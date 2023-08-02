@@ -3,4 +3,33 @@
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="go_laundry">Go-Laundry</string>
+    <string name="ic_login">ic_login</string>
+    <string name="log_in_to_account">Log in to Account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="user">User</string>
+    <string name="laundry_shop_owner">Laundry Shop Owner</string>
+    <string name="rider">Rider</string>
+    <string name="notification">Notification</string>
+    <string name="username">Fendy Woo</string>
+    <string name="rate">GL20</string>
+    <string name="member">Member Rate: </string>
+    <string name="month">July</string>
+    <string name="topup">topup</string>
+    <string name="balance_rm">Balance: RM</string>
+    <string name="amount">20.00</string>
+    <string name="monthly_top_up_amount_rm">Monthly top up amount: RM</string>
+    <string name="progress">70%</string>
+    <string name="top_up_rm">Top up RM</string>
+    <string name="more_to_reach_next_level"> more to reach next level</string>
+    <string name="dashboard"> Dashboard</string>
+    <string name="spending"> Spending</string>
+    <string name="view">View</string>
+    <string name="pending_collection">Pending Collection</string>
+    <string name="_0">0</string>
+    <string name="pending_receiving">Pending Receiving</string>
+    <string name="monthly_orders">Monthly Orders</string>
+    <string name="ic_pending_receiving">ic_pending_receiving</string>
+    <string name="ic_pending_collection">ic_pending_collection</string>
 </resources>

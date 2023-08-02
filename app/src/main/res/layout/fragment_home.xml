@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_green"
+    tools:context=".HomeFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/fh_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/fh_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="#FFC0AB88"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fh_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fh_userdetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="53dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="53dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/fh_civ_profile_pic"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/profile"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/fh_tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/username"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/fh_civ_profile_pic"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/fh_usermember"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/fh_tv_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/fh_civ_profile_pic"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/fh_tv_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:text="@string/member"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@id/fh_tv_rate"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/fh_tv_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:text="@string/rate"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/fh_tv_member"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fh_cv_balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/fh_userdetails"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="22dp"
+                android:backgroundTint="#D6EFEE"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/fh_tv_month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="19dp"
+                        android:text="@string/month"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/fh_iv_topup"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="19dp"
+                        android:layout_marginEnd="18dp"
+                        android:src="@drawable/ic_new_order"
+                        android:contentDescription="@string/topup" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_tv_month"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/balance_rm"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_balance_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_tv_month"
+                        android:layout_marginTop="4dp"
+                        android:layout_toEndOf="@id/fh_tv_balance"
+                        android:text="@string/amount"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_monthly_topup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_tv_balance"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/monthly_top_up_amount_rm"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_monthly_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_tv_balance"
+                        android:layout_marginTop="4dp"
+                        android:layout_toEndOf="@id/fh_tv_monthly_topup"
+                        android:text="@string/amount"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <ProgressBar
+                        android:id="@+id/fh_progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_tv_monthly_amount"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="26dp"
+                        android:layout_marginEnd="20dp"
+                        android:max="100"
+                        android:progress="70"
+                        android:progressTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_tv_monthly_amount"
+                        android:layout_marginTop="23dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_toEndOf="@id/fh_progressBar"
+                        android:text="@string/progress"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_messagestart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_progressBar"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/top_up_rm"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_messageamount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_progressBar"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/amount"
+                        android:textColor="@color/black"
+                        android:layout_toEndOf="@id/fh_tv_messagestart"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_messageend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fh_progressBar"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/more_to_reach_next_level"
+                        android:textColor="@color/black"
+                        android:layout_toEndOf="@id/fh_tv_messageamount"
+                        android:textSize="14sp" />
+
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/fh_tv_dashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fh_cv_balance"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="26dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/dashboard"
+                android:textColor="@color/gold"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@drawable/ic_chart" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fh_card_spending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/fh_tv_dashboard"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="22dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/fh_tv_spending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="13sp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/spending"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_wallet" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_spending_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="18dp"
+                        android:drawableEnd="@drawable/ic_right"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/view"
+                        android:textColor="@color/gold"
+                        android:textSize="13sp" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/fh_spending_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_below="@id/fh_tv_spending"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="19dp"
+                        android:layout_marginBottom="12dp" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <GridLayout
+                android:id="@+id/fh_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fh_card_spending"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginTop="14dp"
+                android:columnCount="2"
+                android:rowCount="1">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/fh_cv_pending_collection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="12.5dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/fh_tv_pending_collection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="11dp"
+                            android:layout_centerInParent="true"
+                            android:text="@string/pending_collection"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+
+                        <ImageView
+                            android:id="@+id/fh_iv_pending_collection"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_below="@id/fh_tv_pending_collection"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="20dp"
+                            android:src="@drawable/ic_pending"
+                            android:contentDescription="@string/ic_pending_collection" />
+
+                        <TextView
+                            android:id="@+id/fh_tv_number_pending_collection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/fh_iv_pending_collection"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="13dp"
+                            android:layout_centerInParent="true"
+                            android:text="@string/_0"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/fh_cv_pending_receiving"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="12.5dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/fh_tv_pending_receiving"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="11dp"
+                            android:text="@string/pending_receiving"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+
+                        <ImageView
+                            android:id="@+id/fh_iv_pending_receiving"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_below="@id/fh_tv_pending_receiving"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="20dp"
+                            android:src="@drawable/ic_receiving"
+                            android:contentDescription="@string/ic_pending_receiving" />
+
+                        <TextView
+                            android:id="@+id/fh_tv_number_pending_receiving"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/fh_iv_pending_receiving"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="13dp"
+                            android:layout_centerInParent="true"
+                            android:text="@string/_0"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </GridLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fh_cv_month_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/fh_grid"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="22dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/fh_tv_monthly_orders"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="13sp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/monthly_orders"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_month" />
+
+                    <TextView
+                        android:id="@+id/fh_tv_monthly_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="18dp"
+                        android:drawableEnd="@drawable/ic_right"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/view"
+                        android:textColor="@color/gold"
+                        android:textSize="13sp" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/fh_order_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_below="@id/fh_tv_monthly_view"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="19dp"
+                        android:layout_marginBottom="12dp" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

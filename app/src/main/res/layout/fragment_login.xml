@@ -8,7 +8,7 @@
     tools:context=".LoginFragment">
 
     <TextView
-        android:id="@+id/tv_go_laundry"
+        android:id="@+id/fl_tv_go_laundry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -27,23 +27,24 @@
         tools:targetApi="p" />
 
     <ImageView
-        android:id="@+id/iv_icon"
+        android:id="@+id/fl_iv_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@id/tv_go_laundry"
+        android:layout_below="@id/fl_tv_go_laundry"
         android:layout_centerInParent="true"
         android:layout_marginTop="52dp"
+        android:contentDescription="@string/ic_login"
         android:src="@drawable/ic_person_2" />
 
     <TextView
-        android:id="@+id/tv_login"
+        android:id="@+id/fl_tv_logintoaccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_icon"
+        android:layout_below="@id/fl_iv_icon"
         android:layout_centerInParent="true"
         android:layout_marginTop="28dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Log in to Account"
+        android:text="@string/log_in_to_account"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -52,7 +53,7 @@
         android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_login"
+        android:layout_below="@id/fl_tv_logintoaccount"
         android:layout_marginStart="42dp"
         android:layout_marginTop="36dp"
         android:gravity="top"
