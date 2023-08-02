@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_green"
+    tools:context=".HelpCenterActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/ha_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_alignParentTop="true"
+                android:elevation="4dp" />
+
+            <TextView
+                android:id="@+id/ha_tv_go_laundry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_toolbar"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="21dp"
+                android:fontFamily="@font/courgette_regular"
+                android:gravity="center_horizontal|center_vertical"
+                android:shadowColor="#000000"
+                android:shadowDx="10"
+                android:shadowDy="5"
+                android:shadowRadius="1"
+                android:text="@string/go_laundry"
+                android:textAlignment="center"
+                android:textColor="#FFC0AB88"
+                android:textFontWeight="400"
+                android:textSize="40sp"
+                tools:targetApi="p" />
+
+            <TextView
+                android:id="@+id/ha_tv_helpcenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_go_laundry"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="41dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/help_center"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/ha_tv_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_helpcenter"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="6dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/helpcentersubtitle"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/ha_tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_subtitle"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="37dp"
+                android:gravity="top"
+                android:text="@string/email_address"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ha_et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_email"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_email_address"
+                android:inputType="textEmailAddress"
+                android:maxLength="7"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ha_tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_et_email"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="20dp"
+                android:gravity="top"
+                android:text="@string/title"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+
+            <EditText
+                android:id="@+id/ha_et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_title"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_title"
+                android:inputType="textMultiLine"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ha_tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_et_title"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="20dp"
+                android:gravity="top"
+                android:text="@string/what_trouble_do_you_faces"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/ha_et_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_message"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:gravity="top"
+                android:hint="@string/enter_message"
+                android:inputType="textMultiLine"
+                android:lines="6"
+                android:padding="15dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ha_tv_reply_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_et_message"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:text="@string/we_will_get_back_to_you_within_3_working_days"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/ha_btn_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ha_tv_reply_message"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="42dp"
+                android:layout_marginBottom="46dp"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="#D6EFEE"
+                android:text="@string/submit"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
