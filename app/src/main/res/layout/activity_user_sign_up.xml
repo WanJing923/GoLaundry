@@ -68,7 +68,7 @@
                 android:gravity="top"
                 android:text="@string/full_name"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/usua_et_name"
@@ -97,7 +97,7 @@
                 android:gravity="top"
                 android:text="@string/gender"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/usua_gender_constraint"
@@ -132,7 +132,7 @@
                 android:gravity="top"
                 android:text="@string/icno"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/usua_et_icno"
@@ -161,7 +161,7 @@
                 android:gravity="top"
                 android:text="@string/phone_number"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/usua_ti_phone_num"
@@ -201,7 +201,7 @@
                 android:gravity="top"
                 android:text="@string/password"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/usua_et_password"
@@ -230,7 +230,7 @@
                 android:gravity="top"
                 android:text="@string/confirm_password"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/usua_et_confirm_password"
@@ -255,6 +255,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="35dp"
+                android:textSize="12sp"
                 android:text="@string/i_agree_to_terms_amp_conditions"
                 android:buttonTint="@color/white"
                 android:textColor="@color/white"
@@ -269,7 +270,7 @@
                 android:layout_marginTop="19dp"
                 android:layout_marginBottom="46dp"
                 android:background="@drawable/custom_button"
-                android:backgroundTint="#D6EFEE"
+                android:backgroundTint="@color/cyan"
                 android:text="@string/register"
                 android:layout_below="@id/usua_checkBox"/>
         </RelativeLayout>
