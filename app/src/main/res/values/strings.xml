@@ -71,4 +71,24 @@
     <string name="view_total_spending">View total spending</string>
     <string name="next_month">next month</string>
     <string name="read_all">Read all</string>
+    <string name="search_laundry_shop">Search laundry shop</string>
+    <string name="last_recently_ordered">Last recently ordered</string>
+    <string name="dry_cleaning_laundry">Dry Cleaning Laundry</string>
+    <string name="_5_0">5.0 </string>
+    <string name="services_chosen">Services chosen: </string>
+    <string name="washing">Washing</string>
+    <string name="repeat_order">Repeat Order</string>
+    <string name="discover">Discover</string>
+    <string name="default_address">Default Address</string>
+    <string name="all">All</string>
+    <string name="filter">Filter</string>
+    <string name="filter_laundry_shops">Filter laundry shops</string>
+    <string name="ratings">Ratings: </string>
+    <string name="distance">Distance: </string>
+    <string name="_3km">3km</string>
+    <string name="services">Services: </string>
+    <string name="ironing">Ironing</string>
+    <string name="drying">Drying</string>
+    <string name="dry_cleaning">Dry Cleaning</string>
+    <string name="_3">3</string>
 </resources>
