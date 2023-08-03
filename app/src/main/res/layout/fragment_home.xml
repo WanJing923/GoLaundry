@@ -29,7 +29,7 @@
             android:shadowRadius="1"
             android:text="@string/go_laundry"
             android:textAlignment="center"
-            android:textColor="#FFC0AB88"
+            android:textColor="@color/gold"
             android:textSize="25sp" />
     </androidx.appcompat.widget.Toolbar>
 

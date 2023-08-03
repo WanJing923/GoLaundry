@@ -59,4 +59,16 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="i_agree_to_terms_amp_conditions"><![CDATA[I agree to Terms & Conditions]]></string>
     <string name="register">Register</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="enter_your_email_address_and_get_the_new_password">Enter your email address and get the new password</string>
+    <string name="all_orders">All Orders</string>
+    <string name="transactions">Transactions</string>
+    <string name="latest">Latest</string>
+    <string name="monthly_spending">Monthly Spending</string>
+    <string name="view_all_history">View all history</string>
+    <string name="last_month">last month</string>
+    <string name="view_total_spending">View total spending</string>
+    <string name="next_month">next month</string>
+    <string name="read_all">Read all</string>
 </resources>
