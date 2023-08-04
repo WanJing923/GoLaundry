@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_green"
+    tools:context=".EditLocationActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ela_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/nwa_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="#FFC0AB88"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ela_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/ela_tv_my_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="19dp"
+                android:text="@string/my_addresses"
+                android:textColor="@color/gold"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ela_rv_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/ela_tv_my_address"
+                android:layout_marginTop="1dp"/>
+
+            <LinearLayout
+                android:id="@+id/ela_new_address_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:layout_below="@id/ela_rv_address"
+                android:orientation="horizontal">
+
+                <include
+                    layout="@layout/location_new_address"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+    android:id="@+id/nwa_btn_save"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="19dp"
+    android:layout_marginEnd="19dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/custom_button"
+    android:backgroundTint="#D6EFEE"
+    android:text="@string/done"
+    android:layout_alignParentBottom="true"/>
+</RelativeLayout>

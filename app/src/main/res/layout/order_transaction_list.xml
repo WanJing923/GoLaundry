@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/custom_button">
+
+    <ImageView
+        android:id="@+id/otl_iv_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/laundry"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="28dp"
+        android:contentDescription="@string/laundry_icon" />
+
+    <TextView
+        android:id="@+id/otl_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="14dp"
+        android:layout_toEndOf="@id/otl_iv_icon"
+        android:text="@string/user"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/otl_tv_orderid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/otl_iv_icon"
+        android:layout_below="@id/otl_tv_name"
+        android:text="@string/order_id"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"/>
+
+    <TextView
+        android:id="@+id/otl_tv_order_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/otl_tv_orderid"
+        android:layout_below="@id/otl_tv_name"
+        android:text="@string/_2309de68"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"/>
+
+    <TextView
+        android:id="@+id/otl_tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/otl_iv_icon"
+        android:layout_below="@id/otl_tv_orderid"
+        android:text="@string/_26_july_2023"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/otl_tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="25dp"
+        android:text="@string/rm_30_00"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/otl_tv_spending_viewMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/otl_tv_date"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="9dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/view_order"
+        android:textColor="@color/gold"
+        android:textSize="13sp"
+        app:drawableEndCompat="@drawable/ic_right" />
+
+
+</RelativeLayout>

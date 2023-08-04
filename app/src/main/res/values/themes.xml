@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.GoLaundry" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/primary_green</item>
         <item name="colorPrimaryVariant">@color/primary_green</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -16,5 +16,14 @@
 
     <style name="SpinnerTheme" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/spinner_down</item>
+    </style>
+
+    <style name="ChooseButtonTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="shapeAppearance">@style/MyShapeAppearance</item>
+    </style>
+
+    <style name="MyShapeAppearance">
+        <item name="android:strokeColor">@color/white</item>
+        <item name="strokeWidth">2dp</item>
     </style>
 </resources>

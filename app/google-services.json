@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "63734818081",
+    "project_id": "golaundry-906c7",
+    "storage_bucket": "golaundry-906c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63734818081:android:6ae377c0da58342b47ca60",
+        "android_client_info": {
+          "package_name": "com.example.golaundry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63734818081-5t5v93esjdc7l04vjt8kue0cpuggigh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAugiQfYh38jM-t6DatQ5XtQO2XWHy6Rds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63734818081-5t5v93esjdc7l04vjt8kue0cpuggigh7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

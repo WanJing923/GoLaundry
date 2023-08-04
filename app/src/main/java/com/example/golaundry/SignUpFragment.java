@@ -1,7 +1,9 @@
 package com.example.golaundry;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -28,15 +30,6 @@ public class SignUpFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SignUpFragment newInstance(String param1, String param2) {
         SignUpFragment fragment = new SignUpFragment();
         Bundle args = new Bundle();
@@ -59,6 +52,19 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
+        View view =  inflater.inflate(R.layout.fragment_sign_up, container, false);
+        // TODO: Rename and change types and number of parameters
+        AppCompatButton btn_user = view.findViewById(R.id.fsu_btn_user);
+
+        btn_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), UserSignUpActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        return view;
     }
 }
