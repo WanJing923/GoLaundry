@@ -85,7 +85,8 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter shop name" />
 
             <TextView
                 android:id="@+id/lsua_tv_phone_number"
@@ -155,7 +156,8 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter email address" />
 
             <TextView
                 android:id="@+id/lsua_choose_location"
@@ -179,19 +181,154 @@
                 android:layout_marginEnd="42dp"
                 android:background="@drawable/custom_login"
                 android:hint="@string/choose_a_location"
+                android:inputType="none"
+                android:focusable="false"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:drawableEnd="@drawable/ic_right"
+                android:autofillHints="choose a location" />
+
+            <TextView
+                android:id="@+id/lsua_address_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_choose_location"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/address_details"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_address_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_address_details"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/e_g_floor_unit_number"
                 android:inputType="text"
                 android:padding="15dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
                 android:textSize="15sp"
-                android:drawableEnd="@drawable/ic_right"/>
+                android:autofillHints="address details" />
+
+            <TextView
+                android:id="@+id/lsua_tv_business_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_address_details"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/business_license"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_upload_business_license"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_business_license"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/upload_photo"
+                android:inputType="none"
+                android:focusable="false"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:drawableEnd="@drawable/ic_camera"
+                android:autofillHints="upload photo" />
+
+            <TextView
+                android:id="@+id/lsua_tv_owner_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_upload_business_license"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/owner_full_name"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_enter_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_owner_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_full_name"
+                android:inputType="textPersonName"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="owner full name" />
+
+            <TextView
+                android:id="@+id/lsua_tv_personal_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_enter_full_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/personal_number"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lsua_ti_personal_num"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lsua_tv_personal_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                app:prefixText="+60 "
+                app:hintEnabled="false"
+                app:hintTextColor="@color/white"
+                app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:prefixTextColor="@color/white">
+
+                <EditText
+                    android:id="@+id/lsua_et_personal_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#195860"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:hint="@string/enter_personal_number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:autofillHints="Enter phone number" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/lsua_tv_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lsua_et_choose_location"
+                android:layout_below="@id/lsua_ti_personal_num"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -214,7 +351,8 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter password" />
 
             <TextView
                 android:id="@+id/lsua_tv_confirm_password"

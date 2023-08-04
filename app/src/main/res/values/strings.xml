@@ -48,7 +48,7 @@
     <string name="submit">Submit</string>
     <string name="ic_signup">ic_signup</string>
     <string name="full_name">Full Name</string>
-    <string name="enter_full_name">Enter Full name</string>
+    <string name="enter_full_name">Enter full name</string>
     <string name="gender">Gender</string>
     <string name="icno">Your IC No.</string>
     <string name="enter_nric_number">Enter NRIC number</string>
@@ -144,4 +144,9 @@
     <string name="_26_july_2023">26 July 2023</string>
     <string name="rm_30_00">RM 30.00</string>
     <string name="view_order">View Order</string>
+    <string name="business_license">Business License</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="owner_full_name">Owner Full Name</string>
+    <string name="personal_number">Personal Number</string>
+    <string name="enter_personal_number">Enter personal number</string>
 </resources>
