@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/second_green"
+    tools:context=".LaundrySignUpActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lsua_tv_go_laundry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="62dp"
+                android:fontFamily="@font/courgette_regular"
+                android:gravity="center_horizontal|center_vertical"
+                android:shadowColor="#000000"
+                android:shadowDx="10"
+                android:shadowDy="5"
+                android:shadowRadius="1"
+                android:text="@string/go_laundry"
+                android:textAlignment="center"
+                android:textColor="@color/gold"
+                android:textFontWeight="400"
+                android:textSize="40sp"
+                tools:targetApi="p" />
+
+            <ImageView
+                android:id="@+id/lsua_iv_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/lsua_tv_go_laundry"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="52dp"
+                android:src="@drawable/ic_person_add"
+                android:contentDescription="@string/ic_signup" />
+
+            <TextView
+                android:id="@+id/lsua_tv_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_iv_icon"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="28dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/create_an_account"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lsua_tv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_signup"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="37dp"
+                android:gravity="top"
+                android:text="@string/laundry_shop_name"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_enter_shop_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_shop_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_laundry_shop_name"
+                android:inputType="textPersonName"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="enter shop name" />
+
+            <TextView
+                android:id="@+id/lsua_tv_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_enter_shop_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/contact_number"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lsua_ti_contact_num"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lsua_tv_phone_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                app:prefixText="+60 "
+                app:hintEnabled="false"
+                app:hintTextColor="@color/white"
+                app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:prefixTextColor="@color/white">
+
+                <EditText
+                    android:id="@+id/lsua_et_contact_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#195860"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:hint="@string/enter_contact_number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:autofillHints="Enter phone number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lsua_tv_email_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_ti_contact_num"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/email_address"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_enter_email_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_email_address"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_email_address"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="enter email address" />
+
+            <TextView
+                android:id="@+id/lsua_choose_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_enter_email_address"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/address"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_choose_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_choose_location"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/choose_a_location"
+                android:inputType="none"
+                android:focusable="false"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:drawableEnd="@drawable/ic_right"
+                android:autofillHints="choose a location" />
+
+            <TextView
+                android:id="@+id/lsua_address_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_choose_location"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/address_details"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_address_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_address_details"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/e_g_floor_unit_number"
+                android:inputType="text"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="address details" />
+
+            <TextView
+                android:id="@+id/lsua_tv_business_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_address_details"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/business_license"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_upload_business_license"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_business_license"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/upload_photo"
+                android:inputType="none"
+                android:focusable="false"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:drawableEnd="@drawable/ic_camera"
+                android:autofillHints="upload photo" />
+
+            <TextView
+                android:id="@+id/lsua_tv_owner_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_upload_business_license"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/owner_full_name"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_enter_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_owner_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_full_name"
+                android:inputType="textPersonName"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="owner full name" />
+
+            <TextView
+                android:id="@+id/lsua_tv_personal_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_enter_full_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/personal_number"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lsua_ti_personal_num"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lsua_tv_personal_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                app:prefixText="+60 "
+                app:hintEnabled="false"
+                app:hintTextColor="@color/white"
+                app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:prefixTextColor="@color/white">
+
+                <EditText
+                    android:id="@+id/lsua_et_personal_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#195860"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:hint="@string/enter_personal_number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:autofillHints="Enter phone number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lsua_tv_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_ti_personal_num"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/password"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_enter_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_password"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_password"
+                android:inputType="textPassword"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="enter password" />
+
+            <TextView
+                android:id="@+id/lsua_tv_confirm_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_enter_password"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/confirm_password"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_confirm_password"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_password"
+                android:inputType="textPassword"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="confirm password" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/lsua_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="35dp"
+                android:textSize="12sp"
+                android:text="@string/i_agree_to_terms_amp_conditions"
+                android:buttonTint="@color/white"
+                android:textColor="@color/white"
+                android:layout_below="@id/lsua_et_confirm_password" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/lsua_btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42dp"
+                android:layout_marginEnd="42dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginBottom="46dp"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/cyan"
+                android:text="@string/register"
+                android:layout_below="@id/lsua_checkBox"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

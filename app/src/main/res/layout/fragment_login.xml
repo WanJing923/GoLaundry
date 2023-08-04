@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,24 +7,29 @@
     android:background="@color/second_green"
     tools:context=".LoginFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/fl_tv_go_laundry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="62dp"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentEnd="true"
         android:fontFamily="@font/courgette_regular"
         android:gravity="center_horizontal|center_vertical"
         android:shadowColor="#000000"
         android:shadowDx="10"
         android:shadowDy="5"
         android:shadowRadius="1"
-        android:text="@string/go_laundry"
+        android:text="Go-Laundry"
         android:textAlignment="center"
-        android:textColor="#FFC0AB88"
-        android:textSize="40sp"
-        tools:targetApi="p" />
+        android:textColor="@color/gold"
+        android:textFontWeight="400"
+        android:textSize="40sp" />
 
     <ImageView
         android:id="@+id/fl_iv_icon"
@@ -48,9 +53,8 @@
         android:textColor="@color/white"
         android:textSize="20sp" />
 
-
     <TextView
-        android:id="@+id/ha_tv_email"
+        android:id="@+id/fl_tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/fl_tv_logintoaccount"
@@ -61,12 +65,11 @@
         android:textColor="@color/white"
         android:textSize="12sp" />
 
-
     <EditText
-        android:id="@+id/ha_et_email"
+        android:id="@+id/fl_et_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ha_tv_email"
+        android:layout_below="@id/fl_tv_email"
         android:layout_marginStart="42dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="42dp"
@@ -82,22 +85,22 @@
         android:autofillHints="Enter Email Address" />
 
     <TextView
-        android:id="@+id/usua_tv_password"
+        android:id="@+id/fl_tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
         android:layout_marginTop="27dp"
         android:text="@string/password"
-        android:layout_below="@id/ha_et_email"
+        android:layout_below="@id/fl_et_email"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
     <EditText
-        android:id="@+id/usua_et_password"
+        android:id="@+id/fl_et_enter_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_login"
-        android:layout_below="@id/usua_tv_password"
+        android:layout_below="@id/fl_tv_password"
         android:layout_marginStart="42dp"
         android:layout_marginEnd="42dp"
         android:layout_marginTop="5dp"
@@ -112,10 +115,10 @@
         android:autofillHints="Enter Password" />
 
     <TextView
-        android:id="@+id/tv_forgetpassword"
+        android:id="@+id/fl_tv_forgetpassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/usua_et_password"
+        android:layout_below="@id/fl_et_enter_password"
         android:layout_marginTop="11dp"
         android:layout_marginStart="42dp"
         android:text="@string/forgot_password"
@@ -123,27 +126,26 @@
         android:textSize="12sp" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/usua_checkBox"
+        android:id="@+id/fl_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:layout_marginBottom="18dp"
+        android:layout_below="@id/fl_tv_forgetpassword"
         android:textSize="12sp"
         android:text="@string/remember_me"
         android:buttonTint="@color/white"
-        android:textColor="@color/white"
-        android:layout_above="@id/ha_btn_submit" />
+        android:textColor="@color/white" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/ha_btn_submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginBottom="46dp"
-        android:background="@drawable/custom_button"
-        android:backgroundTint="@color/cyan"
-        android:text="@string/login"
-        android:layout_alignParentBottom="true" />
-
-</RelativeLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fl_btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_checkBox"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginEnd="42dp"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/cyan"
+            android:text="@string/login" />
+    </RelativeLayout>
+</ScrollView>

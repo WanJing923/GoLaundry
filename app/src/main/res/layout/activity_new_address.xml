@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/second_green"
+    tools:context=".NewAddressActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/nwa_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/nwa_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="#FFC0AB88"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/nwa_tv_new_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nwa_toolbar"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="19dp"
+        android:text="@string/new_address"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/nwa_tv_address_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nwa_tv_new_address"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="13dp"
+        android:gravity="top"
+        android:text="@string/name"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/nwa_et_address_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nwa_tv_address_name"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="19dp"
+        android:background="@drawable/custom_login"
+        android:hint="@string/e_g_work"
+        android:inputType="text"
+        android:padding="15dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/text_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/nwa_tv_address_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nwa_et_address_name"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="13dp"
+        android:gravity="top"
+        android:text="@string/address"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/et_address_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nwa_tv_address_address"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="19dp"
+        android:background="@drawable/custom_login"
+        android:drawableEnd="@drawable/ic_right"
+        android:hint="@string/choose_the_location"
+        android:inputType="text"
+        android:padding="15dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/text_color"
+        android:textSize="15sp"
+        android:autofillHints="choose location" />
+
+    <TextView
+        android:id="@+id/nwa_tv_address_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_address_address"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="13dp"
+        android:gravity="top"
+        android:text="@string/address_details"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/nwa_et_address_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nwa_tv_address_details"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="19dp"
+        android:background="@drawable/custom_login"
+        android:hint="@string/e_g_floor_unit_number"
+        android:inputType="text"
+        android:padding="15dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/text_color"
+        android:textSize="15sp"
+        android:autofillHints="address details" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/nwa_btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/custom_button"
+        android:backgroundTint="@color/cyan"
+        android:text="@string/save"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

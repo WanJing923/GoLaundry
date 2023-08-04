@@ -59,7 +59,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/usua_tv_email"
+                android:id="@+id/usua_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/usua_tv_signup"
@@ -68,13 +68,13 @@
                 android:gravity="top"
                 android:text="@string/full_name"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/usua_et_name"
+                android:id="@+id/usua_et_enter_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_email"
+                android:layout_below="@id/usua_tv_name"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
@@ -85,19 +85,20 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter full name" />
 
             <TextView
                 android:id="@+id/usua_tv_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_et_name"
+                android:layout_below="@id/usua_et_enter_full_name"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
                 android:text="@string/gender"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/usua_gender_constraint"
@@ -111,7 +112,7 @@
                 android:padding="15dp">
 
                 <Spinner
-                    android:id="@+id/usua_spinner_gender"
+                    android:id="@+id/usua_gender_type"
                     style="@style/SpinnerTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -123,7 +124,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/usua_tv_icno"
+                android:id="@+id/usua_tv_ic_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/usua_gender_constraint"
@@ -132,13 +133,13 @@
                 android:gravity="top"
                 android:text="@string/icno"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/usua_et_icno"
+                android:id="@+id/usua_et_ic_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_icno"
+                android:layout_below="@id/usua_tv_ic_no"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
@@ -149,22 +150,23 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter ic no" />
 
             <TextView
                 android:id="@+id/usua_tv_phone_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_et_icno"
+                android:layout_below="@id/usua_et_ic_no"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
                 android:text="@string/phone_number"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/usua_ti_phone_num"
+                android:id="@+id/usua_ti_phone_number"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,7 +182,7 @@
                 app:prefixTextColor="@color/white">
 
                 <EditText
-                    android:id="@+id/usua_et_phonenum"
+                    android:id="@+id/usua_et_phone_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#195860"
@@ -188,20 +190,51 @@
                     android:maxLength="10"
                     android:hint="@string/enter_phone_number"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/text_color"/>
+                    android:textColorHint="@color/text_color"
+                    android:autofillHints="enter phone number" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/usua_tv_email_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/usua_ti_phone_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/email_address"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/usua_et_email_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/usua_tv_email_address"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_email_address"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="enter email address" />
 
             <TextView
                 android:id="@+id/usua_tv_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_ti_phone_num"
+                android:layout_below="@id/usua_et_email_address"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
                 android:text="@string/password"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/usua_et_password"
@@ -218,7 +251,8 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter password" />
 
             <TextView
                 android:id="@+id/usua_tv_confirm_password"
@@ -230,7 +264,7 @@
                 android:gravity="top"
                 android:text="@string/confirm_password"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/usua_et_confirm_password"
@@ -247,7 +281,8 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:autofillHints="enter confirm password" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/usua_checkBox"
@@ -255,7 +290,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="35dp"
-                android:textSize="12sp"
                 android:text="@string/i_agree_to_terms_amp_conditions"
                 android:buttonTint="@color/white"
                 android:textColor="@color/white"

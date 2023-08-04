@@ -12,6 +12,18 @@
         android:theme="@style/Theme.GoLaundry"
         tools:targetApi="31">
         <activity
+            android:name=".NewAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChooseLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LaundrySignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".OrderLocationActivity"
             android:exported="false" />
         <activity
