@@ -7,10 +7,20 @@
     android:background="@color/second_green"
     tools:context=".LaundrySignUpActivity">
 
-    <ScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/usua_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/second_green"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/usua_toolbar"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="62dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/courgette_regular"
                 android:gravity="center_horizontal|center_vertical"
                 android:shadowColor="#000000"
@@ -43,8 +53,8 @@
                 android:layout_below="@id/lsua_tv_go_laundry"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="52dp"
-                android:src="@drawable/ic_person_add"
-                android:contentDescription="@string/ic_signup" />
+                android:contentDescription="@string/ic_signup"
+                android:src="@drawable/ic_person_add" />
 
             <TextView
                 android:id="@+id/lsua_tv_signup"
@@ -78,6 +88,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter shop name"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_laundry_shop_name"
                 android:inputType="textPersonName"
@@ -85,8 +96,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter shop name" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_tv_phone_number"
@@ -110,9 +120,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
                 android:background="@drawable/custom_login"
-                app:prefixText="+60 "
                 app:hintEnabled="false"
                 app:hintTextColor="@color/white"
+                app:prefixText="+60 "
                 app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:prefixTextColor="@color/white">
 
@@ -120,13 +130,13 @@
                     android:id="@+id/lsua_et_contact_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="Enter phone number"
                     android:background="#195860"
+                    android:hint="@string/enter_contact_number"
                     android:inputType="phone"
                     android:maxLength="10"
-                    android:hint="@string/enter_contact_number"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/text_color"
-                    android:autofillHints="Enter phone number" />
+                    android:textColorHint="@color/text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -149,6 +159,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter email address"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_email_address"
                 android:inputType="textEmailAddress"
@@ -156,8 +167,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter email address" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_choose_location"
@@ -179,17 +189,17 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="choose a location"
                 android:background="@drawable/custom_login"
+                android:drawableEnd="@drawable/ic_right"
+                android:focusable="false"
                 android:hint="@string/choose_a_location"
                 android:inputType="none"
-                android:focusable="false"
                 android:padding="15dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:drawableEnd="@drawable/ic_right"
-                android:autofillHints="choose a location" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_address_details"
@@ -211,6 +221,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="address details"
                 android:background="@drawable/custom_login"
                 android:hint="@string/e_g_floor_unit_number"
                 android:inputType="text"
@@ -218,8 +229,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="address details" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_tv_business_license"
@@ -241,17 +251,17 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="upload photo"
                 android:background="@drawable/custom_login"
+                android:drawableEnd="@drawable/ic_camera"
+                android:focusable="false"
                 android:hint="@string/upload_photo"
                 android:inputType="none"
-                android:focusable="false"
                 android:padding="15dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:drawableEnd="@drawable/ic_camera"
-                android:autofillHints="upload photo" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_tv_owner_name"
@@ -273,6 +283,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="owner full name"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_full_name"
                 android:inputType="textPersonName"
@@ -280,8 +291,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="owner full name" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_tv_personal_number"
@@ -305,9 +315,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
                 android:background="@drawable/custom_login"
-                app:prefixText="+60 "
                 app:hintEnabled="false"
                 app:hintTextColor="@color/white"
+                app:prefixText="+60 "
                 app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:prefixTextColor="@color/white">
 
@@ -315,20 +325,50 @@
                     android:id="@+id/lsua_et_personal_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="Enter phone number"
                     android:background="#195860"
+                    android:hint="@string/enter_personal_number"
                     android:inputType="phone"
                     android:maxLength="10"
-                    android:hint="@string/enter_personal_number"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/text_color"
-                    android:autofillHints="Enter phone number" />
+                    android:textColorHint="@color/text_color" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lsua_tv_ic_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_ti_personal_num"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/icno"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/lsua_et_ic_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_tv_ic_no"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_nric_number"
+                android:inputType="date"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="enter ic no" />
 
             <TextView
                 android:id="@+id/lsua_tv_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lsua_ti_personal_num"
+                android:layout_below="@id/lsua_et_ic_no"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -344,6 +384,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter password"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_password"
                 android:inputType="textPassword"
@@ -351,8 +392,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter password" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/lsua_tv_confirm_password"
@@ -374,6 +414,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="confirm password"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_password"
                 android:inputType="textPassword"
@@ -381,33 +422,32 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="confirm password" />
+                android:textSize="15sp" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/lsua_checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_et_confirm_password"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="35dp"
-                android:textSize="12sp"
-                android:text="@string/i_agree_to_terms_amp_conditions"
                 android:buttonTint="@color/white"
+                android:text="@string/i_agree_to_terms_amp_conditions"
                 android:textColor="@color/white"
-                android:layout_below="@id/lsua_et_confirm_password" />
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/lsua_btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/lsua_checkBox"
                 android:layout_marginStart="42dp"
-                android:layout_marginEnd="42dp"
                 android:layout_marginTop="19dp"
+                android:layout_marginEnd="42dp"
                 android:layout_marginBottom="46dp"
                 android:background="@drawable/custom_button"
                 android:backgroundTint="@color/cyan"
-                android:text="@string/register"
-                android:layout_below="@id/lsua_checkBox"/>
+                android:text="@string/register" />
         </RelativeLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

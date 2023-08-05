@@ -41,16 +41,4 @@ public class UserSignUpActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        // Check if there are any fragments in the back stack
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            // Pop the fragment from the back stack to navigate back to the previous fragment
-            getSupportFragmentManager().popBackStack();
-        } else {
-            // If there are no fragments in the back stack, finish the activity to navigate back to the parent activity or previous activity
-            super.onBackPressed();
-        }
-    }
-
 }

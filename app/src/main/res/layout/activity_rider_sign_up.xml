@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/second_green"
-    tools:context=".UserSignUpActivity">
+    tools:context=".RiderSignUpActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/usua_toolbar"
+        android:id="@+id/rsua_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/second_green"
@@ -18,7 +18,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/usua_toolbar"
+        android:layout_below="@id/rsua_toolbar"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -27,12 +27,12 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/usua_tv_go_laundry"
+                android:id="@+id/rsua_tv_go_laundry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/courgette_regular"
                 android:gravity="center_horizontal|center_vertical"
                 android:shadowColor="#000000"
@@ -41,26 +41,26 @@
                 android:shadowRadius="1"
                 android:text="@string/go_laundry"
                 android:textAlignment="center"
-                android:textColor="#FFC0AB88"
+                android:textColor="@color/gold"
                 android:textFontWeight="400"
                 android:textSize="40sp"
                 tools:targetApi="p" />
 
             <ImageView
-                android:id="@+id/usua_iv_icon"
+                android:id="@+id/rsua_iv_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_below="@id/usua_tv_go_laundry"
+                android:layout_below="@id/rsua_tv_go_laundry"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="52dp"
-                android:src="@drawable/ic_person_add"
-                android:contentDescription="@string/ic_signup" />
+                android:contentDescription="@string/ic_signup"
+                android:src="@drawable/ic_person_add" />
 
             <TextView
-                android:id="@+id/usua_tv_signup"
+                android:id="@+id/rsua_tv_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_iv_icon"
+                android:layout_below="@id/rsua_iv_icon"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="28dp"
                 android:gravity="center_horizontal|center_vertical"
@@ -69,10 +69,10 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/usua_tv_name"
+                android:id="@+id/rsua_tv_full_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_signup"
+                android:layout_below="@id/rsua_tv_signup"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="37dp"
                 android:gravity="top"
@@ -81,13 +81,14 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/usua_et_enter_full_name"
+                android:id="@+id/rsua_et_enter_shop_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_name"
+                android:layout_below="@id/rsua_tv_full_name"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter shop name"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_full_name"
                 android:inputType="textPersonName"
@@ -95,120 +96,54 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter full name" />
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/usua_tv_gender"
+                android:id="@+id/rsua_tv_contact_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_et_enter_full_name"
+                android:layout_below="@id/rsua_et_enter_shop_name"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
-                android:text="@string/gender"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/usua_gender_constraint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_gender"
-                android:layout_marginStart="42dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="42dp"
-                android:background="@drawable/custom_login"
-                android:padding="15dp">
-
-                <Spinner
-                    android:id="@+id/usua_gender_type"
-                    style="@style/SpinnerTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAlignment="textStart"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/usua_tv_ic_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/usua_gender_constraint"
-                android:layout_marginStart="42dp"
-                android:layout_marginTop="27dp"
-                android:gravity="top"
-                android:text="@string/icno"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-            <EditText
-                android:id="@+id/usua_et_ic_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_ic_no"
-                android:layout_marginStart="42dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="42dp"
-                android:background="@drawable/custom_login"
-                android:hint="@string/enter_nric_number"
-                android:inputType="date"
-                android:padding="15dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter ic no" />
-
-            <TextView
-                android:id="@+id/usua_tv_phone_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/usua_et_ic_no"
-                android:layout_marginStart="42dp"
-                android:layout_marginTop="27dp"
-                android:gravity="top"
-                android:text="@string/phone_number"
+                android:text="@string/contact_number"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/usua_ti_phone_number"
+                android:id="@+id/rsua_ti_contact_num"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/usua_tv_phone_number"
+                android:layout_below="@+id/rsua_tv_contact_number"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
                 android:background="@drawable/custom_login"
-                app:prefixText="+60 "
                 app:hintEnabled="false"
                 app:hintTextColor="@color/white"
+                app:prefixText="+60 "
                 app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:prefixTextColor="@color/white">
 
                 <EditText
-                    android:id="@+id/usua_et_phone_number"
+                    android:id="@+id/rsua_et_contact_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="Enter phone number"
                     android:background="#195860"
+                    android:hint="@string/enter_contact_number"
                     android:inputType="phone"
                     android:maxLength="10"
-                    android:hint="@string/enter_phone_number"
                     android:textColor="@color/white"
-                    android:textColorHint="@color/text_color"
-                    android:autofillHints="enter phone number" />
+                    android:textColorHint="@color/text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/usua_tv_email_address"
+                android:id="@+id/rsua_tv_email_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_ti_phone_number"
+                android:layout_below="@id/rsua_ti_contact_num"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -217,13 +152,14 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/usua_et_email_address"
+                android:id="@+id/rsua_et_enter_email_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_email_address"
+                android:layout_below="@id/rsua_tv_email_address"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter email address"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_email_address"
                 android:inputType="textEmailAddress"
@@ -231,14 +167,138 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter email address" />
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/usua_tv_password"
+                android:id="@+id/rsua_plate_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_et_email_address"
+                android:layout_below="@id/rsua_et_enter_email_address"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/plate_number"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/rsua_et_enter_plate_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_plate_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:autofillHints="enter plate number"
+                android:background="@drawable/custom_login"
+                android:focusable="false"
+                android:hint="@string/enter_plate_number"
+                android:inputType="text"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/rsua_tv_face_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_et_enter_plate_num"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/face_photo"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/rsua_et_upload_face_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_tv_face_photo"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:autofillHints="upload photo"
+                android:background="@drawable/custom_login"
+                android:drawableEnd="@drawable/ic_camera"
+                android:focusable="false"
+                android:hint="@string/upload_photo"
+                android:inputType="none"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/rsua_tv_driving_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_et_upload_face_photo"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/driving_license"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/rsua_et_upload_driving_license"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_tv_driving_license"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:autofillHints="upload photo"
+                android:background="@drawable/custom_login"
+                android:drawableEnd="@drawable/ic_camera"
+                android:focusable="false"
+                android:hint="@string/upload_photo"
+                android:inputType="none"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/rsua_tv_ic_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_et_upload_driving_license"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/icno"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/rsua_et_ic_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_tv_ic_no"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:autofillHints="enter ic no"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_nric_number"
+                android:inputType="date"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/rsua_tv_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_et_ic_no"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -247,13 +307,14 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/usua_et_password"
+                android:id="@+id/rsua_et_enter_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_password"
+                android:layout_below="@id/rsua_tv_password"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter password"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_password"
                 android:inputType="textPassword"
@@ -261,14 +322,13 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter password" />
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/usua_tv_confirm_password"
+                android:id="@+id/rsua_tv_confirm_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_et_password"
+                android:layout_below="@id/rsua_et_enter_password"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -277,13 +337,14 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/usua_et_confirm_password"
+                android:id="@+id/rsua_et_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/usua_tv_confirm_password"
+                android:layout_below="@id/rsua_tv_confirm_password"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="confirm password"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_password"
                 android:inputType="textPassword"
@@ -291,32 +352,32 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter confirm password" />
+                android:textSize="15sp" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/usua_checkBox"
+                android:id="@+id/rsua_checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_et_confirm_password"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="35dp"
-                android:text="@string/i_agree_to_terms_amp_conditions"
                 android:buttonTint="@color/white"
+                android:text="@string/i_agree_to_terms_amp_conditions"
                 android:textColor="@color/white"
-                android:layout_below="@id/usua_et_confirm_password" />
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/usua_btn_register"
+                android:id="@+id/rsua_btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/rsua_checkBox"
                 android:layout_marginStart="42dp"
-                android:layout_marginEnd="42dp"
                 android:layout_marginTop="19dp"
+                android:layout_marginEnd="42dp"
                 android:layout_marginBottom="46dp"
                 android:background="@drawable/custom_button"
                 android:backgroundTint="@color/cyan"
-                android:text="@string/register"
-                android:layout_below="@id/usua_checkBox"/>
+                android:text="@string/register" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
