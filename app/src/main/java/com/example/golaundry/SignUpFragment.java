@@ -10,15 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.golaundry.databinding.ActivityMainBinding;
+import com.example.golaundry.databinding.FragmentSignUpBinding;
+
 public class SignUpFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -51,12 +47,10 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_sign_up, container, false);
-        // TODO: Rename and change types and number of parameters
-        AppCompatButton btn_user = view.findViewById(R.id.fsu_btn_user);
+        com.example.golaundry.databinding.FragmentSignUpBinding mFragmentSignUpBinding = FragmentSignUpBinding.inflate(getLayoutInflater());
+        View view = mFragmentSignUpBinding.getRoot();
 
-        btn_user.setOnClickListener(new View.OnClickListener() {
+        mFragmentSignUpBinding.fsuBtnUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), UserSignUpActivity.class);
@@ -67,4 +61,6 @@ public class SignUpFragment extends Fragment {
 
         return view;
     }
+
+
 }
