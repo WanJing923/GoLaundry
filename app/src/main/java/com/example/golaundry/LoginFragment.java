@@ -14,12 +14,10 @@ import android.view.ViewGroup;
 
 import com.example.golaundry.databinding.ActivityMainBinding;
 import com.example.golaundry.databinding.FragmentLoginBinding;
+import com.example.golaundry.databinding.FragmentSignUpBinding;
 
 public class LoginFragment extends Fragment {
 
-    private FragmentLoginBinding mFragmentLoginBinding; // Declare the binding object
-
-    // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -49,17 +47,15 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout using ViewBinding
-        mFragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false);
+        com.example.golaundry.databinding.FragmentLoginBinding mFragmentLoginBinding = FragmentLoginBinding.inflate(getLayoutInflater());
         return mFragmentLoginBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-
 
     }
 }

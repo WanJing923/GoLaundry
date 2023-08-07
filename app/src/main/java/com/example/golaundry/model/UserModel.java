@@ -1,6 +1,6 @@
 package com.example.golaundry.model;
 
-public class User {
+public class UserModel {
 
     private String fullName;
     private String gender;
@@ -9,7 +9,7 @@ public class User {
     private String emailAddress;
     private String status;
 
-    public User(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status) {
+    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status) {
         this.fullName = fullName;
         this.gender = gender;
         this.icNo = icNo;
@@ -18,7 +18,7 @@ public class User {
         this.status = status;
     }
 
-    public User() {
+    public UserModel() {
 
     }
 

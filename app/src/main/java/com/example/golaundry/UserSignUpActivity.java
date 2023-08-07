@@ -1,8 +1,5 @@
 package com.example.golaundry;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -11,25 +8,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.golaundry.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.AuthResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import com.example.golaundry.databinding.ActivityMainBinding;
 import com.example.golaundry.databinding.ActivityUserSignUpBinding;
+import com.example.golaundry.model.UserModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
 public class UserSignUpActivity extends AppCompatActivity {
 
-    private FirebaseFirestore db;
+    //    private FirebaseFirestore db;
     ActivityUserSignUpBinding mActivityUserSignUpBinding;
     private ProgressBar mProgressBar;
 
@@ -137,42 +127,50 @@ public class UserSignUpActivity extends AppCompatActivity {
         if (!confirmPass.equals(password)) {
             mActivityUserSignUpBinding.usuaEtConfirmPassword.setError("Both passwords does not match!");
             mActivityUserSignUpBinding.usuaEtConfirmPassword.requestFocus();
+        } else {
+
+            //show progress bar
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            UserModel newUserModel = new UserModel(fullName, gender, icNo, phoneNo, emailAddress, "active");
+
+            //insert the user object into database
+//            mUserViewModel.insertUser(user);
+
+
+            //create user in the firebase authentication
+//            firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            AuthResult authResult = task.getResult();
+//                            if (authResult != null) {
+//                                String userId = Objects.requireNonNull(authResult.getUser()).getUid();
+//
+//
+//
+//                                db.collection("users").document(userId)
+//                                        .set(newUser)
+//                                        .addOnSuccessListener(aVoid -> {
+//                                            //display message if user successfully registered
+//                                            Toast.makeText(UserSignUpActivity.this, "Account has successfully registered!", Toast.LENGTH_SHORT).show();
+//                                            mProgressBar.setVisibility(View.GONE);
+//                                            //close activity
+//                                            finish();
+//                                        })
+//                                        .addOnFailureListener(e -> {
+//                                            //display message if user fail to register
+//                                            Toast.makeText(UserSignUpActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
+//                                            mProgressBar.setVisibility(View.GONE);
+//                                        });
+//                            }
+//                        } else {
+//                            //display error message if user already exist
+//                            Toast.makeText(UserSignUpActivity.this, "User already exists.", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//
+//        }
         }
-
-        //show progress bar
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        //create user in the firebase authentication
-        firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        AuthResult authResult = task.getResult();
-                        if (authResult != null) {
-                            String userId = Objects.requireNonNull(authResult.getUser()).getUid();
-
-                            User newUser = new User(fullName, gender, icNo, phoneNo, emailAddress,"active");
-
-                            db.collection("users").document(userId)
-                                    .set(newUser)
-                                    .addOnSuccessListener(aVoid -> {
-                                        //display message if user successfully registered
-                                        Toast.makeText(UserSignUpActivity.this, "Account has successfully registered!", Toast.LENGTH_SHORT).show();
-                                        mProgressBar.setVisibility(View.GONE);
-                                        //close activity
-                                        finish();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        //display message if user fail to register
-                                        Toast.makeText(UserSignUpActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
-                                        mProgressBar.setVisibility(View.GONE);
-                                    });
-                        }
-                    } else {
-                        //display error message if user already exist
-                        Toast.makeText(UserSignUpActivity.this, "User already exists.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-    };
     }
 
+}
