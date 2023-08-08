@@ -12,6 +12,9 @@
         android:theme="@style/Theme.GoLaundry"
         tools:targetApi="31">
         <activity
+            android:name=".RiderSignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".NewAddressActivity"
             android:exported="false" />
         <activity

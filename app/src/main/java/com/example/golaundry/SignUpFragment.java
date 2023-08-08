@@ -2,23 +2,16 @@ package com.example.golaundry;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 public class SignUpFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -51,12 +44,9 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_sign_up, container, false);
-        // TODO: Rename and change types and number of parameters
-        AppCompatButton btn_user = view.findViewById(R.id.fsu_btn_user);
+        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        btn_user.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fsu_btn_user).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), UserSignUpActivity.class);
@@ -65,6 +55,31 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.fsu_btn_laundry_owner).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LaundrySignUpActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        view.findViewById(R.id.fsu_btn_rider).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), RiderSignUpActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
     }
 }

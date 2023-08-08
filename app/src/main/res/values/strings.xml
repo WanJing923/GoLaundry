@@ -149,4 +149,20 @@
     <string name="owner_full_name">Owner Full Name</string>
     <string name="personal_number">Personal Number</string>
     <string name="enter_personal_number">Enter personal number</string>
+    <string name="plate_number">Plate Number</string>
+    <string name="enter_plate_number">Enter plate number</string>
+    <string name="face_photo">Face Photo</string>
+    <string name="driving_license">Driving License</string>
+    <string name="fullNameRequiredToast">Full name is required!</string>
+    <string name="genderRequiredToast">Gender is required!</string>
+    <string name="icRequiredToast">NRIC number is required!</string>
+    <string name="phoneNoRequiredToast">Phone number is required!</string>
+    <string name="phoneNoLessToast">Phone number should be at least 9 numbers!</string>
+    <string name="emailRequiredToast">Email address is required!</string>
+    <string name="emailInvalidToast">Email address is invalid!</string>
+    <string name="passwordRequiredToast">Password is required!</string>
+    <string name="passwordLessToast">Password should be at least 8 characters!</string>
+    <string name="confirmPasswordRequiredToast">Confirm password is required!</string>
+    <string name="confirmPasswordNotMatchToast">Both passwords are different!</string>
+    <string name="icInvalidToast">NRIC number should be 12 numbers!</string>
 </resources>
