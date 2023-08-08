@@ -10,30 +10,22 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.golaundry.databinding.ActivityForgotPasswordBinding;
-import com.example.golaundry.databinding.ActivityHelpCenterBinding;
-
 import java.util.Objects;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
-
-    private Toolbar toolbar;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //implement binding method
-        com.example.golaundry.databinding.ActivityForgotPasswordBinding mActivityForgotPasswordBinding = ActivityForgotPasswordBinding.inflate(getLayoutInflater());
-        setContentView(mActivityForgotPasswordBinding.getRoot());
+        setContentView(R.layout.activity_forgot_password);
 
         //toolbar function
-        setSupportActionBar(mActivityForgotPasswordBinding.fpaToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.fpa_toolbar);
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Objects.requireNonNull(mActivityForgotPasswordBinding.fpaToolbar.getNavigationIcon()).setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        mActivityForgotPasswordBinding.fpaToolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
+        toolbar.setNavigationIcon((getResources().getDrawable(R.drawable.ic_toolbar_back)));
     }
 
     @Override

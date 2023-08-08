@@ -88,6 +88,7 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
+                android:autofillHints="enter full name"
                 android:background="@drawable/custom_login"
                 android:hint="@string/enter_full_name"
                 android:inputType="textPersonName"
@@ -95,8 +96,7 @@
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/text_color"
-                android:textSize="15sp"
-                android:autofillHints="enter full name" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/usua_tv_gender"
@@ -319,4 +319,11 @@
                 android:layout_below="@id/usua_checkBox"/>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/usua_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </RelativeLayout>

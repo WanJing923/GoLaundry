@@ -2,18 +2,13 @@ package com.example.golaundry;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.golaundry.databinding.ActivityMainBinding;
-import com.example.golaundry.databinding.FragmentSignUpBinding;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class SignUpFragment extends Fragment {
 
@@ -49,10 +44,9 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        com.example.golaundry.databinding.FragmentSignUpBinding mFragmentSignUpBinding = FragmentSignUpBinding.inflate(getLayoutInflater());
-        View view = mFragmentSignUpBinding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        mFragmentSignUpBinding.fsuBtnUser.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fsu_btn_user).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), UserSignUpActivity.class);
@@ -61,7 +55,7 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        mFragmentSignUpBinding.fsuBtnLaundryOwner.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fsu_btn_laundry_owner).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), LaundrySignUpActivity.class);
@@ -70,7 +64,7 @@ public class SignUpFragment extends Fragment {
             }
         });
 
-        mFragmentSignUpBinding.fsuBtnRider.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fsu_btn_rider).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), RiderSignUpActivity.class);
@@ -85,8 +79,6 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
 
 
     }

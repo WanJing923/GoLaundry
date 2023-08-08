@@ -1,31 +1,28 @@
 package com.example.golaundry;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-
-import com.example.golaundry.databinding.ActivityNotificationBinding;
-import com.example.golaundry.databinding.ActivityUserSignUpBinding;
 
 import java.util.Objects;
 
 public class NotificationActivity extends AppCompatActivity {
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //implement binding method
-        com.example.golaundry.databinding.ActivityNotificationBinding mActivityNotificationBinding = ActivityNotificationBinding.inflate(getLayoutInflater());
-        setContentView(mActivityNotificationBinding.getRoot());
+        setContentView(R.layout.activity_notification);
 
         //toolbar function
-        setSupportActionBar(mActivityNotificationBinding.naToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.na_toolbar);
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Objects.requireNonNull(mActivityNotificationBinding.naToolbar.getNavigationIcon()).setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        mActivityNotificationBinding.naToolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
     }
 }

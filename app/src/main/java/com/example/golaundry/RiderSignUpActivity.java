@@ -1,32 +1,29 @@
 package com.example.golaundry;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-
-import com.example.golaundry.databinding.ActivityRiderSignUpBinding;
 
 import java.util.Objects;
 
 public class RiderSignUpActivity extends AppCompatActivity {
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rider_sign_up);
 
-        //implement binding method
-        com.example.golaundry.databinding.ActivityRiderSignUpBinding mActivityRiderSignUpBinding = ActivityRiderSignUpBinding.inflate(getLayoutInflater());
-        setContentView(mActivityRiderSignUpBinding.getRoot());
-
-        //toolbar function
-        setSupportActionBar(mActivityRiderSignUpBinding.rsuaToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.rsua_toolbar);
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Objects.requireNonNull(mActivityRiderSignUpBinding.rsuaToolbar.getNavigationIcon()).setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        mActivityRiderSignUpBinding.rsuaToolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
     }
 
     @Override

@@ -8,7 +8,7 @@
     tools:context=".LaundrySignUpActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/usua_toolbar"
+        android:id="@+id/lsua_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/second_green"
@@ -18,7 +18,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/usua_toolbar"
+        android:layout_below="@id/lsua_toolbar"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

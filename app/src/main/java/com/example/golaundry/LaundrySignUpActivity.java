@@ -1,34 +1,29 @@
 package com.example.golaundry;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.MenuItem;
-
-import com.example.golaundry.databinding.ActivityLaundrySignUpBinding;
-import com.example.golaundry.databinding.ActivityUserSignUpBinding;
 
 import java.util.Objects;
 
 public class LaundrySignUpActivity extends AppCompatActivity {
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_laundry_sign_up);
 
-        //implement binding method
-        com.example.golaundry.databinding.ActivityLaundrySignUpBinding mActivityLaundrySignUpBinding = ActivityLaundrySignUpBinding.inflate(getLayoutInflater());
-        setContentView(mActivityLaundrySignUpBinding.getRoot());
-
-        //toolbar function
-        setSupportActionBar(mActivityLaundrySignUpBinding.usuaToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.lsua_toolbar);
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Objects.requireNonNull(mActivityLaundrySignUpBinding.usuaToolbar.getNavigationIcon()).setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        mActivityLaundrySignUpBinding.usuaToolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
-
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
     }
 
     @Override

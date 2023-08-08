@@ -5,31 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.MenuItem;
-
-import com.example.golaundry.databinding.ActivityHelpCenterBinding;
-import com.example.golaundry.databinding.ActivityUserSignUpBinding;
 
 import java.util.Objects;
 
 public class HelpCenterActivity extends AppCompatActivity {
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_help_center);
 
-        //implement binding method
-        com.example.golaundry.databinding.ActivityHelpCenterBinding mActivityHelpCenterBinding = ActivityHelpCenterBinding.inflate(getLayoutInflater());
-        setContentView(mActivityHelpCenterBinding.getRoot());
-
-        //toolbar function
-        setSupportActionBar(mActivityHelpCenterBinding.haToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.ha_toolbar);
+        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Objects.requireNonNull(mActivityHelpCenterBinding.haToolbar.getNavigationIcon()).setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        mActivityHelpCenterBinding.haToolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
     }
 
     @Override
