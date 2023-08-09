@@ -81,7 +81,7 @@
                 android:textSize="12sp" />
 
             <EditText
-                android:id="@+id/rsua_et_enter_shop_name"
+                android:id="@+id/rsua_et_enter_full_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rsua_tv_full_name"
@@ -102,7 +102,7 @@
                 android:id="@+id/rsua_tv_contact_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rsua_et_enter_shop_name"
+                android:layout_below="@id/rsua_et_enter_full_name"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -191,7 +191,7 @@
                 android:layout_marginEnd="42dp"
                 android:autofillHints="enter plate number"
                 android:background="@drawable/custom_login"
-                android:focusable="false"
+                android:focusable="true"
                 android:hint="@string/enter_plate_number"
                 android:inputType="text"
                 android:padding="15dp"
@@ -212,31 +212,50 @@
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
-            <EditText
-                android:id="@+id/rsua_et_upload_face_photo"
+            <LinearLayout
+                android:id="@+id/rsua_face_photo_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rsua_tv_face_photo"
                 android:layout_marginStart="42dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
-                android:autofillHints="upload photo"
                 android:background="@drawable/custom_login"
-                android:drawableEnd="@drawable/ic_camera"
-                android:focusable="false"
-                android:hint="@string/upload_photo"
-                android:inputType="none"
-                android:padding="15dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/rsua_face_photo_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="2dp"
+                    android:src="@drawable/ic_done"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/rsua_et_upload_face_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:autofillHints="upload photo"
+                    android:background="@drawable/custom_login"
+                    android:drawableEnd="@drawable/ic_camera"
+                    android:focusable="false"
+                    android:hint="@string/upload_photo"
+                    android:inputType="none"
+                    android:padding="15dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/rsua_tv_driving_license"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rsua_et_upload_face_photo"
+                android:layout_below="@id/rsua_face_photo_linear"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -244,31 +263,51 @@
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
-            <EditText
-                android:id="@+id/rsua_et_upload_driving_license"
+            <LinearLayout
+                android:id="@+id/rsua_driving_license_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rsua_tv_driving_license"
                 android:layout_marginStart="42dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
-                android:autofillHints="upload photo"
                 android:background="@drawable/custom_login"
-                android:drawableEnd="@drawable/ic_camera"
-                android:focusable="false"
-                android:hint="@string/upload_photo"
-                android:inputType="none"
-                android:padding="15dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/rsua_driving_license_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="2dp"
+                    android:src="@drawable/ic_done"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/rsua_et_upload_driving_license"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:autofillHints="upload photo"
+                    android:background="@drawable/custom_login"
+                    android:drawableEnd="@drawable/ic_camera"
+                    android:focusable="false"
+                    android:hint="@string/upload_photo"
+                    android:inputType="none"
+                    android:padding="15dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/rsua_tv_ic_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rsua_et_upload_driving_license"
+                android:layout_below="@id/rsua_driving_license_linear"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -380,4 +419,12 @@
                 android:text="@string/register" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/rsua_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
 </RelativeLayout>
