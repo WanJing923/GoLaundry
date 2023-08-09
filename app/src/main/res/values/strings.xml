@@ -165,4 +165,11 @@
     <string name="confirmPasswordRequiredToast">Confirm password is required!</string>
     <string name="confirmPasswordNotMatchToast">Both passwords are different!</string>
     <string name="icInvalidToast">NRIC number should be 12 numbers!</string>
+    <string name="checkBoxToast">Please accept the terms and conditions to register account!</string>
+    <string name="contactNoRequiredToast">Contact number is required!</string>
+    <string name="contactNoLessToast">Contact number must be at least 9 characters!</string>
+    <string name="plateNumberRequiredToast">Plate number is required!</string>
+    <string name="plateNumberLessToast">Plate number should be more than 6 characters!</string>
+    <string name="facePhotoRequiredToast">Face photo is required!</string>
+    <string name="drivingLicensePhotoRequiredToast">Driving license photo is required!</string>
 </resources>

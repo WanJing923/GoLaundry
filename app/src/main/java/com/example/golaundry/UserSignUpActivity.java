@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -97,6 +98,8 @@ public class UserSignUpActivity extends AppCompatActivity {
         // show the visibility of progress bar to show loading
         mProgressBar.setVisibility(View.VISIBLE);
 
+        CheckBox mCheckBox = findViewById(R.id.usua_checkBox);
+
         //get user data
         EditText fullNameEditText = findViewById(R.id.usua_et_full_name);
         EditText icNoEditText = findViewById(R.id.usua_et_ic_no);
@@ -112,7 +115,12 @@ public class UserSignUpActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
         String confirmPass = confirmPassEditText.getText().toString().trim();
 
-
+        if (!mCheckBox.isChecked()){
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(this, R.string.checkBoxToast, Toast.LENGTH_SHORT).show();
+            findViewById(R.id.usua_checkBox).requestFocus();
+            return;
+        }
         //validate to check if name is empty
         if (fullName.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
