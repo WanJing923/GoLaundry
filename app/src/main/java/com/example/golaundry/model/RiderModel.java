@@ -80,14 +80,6 @@ public class RiderModel {
         this.icNo = icNo;
     }
 
-    public String getRegisterDateTime() {
-        return registerDateTime;
-    }
-
-    public void setRegisterDateTime(String registerDateTime) {
-        this.registerDateTime = registerDateTime;
-    }
-
     public String getStatus() {
         return status;
     }

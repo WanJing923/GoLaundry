@@ -125,12 +125,23 @@
         android:textColor="@color/white"
         android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/fl_tv_needhelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_tv_forgetpassword"
+            android:layout_marginTop="11dp"
+            android:layout_marginStart="42dp"
+            android:text="@string/need_help"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/fl_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:layout_below="@id/fl_tv_forgetpassword"
+        android:layout_below="@id/fl_tv_needhelp"
         android:textSize="12sp"
         android:text="@string/remember_me"
         android:buttonTint="@color/white"
@@ -141,7 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/fl_checkBox"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="50dp"
             android:layout_marginStart="42dp"
             android:layout_marginEnd="42dp"
             android:background="@drawable/custom_button"

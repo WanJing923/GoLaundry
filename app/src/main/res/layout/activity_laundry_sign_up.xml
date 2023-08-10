@@ -135,6 +135,7 @@
                     android:hint="@string/enter_contact_number"
                     android:inputType="phone"
                     android:maxLength="10"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/text_color" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -243,31 +244,50 @@
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
-            <EditText
-                android:id="@+id/lsua_et_upload_business_license"
+            <LinearLayout
+                android:id="@+id/lsua_business_license_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lsua_tv_business_license"
                 android:layout_marginStart="42dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="42dp"
-                android:autofillHints="upload photo"
                 android:background="@drawable/custom_login"
-                android:drawableEnd="@drawable/ic_camera"
-                android:focusable="false"
-                android:hint="@string/upload_photo"
-                android:inputType="none"
-                android:padding="15dp"
-                android:singleLine="true"
-                android:textColor="@color/white"
-                android:textColorHint="@color/text_color"
-                android:textSize="15sp" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/lsua_iv_BL_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="2dp"
+                    android:src="@drawable/ic_done"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/lsua_et_upload_BL"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:autofillHints="upload photo"
+                    android:background="@drawable/custom_login"
+                    android:drawableEnd="@drawable/ic_camera"
+                    android:focusable="false"
+                    android:hint="@string/upload_photo"
+                    android:inputType="none"
+                    android:padding="15dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/lsua_tv_owner_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lsua_et_upload_business_license"
+                android:layout_below="@id/lsua_business_license_linear"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="27dp"
                 android:gravity="top"
@@ -450,4 +470,12 @@
                 android:text="@string/register" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/lsua_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
 </RelativeLayout>

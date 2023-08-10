@@ -172,4 +172,17 @@
     <string name="plateNumberLessToast">Plate number should be more than 6 characters!</string>
     <string name="facePhotoRequiredToast">Face photo is required!</string>
     <string name="drivingLicensePhotoRequiredToast">Driving license photo is required!</string>
+    <string name="to_collect">To Collect</string>
+    <string name="to_receive">To Receive</string>
+    <string name="complete">Complete</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="laundry_terry">Laundry Terry</string>
+    <string name="_20ff3e3">20FF3E3</string>
+    <string name="x">x</string>
+    <string name="_2">2</string>
+    <string name="rm">RM</string>
+    <string name="_4_50">4.50</string>
+    <string name="titleRequiredToast">Title is required!</string>
+    <string name="msgRequiredToast">Message is required!</string>
+    <string name="need_help">Need help?</string>
 </resources>
