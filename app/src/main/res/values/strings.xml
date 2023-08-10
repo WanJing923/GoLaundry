@@ -182,4 +182,7 @@
     <string name="_2">2</string>
     <string name="rm">RM</string>
     <string name="_4_50">4.50</string>
+    <string name="titleRequiredToast">Title is required!</string>
+    <string name="msgRequiredToast">Message is required!</string>
+    <string name="need_help">Need help?</string>
 </resources>

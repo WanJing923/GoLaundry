@@ -28,8 +28,6 @@ import java.util.Objects;
 
 public class UserSignUpActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-    private ProgressBar mProgressBar;
     private UserViewModel mUserViewModel;
     private String selectedGender = "";
 
@@ -68,9 +66,6 @@ public class UserSignUpActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
-
-        // taking FirebaseAuth instance
-        mAuth = FirebaseAuth.getInstance();
 
         //check and register user
         findViewById(R.id.usua_btn_register).setOnClickListener(new View.OnClickListener() {
