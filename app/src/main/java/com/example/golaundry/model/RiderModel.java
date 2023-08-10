@@ -11,8 +11,10 @@ public class RiderModel {
     private String icNo;
     private String registerDateTime;
     private String status;
+    private String userType;
 
-    public RiderModel(String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status) {
+
+    public RiderModel(String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType) {
         this.fullName = fullName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -22,6 +24,7 @@ public class RiderModel {
         this.icNo = icNo;
         this.registerDateTime = registerDateTime;
         this.status = status;
+        this.userType = userType;
     }
 
     public String getFullName() {
@@ -86,5 +89,21 @@ public class RiderModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public String getRegisterDateTime() {
+        return registerDateTime;
+    }
+
+    public void setRegisterDateTime(String registerDateTime) {
+        this.registerDateTime = registerDateTime;
     }
 }

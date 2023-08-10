@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,152 +10,159 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/fl_tv_go_laundry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="60dp"
-        android:layout_alignParentEnd="true"
-        android:fontFamily="@font/courgette_regular"
-        android:gravity="center_horizontal|center_vertical"
-        android:shadowColor="#000000"
-        android:shadowDx="10"
-        android:shadowDy="5"
-        android:shadowRadius="1"
-        android:text="Go-Laundry"
-        android:textAlignment="center"
-        android:textColor="@color/gold"
-        android:textFontWeight="400"
-        android:textSize="40sp" />
+        <TextView
+            android:id="@+id/fl_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="60dp"
+            android:fontFamily="@font/courgette_regular"
+            android:gravity="center_horizontal|center_vertical"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="Go-Laundry"
+            android:textAlignment="center"
+            android:textColor="@color/gold"
+            android:textFontWeight="400"
+            android:textSize="40sp" />
 
-    <ImageView
-        android:id="@+id/fl_iv_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/fl_tv_go_laundry"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="52dp"
-        android:contentDescription="@string/ic_login"
-        android:src="@drawable/ic_person_2" />
+        <ImageView
+            android:id="@+id/fl_iv_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/fl_tv_go_laundry"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="52dp"
+            android:contentDescription="@string/ic_login"
+            android:src="@drawable/ic_person_2" />
 
-    <TextView
-        android:id="@+id/fl_tv_logintoaccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fl_iv_icon"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="28dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="@string/log_in_to_account"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/fl_tv_logintoaccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_iv_icon"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="28dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/log_in_to_account"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/fl_tv_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fl_tv_logintoaccount"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="36dp"
-        android:gravity="top"
-        android:text="@string/email_address"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/fl_tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_tv_logintoaccount"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="36dp"
+            android:gravity="top"
+            android:text="@string/email_address"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
-    <EditText
-        android:id="@+id/fl_et_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fl_tv_email"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="42dp"
-        android:background="@drawable/custom_login"
-        android:hint="@string/enter_email_address"
-        android:inputType="textEmailAddress"
-        android:maxLength="7"
-        android:padding="15dp"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textColorHint="@color/text_color"
-        android:textSize="15sp"
-        android:autofillHints="Enter Email Address" />
+        <EditText
+            android:id="@+id/fl_et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_tv_email"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="42dp"
+            android:autofillHints="Enter Email Address"
+            android:background="@drawable/custom_login"
+            android:hint="@string/enter_email_address"
+            android:inputType="textEmailAddress"
+            android:padding="15dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/text_color"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/fl_tv_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="27dp"
-        android:text="@string/password"
-        android:layout_below="@id/fl_et_email"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/fl_tv_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_et_email"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="27dp"
+            android:text="@string/password"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
-    <EditText
-        android:id="@+id/fl_et_enter_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_login"
-        android:layout_below="@id/fl_tv_password"
-        android:layout_marginStart="42dp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginTop="5dp"
-        android:hint="@string/enter_password"
-        android:textColorHint="@color/text_color"
-        android:inputType="textPassword"
-        android:maxLength="7"
-        android:padding="15dp"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:autofillHints="Enter Password" />
+        <EditText
+            android:id="@+id/fl_et_enter_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_tv_password"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="42dp"
+            android:autofillHints="Enter Password"
+            android:background="@drawable/custom_login"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/text_color"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/fl_tv_forgetpassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fl_et_enter_password"
-        android:layout_marginTop="11dp"
-        android:layout_marginStart="42dp"
-        android:text="@string/forgot_password"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/fl_tv_forgetpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_et_enter_password"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="11dp"
+            android:text="@string/forgot_password"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/fl_tv_needhelp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/fl_tv_forgetpassword"
-            android:layout_marginTop="11dp"
             android:layout_marginStart="42dp"
+            android:layout_marginTop="11dp"
             android:text="@string/need_help"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/fl_checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_below="@id/fl_tv_needhelp"
-        android:textSize="12sp"
-        android:text="@string/remember_me"
-        android:buttonTint="@color/white"
-        android:textColor="@color/white" />
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/fl_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fl_tv_needhelp"
+            android:layout_marginStart="35dp"
+            android:buttonTint="@color/white"
+            android:text="@string/remember_me"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/fl_btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/fl_checkBox"
-            android:layout_marginTop="50dp"
             android:layout_marginStart="42dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="42dp"
             android:background="@drawable/custom_button"
             android:backgroundTint="@color/cyan"
             android:text="@string/login" />
+
+        <ProgressBar
+            android:id="@+id/fl_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
     </RelativeLayout>
 </ScrollView>
+

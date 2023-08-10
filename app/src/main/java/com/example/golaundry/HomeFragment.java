@@ -1,5 +1,6 @@
 package com.example.golaundry;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,9 +76,9 @@ public class HomeFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
         toolbar = (Toolbar) view.findViewById(R.id.fh_toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
 
 //        BarChart barChart = view.findViewById(R.id.chart1);
@@ -119,7 +122,9 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.tm_btn_notification) {
-            return true;
+            //intent notification
+            Intent intent = new Intent(getActivity(), NotificationActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

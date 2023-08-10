@@ -247,7 +247,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             findViewById(R.id.lsua_et_confirm_password).requestFocus();
         } else {
 
-            LaundryModel newLaundry = new LaundryModel(fullName, contactNo, emailAddress, address, addressDetails, BusinessLicensePhoto, fullName, phoneNo, icNo, registerDateTime, "terminated");
+            LaundryModel newLaundry = new LaundryModel(fullName, contactNo, emailAddress, address, addressDetails, BusinessLicensePhoto, fullName, phoneNo, icNo, registerDateTime, "terminated", "laundry");
 
             mLaundryViewModel.signUpLaundryWithImage(emailAddress, password, newLaundry)
                     .observe(this, signUpSuccess -> {
