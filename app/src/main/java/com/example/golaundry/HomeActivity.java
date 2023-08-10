@@ -28,10 +28,11 @@ public class HomeActivity extends AppCompatActivity{
                         break;
 
                     case 1:
-                        //replace(new OrderFragment());
+                        replace(new UserOrderFragment());
                         break;
 
                     case 2:
+                        replace(new HistoryFragment());
                         break;
 
                     case 3:
@@ -46,6 +47,5 @@ public class HomeActivity extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.home_container, fragment);
         fragmentTransaction.commit();
-
     }
 }
