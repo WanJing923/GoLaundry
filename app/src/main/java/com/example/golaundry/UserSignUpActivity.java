@@ -21,8 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.UserViewModel;
-import com.google.firebase.auth.FirebaseAuth;
-
 
 import java.util.Objects;
 
@@ -68,12 +66,7 @@ public class UserSignUpActivity extends AppCompatActivity {
         });
 
         //check and register user
-        findViewById(R.id.usua_btn_register).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerUser();
-            }
-        });
+        findViewById(R.id.usua_btn_register).setOnClickListener(v -> registerUser());
     }
 
     // return to the previous page. Kill the current page.
@@ -110,7 +103,7 @@ public class UserSignUpActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
         String confirmPass = confirmPassEditText.getText().toString().trim();
 
-        if (!mCheckBox.isChecked()){
+        if (!mCheckBox.isChecked()) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, R.string.checkBoxToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_checkBox).requestFocus();
@@ -226,40 +219,6 @@ public class UserSignUpActivity extends AppCompatActivity {
                             mProgressBar.setVisibility(View.GONE);
                         }
                     });
-
-            // create new user
-//            mAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                @Override
-//                public void onComplete(@NonNull Task<AuthResult> task) {
-//                    if (task.isSuccessful()) {
-//                        // Registration successful
-//                        Toast.makeText(getApplicationContext(),
-//                                "Registration successful!",
-//                                Toast.LENGTH_LONG).show();
-//
-//                        // Get the UID of the newly created user
-//                        String uid = Objects.requireNonNull(task.getResult().getUser()).getUid();
-//
-//                        // Initialize Firebase Realtime Database reference
-//                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-//
-//                        // Create a new child node with the UID and set the user data
-//                        databaseReference.child(uid).setValue(newUser);
-//
-//                        // Hide the progress bar
-//                        mProgressBar.setVisibility(View.GONE);
-//                    } else {
-//                        // Registration failed
-//                        String errorMessage = Objects.requireNonNull(task.getException()).getMessage(); // Get the error message
-//                        Toast.makeText(
-//                                getApplicationContext(),
-//                                "Registration failed: " + errorMessage,
-//                                Toast.LENGTH_LONG).show();
-//                        mProgressBar.setVisibility(View.GONE);
-//                    }
-//                }
-//            });
-
 
         }
     }

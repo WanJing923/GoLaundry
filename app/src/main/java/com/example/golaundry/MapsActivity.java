@@ -43,7 +43,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private LatLng pickupLocation;
 
-    private int radius = 1;
+    private final int radius = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
