@@ -13,8 +13,10 @@ public class LaundryModel {
     private String icNo;
     private String registerDateTime;
     private String status;
+    private String userType;
 
-    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status) {
+
+    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType) {
         this.shopName = shopName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -26,6 +28,7 @@ public class LaundryModel {
         this.icNo = icNo;
         this.registerDateTime = registerDateTime;
         this.status = status;
+        this.userType = userType;
     }
 
     public String getShopName() {
@@ -114,5 +117,13 @@ public class LaundryModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

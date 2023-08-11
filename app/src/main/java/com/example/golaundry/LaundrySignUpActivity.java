@@ -247,7 +247,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             findViewById(R.id.lsua_et_confirm_password).requestFocus();
         } else {
 
-            LaundryModel newLaundry = new LaundryModel(fullName, contactNo, emailAddress, address, addressDetails, BusinessLicensePhoto, fullName, phoneNo, icNo, registerDateTime, "terminated");
+            LaundryModel newLaundry = new LaundryModel(fullName, contactNo, emailAddress, address, addressDetails, BusinessLicensePhoto, fullName, phoneNo, icNo, registerDateTime, "terminated", "laundry");
 
             mLaundryViewModel.signUpLaundryWithImage(emailAddress, password, newLaundry)
                     .observe(this, signUpSuccess -> {
@@ -261,90 +261,8 @@ public class LaundrySignUpActivity extends AppCompatActivity {
                         }
                     });
 
-//            if (FPfilepath != null) {
-//                String riderID = UUID.randomUUID().toString();
-//
-//                StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("Riders/" + riderID).child("FacePhoto");
-//                uploadTask = fileRef.putFile(FPfilepath);
-//                uploadTask.continueWithTask(task -> {
-//                    if (!task.isComplete()) {
-//                        throw Objects.requireNonNull(task.getException());
-//                    }
-//                    return fileRef.getDownloadUrl();
-//                }).addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        //get the download Uri of the image
-//                        Uri downloadUri = (Uri) task.getResult();
-//                        myUrl = downloadUri.toString();
-//
-//                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-//                        DatabaseReference dbRef = db.getReference();
-//                        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                                if (!(snapshot.child("CommunityPost").child(riderID).exists())) {
-//                                    HashMap<String, Object> data = new HashMap<>();
-//
-//                                    data.put("riderId", riderID);
-//                                    data.put("dateTime", registerDateTime);
-//                                    data.put("url", myUrl);
-//
-//                                    dbRef.child("riders").child(riderID).updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-//
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            if (task.isSuccessful()) {
-//                                                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-//                                                Intent intent = new Intent(RiderSignUpActivity.this, HomeActivity.class);
-//                                                startActivity(intent);
-//                                                finish();
-//
-//                                            } else {
-//                                                Toast.makeText(getApplicationContext(), "Network Error. Please Try Again", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//                                    });
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Network Error. Please try Again", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(RiderSignUpActivity.this, HomeActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//
-//                            }
-//                        });
-//                    }
-//                }).addOnFailureListener(e -> Toast.makeText(RiderSignUpActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-//            } else {
-//                Toast.makeText(RiderSignUpActivity.this, "No Image Selected!", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            //vm create user
-//            mRiderViewModel.createRider(emailAddress, password, newRider)
-//                    .observe(this, signUpResult -> {
-//                        if (signUpResult != null && signUpResult) {
-//                            // User registration success
-//                            Toast.makeText(RiderSignUpActivity.this, "Account has successfully registered!", Toast.LENGTH_SHORT).show();
-//                            mProgressBar.setVisibility(View.GONE);
-//                            finish();
-//                        } else {
-//                            // User registration failed
-//                            Toast.makeText(RiderSignUpActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
-//                            mProgressBar.setVisibility(View.GONE);
-//                        }
-//                    });
-
         }
     }
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

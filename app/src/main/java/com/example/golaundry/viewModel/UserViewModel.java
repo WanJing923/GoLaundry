@@ -1,12 +1,19 @@
 package com.example.golaundry.viewModel;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.MainActivity;
 import com.example.golaundry.UserSignUpActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,6 +53,20 @@ public class UserViewModel extends ViewModel {
                     }
                 });
         return signUpResult;
+    }
+
+    public LiveData<Boolean> loginUser(String email, String password) {
+        MutableLiveData<Boolean> signInResult = new MutableLiveData<>();
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                signInResult.setValue(true);
+                            } else {
+                                signInResult.setValue(false);
+                            }
+                        });
+        return signInResult;
     }
 
 }

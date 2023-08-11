@@ -271,7 +271,7 @@ public class RiderSignUpActivity extends AppCompatActivity {
             findViewById(R.id.rsua_et_confirm_password).requestFocus();
         } else {
 
-            RiderModel newRider = new RiderModel(fullName, contactNo, emailAddress, plateNumber, facePhoto, drivingLicensePhoto, icNo, registerDateTime, "terminated");
+            RiderModel newRider = new RiderModel(fullName, contactNo, emailAddress, plateNumber, facePhoto, drivingLicensePhoto, icNo, registerDateTime, "terminated", "rider");
 
             mRiderViewModel.signUpRiderWithImage(emailAddress, password, newRider)
                     .observe(this, signUpSuccess -> {

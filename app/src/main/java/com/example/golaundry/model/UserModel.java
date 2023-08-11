@@ -8,14 +8,16 @@ public class UserModel {
     private String phoneNo;
     private String emailAddress;
     private String status;
+    private String userType;
 
-    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status) {
+    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType) {
         this.fullName = fullName;
         this.gender = gender;
         this.icNo = icNo;
         this.phoneNo = phoneNo;
         this.emailAddress = emailAddress;
         this.status = status;
+        this.userType = userType;
     }
 
     public UserModel() {
@@ -62,11 +64,19 @@ public class UserModel {
         this.emailAddress = emailAddress;
     }
 
-    public String getstatus() {
+    public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }
