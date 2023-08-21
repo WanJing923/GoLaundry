@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/second_green"
+    tools:context=".RatingActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ra_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/ra_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="#FFC0AB88"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ra_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/pa_tv_rate_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/rate_order"
+                android:textStyle="bold"
+                android:textColor="@color/gold"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ra_tv_laundry_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/pa_tv_rate_order"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/laundry_service"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RatingBar
+                android:id="@+id/ra_rate_laundry"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ra_tv_laundry_service"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:numStars="5"
+                android:progressTint="@color/white"
+                android:rating="1"
+                android:saveEnabled="true" />
+
+            <TextView
+                android:id="@+id/ra_tv_laundry_service_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/ra_rate_laundry"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/laundry_service_optional"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/ra_et_laundry_service"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@id/ra_tv_laundry_service_msg"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="28dp"
+                android:autofillHints="laundry service"
+                android:background="@drawable/custom_edittext"
+                android:ems="10"
+                android:gravity="center_horizontal|left"
+                android:hint="@string/tell_this_laundy_shop"
+                android:inputType="textMultiLine"
+                android:maxLines="10"
+                android:padding="5dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="15sp"
+                tools:ignore="RtlHardcoded" />
+
+
+            <TextView
+                android:id="@+id/ra_tv_rider_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/ra_et_laundry_service"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="48dp"
+                android:text="@string/rider_service"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RatingBar
+                android:id="@+id/ra_rate_rider"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ra_tv_rider_service"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:numStars="5"
+                android:progressTint="@color/white"
+                android:rating="1"
+                android:saveEnabled="true" />
+
+            <TextView
+                android:id="@+id/ra_tv_rider_service_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/ra_rate_rider"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/rider_service_optional"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/ra_et_rider_service_note"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@id/ra_tv_rider_service_msg"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="28dp"
+                android:background="@drawable/custom_edittext"
+                android:ems="10"
+                android:maxLines="10"
+                android:padding="5dp"
+                android:gravity="center_horizontal|left"
+                android:hint="@string/tell_this_rider"
+                android:inputType="textMultiLine"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="15sp"
+                tools:ignore="RtlHardcoded"
+                android:autofillHints="rider service" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/ra_btn_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/cyan"
+                android:text="@string/done"
+                android:layout_below="@id/ra_et_rider_service_note"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
