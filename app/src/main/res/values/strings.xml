@@ -5,7 +5,6 @@
     <string name="go_laundry">Go-Laundry</string>
     <string name="ic_login">ic_login</string>
     <string name="log_in_to_account">Log in to Account</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_an_account">Create an Account</string>
     <string name="user">User</string>
@@ -14,7 +13,7 @@
     <string name="notification">Notification</string>
     <string name="username">Fendy Woo</string>
     <string name="rate">GL20</string>
-    <string name="member">Member Rate: </string>
+    <string name="member">Member Rate:\u0020</string>
     <string name="month">July</string>
     <string name="topup">topup</string>
     <string name="balance_rm">Balance: RM</string>
@@ -22,9 +21,9 @@
     <string name="monthly_top_up_amount_rm">Monthly top up amount: RM</string>
     <string name="progress">70%</string>
     <string name="top_up_rm">Top up RM</string>
-    <string name="more_to_reach_next_level"> more to reach next level</string>
-    <string name="dashboard"> Dashboard</string>
-    <string name="spending"> Spending</string>
+    <string name="more_to_reach_next_level">\u0020more to reach next level</string>
+    <string name="dashboard">\u0020Dashboard</string>
+    <string name="spending">\u0020Spending</string>
     <string name="view">View</string>
     <string name="pending_collection">Pending Collection</string>
     <string name="_0">0</string>
@@ -75,7 +74,7 @@
     <string name="last_recently_ordered">Last recently ordered</string>
     <string name="dry_cleaning_laundry">Dry Cleaning Laundry</string>
     <string name="_5_0">5.0 </string>
-    <string name="services_chosen">Services chosen: </string>
+    <string name="services_chosen">Services chosen:\u0020</string>
     <string name="washing">Washing</string>
     <string name="repeat_order">Repeat Order</string>
     <string name="discover">Discover</string>
@@ -83,10 +82,10 @@
     <string name="all">All</string>
     <string name="filter">Filter</string>
     <string name="filter_laundry_shops">Filter laundry shops</string>
-    <string name="ratings">Ratings: </string>
-    <string name="distance">Distance: </string>
+    <string name="ratings">Ratings:\u0020</string>
+    <string name="distance">Distance:\u0020</string>
     <string name="_3km">3km</string>
-    <string name="services">Services: </string>
+    <string name="services">Services:\u0020</string>
     <string name="ironing">Ironing</string>
     <string name="drying">Drying</string>
     <string name="dry_cleaning">Dry Cleaning</string>
@@ -109,7 +108,7 @@
     <string name="location">location</string>
     <string name="save">save</string>
     <string name="all_clothes_will_be_washed_at_30_u2103_including_tumble_dried_and_folding">All clothes will be washed at 30℃, including tumble dried and folding.</string>
-    <string name="note">Please separate the clothes by colors, Thank you.</string>
+    <string name="note">Please separate the clothes by colors, thank you.</string>
     <string name="leave_a_note">Leave a note</string>
     <string name="rm9_00_for_each_9kg">RM9.00 for each 9kg</string>
     <string name="less">less</string>
@@ -139,7 +138,7 @@
     <string name="your_laundry_order_2309de6_will_be_delivered_by_the_rider_today_click_here_to_see_order_details_and_track_your_order">Your laundry order 2309DE6 will be delivered by the rider today. Click here to see order details and track your order.</string>
     <string name="_2023_06_08_05_25">2023-06-08 05:25</string>
     <string name="laundry_icon">laundry icon</string>
-    <string name="order_id">Order ID:</string>
+    <string name="order_id">Order ID:\u0020</string>
     <string name="_2309de68">2309DE68</string>
     <string name="_26_july_2023">26 July 2023</string>
     <string name="rm_30_00">RM 30.00</string>
@@ -189,9 +188,9 @@
     <string name="status_icon">Status Icon</string>
     <string name="more_icon">More Icon</string>
     <string name="_3_00">3.00</string>
-    <string name="delivery_fee">Delivery Fee:</string>
+    <string name="delivery_fee">Delivery Fee:\u0020</string>
     <string name="_50_00">50.00</string>
-    <string name="order_total">Order Total:</string>
+    <string name="order_total">Order Total:\u0020</string>
     <string name="_23_september_2023">23 September 2023</string>
     <string name="completed">Completed</string>
     <string name="tv_rate">Rate</string>
@@ -201,10 +200,10 @@
     <string name="_601234567890">+601234567890</string>
     <string name="ratings_num">Ratings:</string>
     <string name="ppp2222">PPP2222</string>
-    <string name="plate_number_num">Plate Number:</string>
-    <string name="phone_number_equal">Phone Number:</string>
-    <string name="gender_equal">Gender:</string>
-    <string name="full_name_equal">Full Name:</string>
+    <string name="plate_number_num">Plate Number:\u0020</string>
+    <string name="phone_number_equal">Phone Number:\u0020</string>
+    <string name="gender_equal">Gender:\u0020</string>
+    <string name="full_name_equal">Full Name:\u0020</string>
     <string name="reset_password">Reset Password</string>
     <string name="old_password">Old Password</string>
     <string name="enter_old_password">Enter old password</string>
@@ -232,4 +231,15 @@
     <string name="rider_service">Rider Service:</string>
     <string name="rider_service_optional">Rider Service:(optional)</string>
     <string name="tell_this_rider">Tell this rider…</string>
+    <string name="_4_5">4.5</string>
+    <string name="view_ratings">View ratings</string>
+    <string name="earnings">\u0020Earnings</string>
+    <string name="pending_process">Pending Process</string>
+    <string name="ic_pending_process">Icon pending process</string>
+    <string name="ic_pending_confirm">Icon pending confirm</string>
+    <string name="pending_confirm">Pending Confirm</string>
+    <string name="johnny_tan">Johnny Tan</string>
+    <string name="pending_pick_up">Pending Pick Up</string>
+    <string name="ic_pending_pick_up">Icon Pending Pick Up</string>
+    <string name="lorong_tingga_2">Lorong Tingga 2</string>
 </resources>

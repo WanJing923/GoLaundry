@@ -15,22 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
-public class HomeFragment extends Fragment {
+public class HomeRiderFragment extends Fragment {
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
-    private Toolbar toolbar;
     private LineChart lineChart;
 
-    public HomeFragment() {
+    public HomeRiderFragment() {
         // Required empty public constructor
     }
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+
+    public static HomeRiderFragment newInstance(String param1, String param2) {
+        HomeRiderFragment fragment = new HomeRiderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -42,24 +42,27 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String param1 = getArguments().getString(ARG_PARAM1);
+            String param2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //get current user id
+        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_home, container, false);
+        View view =  inflater.inflate(R.layout.fragment_home_rider, container, false);
 
-        toolbar = (Toolbar) view.findViewById(R.id.fh_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fhr_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
 
-//        BarChart barChart = view.findViewById(R.id.chart1);
+//        BarChart barChart = view.findViewById(R.id.fh_order_chart);
 //        ArrayList<BarEntry> barEntries = new ArrayList<>();
 //        barEntries.add(new BarEntry(0f, 44f));
 //        barEntries.add(new BarEntry(1f, 88f));
@@ -86,6 +89,7 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // First clear current all the menu items
@@ -106,6 +110,4 @@ public class HomeFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

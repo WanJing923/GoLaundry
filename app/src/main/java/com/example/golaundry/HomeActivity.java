@@ -48,12 +48,12 @@ public class HomeActivity extends AppCompatActivity {
                     String userType = snapshot.child("userType").getValue(String.class);
 
                     if (Objects.requireNonNull(userType).equals("user")) {
-                        replace(new HomeFragment());
+                        replace(new HomeUserFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {
                                 case 0:
-                                    replace(new HomeFragment());
+                                    replace(new HomeUserFragment());
                                     break;
 
                                 case 1:
@@ -90,12 +90,12 @@ public class HomeActivity extends AppCompatActivity {
                     String userType = snapshot.child("userType").getValue(String.class);
 
                     if (Objects.requireNonNull(userType).equals("laundry")) {
-                        replace(new HomeFragment());
+                        replace(new HomeUserFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {
                                 case 0:
-                                    replace(new HomeFragment());
+                                    replace(new HomeLaundryFragment());
                                     break;
 
                                 case 1:
@@ -121,7 +121,6 @@ public class HomeActivity extends AppCompatActivity {
             }
 
         });
-
     }
 
     private void riderUserType(String currentUserId){
@@ -132,12 +131,12 @@ public class HomeActivity extends AppCompatActivity {
                     String userType = snapshot.child("userType").getValue(String.class);
 
                     if (Objects.requireNonNull(userType).equals("rider")) {
-                        replace(new HomeFragment());
+                        replace(new HomeUserFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {
                                 case 0:
-                                    replace(new HomeFragment());
+                                    replace(new HomeRiderFragment());
                                     break;
 
                                 case 1:

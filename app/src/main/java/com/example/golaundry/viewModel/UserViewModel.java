@@ -12,23 +12,30 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.MainActivity;
 import com.example.golaundry.UserSignUpActivity;
+import com.example.golaundry.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
 public class UserViewModel extends ViewModel {
 
     private final FirebaseDatabase db;
+    private final DatabaseReference userRef;
     private final FirebaseAuth mAuth;
 
     //constructor
     public UserViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
+        userRef = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
     public <User> LiveData<Boolean> createUser(String email, String password, User newUser) {
@@ -67,6 +74,26 @@ public class UserViewModel extends ViewModel {
                             }
                         });
         return signInResult;
+    }
+
+    public LiveData<UserModel> getUserData(String currentUserId) {
+        MutableLiveData<UserModel> userData = new MutableLiveData<>();
+        userRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    UserModel user = dataSnapshot.getValue(UserModel.class);
+                    userData.setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+
+        return userData;
     }
 
 }
