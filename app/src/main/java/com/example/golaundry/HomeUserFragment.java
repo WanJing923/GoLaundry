@@ -2,13 +2,6 @@ package com.example.golaundry;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.time.Month;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -42,7 +41,7 @@ public class HomeUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_home_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_user, container, false);
 
         //toolbar and back button
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fhu_toolbar);
@@ -61,6 +60,8 @@ public class HomeUserFragment extends Fragment {
         TextView userNameTextView = view.findViewById(R.id.fhu_tv_name);
         TextView membershipRateTextView = view.findViewById(R.id.fhu_tv_rate);
         TextView currentMonthTextView = view.findViewById(R.id.fhu_tv_month);
+        TextView balanceAmountTextView = view.findViewById(R.id.fhu_tv_balance_amount);
+        TextView monthlyAmountTextView = view.findViewById(R.id.fhu_tv_monthly_amount);
 
         //get user data
         mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), new Observer<UserModel>() {
@@ -68,15 +69,27 @@ public class HomeUserFragment extends Fragment {
             public void onChanged(UserModel user) {
                 if (user != null) {
                     userNameTextView.setText(user.getFullName());
-                    membershipRateTextView.setText(String.valueOf(user.getMembershipRate()));
+                    membershipRateTextView.setText(user.getMembershipRate());
+                    balanceAmountTextView.setText(user.getBalance());
                 }
             }
         });
 
+        //show current month
         Calendar calendar = Calendar.getInstance();
-        String[] monthName = {"January","February","March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        String[] monthName = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         String currentMonth = monthName[calendar.get(Calendar.MONTH)];
         currentMonthTextView.setText(currentMonth);
+
+        //show membership and balance info
+        mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), new Observer<CurrentMembershipModel>() {
+            @Override
+            public void onChanged(CurrentMembershipModel currentMembership) {
+                if (currentMembership != null) {
+                    monthlyAmountTextView.setText(currentMembership.getMonthlyTopUp());
+                }
+            }
+        });
 
 
 //        BarChart barChart = view.findViewById(R.id.fhl_order_chart);
@@ -106,6 +119,7 @@ public class HomeUserFragment extends Fragment {
 
         return view;
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // First clear current all the menu items

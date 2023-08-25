@@ -1,21 +1,12 @@
 package com.example.golaundry.viewModel;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.view.View;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.golaundry.MainActivity;
-import com.example.golaundry.UserSignUpActivity;
+import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.UserModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,15 +20,18 @@ public class UserViewModel extends ViewModel {
 
     private final FirebaseDatabase db;
     private final DatabaseReference userRef;
+    private final DatabaseReference userMembershipRef;
     private final FirebaseAuth mAuth;
 
     //constructor
     public UserViewModel() {
+        userMembershipRef = FirebaseDatabase.getInstance().getReference().child("currentMembership");
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
+    //create user auth
     public <User> LiveData<Boolean> createUser(String email, String password, User newUser) {
         MutableLiveData<Boolean> signUpResult = new MutableLiveData<>();
 
@@ -62,6 +56,7 @@ public class UserViewModel extends ViewModel {
         return signUpResult;
     }
 
+    //login into account, all users
     public LiveData<Boolean> loginUser(String email, String password) {
         MutableLiveData<Boolean> signInResult = new MutableLiveData<>();
 
@@ -76,6 +71,7 @@ public class UserViewModel extends ViewModel {
         return signInResult;
     }
 
+    //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
         MutableLiveData<UserModel> userData = new MutableLiveData<>();
         userRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -94,6 +90,26 @@ public class UserViewModel extends ViewModel {
         });
 
         return userData;
+    }
+
+    public LiveData<CurrentMembershipModel> getCurrentMembershipData(String currentUserId) {
+        MutableLiveData<CurrentMembershipModel> userCurrentMembershipData = new MutableLiveData<>();
+        userMembershipRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    CurrentMembershipModel currentMembership = dataSnapshot.getValue(CurrentMembershipModel.class);
+                    userCurrentMembershipData.setValue(currentMembership);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+
+        return userCurrentMembershipData;
     }
 
 }
