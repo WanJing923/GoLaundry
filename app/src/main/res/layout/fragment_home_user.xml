@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_green"
-    tools:context=".HomeFragment">
+    tools:context=".HomeUserFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/fh_toolbar"
+        android:id="@+id/fhu_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/fh_tv_go_laundry"
+            android:id="@+id/fhu_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -36,14 +36,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fh_toolbar">
+        android:layout_below="@id/fhu_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/fh_userdetails"
+                android:id="@+id/fhu_userdetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="53dp"
@@ -51,7 +51,7 @@
                 android:layout_marginEnd="53dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/fh_civ_profile_pic"
+                    android:id="@+id/fhu_civ_profile_pic"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:src="@drawable/profile"
@@ -62,7 +62,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/fh_tv_name"
+                    android:id="@+id/fhu_tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -72,20 +72,20 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/fh_civ_profile_pic"
+                    app:layout_constraintStart_toEndOf="@id/fhu_civ_profile_pic"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/fh_usermember"
+                    android:id="@+id/fhu_usermember"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/fh_tv_name"
+                    app:layout_constraintTop_toBottomOf="@id/fhu_tv_name"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/fh_civ_profile_pic"
+                    app:layout_constraintStart_toEndOf="@id/fhu_civ_profile_pic"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
-                    android:id="@+id/fh_tv_member"
+                    android:id="@+id/fhu_tv_member"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -93,30 +93,29 @@
                     android:text="@string/member"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toStartOf="@id/fh_tv_rate"
+                    app:layout_constraintEnd_toStartOf="@id/fhu_tv_rate"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/fh_tv_rate"
+                    android:id="@+id/fhu_tv_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:gravity="center"
                     android:text="@string/rate"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@id/fh_tv_member"
+                    app:layout_constraintStart_toEndOf="@id/fhu_tv_member"
                     app:layout_constraintTop_toTopOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/fh_cv_balance"
+                android:id="@+id/fhu_cv_balance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_below="@id/fh_userdetails"
+                android:layout_below="@id/fhu_userdetails"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="22dp"
@@ -129,7 +128,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/fh_tv_month"
+                        android:id="@+id/fhu_tv_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -138,10 +137,11 @@
                         android:layout_marginTop="19dp"
                         android:text="@string/month"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RelativeOverlap" />
 
                     <ImageView
-                        android:id="@+id/fh_iv_topup"
+                        android:id="@+id/fhu_iv_topup"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
@@ -152,10 +152,10 @@
                         android:contentDescription="@string/topup" />
 
                     <TextView
-                        android:id="@+id/fh_tv_balance"
+                        android:id="@+id/fhu_tv_balance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_tv_month"
+                        android:layout_below="@id/fhu_tv_month"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="4dp"
                         android:text="@string/balance_rm"
@@ -164,22 +164,22 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/fh_tv_balance_amount"
+                        android:id="@+id/fhu_tv_balance_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_tv_month"
+                        android:layout_below="@id/fhu_tv_month"
                         android:layout_marginTop="4dp"
-                        android:layout_toEndOf="@id/fh_tv_balance"
+                        android:layout_toEndOf="@id/fhu_tv_balance"
                         android:text="@string/amount"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/fh_tv_monthly_topup"
+                        android:id="@+id/fhu_tv_monthly_topup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_tv_balance"
+                        android:layout_below="@id/fhu_tv_balance"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="4dp"
                         android:text="@string/monthly_top_up_amount_rm"
@@ -187,22 +187,22 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/fh_tv_monthly_amount"
+                        android:id="@+id/fhu_tv_monthly_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_tv_balance"
+                        android:layout_below="@id/fhu_tv_balance"
                         android:layout_marginTop="4dp"
-                        android:layout_toEndOf="@id/fh_tv_monthly_topup"
+                        android:layout_toEndOf="@id/fhu_tv_monthly_topup"
                         android:text="@string/amount"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <ProgressBar
-                        android:id="@+id/fh_progressBar"
+                        android:id="@+id/fhu_progressBar"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_tv_monthly_amount"
+                        android:layout_below="@id/fhu_tv_monthly_amount"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="26dp"
                         android:layout_marginEnd="20dp"
@@ -211,22 +211,22 @@
                         android:progressTint="@color/black" />
 
                     <TextView
-                        android:id="@+id/fh_tv_progress"
+                        android:id="@+id/fhu_tv_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_tv_monthly_amount"
+                        android:layout_below="@id/fhu_tv_monthly_amount"
                         android:layout_marginTop="23dp"
                         android:layout_marginEnd="30dp"
-                        android:layout_toEndOf="@id/fh_progressBar"
+                        android:layout_toEndOf="@id/fhu_progressBar"
                         android:text="@string/progress"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/fh_tv_messagestart"
+                        android:id="@+id/fhu_tv_messagestart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_progressBar"
+                        android:layout_below="@id/fhu_progressBar"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="14dp"
                         android:layout_marginBottom="12dp"
@@ -235,27 +235,27 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/fh_tv_messageamount"
+                        android:id="@+id/fhu_tv_messageamount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_progressBar"
+                        android:layout_below="@id/fhu_progressBar"
                         android:layout_marginTop="14dp"
                         android:layout_marginBottom="12dp"
                         android:text="@string/amount"
                         android:textColor="@color/black"
-                        android:layout_toEndOf="@id/fh_tv_messagestart"
+                        android:layout_toEndOf="@id/fhu_tv_messagestart"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/fh_tv_messageend"
+                        android:id="@+id/fhu_tv_messageend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fh_progressBar"
+                        android:layout_below="@id/fhu_progressBar"
                         android:layout_marginTop="14dp"
                         android:layout_marginBottom="12dp"
                         android:text="@string/more_to_reach_next_level"
                         android:textColor="@color/black"
-                        android:layout_toEndOf="@id/fh_tv_messageamount"
+                        android:layout_toEndOf="@id/fhu_tv_messageamount"
                         android:textSize="14sp" />
 
 
@@ -263,10 +263,10 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/fh_tv_dashboard"
+                android:id="@+id/fhu_tv_dashboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/fh_cv_balance"
+                android:layout_below="@id/fhu_cv_balance"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="26dp"
                 android:gravity="center_horizontal|center_vertical"
@@ -277,11 +277,11 @@
                 app:drawableStartCompat="@drawable/ic_chart" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/fh_card_spending"
+                android:id="@+id/fhu_card_spending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_below="@id/fh_tv_dashboard"
+                android:layout_below="@id/fhu_tv_dashboard"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="22dp"
@@ -294,7 +294,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/fh_tv_spending"
+                        android:id="@+id/fhu_tv_spending"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -308,24 +308,25 @@
                         app:drawableStartCompat="@drawable/ic_wallet" />
 
                     <TextView
-                        android:id="@+id/fh_tv_spending_more"
+                        android:id="@+id/fhu_tv_spending_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
-                        android:drawableEnd="@drawable/ic_right"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="@string/view"
                         android:textColor="@color/gold"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:ignore="RelativeOverlap"
+                        app:drawableEndCompat="@drawable/ic_right" />
 
                     <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/fh_spending_chart"
+                        android:id="@+id/fhu_spending_chart"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:layout_below="@id/fh_tv_spending"
+                        android:layout_below="@id/fhu_tv_spending"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"
@@ -334,10 +335,10 @@
             </androidx.cardview.widget.CardView>
 
             <GridLayout
-                android:id="@+id/fh_grid"
+                android:id="@+id/fhu_grid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/fh_card_spending"
+                android:layout_below="@id/fhu_card_spending"
                 android:layout_marginStart="22dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginTop="14dp"
@@ -345,7 +346,7 @@
                 android:rowCount="1">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/fh_cv_pending_collection"
+                    android:id="@+id/fhu_cv_pending_collection"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
@@ -358,7 +359,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/fh_tv_pending_collection"
+                            android:id="@+id/fhu_tv_pending_collection"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
@@ -369,20 +370,20 @@
                             android:textSize="13sp" />
 
                         <ImageView
-                            android:id="@+id/fh_iv_pending_collection"
+                            android:id="@+id/fhu_iv_pending_collection"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_below="@id/fh_tv_pending_collection"
+                            android:layout_below="@id/fhu_tv_pending_collection"
                             android:layout_centerInParent="true"
                             android:layout_marginTop="20dp"
                             android:src="@drawable/ic_pending"
                             android:contentDescription="@string/ic_pending_collection" />
 
                         <TextView
-                            android:id="@+id/fh_tv_number_pending_collection"
+                            android:id="@+id/fhu_tv_number_pending_collection"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/fh_iv_pending_collection"
+                            android:layout_below="@id/fhu_iv_pending_collection"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="13dp"
                             android:layout_centerInParent="true"
@@ -393,7 +394,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/fh_cv_pending_receiving"
+                    android:id="@+id/fhu_cv_pending_receiving"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
@@ -406,7 +407,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/fh_tv_pending_receiving"
+                            android:id="@+id/fhu_tv_pending_receiving"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
@@ -417,20 +418,20 @@
                             android:textSize="13sp" />
 
                         <ImageView
-                            android:id="@+id/fh_iv_pending_receiving"
+                            android:id="@+id/fhu_iv_pending_receiving"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_below="@id/fh_tv_pending_receiving"
+                            android:layout_below="@id/fhu_tv_pending_receiving"
                             android:layout_centerInParent="true"
                             android:layout_marginTop="20dp"
                             android:src="@drawable/ic_receiving"
                             android:contentDescription="@string/ic_pending_receiving" />
 
                         <TextView
-                            android:id="@+id/fh_tv_number_pending_receiving"
+                            android:id="@+id/fhu_tv_number_pending_receiving"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/fh_iv_pending_receiving"
+                            android:layout_below="@id/fhu_iv_pending_receiving"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="13dp"
                             android:layout_centerInParent="true"
@@ -442,11 +443,11 @@
             </GridLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/fh_cv_month_orders"
+                android:id="@+id/fhu_cv_month_orders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_below="@id/fh_grid"
+                android:layout_below="@id/fhu_grid"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="10dp"
@@ -460,7 +461,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/fh_tv_monthly_orders"
+                        android:id="@+id/fhu_tv_monthly_orders"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -474,24 +475,25 @@
                         app:drawableStartCompat="@drawable/ic_month" />
 
                     <TextView
-                        android:id="@+id/fh_tv_monthly_view"
+                        android:id="@+id/fhu_tv_monthly_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="18dp"
-                        android:drawableEnd="@drawable/ic_right"
                         android:gravity="center_horizontal|center_vertical"
                         android:text="@string/view"
                         android:textColor="@color/gold"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        app:drawableEndCompat="@drawable/ic_right"
+                        tools:ignore="RelativeOverlap" />
 
                     <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/fh_order_chart"
+                        android:id="@+id/fhu_order_chart"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:layout_below="@id/fh_tv_monthly_view"
+                        android:layout_below="@id/fhu_tv_monthly_view"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"

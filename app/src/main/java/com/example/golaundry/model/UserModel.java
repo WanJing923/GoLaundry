@@ -9,8 +9,11 @@ public class UserModel {
     private String emailAddress;
     private String status;
     private String userType;
+    private String membershipRate;
+    private String avatar;
+    private String balance;
 
-    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType) {
+    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, String balance) {
         this.fullName = fullName;
         this.gender = gender;
         this.icNo = icNo;
@@ -18,6 +21,9 @@ public class UserModel {
         this.emailAddress = emailAddress;
         this.status = status;
         this.userType = userType;
+        this.membershipRate = membershipRate;
+        this.avatar = avatar;
+        this.balance = balance;
     }
 
     public UserModel() {
@@ -78,5 +84,29 @@ public class UserModel {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getMembershipRate() {
+        return membershipRate;
+    }
+
+    public void setMembershipRate(String membershipRate) {
+        this.membershipRate = membershipRate;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getBalance() {
+        return balance;
+    }
+
+    public void setBalance(String balance) {
+        this.balance = balance;
     }
 }
