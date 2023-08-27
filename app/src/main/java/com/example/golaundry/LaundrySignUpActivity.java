@@ -2,6 +2,8 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -11,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +25,10 @@ import com.example.golaundry.model.RiderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.google.firebase.storage.StorageTask;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -36,6 +41,8 @@ public class LaundrySignUpActivity extends AppCompatActivity {
     String myUrl = "";
     private Boolean validateImage = false;
     private StorageTask uploadTask;
+    private static final int REQUEST_CODE_MAP = 4;
+    String formattedAddress;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -52,13 +59,21 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
 
         findViewById(R.id.lsua_et_upload_BL).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Business License"), SELECT_BUSINESS_LICENSE);
+            }
+        });
+
+        findViewById(R.id.lsua_et_choose_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inside a method or an event handler
+                Intent intent = new Intent(LaundrySignUpActivity.this, MapsActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_MAP);
             }
         });
 
@@ -84,6 +99,27 @@ public class LaundrySignUpActivity extends AppCompatActivity {
                 EditText BLEditText = findViewById(R.id.lsua_et_upload_BL);
                 BLEditText.setHint("Uploaded Photo");
             }
+            if (requestCode == REQUEST_CODE_MAP && data != null) {
+                double latitude = data.getDoubleExtra("latitude", 0);
+                double longitude = data.getDoubleExtra("longitude", 0);
+
+                // Now you have the latitude and longitude, you can use them as needed
+                // Perform reverse geocoding to get address
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                    if (!Objects.requireNonNull(addresses).isEmpty()) {
+                        Address address = addresses.get(0);
+                        formattedAddress = address.getAddressLine(0); // Get the first line of the address
+                        // Now you have the formatted address, you can use it as needed
+                        // For example, set it in a TextView
+                        EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
+                        addressEditText.setText(formattedAddress);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -102,7 +138,6 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         EditText shopNameEditText = findViewById(R.id.lsua_et_enter_shop_name);
         EditText contactNoEditText = findViewById(R.id.lsua_et_contact_num);
         EditText emailAddressEditText = findViewById(R.id.lsua_et_enter_email_address);
-        EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
         EditText addressDetailsEditText = findViewById(R.id.lsua_et_address_details);
         EditText fullNameEditText = findViewById(R.id.lsua_et_enter_full_name);
         EditText phoneNoEditText = findViewById(R.id.lsua_et_personal_num);
@@ -113,7 +148,6 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         String shopName = shopNameEditText.getText().toString().trim();
         String contactNo = contactNoEditText.getText().toString().trim();
         String emailAddress = emailAddressEditText.getText().toString().trim();
-        String address = addressEditText.getText().toString().trim();
         String addressDetails = addressDetailsEditText.getText().toString().trim();
         String fullName = fullNameEditText.getText().toString().trim();
         String phoneNo = phoneNoEditText.getText().toString().trim();
@@ -165,7 +199,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if address is empty
-        if (address.isEmpty()) {
+        if (formattedAddress.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             emailAddressEditText.setError("Address is required!");
             findViewById(R.id.lsua_et_choose_location).requestFocus();
@@ -247,7 +281,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             findViewById(R.id.lsua_et_confirm_password).requestFocus();
         } else {
 
-            LaundryModel newLaundry = new LaundryModel(fullName, contactNo, emailAddress, address, addressDetails, BusinessLicensePhoto, fullName, phoneNo, icNo, registerDateTime, "terminated", "laundry");
+            LaundryModel newLaundry = new LaundryModel(fullName, "+60" + contactNo, emailAddress, formattedAddress, addressDetails, BusinessLicensePhoto, fullName, "+60" + phoneNo, icNo, registerDateTime, "terminated", "laundry");
 
             mLaundryViewModel.signUpLaundryWithImage(emailAddress, password, newLaundry)
                     .observe(this, signUpSuccess -> {
