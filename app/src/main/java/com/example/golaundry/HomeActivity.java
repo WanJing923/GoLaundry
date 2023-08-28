@@ -46,7 +46,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String userType = snapshot.child("userType").getValue(String.class);
-
                     if (Objects.requireNonNull(userType).equals("user")) {
                         replace(new HomeUserFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
@@ -90,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
                     String userType = snapshot.child("userType").getValue(String.class);
 
                     if (Objects.requireNonNull(userType).equals("laundry")) {
-                        replace(new HomeUserFragment());
+                        replace(new HomeLaundryFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {
@@ -131,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
                     String userType = snapshot.child("userType").getValue(String.class);
 
                     if (Objects.requireNonNull(userType).equals("rider")) {
-                        replace(new HomeUserFragment());
+                        replace(new HomeRiderFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {

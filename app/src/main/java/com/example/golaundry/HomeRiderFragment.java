@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,27 +15,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.golaundry.model.RiderModel;
+import com.example.golaundry.model.UserModel;
+import com.example.golaundry.viewModel.RiderViewModel;
 import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
 public class HomeRiderFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private LineChart lineChart;
 
     public HomeRiderFragment() {
         // Required empty public constructor
     }
 
-    public static HomeRiderFragment newInstance(String param1, String param2) {
+    public static HomeRiderFragment newInstance() {
         HomeRiderFragment fragment = new HomeRiderFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,13 +42,6 @@ public class HomeRiderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String param1 = getArguments().getString(ARG_PARAM1);
-            String param2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        //get current user id
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     @Override
@@ -61,6 +55,24 @@ public class HomeRiderFragment extends Fragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
+
+        //user view model
+        RiderViewModel mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
+        //get current rider id
+        String currentRiderId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        TextView riderNameTextView = view.findViewById(R.id.fhr_tv_name);
+        TextView ratingsTextView = view.findViewById(R.id.fhr_tv_rating_num);
+
+        mRiderViewModel.getRiderData(currentRiderId).observe(getViewLifecycleOwner(), rider -> {
+            if (rider != null) {
+                riderNameTextView.setText(rider.getFullName());
+            }
+        });
+
+
+
+
 
 //        BarChart barChart = view.findViewById(R.id.fh_order_chart);
 //        ArrayList<BarEntry> barEntries = new ArrayList<>();
@@ -94,10 +106,7 @@ public class HomeRiderFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // First clear current all the menu items
         menu.clear();
-
-        // Add the new menu items
         inflater.inflate(R.menu.menu_top, menu);
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 

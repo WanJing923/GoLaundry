@@ -13,6 +13,8 @@ public class RiderModel {
     private String status;
     private String userType;
 
+    public RiderModel() {
+    }
 
     public RiderModel(String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType) {
         this.fullName = fullName;

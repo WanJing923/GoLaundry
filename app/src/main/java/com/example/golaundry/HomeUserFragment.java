@@ -64,14 +64,11 @@ public class HomeUserFragment extends Fragment {
         TextView monthlyAmountTextView = view.findViewById(R.id.fhu_tv_monthly_amount);
 
         //get user data
-        mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), new Observer<UserModel>() {
-            @Override
-            public void onChanged(UserModel user) {
-                if (user != null) {
-                    userNameTextView.setText(user.getFullName());
-                    membershipRateTextView.setText(user.getMembershipRate());
-                    balanceAmountTextView.setText(user.getBalance());
-                }
+        mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
+            if (user != null) {
+                userNameTextView.setText(user.getFullName());
+                membershipRateTextView.setText(user.getMembershipRate());
+                balanceAmountTextView.setText(user.getBalance());
             }
         });
 

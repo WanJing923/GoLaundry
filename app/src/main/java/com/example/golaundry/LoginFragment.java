@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.viewModel.UserViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
 
@@ -51,6 +52,7 @@ public class LoginFragment extends Fragment {
         EditText passwordEditText = view.findViewById(R.id.fl_et_enter_password);
         CheckBox rmbMeCheckBox = view.findViewById(R.id.fl_checkBox);
 
+        //rmb me
         SharedPreferences loginPreferences = requireActivity().getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 
@@ -101,29 +103,53 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
-            //vm create user
-            mUserViewModel.loginUser(email, password)
-                    .observe(requireActivity(), signInResult -> {
-                        if (signInResult != null && signInResult) {
-                            // User login success
-                            Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.GONE);
+//            mUserViewModel.loginUser(email, password)
+//                    .observe(requireActivity(), signInResult -> {
+//                        if (signInResult != null && signInResult) {
+//                            // User login success
+//                            Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+//                            mProgressBar.setVisibility(View.GONE);
+//
+//                            //intent to home
+//                            Intent intent = new Intent(getActivity(), HomeActivity.class);
+//                            startActivity(intent);
+//
+//                        } else {
+//                            // User login failed
+//                            Toast.makeText(getActivity(), "Login failed!", Toast.LENGTH_SHORT).show();
+//                            mProgressBar.setVisibility(View.GONE);
+//                        }
+//                    });
 
-                            //intent to home
-                            Intent intent = new Intent(getActivity(), HomeActivity.class);
-                            startActivity(intent);
-
-                        } else {
-                            // User login failed
-                            Toast.makeText(getActivity(), "Login failed!", Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-                    });
-
-
+            //check user account status and login
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            mUserViewModel.checkUserStatus(email).observe(getViewLifecycleOwner(), status -> {
+                if (status != null) {
+                    if (status) {
+                        auth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+                                        mProgressBar.setVisibility(View.GONE);
+                                        //intent to home
+                                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                        mProgressBar.setVisibility(View.GONE);
+                                    }
+                                });
+                    } else {
+                        //status is not active
+                        Toast.makeText(requireContext(), "User status is not active", Toast.LENGTH_SHORT).show();
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Error occurred", Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.GONE);
+                }
+            });
         });
-
-
     }
 
 

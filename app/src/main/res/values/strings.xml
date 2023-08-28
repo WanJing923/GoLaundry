@@ -241,5 +241,5 @@
     <string name="johnny_tan">Johnny Tan</string>
     <string name="pending_pick_up">Pending Pick Up</string>
     <string name="ic_pending_pick_up">Icon Pending Pick Up</string>
-    <string name="lorong_tingga_2">Lorong Tingga 2</string>
+    <string name="current_location">Current Location</string>
 </resources>
