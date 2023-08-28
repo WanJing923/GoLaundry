@@ -2,15 +2,21 @@ package com.example.golaundry.viewModel;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.RiderModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -22,13 +28,14 @@ import java.util.Objects;
 public class RiderViewModel extends ViewModel {
     private final FirebaseDatabase db;
     private final FirebaseAuth mAuth;
-    private Uri FPfilepath, DLfilepath;
     private final Boolean validateImage = false;
+    private final DatabaseReference riderRef;
 
 
     public RiderViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
+        riderRef = FirebaseDatabase.getInstance().getReference().child("riders");
     }
 
     public LiveData<Boolean> signUpRiderWithImage(String email, String password, RiderModel newRider) {
@@ -47,8 +54,8 @@ public class RiderViewModel extends ViewModel {
     }
 
     private void uploadImageAndCreateRider(String riderId, RiderModel newRider, MutableLiveData<Boolean> signUpResult) {
-        FPfilepath = Uri.parse(newRider.getFacePhoto());
-        DLfilepath = Uri.parse(newRider.getDrivingLicensePhoto());
+        Uri FPfilepath = Uri.parse(newRider.getFacePhoto());
+        Uri DLfilepath = Uri.parse(newRider.getDrivingLicensePhoto());
 
         if ( FPfilepath != null && DLfilepath != null) {
             StorageReference fpFileRef = FirebaseStorage.getInstance().getReference()
@@ -86,28 +93,24 @@ public class RiderViewModel extends ViewModel {
         }
     }
 
-//    public <Rider> LiveData<Boolean> createRider(String email, String password, Rider newRider) {
-//        MutableLiveData<Boolean> signUpRiderResult = new MutableLiveData<>();
-//
-//        //create user
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        String userId = Objects.requireNonNull(task.getResult().getUser()).getUid();
-//                        db.getReference("riders")
-//                                .child(userId).setValue(newRider)
-//                                .addOnCompleteListener(task1 -> {
-//                                    if (task1.isSuccessful()) {
-//                                        signUpRiderResult.setValue(true);
-//                                    } else {
-//                                        signUpRiderResult.setValue(false);
-//                                    }
-//                                });
-//                    } else {
-//                        signUpRiderResult.setValue(false);
-//                    }
-//                });
-//        return signUpRiderResult;
-//    }
+    public LiveData<RiderModel> getRiderData(String currentUserId) {
+        MutableLiveData<RiderModel> riderData = new MutableLiveData<>();
+        riderRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    RiderModel rider = dataSnapshot.getValue(RiderModel.class);
+                    riderData.setValue(rider);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+
+        return riderData;
+    }
 
 }

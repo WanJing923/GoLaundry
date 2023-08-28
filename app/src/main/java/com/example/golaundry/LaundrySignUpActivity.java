@@ -2,8 +2,6 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -13,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +18,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.model.LaundryModel;
-import com.example.golaundry.model.RiderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.google.firebase.storage.StorageTask;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -100,25 +94,29 @@ public class LaundrySignUpActivity extends AppCompatActivity {
                 BLEditText.setHint("Uploaded Photo");
             }
             if (requestCode == REQUEST_CODE_MAP && data != null) {
-                double latitude = data.getDoubleExtra("latitude", 0);
-                double longitude = data.getDoubleExtra("longitude", 0);
+//                double latitude = data.getDoubleExtra("latitude", 0);
+//                double longitude = data.getDoubleExtra("longitude", 0);
+
+                formattedAddress = data.getStringExtra("formattedAddress");
+                EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
+                addressEditText.setText(formattedAddress);
 
                 // Now you have the latitude and longitude, you can use them as needed
                 // Perform reverse geocoding to get address
-                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                    if (!Objects.requireNonNull(addresses).isEmpty()) {
-                        Address address = addresses.get(0);
-                        formattedAddress = address.getAddressLine(0); // Get the first line of the address
-                        // Now you have the formatted address, you can use it as needed
-                        // For example, set it in a TextView
-                        EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
-                        addressEditText.setText(formattedAddress);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+//                try {
+//                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+//                    if (!Objects.requireNonNull(addresses).isEmpty()) {
+//                        Address address = addresses.get(0);
+//                        formattedAddress = address.getAddressLine(0); // Get the first line of the address
+//                        // Now you have the formatted address, you can use it as needed
+//                        // For example, set it in a TextView
+//                        EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
+//                        addressEditText.setText(formattedAddress);
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
     }

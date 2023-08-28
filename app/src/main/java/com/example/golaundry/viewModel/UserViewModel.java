@@ -56,10 +56,9 @@ public class UserViewModel extends ViewModel {
         return signUpResult;
     }
 
-    //login into account, all users
+    //login into account, all users(not using cause of the check status function)
     public LiveData<Boolean> loginUser(String email, String password) {
         MutableLiveData<Boolean> signInResult = new MutableLiveData<>();
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -69,6 +68,34 @@ public class UserViewModel extends ViewModel {
                             }
                         });
         return signInResult;
+    }
+
+    //check status here, login user in front
+    public LiveData<Boolean> checkUserStatus(String email) {
+        MutableLiveData<Boolean> statusLiveData = new MutableLiveData<>();
+        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        UserModel user = userSnapshot.getValue(UserModel.class);
+                        if (user != null && user.getStatus().equals("active")) {
+                            statusLiveData.setValue(true);
+                            return;
+                        }
+                    }
+                }
+                statusLiveData.setValue(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle database error
+                statusLiveData.setValue(false);
+            }
+        });
+
+        return statusLiveData;
     }
 
     //get user role data

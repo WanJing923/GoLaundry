@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,23 +39,16 @@ import java.util.Objects;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
-    int LOCATION_REFRESH_TIME = 5000;
-    int LOCATION_REFRESH_DISTANCE = 100;
-
     GoogleApiClient googleApiClient;
-
     LocationRequest locationRequest;
-
     Location LastLocation;
-
-    private LocationManager mLocation;
-
-    Marker pickupMaker;
-
-    private LatLng pickupLocation;
-
-    private final int radius = 1;
     Marker movingPin;
+    private LatLng currentPinPosition;
+    private boolean shouldUpdateLocation = true;
+    String formattedAddress;
+
+    public MapsActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +58,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
-
-//        mLocation = (LocationManager) getSystemService(LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//            return;
-//        }
-//        mLocation.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationlistener);
 
         if (ContextCompat.checkSelfPermission(MapsActivity.this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -96,35 +81,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ContextCompat.checkSelfPermission(MapsActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 1) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                if (ContextCompat.checkSelfPermission(MapsActivity.this,
+//                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+//                }
+//            } else {
+//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+//            }
+//            return;
+//        }
+//    }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        // now let set user location enable
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//
-//        buildGoogleApiClient();
-//        mMap.setMyLocationEnabled(true);
-
+        // Let user location enable
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -138,26 +116,96 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         movingPin = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(0, 0)) // Initial position
                 .title("Moving Pin"));
+
+        // Set up the OnCameraMoveStartedListener to detect camera movements
+        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int reason) {
+                // Check if the user initiated the camera movement
+                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                    // User-initiated camera movement, do not update camera position
+                } else {
+                    // Other reasons (such as animations or programmatic movement),
+                    // update the camera to the current location
+                    updateCameraToCurrentLocation();
+                }
+            }
+        });
+
+        // Set up the OnMapClickListener to update the current pin position when the user clicks on the map
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+                shouldUpdateLocation = false; // Disable automatic updates
+                // Update the current pin position when the user clicks on the map
+                currentPinPosition = latLng;
+
+                // Update the position of the moving pin marker
+                if (movingPin != null) {
+                    movingPin.setPosition(currentPinPosition);
+                }
+
+                // Update the camera to the clicked position
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Perform reverse geocoding to get address
+                updateAddressForLocation(latLng);
+
+                shouldUpdateLocation = true; // Enable automatic updates again
+                onConnected(null); // Restart location updates
+            }
+        });
+    }
+
+    private void updateAddressForLocation(LatLng latLng) {
+        double latitude = latLng.latitude;
+        double longitude = latLng.longitude;
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            assert addresses != null;
+            if (!addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                formattedAddress = address.getAddressLine(0);
+
+                // Update the address in the TextView
+                TextView addressTextView = findViewById(R.id.mf_tv_address);
+                addressTextView.setText(formattedAddress);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void updateCameraToCurrentLocation() {
+        if (LastLocation != null) {
+            LatLng latLng = new LatLng(LastLocation.getLatitude(), LastLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
+//        locationRequest.setInterval(9000);
+//        locationRequest.setFastestInterval(9000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //
-
             return;
         }
-        //it will handle the refreshment of the location
-        //if we dont call it we will get location only once
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+
+        if (shouldUpdateLocation) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        } else {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+        }
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -184,22 +232,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LastLocation = location;
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        // Set the current pin position to the user's current location if not set yet
+        if (currentPinPosition == null) {
+            currentPinPosition = latLng;
+        }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        // Now you have the latitude and longitude, you can use them as needed
         // Perform reverse geocoding to get address
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (!Objects.requireNonNull(addresses).isEmpty()) {
                 Address address = addresses.get(0);
-                String formattedAddress = address.getAddressLine(0); // Get the first line of the address
-                // Now you have the formatted address, you can use it as needed
-                // For example, set it in a TextView
+                formattedAddress = address.getAddressLine(0); // Get the first line of the address
+
                 TextView addressTextView = findViewById(R.id.mf_tv_address);
                 addressTextView.setText(formattedAddress);
             }
@@ -221,8 +273,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void returnWithLocation() {
         if (LastLocation != null) {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("latitude", LastLocation.getLatitude());
-            returnIntent.putExtra("longitude", LastLocation.getLongitude());
+            returnIntent.putExtra("formattedAddress", formattedAddress);
             setResult(RESULT_OK, returnIntent);
         }
         finish();
