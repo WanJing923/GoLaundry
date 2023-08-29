@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,11 +22,13 @@ public class UserViewModel extends ViewModel {
     private final FirebaseDatabase db;
     private final DatabaseReference userRef;
     private final DatabaseReference userMembershipRef;
+    private final DatabaseReference allMembershipRef;
     private final FirebaseAuth mAuth;
 
     //constructor
     public UserViewModel() {
         userMembershipRef = FirebaseDatabase.getInstance().getReference().child("currentMembership");
+        allMembershipRef = FirebaseDatabase.getInstance().getReference().child("allMemberships");
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
@@ -119,6 +122,7 @@ public class UserViewModel extends ViewModel {
         return userData;
     }
 
+    //get current membership
     public LiveData<CurrentMembershipModel> getCurrentMembershipData(String currentUserId) {
         MutableLiveData<CurrentMembershipModel> userCurrentMembershipData = new MutableLiveData<>();
         userMembershipRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -137,6 +141,27 @@ public class UserViewModel extends ViewModel {
         });
 
         return userCurrentMembershipData;
+    }
+
+    //all memberships data
+    public LiveData<AllMembershipModel> getAllMembershipData(String membershipRate) {
+        MutableLiveData<AllMembershipModel> AllMembershipData = new MutableLiveData<>();
+        allMembershipRef.child(membershipRate).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    AllMembershipModel allMemberships = dataSnapshot.getValue(AllMembershipModel.class);
+                    AllMembershipData.setValue(allMemberships);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+
+        return AllMembershipData;
     }
 
 }

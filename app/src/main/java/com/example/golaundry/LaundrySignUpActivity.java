@@ -94,29 +94,10 @@ public class LaundrySignUpActivity extends AppCompatActivity {
                 BLEditText.setHint("Uploaded Photo");
             }
             if (requestCode == REQUEST_CODE_MAP && data != null) {
-//                double latitude = data.getDoubleExtra("latitude", 0);
-//                double longitude = data.getDoubleExtra("longitude", 0);
-
+                //get return intent
                 formattedAddress = data.getStringExtra("formattedAddress");
                 EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
                 addressEditText.setText(formattedAddress);
-
-                // Now you have the latitude and longitude, you can use them as needed
-                // Perform reverse geocoding to get address
-//                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-//                try {
-//                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-//                    if (!Objects.requireNonNull(addresses).isEmpty()) {
-//                        Address address = addresses.get(0);
-//                        formattedAddress = address.getAddressLine(0); // Get the first line of the address
-//                        // Now you have the formatted address, you can use it as needed
-//                        // For example, set it in a TextView
-//                        EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
-//                        addressEditText.setText(formattedAddress);
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
             }
         }
     }
@@ -126,12 +107,9 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         ProgressBar mProgressBar = findViewById(R.id.lsua_progressbar);
         // show the visibility of progress bar to show loading
         mProgressBar.setVisibility(View.VISIBLE);
-
         //get current date time
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-
         CheckBox mCheckBox = findViewById(R.id.lsua_checkBox);
-
         //get user data
         EditText shopNameEditText = findViewById(R.id.lsua_et_enter_shop_name);
         EditText contactNoEditText = findViewById(R.id.lsua_et_contact_num);
@@ -142,7 +120,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         EditText icNoEditText = findViewById(R.id.lsua_et_ic_no);
         EditText passwordEditText = findViewById(R.id.lsua_et_enter_password);
         EditText confirmPassEditText = findViewById(R.id.lsua_et_confirm_password);
-
+        //to string
         String shopName = shopNameEditText.getText().toString().trim();
         String contactNo = contactNoEditText.getText().toString().trim();
         String emailAddress = emailAddressEditText.getText().toString().trim();
@@ -154,7 +132,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
         String confirmPass = confirmPassEditText.getText().toString().trim();
         String registerDateTime = sdf.format(new Date());
-
+        //check
         if (!mCheckBox.isChecked()) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, R.string.checkBoxToast, Toast.LENGTH_SHORT).show();
