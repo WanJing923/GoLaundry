@@ -1,10 +1,10 @@
 package com.example.golaundry.model;
 
 public class AllMembershipModel {
-    private double discount;
-    private double monthlyTopUp;
+    private int discount;
+    private int monthlyTopUp;
 
-    public AllMembershipModel(double discount, double monthlyTopUp) {
+    public AllMembershipModel(int discount, int monthlyTopUp) {
         this.discount = discount;
         this.monthlyTopUp = monthlyTopUp;
     }
@@ -13,19 +13,19 @@ public class AllMembershipModel {
 
     }
 
-    public double getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
-    public double getMonthlyTopUp() {
+    public int getMonthlyTopUp() {
         return monthlyTopUp;
     }
 
-    public void setMonthlyTopUp(double monthlyTopUp) {
+    public void setMonthlyTopUp(int monthlyTopUp) {
         this.monthlyTopUp = monthlyTopUp;
     }
 }

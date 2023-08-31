@@ -203,7 +203,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             findViewById(R.id.usua_et_confirm_password).requestFocus();
         } else {
 
-            UserModel newUser = new UserModel(fullName, selectedGender, icNo, phoneNo, emailAddress, "active", "user", "None", "", "0");
+            UserModel newUser = new UserModel(fullName, selectedGender, icNo, phoneNo, emailAddress, "active", "user", "None", "", 0);
 
             //vm create user
             mUserViewModel.createUser(emailAddress, password, newUser)

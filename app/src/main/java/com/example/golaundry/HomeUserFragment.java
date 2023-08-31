@@ -28,7 +28,8 @@ public class HomeUserFragment<membershipRate> extends Fragment {
     private LineChart lineChart;
     String membershipRate;
     UserViewModel mUserViewModel;
-    String monthlyTopUp;
+    double monthlyTopUp;
+    double monthlyTopUpAll;
     private View view;
 
     public HomeUserFragment() {
@@ -73,41 +74,114 @@ public class HomeUserFragment<membershipRate> extends Fragment {
             if (user != null) {
                 userNameTextView.setText(user.getFullName());
                 membershipRateTextView.setText(user.getMembershipRate());
-                balanceAmountTextView.setText(user.getBalance());
+                @SuppressLint("DefaultLocale")
+                String balance = String.format("%.2f", user.getBalance());
+                balanceAmountTextView.setText(balance);
 
+                //show membership card data
                 if (Objects.equals(user.getMembershipRate(), "None")) {
-                    membershipProgressBar.setProgress(0);
-                    progressBarTextView.setText("0%");
-                    messageAmountTextView.setText("5.00");
-                    messageEndTextView.setText(" to enjoy membership rate");
 
-                } else if (user.getMembershipRate().equals("GL05") || user.getMembershipRate().equals("GL10") || user.getMembershipRate().equals("GL20")) {
-//                    membershipProgressBar.setProgress(100);
-//                    progressBarTextView.setText("100%");
-//                    messageStartTextView.setText("You have reach the highest member rate");
-//                    messageAmountTextView.setVisibility(View.GONE);
-//                    messageEndTextView.setVisibility(View.GONE);
-
-//                    getAllMemberships(membershipRate)
-                    mUserViewModel.getAllMembershipData(user.getMembershipRate()).observe(getViewLifecycleOwner(), allMemberships -> {
+                    mUserViewModel.getAllMembershipData("GL05").observe(getViewLifecycleOwner(), allMemberships -> {
                         if (allMemberships != null) {
-//                              int discountAll = allMemberships.getDiscount();
-                            double monthlyTopUpAll = allMemberships.getMonthlyTopUp();
-                            double monthlyTopUpCurrent = Double.parseDouble(monthlyTopUp);
 
-//                                            TextView messageAmountTextView = view.findViewById(R.id.fhu_tv_messageamount);
-//                                            TextView messageStartTextView = view.findViewById(R.id.fhu_tv_messagestart);
-//                                            TextView messageEndTextView = view.findViewById(R.id.fhu_tv_messageend);
+                            //progress bar
+                            monthlyTopUpAll = allMemberships.getMonthlyTopUp();
+                            int progressEndStrFinal = (int) Math.round(monthlyTopUpAll);
+                            membershipProgressBar.setMax(progressEndStrFinal);
+                            int progressStartStrFinal = (int) Math.round(monthlyTopUp);
+                            membershipProgressBar.setProgress(progressStartStrFinal);
 
-//                if (monthlyTopUpCurrent >= monthlyTopUpAll){
-//                    messageStartTextView.setText("You have reach the highest member rate!");
-//                    messageAmountTextView.setVisibility(View.GONE);
-//                    messageEndTextView.setVisibility(View.GONE);
-//                }
+                            //progress bar percentage text view
+                            double progressPercentage = ((double) monthlyTopUp / progressEndStrFinal) * 100;
+                            int progressTv = (int) Math.round(progressPercentage);
+                            String progressTvStr = String.valueOf(progressTv);
+                            progressBarTextView.setText(progressTvStr+"%");
 
-                            double leftTopUpAmount = monthlyTopUpAll - monthlyTopUpCurrent;
-                            String leftTopUpAmountString = String.valueOf(leftTopUpAmount);
-                            messageAmountTextView.setText(leftTopUpAmountString);
+                            //left top up how much text view
+                            double leftTopUpAmount = monthlyTopUpAll - monthlyTopUp;
+                            @SuppressLint("DefaultLocale")
+                            String leftTopUpAmountStr = String.format("%.2f", leftTopUpAmount);
+                            messageAmountTextView.setText(leftTopUpAmountStr);
+                            messageEndTextView.setText(" more to enjoy membership rate");
+                        }
+                    });
+
+                } else if (user.getMembershipRate().equals("GL05")) { //if membership rate is GL05
+
+                    mUserViewModel.getAllMembershipData("GL10").observe(getViewLifecycleOwner(), allMemberships -> {
+                        if (allMemberships != null) {
+
+                            //progress bar
+                            monthlyTopUpAll = allMemberships.getMonthlyTopUp();
+                            int progressEndStrFinal = (int) Math.round(monthlyTopUpAll);
+                            membershipProgressBar.setMax(progressEndStrFinal);
+                            int progressStartStrFinal = (int) Math.round(monthlyTopUp);
+                            membershipProgressBar.setProgress(progressStartStrFinal);
+
+                            //progress bar percentage text view
+                            double progressPercentage = ((double) monthlyTopUp / progressEndStrFinal) * 100;
+                            int progressTv = (int) Math.round(progressPercentage);
+                            String progressTvStr = String.valueOf(progressTv);
+                            progressBarTextView.setText(progressTvStr+"%");
+
+                            //left top up how much text view
+                            double leftTopUpAmount = monthlyTopUpAll - monthlyTopUp;
+                            @SuppressLint("DefaultLocale")
+                            String leftTopUpAmountStr = String.format("%.2f", leftTopUpAmount);
+                            messageAmountTextView.setText(leftTopUpAmountStr);
+
+                        }
+                    });
+
+                } else if (user.getMembershipRate().equals("GL10")) {
+
+                    mUserViewModel.getAllMembershipData("GL20").observe(getViewLifecycleOwner(), allMemberships -> {
+                        if (allMemberships != null) {
+
+                            //progress bar
+                            monthlyTopUpAll = allMemberships.getMonthlyTopUp();
+                            int progressEndStrFinal = (int) Math.round(monthlyTopUpAll);
+                            membershipProgressBar.setMax(progressEndStrFinal);
+                            int progressStartStrFinal = (int) Math.round(monthlyTopUp);
+                            membershipProgressBar.setProgress(progressStartStrFinal);
+
+                            //progress bar percentage text view
+                            double progressPercentage = ((double) monthlyTopUp / progressEndStrFinal) * 100;
+                            int progressTv = (int) Math.round(progressPercentage);
+                            String progressTvStr = String.valueOf(progressTv);
+                            progressBarTextView.setText(progressTvStr+"%");
+
+                            //left top up how much text view
+                            double leftTopUpAmount = monthlyTopUpAll - monthlyTopUp;
+                            @SuppressLint("DefaultLocale")
+                            String leftTopUpAmountStr = String.format("%.2f", leftTopUpAmount);
+                            messageAmountTextView.setText(leftTopUpAmountStr);
+
+                        }
+                    });
+
+                } else if (user.getMembershipRate().equals("GL20")) {
+                    mUserViewModel.getAllMembershipData("GL30").observe(getViewLifecycleOwner(), allMemberships -> {
+                        if (allMemberships != null) {
+
+                            //progress bar
+                            monthlyTopUpAll = allMemberships.getMonthlyTopUp();
+                            int progressEndStrFinal = (int) Math.round(monthlyTopUpAll);
+                            membershipProgressBar.setMax(progressEndStrFinal);
+                            int progressStartStrFinal = (int) Math.round(monthlyTopUp);
+                            membershipProgressBar.setProgress(progressStartStrFinal);
+
+                            //progress bar percentage text view
+                            double progressPercentage = ((double) monthlyTopUp / progressEndStrFinal) * 100;
+                            int progressTv = (int) Math.round(progressPercentage);
+                            String progressTvStr = String.valueOf(progressTv);
+                            progressBarTextView.setText(progressTvStr+"%");
+
+                            //left top up how much text view
+                            double leftTopUpAmount = monthlyTopUpAll - monthlyTopUp;
+                            @SuppressLint("DefaultLocale")
+                            String leftTopUpAmountStr = String.format("%.2f", leftTopUpAmount);
+                            messageAmountTextView.setText(leftTopUpAmountStr);
 
                         }
                     });
@@ -131,7 +205,9 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         //show membership and balance info
         mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
             if (currentMembership != null) {
-                monthlyAmountTextView.setText(currentMembership.getMonthlyTopUp());
+                @SuppressLint("DefaultLocale")
+                String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
+                monthlyAmountTextView.setText(monthlyTopUpStr);
                 monthlyTopUp = currentMembership.getMonthlyTopUp();
             }
         });

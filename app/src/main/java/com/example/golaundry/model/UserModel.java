@@ -11,9 +11,9 @@ public class UserModel {
     private String userType;
     private String membershipRate;
     private String avatar;
-    private String balance;
+    private double balance;
 
-    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, String balance) {
+    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, double balance) {
         this.fullName = fullName;
         this.gender = gender;
         this.icNo = icNo;
@@ -102,11 +102,11 @@ public class UserModel {
         this.avatar = avatar;
     }
 
-    public String getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 }
