@@ -73,14 +73,7 @@ public class ProfileUserFragment extends Fragment {
         TextView messageAmountTextView = view.findViewById(R.id.puf_tv_messageamount);
         TextView messageStartTextView = view.findViewById(R.id.puf_tv_messagestart);
         TextView messageEndTextView = view.findViewById(R.id.puf_tv_messageend);
-
-        //bottom card
         Switch notificationSwitch = view.findViewById(R.id.puf_noti_switch);
-        TextView savedLaundryTextView = view.findViewById(R.id.puf_tv_saved_laundry);
-        TextView myAddressTextView = view.findViewById(R.id.puf_tv_my_address);
-        TextView resetPasswordTextView = view.findViewById(R.id.puf_tv_reset_password);
-        TextView getHelpTextView = view.findViewById(R.id.puf_tv_get_help);
-        TextView logOutTextView = view.findViewById(R.id.puf_tv_log_out);
 
         //show current month
         Calendar calendar = Calendar.getInstance();
