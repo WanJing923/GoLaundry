@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_columnWeight="1"
+    android:layout_marginTop="10dp"
+    android:backgroundTint="@color/white"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/lic_laundry_image"
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/image"
+            android:contentDescription="@string/laundry_images" />
+
+        <TextView
+            android:id="@+id/lic_tv_laundry_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lic_laundry_image"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/dry_cleaning_laundry"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/lic_tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lic_tv_laundry_name"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="1dp"
+            android:text="@string/_5_0"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <RatingBar
+            android:id="@+id/lic_rating_star"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lic_tv_laundry_name"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="1dp"
+            android:layout_toEndOf="@id/lic_tv_rating"
+            android:numStars="5"
+            android:progressTint="#195860"
+            android:rating="2.5" />
+
+        <TextView
+            android:id="@+id/lic_tv_service_chosen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lic_tv_rating"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="1dp"
+            android:text="@string/distance"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/lic_tv_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lic_tv_rating"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="1dp"
+            android:layout_toEndOf="@id/lic_tv_service_chosen"
+            android:text="@string/_13_5km"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/lic_iv_right"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/lic_laundry_image"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="21dp"
+            android:src="@drawable/ic_right"
+            app:tint="#0C8292"
+            android:contentDescription="@string/more" />
+
+        <ImageView
+            android:id="@+id/lic_iv_saved"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/lic_iv_right"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="17dp"
+            android:src="@drawable/ic_love"
+            android:contentDescription="@string/saved_laundry" />
+
+        <com.greenfrvr.hashtagview.HashtagView
+            android:id="@+id/lic_hashtag1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/lic_tv_service_chosen">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/washing"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:background="#0C8292"
+                android:textSize="12sp"/>
+
+        </com.greenfrvr.hashtagview.HashtagView>
+
+        <com.greenfrvr.hashtagview.HashtagView
+            android:id="@+id/lic_hashtag2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/lic_hashtag1"
+            android:layout_below="@id/lic_tv_service_chosen">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ironing"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:background="@color/normal_green"
+                android:textSize="12sp"/>
+        </com.greenfrvr.hashtagview.HashtagView>
+
+        <com.greenfrvr.hashtagview.HashtagView
+            android:id="@+id/lic_hashtag3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/lic_hashtag2"
+            android:layout_below="@id/lic_tv_service_chosen">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dry_cleaning"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:background="@color/normal_green"
+                android:textSize="12sp"/>
+
+        </com.greenfrvr.hashtagview.HashtagView>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
