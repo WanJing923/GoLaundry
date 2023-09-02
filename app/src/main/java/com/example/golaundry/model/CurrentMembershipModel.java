@@ -2,9 +2,9 @@ package com.example.golaundry.model;
 
 public class CurrentMembershipModel {
     private String monthYear;
-    private String monthlyTopUp;
+    private double monthlyTopUp;
 
-    public CurrentMembershipModel(String monthYear, String monthlyTopUp) {
+    public CurrentMembershipModel(String monthYear, double monthlyTopUp) {
         this.monthYear = monthYear;
         this.monthlyTopUp = monthlyTopUp;
     }
@@ -21,11 +21,11 @@ public class CurrentMembershipModel {
         this.monthYear = monthYear;
     }
 
-    public String getMonthlyTopUp() {
+    public double getMonthlyTopUp() {
         return monthlyTopUp;
     }
 
-    public void setMonthlyTopUp(String monthlyTopUp) {
+    public void setMonthlyTopUp(double monthlyTopUp) {
         this.monthlyTopUp = monthlyTopUp;
     }
 }

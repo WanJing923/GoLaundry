@@ -59,6 +59,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
+        //get permission
         if (ContextCompat.checkSelfPermission(MapsActivity.this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MapsActivity.this,
@@ -72,6 +73,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
+        //intent back to previous activity
         findViewById(R.id.map_next_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,28 +83,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == 1) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                if (ContextCompat.checkSelfPermission(MapsActivity.this,
-//                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-//            }
-//            return;
-//        }
-//    }
-
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Let user location enable
+        //let user location enable
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -112,47 +97,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         buildGoogleApiClient();
         mMap.setMyLocationEnabled(true);
 
-        // Create the moving pin marker
+        //create the moving pin marker
         movingPin = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(0, 0)) // Initial position
                 .title("Moving Pin"));
 
-        // Set up the OnCameraMoveStartedListener to detect camera movements
+        //set up the OnCameraMoveStartedListener to detect camera movements
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int reason) {
                 // Check if the user initiated the camera movement
                 if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
-                    // User-initiated camera movement, do not update camera position
+                    //user-initiated camera movement, do not update camera position
                 } else {
-                    // Other reasons (such as animations or programmatic movement),
                     // update the camera to the current location
                     updateCameraToCurrentLocation();
                 }
             }
         });
 
-        // Set up the OnMapClickListener to update the current pin position when the user clicks on the map
+        //set up the OnMapClickListener to update current pin position when user clicks on the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-                shouldUpdateLocation = false; // Disable automatic updates
-                // Update the current pin position when the user clicks on the map
+                shouldUpdateLocation = false; //disable auto updates
+                //update current pin position
                 currentPinPosition = latLng;
-
-                // Update the position of the moving pin marker
+                //update position of the moving pin marker
                 if (movingPin != null) {
                     movingPin.setPosition(currentPinPosition);
                 }
-
-                // Update the camera to the clicked position
+                //update the camera
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                // Perform reverse geocoding to get address
+                //reverse geocoding to get address
                 updateAddressForLocation(latLng);
 
-                shouldUpdateLocation = true; // Enable automatic updates again
-                onConnected(null); // Restart location updates
+                shouldUpdateLocation = true; //enable auto updates
+                onConnected(null); //restart location updates
             }
         });
     }
@@ -189,8 +170,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
-//        locationRequest.setInterval(9000);
-//        locationRequest.setFastestInterval(9000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -233,7 +212,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        // Set the current pin position to the user's current location if not set yet
+        //set current pin position to the user's current location if not set yet
         if (currentPinPosition == null) {
             currentPinPosition = latLng;
         }
@@ -270,6 +249,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    //intent back to previous activity
     public void returnWithLocation() {
         if (LastLocation != null) {
             Intent returnIntent = new Intent();

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_green"
+    tools:context=".SavedLaundryActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/asl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/asl_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="@color/gold"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/asl_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/asl_tv_saved_laundry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/saved_laundry"
+                android:textColor="@color/gold"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/asl_rv_saved_laundry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="22dp"
+                android:layout_below="@id/asl_tv_saved_laundry"
+                android:layout_marginTop="18dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

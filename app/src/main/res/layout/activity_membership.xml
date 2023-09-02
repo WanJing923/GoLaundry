@@ -1,9 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/second_green"
     tools:context=".MembershipActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/am_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/am_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="#FFC0AB88"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/am_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/am_tv_membership"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="19dp"
+                android:text="@string/membership"
+                android:textColor="@color/gold"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageView
+                android:id="@+id/am_iv_topup"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="25dp"
+                android:src="@drawable/ic_add_address"
+                android:contentDescription="@string/top_up" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/am_details_constraint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/am_tv_membership"
+                android:layout_marginStart="53dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="53dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/am_iv_profile"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/profile"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/am_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/username"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/am_iv_profile"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/am_member_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/am_user_name"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/am_iv_profile"
+                    android:gravity="center"
+                    android:text="@string/member_rate_gl20"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/am_iv_profile"
+                    app:layout_constraintTop_toBottomOf="@id/am_user_name" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/am_cv_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/am_details_constraint"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="19dp"
+                android:backgroundTint="@color/primary_green"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp">
+
+                <TableLayout
+                    android:id="@+id/am_simpleTableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/am_details_constraint">
+
+                    <TableRow
+                        android:id="@+id/am_tr_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/top_up_per_month"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/member_rate"
+                            android:layout_weight="1"
+                            android:textColor="@color/cyan"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/discount"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                    </TableRow>
+
+                    <View
+                        android:id="@+id/am_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="?android:attr/listDivider"
+                        android:backgroundTint="#D9D9D9" />
+
+                    <TableRow
+                        android:id="@+id/am_tr_second"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_marginTop="19dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/rm_5_00"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/gl05"
+                            android:layout_weight="1"
+                            android:textColor="@color/cyan"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/_5"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/am_tr_third"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_marginTop="19dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/rm_10_00"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/gl10"
+                            android:layout_weight="1"
+                            android:textColor="@color/cyan"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/_10"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/am_tr_forth"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_marginTop="19dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/rm_15_00"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/gl15"
+                            android:layout_weight="1"
+                            android:textColor="@color/cyan"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/_15"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/am_tr_fifth"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_marginTop="19dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/rm_20_00"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/gl20"
+                            android:layout_weight="1"
+                            android:textColor="@color/cyan"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/_20"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+                    </TableRow>
+                </TableLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -17,13 +17,16 @@
         android:theme="@style/Theme.GoLaundry"
         tools:targetApi="31">
         <activity
+            android:name=".SavedLaundryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".MembershipActivity"
             android:exported="false" />
         <activity
             android:name=".RatingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ResetPasswordActivity"
@@ -101,7 +104,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBdyygdjbgrtWMu0RqCCBDzH6M16o0qdjY" />
-
     </application>
 
 </manifest>

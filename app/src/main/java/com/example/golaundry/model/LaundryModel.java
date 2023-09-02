@@ -14,9 +14,9 @@ public class LaundryModel {
     private String registerDateTime;
     private String status;
     private String userType;
+    private boolean notification;
 
-
-    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType) {
+    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification) {
         this.shopName = shopName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -29,6 +29,7 @@ public class LaundryModel {
         this.registerDateTime = registerDateTime;
         this.status = status;
         this.userType = userType;
+        this.notification = notification;
     }
 
     public String getShopName() {
@@ -125,5 +126,13 @@ public class LaundryModel {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public boolean getNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
+        this.notification = notification;
     }
 }

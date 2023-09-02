@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/second_green"
+    tools:context=".EditProfileActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/aep_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/aep_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="@color/gold"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/aep_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/aep_tv_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/edit_profile_capital"
+                android:textColor="@color/gold"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/aep_edit_profile_image_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_tv_edit_profile"
+                android:layout_marginTop="14dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/aep_iv_profile"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/profile"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.App.Button.OutlinedButton.Icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/white"
+                    app:iconGravity="textStart"
+                    app:iconSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="@id/aep_iv_profile"
+                    app:layout_constraintEnd_toEndOf="@id/aep_iv_profile"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
+                    app:strokeColor="@color/black" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/aep_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_edit_profile_image_layout"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="18dp"
+                android:gravity="top"
+                android:text="@string/full_name"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/aep_et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_tv_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_full_name"
+                android:inputType="textPersonName"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="Enter full name" />
+
+            <TextView
+                android:id="@+id/aep_tv_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_et_name"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/gender"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/aep_gender_constraint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_tv_gender"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:padding="15dp">
+
+                <Spinner
+                    android:id="@+id/aep_gender_type"
+                    style="@style/SpinnerTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/aep_tv_ic_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_gender_constraint"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/icno"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/aep_et_enter_ic_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_tv_ic_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                android:hint="@string/enter_nric_number"
+                android:inputType="date"
+                android:padding="15dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_color"
+                android:textSize="15sp"
+                android:autofillHints="Ic No" />
+
+            <TextView
+                android:id="@+id/aep_tv_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/aep_et_enter_ic_no"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="27dp"
+                android:gravity="top"
+                android:text="@string/phone_number"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/aep_ti_phone_number"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/aep_tv_phone_number"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="42dp"
+                android:background="@drawable/custom_login"
+                app:prefixText="+60 "
+                app:hintEnabled="false"
+                app:hintTextColor="@color/white"
+                app:prefixTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:prefixTextColor="@color/white">
+
+                <EditText
+                    android:id="@+id/aep_et_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary_green"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:hint="@string/enter_phone_number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_color"
+                    android:autofillHints="Enter phone number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/aep_btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42dp"
+                android:layout_marginEnd="42dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="46dp"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/cyan"
+                android:text="@string/save"
+                android:layout_below="@id/aep_ti_phone_number"/>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

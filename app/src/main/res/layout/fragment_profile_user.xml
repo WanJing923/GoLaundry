@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/second_green"
-    tools:context=".ProfileActivity">
+    tools:context=".ProfileUserFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/pa_toolbar"
+        android:id="@+id/puf_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/pa_tv_go_laundry"
+            android:id="@+id/puf_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -36,14 +36,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/pa_toolbar">
+        android:layout_below="@id/puf_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/pa_tv_my_profile"
+                android:id="@+id/puf_tv_my_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -57,7 +57,7 @@
                 tools:ignore="RelativeOverlap" />
 
             <ImageView
-                android:id="@+id/pa_iv_edit"
+                android:id="@+id/puf_iv_edit"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentTop="true"
@@ -68,16 +68,16 @@
                 android:contentDescription="@string/edit_profile" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/pa_details_constraint"
+                android:id="@+id/puf_details_constraint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pa_iv_edit"
+                android:layout_below="@id/puf_iv_edit"
                 android:layout_marginStart="53dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="53dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/pa_iv_profile"
+                    android:id="@+id/puf_iv_profile"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:src="@drawable/profile"
@@ -88,41 +88,60 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/pa_tv_user_name"
+                    android:id="@+id/puf_tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:text="@string/fendy_woo"
+                    android:text="@string/username"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pa_iv_profile"
+                    app:layout_constraintStart_toEndOf="@id/puf_iv_profile"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/pa_member_details"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/puf_usermember"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/pa_tv_user_name"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/pa_tv_user_name"
-                    android:gravity="center"
-                    android:text="@string/member_rate_gl20"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/puf_tv_user_name"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pa_iv_profile"
-                    app:layout_constraintTop_toBottomOf="@id/pa_tv_user_name" />
+                    app:layout_constraintStart_toEndOf="@id/puf_iv_profile"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView
+                        android:id="@+id/puf_tv_member"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center"
+                        android:text="@string/member"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toStartOf="@id/puf_tv_rate"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/puf_tv_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/rate"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toEndOf="@id/puf_tv_member"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/pa_cv_membership"
+                android:id="@+id/puf_cv_membership"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_below="@id/pa_details_constraint"
+                android:layout_below="@id/puf_details_constraint"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="22dp"
@@ -135,7 +154,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/pa_tv_month"
+                        android:id="@+id/puf_tv_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -148,7 +167,7 @@
                         tools:ignore="RelativeOverlap" />
 
                     <ImageView
-                        android:id="@+id/pa_iv_topup"
+                        android:id="@+id/puf_iv_topup"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
@@ -159,10 +178,10 @@
                         android:contentDescription="@string/top_up" />
 
                     <TextView
-                        android:id="@+id/pa_tv_balance"
+                        android:id="@+id/puf_tv_balance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_month"
+                        android:layout_below="@id/puf_tv_month"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="4dp"
                         android:text="@string/balance_rm"
@@ -171,22 +190,22 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/pa_tv_balance_amount"
+                        android:id="@+id/puf_tv_balance_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_month"
+                        android:layout_below="@id/puf_tv_month"
                         android:layout_marginTop="4dp"
-                        android:layout_toEndOf="@id/pa_tv_balance"
-                        android:text="@string/_20_00"
+                        android:layout_toEndOf="@id/puf_tv_balance"
+                        android:text="@string/_0"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/pa_tv_top_up"
+                        android:id="@+id/puf_tv_top_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_balance"
+                        android:layout_below="@id/puf_tv_balance"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="4dp"
                         android:text="@string/monthly_top_up_amount_rm"
@@ -194,61 +213,85 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/pa_tv_top_up_amount"
+                        android:id="@+id/puf_tv_top_up_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_balance"
+                        android:layout_below="@id/puf_tv_balance"
                         android:layout_marginTop="4dp"
-                        android:layout_toEndOf="@id/pa_tv_top_up"
-                        android:text="@string/_20_00"
+                        android:layout_toEndOf="@id/puf_tv_top_up"
+                        android:text="@string/_0"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <ProgressBar
-                        android:id="@+id/pa_progressBar"
+                        android:id="@+id/puf_progressBar"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_top_up_amount"
+                        android:layout_below="@id/puf_tv_top_up_amount"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="26dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginEnd="10dp"
                         android:max="100"
                         android:progress="70"
                         android:progressTint="@color/black" />
 
                     <TextView
-                        android:id="@+id/pa_tv_progressBar"
+                        android:id="@+id/puf_tv_progressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_top_up_amount"
+                        android:layout_below="@id/puf_tv_top_up_amount"
                         android:layout_marginTop="23dp"
                         android:layout_marginEnd="30dp"
-                        android:layout_toEndOf="@id/pa_progressBar"
+                        android:layout_toEndOf="@id/puf_progressBar"
                         android:text="@string/_70"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/pa_tv_message"
+                        android:id="@+id/puf_tv_messagestart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_progressBar"
+                        android:layout_below="@id/puf_progressBar"
                         android:layout_marginStart="18dp"
                         android:layout_marginTop="14dp"
                         android:layout_marginBottom="12dp"
-                        android:text="@string/top_up_rm100_00_more_to_reach_next_level"
+                        android:text="@string/top_up_rm"
                         android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/puf_tv_messageamount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/puf_progressBar"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/amount"
+                        android:textColor="@color/black"
+                        android:layout_toEndOf="@id/puf_tv_messagestart"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/puf_tv_messageend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/puf_progressBar"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/more_to_reach_next_level"
+                        android:textColor="@color/black"
+                        android:layout_toEndOf="@id/puf_tv_messageamount"
                         android:textSize="14sp" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/pa_cv_settings"
+                android:id="@+id/puf_cv_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_below="@id/pa_cv_membership"
+                android:layout_below="@id/puf_cv_membership"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="22dp"
@@ -263,7 +306,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/pa_tv_notification"
+                        android:id="@+id/puf_tv_notification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -276,20 +319,22 @@
                         tools:ignore="RelativeOverlap" />
 
                     <Switch
-                        android:id="@+id/pa_noti_switch"
+                        android:id="@+id/puf_noti_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:buttonTint="@color/white"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:checked="true"
                         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                     <View
-                        android:id="@+id/pa_divider"
+                        android:id="@+id/puf_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_below="@id/pa_tv_notification"
+                        android:layout_below="@id/puf_tv_notification"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="7dp"
                         android:layout_marginEnd="10dp"
@@ -298,12 +343,12 @@
                         android:backgroundTint="@color/white" />
 
                     <TextView
-                        android:id="@+id/pa_tv_saved_laundry"
+                        android:id="@+id/puf_tv_saved_laundry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_divider"
+                        android:layout_below="@id/puf_divider"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="10dp"
                         android:drawablePadding="10dp"
                         android:gravity="center"
                         android:text="@string/saved_laundry"
@@ -312,10 +357,10 @@
                         app:drawableStartCompat="@drawable/ic_love_white" />
 
                     <TextView
-                        android:id="@+id/pa_tv_my_address"
+                        android:id="@+id/puf_tv_my_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_saved_laundry"
+                        android:layout_below="@id/puf_tv_saved_laundry"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="6dp"
                         android:drawablePadding="10dp"
@@ -326,10 +371,10 @@
                         app:drawableStartCompat="@drawable/ic_map_white" />
 
                     <TextView
-                        android:id="@+id/pa_tv_reset_password"
+                        android:id="@+id/puf_tv_reset_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_my_address"
+                        android:layout_below="@id/puf_tv_my_address"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="6dp"
                         android:drawablePadding="10dp"
@@ -340,10 +385,10 @@
                         app:drawableStartCompat="@drawable/ic_lock" />
 
                     <TextView
-                        android:id="@+id/pa_tv_get_help"
+                        android:id="@+id/puf_tv_get_help"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_reset_password"
+                        android:layout_below="@id/puf_tv_reset_password"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="6dp"
                         android:drawablePadding="10dp"
@@ -354,10 +399,10 @@
                         app:drawableStartCompat="@drawable/ic_help" />
 
                     <TextView
-                        android:id="@+id/pa_tv_log_out"
+                        android:id="@+id/puf_tv_log_out"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/pa_tv_get_help"
+                        android:layout_below="@id/puf_tv_get_help"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="6dp"
                         android:layout_marginBottom="10dp"
