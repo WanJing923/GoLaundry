@@ -245,6 +245,13 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 //        barChart.setDragEnabled(false);
 //        barChart.setScaleEnabled(false);
 
+        //intent to membership activity, show all memberships
+        view.findViewById(R.id.fhu_cv_balance).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MembershipActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
         return view;
     }
 

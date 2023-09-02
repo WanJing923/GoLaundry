@@ -29,7 +29,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProfileUserFragment extends Fragment {
 
-    private LineChart lineChart;
     UserViewModel mUserViewModel;
     double monthlyTopUp;
     double monthlyTopUpAll;
