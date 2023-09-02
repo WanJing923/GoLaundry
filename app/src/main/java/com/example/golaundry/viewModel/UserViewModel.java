@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,12 +66,12 @@ public class UserViewModel extends ViewModel {
         MutableLiveData<Boolean> signInResult = new MutableLiveData<>();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                signInResult.setValue(true);
-                            } else {
-                                signInResult.setValue(false);
-                            }
-                        });
+                    if (task.isSuccessful()) {
+                        signInResult.setValue(true);
+                    } else {
+                        signInResult.setValue(false);
+                    }
+                });
         return signInResult;
     }
 
@@ -162,6 +164,25 @@ public class UserViewModel extends ViewModel {
         });
 
         return AllMembershipData;
+    }
+
+    //update notification data
+    public LiveData<Boolean> updateNotificationData(String currentUserId, boolean updatedValue) {
+        MutableLiveData<Boolean> notificationStatusData = new MutableLiveData<>();
+
+        userRef.child(currentUserId).child("notification").setValue(updatedValue)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        notificationStatusData.setValue(true);
+                    } else {
+                        // Update failed
+                        Exception e = task.getException();
+                        if (e != null) {
+                            notificationStatusData.setValue(false);
+                        }
+                    }
+                });
+        return notificationStatusData;
     }
 
 }

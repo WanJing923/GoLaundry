@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,25 +20,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.viewModel.UserViewModel;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class HomeUserFragment<membershipRate> extends Fragment {
+public class ProfileUserFragment extends Fragment {
+
     private LineChart lineChart;
     UserViewModel mUserViewModel;
     double monthlyTopUp;
     double monthlyTopUpAll;
 
-    public HomeUserFragment() {
+    public ProfileUserFragment() {
         // Required empty public constructor
     }
 
@@ -46,14 +44,15 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "UseSwitchCompatOrMaterialCode"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_user, container, false);
+
         //toolbar and back button
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fhu_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.puf_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -61,17 +60,33 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 
         //get current user id
         String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
         //declare the view id
-        TextView userNameTextView = view.findViewById(R.id.fhu_tv_name);
-        TextView membershipRateTextView = view.findViewById(R.id.fhu_tv_rate);
-        TextView currentMonthTextView = view.findViewById(R.id.fhu_tv_month);
-        TextView balanceAmountTextView = view.findViewById(R.id.fhu_tv_balance_amount);
-        TextView monthlyAmountTextView = view.findViewById(R.id.fhu_tv_monthly_amount);
-        TextView progressBarTextView = view.findViewById(R.id.fhu_tv_progress);
-        ProgressBar membershipProgressBar = view.findViewById(R.id.fhu_progressBar);
-        TextView messageAmountTextView = view.findViewById(R.id.fhu_tv_messageamount);
-        TextView messageStartTextView = view.findViewById(R.id.fhu_tv_messagestart);
-        TextView messageEndTextView = view.findViewById(R.id.fhu_tv_messageend);
+        //upper card
+        TextView userNameTextView = view.findViewById(R.id.puf_tv_user_name);
+        TextView membershipRateTextView = view.findViewById(R.id.puf_tv_rate);
+        TextView currentMonthTextView = view.findViewById(R.id.puf_tv_month);
+        TextView balanceAmountTextView = view.findViewById(R.id.puf_tv_balance_amount);
+        TextView monthlyAmountTextView = view.findViewById(R.id.puf_tv_top_up_amount);
+        TextView progressBarTextView = view.findViewById(R.id.puf_tv_progressBar);
+        ProgressBar membershipProgressBar = view.findViewById(R.id.puf_progressBar);
+        TextView messageAmountTextView = view.findViewById(R.id.puf_tv_messageamount);
+        TextView messageStartTextView = view.findViewById(R.id.puf_tv_messagestart);
+        TextView messageEndTextView = view.findViewById(R.id.puf_tv_messageend);
+
+        //bottom card
+        Switch notificationSwitch = view.findViewById(R.id.puf_noti_switch);
+        TextView savedLaundryTextView = view.findViewById(R.id.puf_tv_saved_laundry);
+        TextView myAddressTextView = view.findViewById(R.id.puf_tv_my_address);
+        TextView resetPasswordTextView = view.findViewById(R.id.puf_tv_reset_password);
+        TextView getHelpTextView = view.findViewById(R.id.puf_tv_get_help);
+        TextView logOutTextView = view.findViewById(R.id.puf_tv_log_out);
+
+        //show current month
+        Calendar calendar = Calendar.getInstance();
+        String[] monthName = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        String currentMonth = monthName[calendar.get(Calendar.MONTH)];
+        currentMonthTextView.setText(currentMonth);
 
         //get user and membership data
         mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
@@ -201,14 +216,81 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                     messageEndTextView.setVisibility(View.GONE);
 
                 }
+
+                //notification switch
+                notificationSwitch.setChecked(user.getNotification());
+
             }
         });
 
-        //show current month
-        Calendar calendar = Calendar.getInstance();
-        String[] monthName = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        String currentMonth = monthName[calendar.get(Calendar.MONTH)];
-        currentMonthTextView.setText(currentMonth);
+
+
+        notificationSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            //get latest user notification data
+            AtomicBoolean latestValue = new AtomicBoolean(false);
+
+            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
+                boolean value = user.getNotification();
+                boolean updatedValue = !value;
+                latestValue.set(updatedValue);
+            });
+
+            mUserViewModel.updateNotificationData(currentUserId, latestValue.get()).observe(getViewLifecycleOwner(), notificationStatusData -> {
+                if (notificationStatusData != null) {
+                    assert getFragmentManager() != null;
+                    getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                    Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
+                };
+
+            });
+        });
+
+        //intent to top up
+        view.findViewById(R.id.puf_iv_topup).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MembershipActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //intent to membership activity, show all memberships
+        view.findViewById(R.id.puf_cv_membership).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MembershipActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //saved laundry
+        view.findViewById(R.id.puf_tv_saved_laundry).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), SavedLaundryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //my addresses
+//        view.findViewById(R.id.puf_tv_my_address).setOnClickListener(view1 -> {
+//            Intent intent = new Intent(getContext(), MyAddressesActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+//        });
+
+        //reset password
+        view.findViewById(R.id.puf_tv_reset_password).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), ResetPasswordActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //helpcenter
+        view.findViewById(R.id.puf_tv_get_help).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), HelpCenterActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //logout
+        view.findViewById(R.id.puf_tv_log_out).setOnClickListener(view1 -> {
+            showLogoutConfirmationDialog();
+        });
 
         //show membership and monthly top up data
         mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
@@ -220,32 +302,25 @@ public class HomeUserFragment<membershipRate> extends Fragment {
             }
         });
 
-//        BarChart barChart = view.findViewById(R.id.fhu_spending_chart);
-//        ArrayList<BarEntry> barEntries = new ArrayList<>();
-//        barEntries.add(new BarEntry(0f, 44f));
-//        barEntries.add(new BarEntry(1f, 88f));
-//        barEntries.add(new BarEntry(2f, 41f));
-//        barEntries.add(new BarEntry(3f, 85f));
-//        barEntries.add(new BarEntry(4f, 96f));
-//        barEntries.add(new BarEntry(5f, 25f));
-//        barEntries.add(new BarEntry(6f, 10f));
-//        BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
-//        ArrayList<String> theDates = new ArrayList<>();
-//        theDates.add("Mars");
-//        theDates.add("Avril");
-//        theDates.add("Dec");
-//        theDates.add("May");
-//        theDates.add("OCt");
-//        theDates.add("Nov");
-//        theDates.add("Fir");
-//        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(theDates));
-//        BarData theData = new BarData(barDataSet);//----Line of error
-//        barChart.setData(theData);
-//        barChart.setTouchEnabled(false);
-//        barChart.setDragEnabled(false);
-//        barChart.setScaleEnabled(false);
-
         return view;
+    }
+
+    //call dialog
+    private void showLogoutConfirmationDialog() {
+        LogoutConfirmationDialogFragment dialogFragment = new LogoutConfirmationDialogFragment();
+        dialogFragment.setTargetFragment(this, 0);
+        assert getFragmentManager() != null;
+        dialogFragment.show(getFragmentManager(), "logout_confirmation_dialog");
+    }
+
+    //logout user
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    public void logout() {
+        mAuth.signOut();
+        Intent intent = new Intent(getActivity(), LoginFragment.class);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
     @Override
@@ -267,6 +342,4 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

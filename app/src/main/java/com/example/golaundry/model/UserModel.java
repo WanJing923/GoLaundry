@@ -12,8 +12,9 @@ public class UserModel {
     private String membershipRate;
     private String avatar;
     private double balance;
+    private boolean notification;
 
-    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, double balance) {
+    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, double balance, boolean notification) {
         this.fullName = fullName;
         this.gender = gender;
         this.icNo = icNo;
@@ -24,6 +25,7 @@ public class UserModel {
         this.membershipRate = membershipRate;
         this.avatar = avatar;
         this.balance = balance;
+        this.notification = notification;
     }
 
     public UserModel() {
@@ -108,5 +110,13 @@ public class UserModel {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public boolean getNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
+        this.notification = notification;
     }
 }

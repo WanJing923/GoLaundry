@@ -221,7 +221,7 @@
     <string name="_70">70%</string>
     <string name="top_up_rm100_00_more_to_reach_next_level">Top up RM100.00 more to reach next level</string>
     <string name="saved_laundry">Saved Laundry</string>
-    <string name="my_address">My Address</string>
+    <string name="my_address">My Addresses</string>
     <string name="get_help">Get Help</string>
     <string name="log_out">Log Out</string>
     <string name="rate_order">Rate Order</string>
@@ -242,4 +242,24 @@
     <string name="pending_pick_up">Pending Pick Up</string>
     <string name="ic_pending_pick_up">Icon Pending Pick Up</string>
     <string name="current_location">Current Location</string>
+    <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="membership">Membership</string>
+    <string name="top_up_per_month">Top up per month</string>
+    <string name="member_rate">Member Rate</string>
+    <string name="discount">Discount</string>
+    <string name="rm_5_00">RM 5.00</string>
+    <string name="gl05">GL05</string>
+    <string name="_5">5%</string>
+    <string name="_20">20%</string>
+    <string name="gl20">GL20</string>
+    <string name="rm_20_00">RM 20.00</string>
+    <string name="_15">15%</string>
+    <string name="gl15">GL15</string>
+    <string name="rm_15_00">RM 15.00</string>
+    <string name="_10">10%</string>
+    <string name="gl10">GL10</string>
+    <string name="rm_10_00">RM 10.00</string>
+    <string name="edit_profile_capital">Edit Profile</string>
 </resources>

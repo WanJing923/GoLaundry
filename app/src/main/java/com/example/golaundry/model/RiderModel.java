@@ -12,11 +12,12 @@ public class RiderModel {
     private String registerDateTime;
     private String status;
     private String userType;
+    private boolean notification;
 
     public RiderModel() {
     }
 
-    public RiderModel(String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType) {
+    public RiderModel(String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType, boolean notification) {
         this.fullName = fullName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -27,6 +28,7 @@ public class RiderModel {
         this.registerDateTime = registerDateTime;
         this.status = status;
         this.userType = userType;
+        this.notification = notification;
     }
 
     public String getFullName() {
@@ -107,5 +109,13 @@ public class RiderModel {
 
     public void setRegisterDateTime(String registerDateTime) {
         this.registerDateTime = registerDateTime;
+    }
+
+    public boolean getNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
+        this.notification = notification;
     }
 }
