@@ -32,6 +32,7 @@ public class ProfileUserFragment extends Fragment {
     UserViewModel mUserViewModel;
     double monthlyTopUp;
     double monthlyTopUpAll;
+    boolean notificationValue;
 
     public ProfileUserFragment() {
         // Required empty public constructor
@@ -211,14 +212,15 @@ public class ProfileUserFragment extends Fragment {
 
                 //notification switch
                 notificationSwitch.setChecked(user.getNotification());
+                notificationValue = user.getNotification();
             }
         });
 
         //user click switch turn on or off
         notificationSwitch.setOnClickListener(view1 -> {
             //get latest notification data, for click many times
-            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
-                boolean notificationValue = user.getNotification();
+//            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
+//                boolean notificationValue = user.getNotification();
                 boolean updatedValue = !notificationValue;
 
                 //update notification data
@@ -231,7 +233,14 @@ public class ProfileUserFragment extends Fragment {
                     };
                 });
 
-            });
+//            });
+        });
+
+        //intent to edit profile
+        view.findViewById(R.id.puf_iv_edit).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
         //intent to top up

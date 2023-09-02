@@ -143,7 +143,7 @@
                 android:padding="15dp">
 
                 <Spinner
-                    android:id="@+id/aep_gender_type"
+                    android:id="@+id/aep_spinner_gender"
                     style="@style/SpinnerTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -179,7 +179,8 @@
                 android:inputType="date"
                 android:padding="15dp"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:enabled="false"
+                android:textColor="#B4B4B4"
                 android:textColorHint="@color/text_color"
                 android:textSize="15sp"
                 android:autofillHints="Ic No" />
@@ -240,4 +241,10 @@
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/aep_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </RelativeLayout>
