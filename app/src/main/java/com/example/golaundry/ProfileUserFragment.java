@@ -219,28 +219,25 @@ public class ProfileUserFragment extends Fragment {
 
                 //notification switch
                 notificationSwitch.setChecked(user.getNotification());
-
             }
         });
 
-
-
-        notificationSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            //get latest user notification data
-            AtomicBoolean latestValue = new AtomicBoolean(false);
-
+        //user click switch turn on or off
+        notificationSwitch.setOnClickListener(view1 -> {
+            //get latest notification data, for click many times
             mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
-                boolean value = user.getNotification();
-                boolean updatedValue = !value;
-                latestValue.set(updatedValue);
-            });
+                boolean notificationValue = user.getNotification();
+                boolean updatedValue = !notificationValue;
 
-            mUserViewModel.updateNotificationData(currentUserId, latestValue.get()).observe(getViewLifecycleOwner(), notificationStatusData -> {
-                if (notificationStatusData != null) {
-                    assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-                    Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
-                };
+                //update notification data
+                mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
+                    if (notificationStatusData != null && notificationStatusData) {
+                        notificationSwitch.setChecked(updatedValue);
+                        Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
+                    };
+                });
 
             });
         });
@@ -280,7 +277,7 @@ public class ProfileUserFragment extends Fragment {
             startActivity(intent);
         });
 
-        //helpcenter
+        //help center
         view.findViewById(R.id.puf_tv_get_help).setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(), HelpCenterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -314,10 +311,8 @@ public class ProfileUserFragment extends Fragment {
     }
 
     //logout user
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
     public void logout() {
-        mAuth.signOut();
+        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getActivity(), LoginFragment.class);
         startActivity(intent);
         requireActivity().finish();
