@@ -1,5 +1,7 @@
 package com.example.golaundry.viewModel;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -8,15 +10,17 @@ import androidx.lifecycle.ViewModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.UserModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class UserViewModel extends ViewModel {
@@ -106,7 +110,7 @@ public class UserViewModel extends ViewModel {
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
         MutableLiveData<UserModel> userData = new MutableLiveData<>();
-        userRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -127,7 +131,7 @@ public class UserViewModel extends ViewModel {
     //get current membership
     public LiveData<CurrentMembershipModel> getCurrentMembershipData(String currentUserId) {
         MutableLiveData<CurrentMembershipModel> userCurrentMembershipData = new MutableLiveData<>();
-        userMembershipRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        userMembershipRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -148,7 +152,7 @@ public class UserViewModel extends ViewModel {
     //all memberships data
     public LiveData<AllMembershipModel> getAllMembershipData(String membershipRate) {
         MutableLiveData<AllMembershipModel> AllMembershipData = new MutableLiveData<>();
-        allMembershipRef.child(membershipRate).addListenerForSingleValueEvent(new ValueEventListener() {
+        allMembershipRef.child(membershipRate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -170,19 +174,70 @@ public class UserViewModel extends ViewModel {
     public LiveData<Boolean> updateNotificationData(String currentUserId, boolean updatedValue) {
         MutableLiveData<Boolean> notificationStatusData = new MutableLiveData<>();
 
-        userRef.child(currentUserId).child("notification").setValue(updatedValue)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        notificationStatusData.setValue(true);
-                    } else {
-                        // Update failed
-                        Exception e = task.getException();
-                        if (e != null) {
-                            notificationStatusData.setValue(false);
-                        }
-                    }
-                });
+        userRef.child(currentUserId).child("notification").setValue(updatedValue).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                notificationStatusData.setValue(true);
+            } else {
+                // Update failed
+                Exception e = task.getException();
+                if (e != null) {
+                    notificationStatusData.setValue(false);
+                }
+            }
+        });
         return notificationStatusData;
     }
+
+    //edit profile, if no select profile pic
+    public LiveData<Boolean> updateUserData(String currentUserId, Map<String, Object> updates) {
+        MutableLiveData<Boolean> updateUserResult = new MutableLiveData<>();
+
+        userRef.child(currentUserId).updateChildren(updates, (databaseError, db) -> {
+            if (databaseError != null) {
+                updateUserResult.setValue(false);
+            } else {
+                updateUserResult.setValue(true);
+            }
+        });
+        return updateUserResult;
+    }
+
+    //if select profile pic
+    public LiveData<Boolean> updateUserDataProfilePic(String currentUserId, Map<String, Object> updates, Uri profilePicUri) {
+        MutableLiveData<Boolean> updateUserProfilePicResult = new MutableLiveData<>();
+
+        StorageReference avatarFileRef = FirebaseStorage.getInstance().getReference()
+                .child("Users").child(currentUserId).child(Objects.requireNonNull(profilePicUri.getLastPathSegment()));
+
+        UploadTask avatarUploadTask = avatarFileRef.putFile(profilePicUri);
+
+        avatarUploadTask.continueWithTask(uploadTask -> {
+            //download url
+            return avatarFileRef.getDownloadUrl();
+        }).addOnCompleteListener(downloadUrlTask -> {
+            if (downloadUrlTask.isSuccessful()) {
+                Uri avatarDownloadUri = downloadUrlTask.getResult();
+
+                //add map
+                updates.put("avatar", avatarDownloadUri.toString());
+
+                //update db
+                userRef.child(currentUserId).updateChildren(updates).addOnCompleteListener(dbTask -> {
+                    if (dbTask.isSuccessful()) {
+                        updateUserProfilePicResult.setValue(true);
+                    } else {
+                        updateUserProfilePicResult.setValue(false);
+                    }
+                });
+
+            } else {
+                updateUserProfilePicResult.setValue(false);
+            }
+        });
+        return updateUserProfilePicResult;
+    }
+
+
+
 
 }

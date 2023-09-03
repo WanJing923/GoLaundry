@@ -110,7 +110,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if name is empty
-        if (fullName.isEmpty()) {
+        else if (fullName.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             fullNameEditText.setError("Full name is required");
             Toast.makeText(this, R.string.fullNameRequiredToast, Toast.LENGTH_SHORT).show();
@@ -118,21 +118,21 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if gender is selected
-        if (Objects.equals(selectedGender, "Select gender")) {
+        else if (Objects.equals(selectedGender, "Select gender")) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, R.string.genderRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_spinner_gender).requestFocus();
             return;
         }
         //validate to check if ic no is empty
-        if (icNo.isEmpty()) {
+        else if (icNo.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             icNoEditText.setError("NRIC number is required!");
             Toast.makeText(this, R.string.icRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_ic_no).requestFocus();
             return;
         }
-        if (icNo.length() != 12) {
+        else if (icNo.length() != 12) {
             mProgressBar.setVisibility(View.GONE);
             icNoEditText.setError("NRIC number is invalid!");
             Toast.makeText(this, R.string.icInvalidToast, Toast.LENGTH_SHORT).show();
@@ -140,7 +140,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if phone number is empty
-        if (phoneNo.isEmpty()) {
+        else if (phoneNo.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             phoneNoEditText.setError("Phone number is required!");
             Toast.makeText(this, R.string.phoneNoRequiredToast, Toast.LENGTH_SHORT).show();
@@ -148,7 +148,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if phone number is less than 9 characters
-        if (phoneNo.length() < 9) {
+        else if (phoneNo.length() < 9) {
             mProgressBar.setVisibility(View.GONE);
             phoneNoEditText.setError("Phone number must be at least 9 characters!");
             Toast.makeText(this, R.string.phoneNoLessToast, Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if email is empty
-        if (emailAddress.isEmpty()) {
+        else if (emailAddress.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             emailAddressEditText.setError("Email address is required!");
             Toast.makeText(this, R.string.emailRequiredToast, Toast.LENGTH_SHORT).show();
@@ -164,7 +164,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if email format is invalid
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()) {
+        else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()) {
             mProgressBar.setVisibility(View.GONE);
             emailAddressEditText.setError("Email address is invalid!");
             Toast.makeText(this, R.string.emailInvalidToast, Toast.LENGTH_SHORT).show();
@@ -172,7 +172,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if password is empty
-        if (password.isEmpty()) {
+        else if (password.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             passwordEditText.setError("Password is required!");
             Toast.makeText(this, R.string.passwordRequiredToast, Toast.LENGTH_SHORT).show();
@@ -180,7 +180,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if password is less than 8 characters
-        if (password.length() < 8) {
+        else if (password.length() < 8) {
             mProgressBar.setVisibility(View.GONE);
             passwordEditText.setError("Password should be at least 8 characters!");
             Toast.makeText(this, R.string.passwordLessToast, Toast.LENGTH_SHORT).show();
@@ -188,7 +188,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if confirm password is empty
-        if (confirmPass.isEmpty()) {
+        else if (confirmPass.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             confirmPassEditText.setError("Confirm password is required!");
             Toast.makeText(this, R.string.confirmPasswordRequiredToast, Toast.LENGTH_SHORT).show();
@@ -196,7 +196,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if both password match
-        if (!confirmPass.equals(password)) {
+        else if (!confirmPass.equals(password)) {
             mProgressBar.setVisibility(View.GONE);
             confirmPassEditText.setError("Both passwords does not match!");
             Toast.makeText(this, R.string.confirmPasswordNotMatchToast, Toast.LENGTH_SHORT).show();

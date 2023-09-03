@@ -29,10 +29,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProfileUserFragment extends Fragment {
 
-    private LineChart lineChart;
     UserViewModel mUserViewModel;
     double monthlyTopUp;
     double monthlyTopUpAll;
+    boolean notificationValue;
 
     public ProfileUserFragment() {
         // Required empty public constructor
@@ -73,14 +73,7 @@ public class ProfileUserFragment extends Fragment {
         TextView messageAmountTextView = view.findViewById(R.id.puf_tv_messageamount);
         TextView messageStartTextView = view.findViewById(R.id.puf_tv_messagestart);
         TextView messageEndTextView = view.findViewById(R.id.puf_tv_messageend);
-
-        //bottom card
         Switch notificationSwitch = view.findViewById(R.id.puf_noti_switch);
-        TextView savedLaundryTextView = view.findViewById(R.id.puf_tv_saved_laundry);
-        TextView myAddressTextView = view.findViewById(R.id.puf_tv_my_address);
-        TextView resetPasswordTextView = view.findViewById(R.id.puf_tv_reset_password);
-        TextView getHelpTextView = view.findViewById(R.id.puf_tv_get_help);
-        TextView logOutTextView = view.findViewById(R.id.puf_tv_log_out);
 
         //show current month
         Calendar calendar = Calendar.getInstance();
@@ -219,14 +212,15 @@ public class ProfileUserFragment extends Fragment {
 
                 //notification switch
                 notificationSwitch.setChecked(user.getNotification());
+                notificationValue = user.getNotification();
             }
         });
 
         //user click switch turn on or off
         notificationSwitch.setOnClickListener(view1 -> {
             //get latest notification data, for click many times
-            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
-                boolean notificationValue = user.getNotification();
+//            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
+//                boolean notificationValue = user.getNotification();
                 boolean updatedValue = !notificationValue;
 
                 //update notification data
@@ -239,7 +233,14 @@ public class ProfileUserFragment extends Fragment {
                     };
                 });
 
-            });
+//            });
+        });
+
+        //intent to edit profile
+        view.findViewById(R.id.puf_iv_edit).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
         //intent to top up

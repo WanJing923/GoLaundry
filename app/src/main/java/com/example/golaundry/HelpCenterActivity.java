@@ -37,12 +37,7 @@ public class HelpCenterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
-        findViewById(R.id.ha_btn_submit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addHelpCenterMessage();
-            }
-        });
+        findViewById(R.id.ha_btn_submit).setOnClickListener(v -> addHelpCenterMessage());
     }
 
     private void addHelpCenterMessage() {

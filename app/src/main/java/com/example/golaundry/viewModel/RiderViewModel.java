@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.RiderModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -19,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.List;
@@ -28,7 +26,6 @@ import java.util.Objects;
 public class RiderViewModel extends ViewModel {
     private final FirebaseDatabase db;
     private final FirebaseAuth mAuth;
-    private final Boolean validateImage = false;
     private final DatabaseReference riderRef;
 
 
@@ -57,7 +54,7 @@ public class RiderViewModel extends ViewModel {
         Uri FPfilepath = Uri.parse(newRider.getFacePhoto());
         Uri DLfilepath = Uri.parse(newRider.getDrivingLicensePhoto());
 
-        if ( FPfilepath != null && DLfilepath != null) {
+        if (FPfilepath != null && DLfilepath != null) {
             StorageReference fpFileRef = FirebaseStorage.getInstance().getReference()
                     .child("Riders/" + riderId).child("FacePhoto");
             UploadTask fpUploadTask = fpFileRef.putFile(FPfilepath);
@@ -77,8 +74,8 @@ public class RiderViewModel extends ViewModel {
                 Uri fpDownloadUri = (Uri) downloadUrlTask.getResult().get(0);
                 Uri dlDownloadUri = (Uri) downloadUrlTask.getResult().get(1);
 
-                newRider.setFacePhoto(fpDownloadUri.toString());
-                newRider.setDrivingLicensePhoto(dlDownloadUri.toString());
+                newRider.setFacePhoto("Riders/" + riderId + "/" + fpDownloadUri.toString());
+                newRider.setDrivingLicensePhoto("Riders/" + riderId + "/" + dlDownloadUri.toString());
 
                 return db.getReference("riders").child(riderId).setValue(newRider);
             }).addOnCompleteListener(dbTask -> {

@@ -94,11 +94,13 @@ public class LoginFragment extends Fragment {
 
             // validations for input email and password
             if (TextUtils.isEmpty(email)) {
+                mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Please enter email!", Toast.LENGTH_LONG).show();
                 return;
             }
 
             if (TextUtils.isEmpty(password)) {
+                mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Please enter password!!", Toast.LENGTH_LONG).show();
                 return;
             }

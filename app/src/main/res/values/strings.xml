@@ -60,7 +60,7 @@
     <string name="register">Register</string>
     <string name="remember_me">Remember Me</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="enter_your_email_address_and_get_the_new_password">Enter your email address and get the new password</string>
+    <string name="enter_your_email_address_and_get_the_reset_password_link">Enter your email address and get the reset password link</string>
     <string name="all_orders">All Orders</string>
     <string name="transactions">Transactions</string>
     <string name="latest">Latest</string>
