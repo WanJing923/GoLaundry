@@ -1,5 +1,7 @@
 package com.example.golaundry.viewModel;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -14,6 +16,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Map;
 import java.util.Objects;
@@ -183,7 +188,7 @@ public class UserViewModel extends ViewModel {
         return notificationStatusData;
     }
 
-    //edit profile
+    //edit profile, if no select profile pic
     public LiveData<Boolean> updateUserData(String currentUserId, Map<String, Object> updates) {
         MutableLiveData<Boolean> updateUserResult = new MutableLiveData<>();
 
@@ -196,5 +201,43 @@ public class UserViewModel extends ViewModel {
         });
         return updateUserResult;
     }
+
+    //if select profile pic
+    public LiveData<Boolean> updateUserDataProfilePic(String currentUserId, Map<String, Object> updates, Uri profilePicUri) {
+        MutableLiveData<Boolean> updateUserProfilePicResult = new MutableLiveData<>();
+
+        StorageReference avatarFileRef = FirebaseStorage.getInstance().getReference()
+                .child("Users").child(currentUserId).child(Objects.requireNonNull(profilePicUri.getLastPathSegment()));
+
+        UploadTask avatarUploadTask = avatarFileRef.putFile(profilePicUri);
+
+        avatarUploadTask.continueWithTask(uploadTask -> {
+            //download url
+            return avatarFileRef.getDownloadUrl();
+        }).addOnCompleteListener(downloadUrlTask -> {
+            if (downloadUrlTask.isSuccessful()) {
+                Uri avatarDownloadUri = downloadUrlTask.getResult();
+
+                //add map
+                updates.put("avatar", avatarDownloadUri.toString());
+
+                //update db
+                userRef.child(currentUserId).updateChildren(updates).addOnCompleteListener(dbTask -> {
+                    if (dbTask.isSuccessful()) {
+                        updateUserProfilePicResult.setValue(true);
+                    } else {
+                        updateUserProfilePicResult.setValue(false);
+                    }
+                });
+
+            } else {
+                updateUserProfilePicResult.setValue(false);
+            }
+        });
+        return updateUserProfilePicResult;
+    }
+
+
+
 
 }

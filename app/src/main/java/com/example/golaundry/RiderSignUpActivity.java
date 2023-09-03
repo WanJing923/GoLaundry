@@ -134,6 +134,8 @@ public class RiderSignUpActivity extends AppCompatActivity {
         EditText icNoEditText = findViewById(R.id.rsua_et_ic_no);
         EditText passwordEditText = findViewById(R.id.rsua_et_enter_password);
         EditText confirmPassEditText = findViewById(R.id.rsua_et_confirm_password);
+        EditText drivingLicenseEditText = findViewById(R.id.rsua_et_upload_driving_license);
+        EditText facePhotoEditText = findViewById(R.id.rsua_et_upload_face_photo);
 
         String fullName = fullNameEditText.getText().toString().trim();
         String contactNo = contactNoEditText.getText().toString().trim();
@@ -211,7 +213,7 @@ public class RiderSignUpActivity extends AppCompatActivity {
         //validate to check if face photo is empty
         if (facePhoto.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
-            passwordEditText.setError("Face photo is required!");
+            facePhotoEditText.setError("Face photo is required!");
             Toast.makeText(this, R.string.facePhotoRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.rsua_et_upload_face_photo).requestFocus();
             return;
@@ -219,7 +221,7 @@ public class RiderSignUpActivity extends AppCompatActivity {
         //validate to check if license photo is empty
         if (drivingLicensePhoto.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
-            passwordEditText.setError("Driving license photo is required!");
+            drivingLicenseEditText.setError("Driving license photo is required!");
             Toast.makeText(this, R.string.drivingLicensePhotoRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.rsua_et_upload_driving_license).requestFocus();
             return;
@@ -273,96 +275,16 @@ public class RiderSignUpActivity extends AppCompatActivity {
 
             RiderModel newRider = new RiderModel(fullName, contactNo, emailAddress, plateNumber, facePhoto, drivingLicensePhoto, icNo, registerDateTime, "terminated", "rider", true);
 
-            mRiderViewModel.signUpRiderWithImage(emailAddress, password, newRider)
-                    .observe(this, signUpSuccess -> {
-                        if (signUpSuccess) {
-                            mProgressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(RiderSignUpActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            mProgressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(RiderSignUpActivity.this, "Sign up failed", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-//            if (FPfilepath != null) {
-//                String riderID = UUID.randomUUID().toString();
-//
-//                StorageReference fileRef = FirebaseStorage.getInstance().getReference().child("Riders/" + riderID).child("FacePhoto");
-//                uploadTask = fileRef.putFile(FPfilepath);
-//                uploadTask.continueWithTask(task -> {
-//                    if (!task.isComplete()) {
-//                        throw Objects.requireNonNull(task.getException());
-//                    }
-//                    return fileRef.getDownloadUrl();
-//                }).addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        //get the download Uri of the image
-//                        Uri downloadUri = (Uri) task.getResult();
-//                        myUrl = downloadUri.toString();
-//
-//                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-//                        DatabaseReference dbRef = db.getReference();
-//                        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                                if (!(snapshot.child("CommunityPost").child(riderID).exists())) {
-//                                    HashMap<String, Object> data = new HashMap<>();
-//
-//                                    data.put("riderId", riderID);
-//                                    data.put("dateTime", registerDateTime);
-//                                    data.put("url", myUrl);
-//
-//                                    dbRef.child("riders").child(riderID).updateChildren(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-//
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            if (task.isSuccessful()) {
-//                                                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-//                                                Intent intent = new Intent(RiderSignUpActivity.this, HomeActivity.class);
-//                                                startActivity(intent);
-//                                                finish();
-//
-//                                            } else {
-//                                                Toast.makeText(getApplicationContext(), "Network Error. Please Try Again", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//                                    });
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Network Error. Please try Again", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(RiderSignUpActivity.this, HomeActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//
-//                            }
-//                        });
-//                    }
-//                }).addOnFailureListener(e -> Toast.makeText(RiderSignUpActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-//            } else {
-//                Toast.makeText(RiderSignUpActivity.this, "No Image Selected!", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            //vm create user
-//            mRiderViewModel.createRider(emailAddress, password, newRider)
-//                    .observe(this, signUpResult -> {
-//                        if (signUpResult != null && signUpResult) {
-//                            // User registration success
-//                            Toast.makeText(RiderSignUpActivity.this, "Account has successfully registered!", Toast.LENGTH_SHORT).show();
-//                            mProgressBar.setVisibility(View.GONE);
-//                            finish();
-//                        } else {
-//                            // User registration failed
-//                            Toast.makeText(RiderSignUpActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
-//                            mProgressBar.setVisibility(View.GONE);
-//                        }
-//                    });
+            mRiderViewModel.signUpRiderWithImage(emailAddress, password, newRider).observe(this, signUpSuccess -> {
+                if (signUpSuccess) {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(RiderSignUpActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(RiderSignUpActivity.this, "Sign up failed", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
     }

@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.LaundryModel;
-import com.example.golaundry.model.RiderModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,7 +49,7 @@ public class LaundryViewModel extends ViewModel {
     private void uploadImageAndCreateRider(String laundryId, LaundryModel newLaundry, MutableLiveData<Boolean> signUpResult) {
         BLfilepath = Uri.parse(newLaundry.getBusinessLicensePhoto());
 
-        if ( BLfilepath != null ) {
+        if (BLfilepath != null) {
             StorageReference fpFileRef = FirebaseStorage.getInstance().getReference()
                     .child("Laundry/" + laundryId).child("FacePhoto");
             UploadTask fpUploadTask = fpFileRef.putFile(BLfilepath);
@@ -58,21 +57,24 @@ public class LaundryViewModel extends ViewModel {
             Task<List<Object>> combinedUploadTask = Tasks.whenAllSuccess(fpUploadTask);
 
             combinedUploadTask.continueWithTask(uploadTask -> {
+
                 Task<Uri> fpDownloadUrlTask = fpFileRef.getDownloadUrl();
-
                 return Tasks.whenAllSuccess(fpDownloadUrlTask);
+
             }).continueWithTask(downloadUrlTask -> {
+
                 Uri blDownloadUri = (Uri) downloadUrlTask.getResult().get(0);
-
-                newLaundry.setBusinessLicensePhoto(blDownloadUri.toString());
-
+                newLaundry.setBusinessLicensePhoto("Laundry/" + laundryId + "/" + blDownloadUri.toString());
                 return db.getReference("laundry").child(laundryId).setValue(newLaundry);
+
             }).addOnCompleteListener(dbTask -> {
+
                 if (dbTask.isSuccessful()) {
                     signUpResult.setValue(true);
                 } else {
                     signUpResult.setValue(false);
                 }
+
             });
         } else {
             signUpResult.setValue(false);
