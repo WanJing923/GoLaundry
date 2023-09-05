@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
         riderUserType(currentUserId);
     }
 
-    private void userUserType(String currentUserId){
+    private void userUserType(String currentUserId) {
         usersRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private void laundryUserType(String currentUserId){
+    private void laundryUserType(String currentUserId) {
         laundryRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 1:
-//                                    replace(new UserOrderFragment());
+                                    replace(new UserOrderFragment());
                                     break;
 
                                 case 2:
@@ -124,7 +124,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void riderUserType(String currentUserId){
+    private void riderUserType(String currentUserId) {
         riderRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -141,15 +141,15 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 1:
-//                                    replace(new UserOrderFragment());
+                                    replace(new UserOrderFragment());
                                     break;
 
                                 case 2:
-//                                    replace(new HistoryFragment());
+                                    replace(new HistoryFragment());
                                     break;
 
                                 case 3:
-//                                    replace(new ProfileUserFragment());
+                                    replace(new ProfileRiderFragment());
                                     break;
                             }
                             return true;

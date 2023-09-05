@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.golaundry.viewModel.LaundryViewModel;
-import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -79,11 +78,7 @@ public class ProfileLaundryFragment extends Fragment {
             if (laundry != null) {
                 shopNameTextView.setText(laundry.getShopName());
                 fullNameTextView.setText(laundry.getFullName());
-
-//                //take away +60
-//                String phoneNoShow = laundry.getPhoneNo().replace("+60", "");
                 phoneNumberTextView.setText(laundry.getPhoneNo());
-
                 icNoTextView.setText(laundry.getIcNo());
                 emailAddressTextView.setText(laundry.getEmailAddress());
 
@@ -93,7 +88,7 @@ public class ProfileLaundryFragment extends Fragment {
             }
         });
 
-        //user click switch turn on or off
+        //switch turn on or off
         notificationSwitch.setOnClickListener(view1 -> {
             boolean updatedValue = !notificationValue;
             //update notification data

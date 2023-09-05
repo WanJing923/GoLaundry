@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.viewModel.UserViewModel;
-import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -32,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProfileUserFragment extends Fragment {
 
@@ -102,7 +100,7 @@ public class ProfileUserFragment extends Fragment {
                 //show image
                 String avatarUrl = user.getAvatar();
                 if (!Objects.equals(avatarUrl, "")) {
-                    setAvatar(avatarUrl,ProfilePictureImageView);
+                    setAvatar(avatarUrl, ProfilePictureImageView);
                 }
 
                 //show membership card data
@@ -232,22 +230,18 @@ public class ProfileUserFragment extends Fragment {
 
         //user click switch turn on or off
         notificationSwitch.setOnClickListener(view1 -> {
-            //get latest notification data, for click many times
-//            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
-//                boolean notificationValue = user.getNotification();
-                boolean updatedValue = !notificationValue;
+            boolean updatedValue = !notificationValue;
 
-                //update notification data
-                mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
-                    if (notificationStatusData != null && notificationStatusData) {
-                        notificationSwitch.setChecked(updatedValue);
-                        Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
-                    };
-                });
-
-//            });
+            //update notification data
+            mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
+                if (notificationStatusData != null && notificationStatusData) {
+                    notificationSwitch.setChecked(updatedValue);
+                    Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
+                }
+                ;
+            });
         });
 
         //intent to edit profile

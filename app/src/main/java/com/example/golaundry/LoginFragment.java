@@ -105,24 +105,6 @@ public class LoginFragment extends Fragment {
                 return;
             }
 
-//            mUserViewModel.loginUser(email, password)
-//                    .observe(requireActivity(), signInResult -> {
-//                        if (signInResult != null && signInResult) {
-//                            // User login success
-//                            Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-//                            mProgressBar.setVisibility(View.GONE);
-//
-//                            //intent to home
-//                            Intent intent = new Intent(getActivity(), HomeActivity.class);
-//                            startActivity(intent);
-//
-//                        } else {
-//                            // User login failed
-//                            Toast.makeText(getActivity(), "Login failed!", Toast.LENGTH_SHORT).show();
-//                            mProgressBar.setVisibility(View.GONE);
-//                        }
-//                    });
-
             //check user account status and login
             FirebaseAuth auth = FirebaseAuth.getInstance();
             mUserViewModel.checkUserRole(email).observe(getViewLifecycleOwner(), roleLiveData -> {

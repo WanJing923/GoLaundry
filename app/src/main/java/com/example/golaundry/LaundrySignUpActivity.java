@@ -33,7 +33,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
     private Uri BLfilepath;
     private Uri BLUri;
     String myUrl = "";
-    private Boolean validateImage = false;
+    private final Boolean validateImage = false;
     private StorageTask uploadTask;
     private static final int REQUEST_CODE_MAP = 4;
     String formattedAddress;

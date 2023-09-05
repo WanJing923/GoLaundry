@@ -44,7 +44,7 @@ public class LaundryViewModel extends ViewModel {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String laundryId = Objects.requireNonNull(task.getResult().getUser()).getUid();
-                        uploadImageAndCreateRider(laundryId, newLaundry, signUpResult);
+                        uploadImageAndCreateLaundry(laundryId, newLaundry, signUpResult);
                     } else {
                         signUpResult.setValue(false);
                     }
@@ -52,7 +52,7 @@ public class LaundryViewModel extends ViewModel {
         return signUpResult;
     }
 
-    private void uploadImageAndCreateRider(String laundryId, LaundryModel newLaundry, MutableLiveData<Boolean> signUpResult) {
+    private void uploadImageAndCreateLaundry(String laundryId, LaundryModel newLaundry, MutableLiveData<Boolean> signUpResult) {
         Uri BLfilepath = Uri.parse(newLaundry.getBusinessLicensePhoto());
 
         if (BLfilepath != null) {
@@ -70,7 +70,7 @@ public class LaundryViewModel extends ViewModel {
             }).continueWithTask(downloadUrlTask -> {
 
                 Uri blDownloadUri = (Uri) downloadUrlTask.getResult().get(0);
-                newLaundry.setBusinessLicensePhoto("Laundry/" + laundryId + "/" + blDownloadUri.toString());
+                newLaundry.setBusinessLicensePhoto(blDownloadUri.toString());
                 return db.getReference("laundry").child(laundryId).setValue(newLaundry);
 
             }).addOnCompleteListener(dbTask -> {
