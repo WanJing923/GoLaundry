@@ -274,4 +274,13 @@
     <string name="rider_full_name">Rider Full Name</string>
     <string name="rider_info_icon">Rider info icon</string>
     <string name="plate_number_profile">Plate Number:</string>
+    <string name="cash_out">Cash Out</string>
+    <string name="current_balance">Current Balance:</string>
+    <string name="_00_00_0000_00_00">00-00-0000 00:00</string>
+    <string name="_000_00">000.00</string>
+    <string name="minus">-</string>
+    <string name="find_order">Find Order</string>
+    <string name="please_be_noted_that_the_delivery_earnings_of_each_order_has_included_pick_up_and_deliver_fees_you_will_receive_earnings_after_the_order_completed_accept_order_before_you_notices_about_your_fuel_costs">Please be noted that the delivery earnings of each order has included pick up and deliver fees. You will receive earnings after the order completed. Accept order before you notices about your fuel costs.</string>
+    <string name="near_me">Near Me</string>
+    <string name="this_portal_has_been_temporary_closed_due_to_out_of_working_hours_please_accept_and_deliver_the_new_order_within_9am_5pm_everyday">This portal has been temporary closed due to out of working hours. Please accept and deliver the new order within 9am-5pm everyday.</string>
 </resources>

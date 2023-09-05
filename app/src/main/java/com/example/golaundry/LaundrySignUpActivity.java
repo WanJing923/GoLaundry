@@ -2,8 +2,11 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -264,7 +268,20 @@ public class LaundrySignUpActivity extends AppCompatActivity {
                         if (signUpSuccess) {
                             mProgressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(LaundrySignUpActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
-                            finish();
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            builder.setTitle("Pending approve from admin")
+                                    .setMessage("Laundry shop account may need admin to validate information. This action may take 1 to 3 working days. " +
+                                            "You will receive an email after approving.");
+
+                            SpannableString spannableString = new SpannableString("OK");
+                            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+
+                            builder.setPositiveButton(spannableString, (dialog, which) -> {
+                                dialog.dismiss();
+                                finish();
+                            }).show();
+
                         } else {
                             mProgressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(LaundrySignUpActivity.this, "Sign up failed", Toast.LENGTH_SHORT).show();
