@@ -265,4 +265,13 @@
     <string name="laundry_images">Laundry Images</string>
     <string name="_13_5km">13.5km</string>
     <string name="more">more</string>
+    <string name="owner_info">Owner Info</string>
+    <string name="_000609089090">000609089090</string>
+    <string name="johnny04_gmail_com">johnny04@gmail.com</string>
+    <string name="take_a_break">Take a break</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="owner_info_icon">owner info icon</string>
+    <string name="rider_full_name">Rider Full Name</string>
+    <string name="rider_info_icon">Rider info icon</string>
+    <string name="plate_number_profile">Plate Number:</string>
 </resources>

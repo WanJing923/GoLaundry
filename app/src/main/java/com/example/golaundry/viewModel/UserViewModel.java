@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
+import com.example.golaundry.model.LaundryModel;
+import com.example.golaundry.model.RiderModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -80,8 +82,41 @@ public class UserViewModel extends ViewModel {
     }
 
     //check status here, login user in front
-    public LiveData<Boolean> checkUserStatus(String email) {
-        MutableLiveData<Boolean> statusLiveData = new MutableLiveData<>();
+//    public LiveData<Boolean> checkUserStatus(String email) {
+//        MutableLiveData<Boolean> statusLiveData = new MutableLiveData<>();
+//        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+//                        UserModel user = userSnapshot.getValue(UserModel.class);
+//                        if (user != null && user.getStatus().equals("active")) {
+//                            statusLiveData.setValue(true);
+//                            return;
+//                        }
+//                    }
+//                }
+//                statusLiveData.setValue(false);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                // Handle database error
+//                statusLiveData.setValue(false);
+//            }
+//        });
+//
+//        return statusLiveData;
+//    }
+
+    //before login, check user role
+    public LiveData<Boolean> checkUserRole(String email) {
+        MutableLiveData<Boolean> roleLiveData = new MutableLiveData<>();
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference("laundry");
+        DatabaseReference riderRef = FirebaseDatabase.getInstance().getReference("riders");
+
         userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -89,22 +124,68 @@ public class UserViewModel extends ViewModel {
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         UserModel user = userSnapshot.getValue(UserModel.class);
                         if (user != null && user.getStatus().equals("active")) {
-                            statusLiveData.setValue(true);
-                            return;
+                            roleLiveData.setValue(true);
+                        } else {
+                            roleLiveData.setValue(false);
                         }
+                        return;
                     }
                 }
-                statusLiveData.setValue(false);
+                laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot laundrySnapshot : snapshot.getChildren()) {
+                                LaundryModel laundry = laundrySnapshot.getValue(LaundryModel.class);
+                                if (laundry != null && laundry.getStatus().equals("active")) {
+                                    roleLiveData.setValue(true);
+                                } else {
+                                    roleLiveData.setValue(false);
+                                }
+                                return;
+                            }
+                        } else {
+                            riderRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        for (DataSnapshot riderSnapshot : snapshot.getChildren()) {
+                                            RiderModel rider = riderSnapshot.getValue(RiderModel.class);
+                                            if (rider != null && rider.getStatus().equals("active")) {
+                                                roleLiveData.setValue(true);
+                                            } else {
+                                                roleLiveData.setValue(false);
+                                            }
+                                            return;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    // Handle database error
+                                    roleLiveData.setValue(false);
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle database error
+                        roleLiveData.setValue(false);
+                    }
+                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle database error
-                statusLiveData.setValue(false);
+                roleLiveData.setValue(false);
             }
         });
 
-        return statusLiveData;
+        return roleLiveData;
     }
 
     //get user role data

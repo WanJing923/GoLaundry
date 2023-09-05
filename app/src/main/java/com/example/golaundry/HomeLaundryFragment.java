@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,41 +14,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.example.golaundry.viewModel.LaundryViewModel;
 import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
 public class HomeLaundryFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private LineChart lineChart;
+    LaundryViewModel mLaundryViewModel;
 
     public HomeLaundryFragment() {
         // Required empty public constructor
     }
 
-    public static HomeLaundryFragment newInstance(String param1, String param2) {
-        HomeLaundryFragment fragment = new HomeLaundryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String param1 = getArguments().getString(ARG_PARAM1);
-            String param2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        //get current user id
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
     }
 
     @Override
@@ -61,6 +48,23 @@ public class HomeLaundryFragment extends Fragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
+
+        //get current user id
+        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        TextView shopNameTextView = view.findViewById(R.id.fhl_tv_name);
+        TextView ratingNumberTextView = view.findViewById(R.id.fhl_tv_rating_num);
+        RatingBar ratingstarRatingBar = view.findViewById(R.id.fhl_tv_rating_star);
+        TextView viewRatingsTextView = view.findViewById(R.id.fhl_tv_view_ratings);
+
+        //get laundry data
+        mLaundryViewModel.getLaundryData(currentUserId).observe(getViewLifecycleOwner(), laundry -> {
+            if (laundry != null) {
+                shopNameTextView.setText(laundry.getShopName());
+            }
+        });
+
+
 
 //        BarChart barChart = view.findViewById(R.id.fh_order_chart);
 //        ArrayList<BarEntry> barEntries = new ArrayList<>();
@@ -94,10 +98,8 @@ public class HomeLaundryFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // First clear current all the menu items
         menu.clear();
-
         // Add the new menu items
         inflater.inflate(R.menu.menu_top, menu);
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 

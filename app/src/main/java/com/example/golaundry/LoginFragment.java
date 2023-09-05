@@ -125,31 +125,27 @@ public class LoginFragment extends Fragment {
 
             //check user account status and login
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            mUserViewModel.checkUserStatus(email).observe(getViewLifecycleOwner(), status -> {
-                if (status != null) {
-                    if (status) {
-                        auth.signInWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-                                        mProgressBar.setVisibility(View.GONE);
-                                        //intent to home
-                                        Intent intent = new Intent(getActivity(), HomeActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show();
-                                        mProgressBar.setVisibility(View.GONE);
-                                    }
-                                });
-                    } else {
-                        //status is not active
-                        Toast.makeText(requireContext(), "User status is not active", Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
-                    }
+            mUserViewModel.checkUserRole(email).observe(getViewLifecycleOwner(), roleLiveData -> {
+
+                if (roleLiveData) {
+                    auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+                            mProgressBar.setVisibility(View.GONE);
+                            //intent to home
+                            Intent intent = new Intent(getActivity(), HomeActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    });
                 } else {
-                    Toast.makeText(requireContext(), "Error occurred", Toast.LENGTH_SHORT).show();
+                    //status is not active
+                    Toast.makeText(requireContext(), "User status is not active", Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.GONE);
                 }
+
             });
         });
     }

@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 3:
-//                                    replace(new ProfileUserFragment());
+                                    replace(new ProfileLaundryFragment());
                                     break;
                             }
                             return true;
