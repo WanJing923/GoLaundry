@@ -2,6 +2,8 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,8 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,7 +29,11 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -72,6 +80,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         TextView messageAmountTextView = view.findViewById(R.id.fhu_tv_messageamount);
         TextView messageStartTextView = view.findViewById(R.id.fhu_tv_messagestart);
         TextView messageEndTextView = view.findViewById(R.id.fhu_tv_messageend);
+        ImageView ProfilePictureImageView = view.findViewById(R.id.fhu_civ_profile_pic);
 
         //get user and membership data
         mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
@@ -82,6 +91,12 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                 @SuppressLint("DefaultLocale")
                 String balance = String.format("%.2f", user.getBalance());
                 balanceAmountTextView.setText(balance);
+
+                //show image
+                String avatarUrl = user.getAvatar();
+                if (!Objects.equals(avatarUrl, "")) {
+                    setAvatar(avatarUrl,ProfilePictureImageView);
+                }
 
                 //show membership card data
                 if (Objects.equals(user.getMembershipRate(), "None")) {
@@ -253,6 +268,26 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         });
 
         return view;
+    }
+
+    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
+        //referenceFromUrl to get StorageReference
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
+
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+
+            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                //show
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                profilePictureImageView.setImageBitmap(bitmap);
+
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

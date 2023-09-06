@@ -34,6 +34,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/fhr_toolbar">
@@ -76,7 +77,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:gravity="center"
-                        android:text="@string/_4_5"
+                        android:text="@string/_0"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toStartOf="@id/fhr_tv_rating_star"
@@ -90,7 +91,7 @@
                         android:numStars="5"
                         android:padding="2dp"
                         android:progressTint="@color/white"
-                        android:rating="4.5"
+                        android:rating="0"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/fhr_tv_rating_num"
                         app:layout_constraintTop_toTopOf="parent" />

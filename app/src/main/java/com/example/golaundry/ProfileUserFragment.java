@@ -2,6 +2,8 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,12 +23,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.viewModel.UserViewModel;
-import com.github.mikephil.charting.charts.LineChart;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ProfileUserFragment extends Fragment {
 
@@ -74,6 +79,7 @@ public class ProfileUserFragment extends Fragment {
         TextView messageStartTextView = view.findViewById(R.id.puf_tv_messagestart);
         TextView messageEndTextView = view.findViewById(R.id.puf_tv_messageend);
         Switch notificationSwitch = view.findViewById(R.id.puf_noti_switch);
+        ImageView ProfilePictureImageView = view.findViewById(R.id.puf_iv_profile);
 
         //show current month
         Calendar calendar = Calendar.getInstance();
@@ -90,6 +96,12 @@ public class ProfileUserFragment extends Fragment {
                 @SuppressLint("DefaultLocale")
                 String balance = String.format("%.2f", user.getBalance());
                 balanceAmountTextView.setText(balance);
+
+                //show image
+                String avatarUrl = user.getAvatar();
+                if (!Objects.equals(avatarUrl, "")) {
+                    setAvatar(avatarUrl, ProfilePictureImageView);
+                }
 
                 //show membership card data
                 if (Objects.equals(user.getMembershipRate(), "None")) {
@@ -218,22 +230,18 @@ public class ProfileUserFragment extends Fragment {
 
         //user click switch turn on or off
         notificationSwitch.setOnClickListener(view1 -> {
-            //get latest notification data, for click many times
-//            mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
-//                boolean notificationValue = user.getNotification();
-                boolean updatedValue = !notificationValue;
+            boolean updatedValue = !notificationValue;
 
-                //update notification data
-                mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
-                    if (notificationStatusData != null && notificationStatusData) {
-                        notificationSwitch.setChecked(updatedValue);
-                        Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
-                    };
-                });
-
-//            });
+            //update notification data
+            mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
+                if (notificationStatusData != null && notificationStatusData) {
+                    notificationSwitch.setChecked(updatedValue);
+                    Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
+                }
+                ;
+            });
         });
 
         //intent to edit profile
@@ -301,6 +309,26 @@ public class ProfileUserFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
+        //referenceFromUrl to get StorageReference
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
+
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+
+            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                //show
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                profilePictureImageView.setImageBitmap(bitmap);
+
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //call dialog

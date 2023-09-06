@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/second_green"
+    tools:context=".ProfileRiderFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/prf_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/prf_tv_go_laundry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:fontFamily="@font/courgette_regular"
+            android:shadowColor="#000000"
+            android:shadowDx="10"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="@string/go_laundry"
+            android:textAlignment="center"
+            android:textColor="#FFC0AB88"
+            android:textSize="25sp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/prf_toolbar"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/prf_tv_rider_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/my_profile"
+                android:textColor="@color/gold"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/prf_details_constraint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prf_tv_rider_info"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp">
+
+                <TextView
+                    android:id="@+id/prf_tv_rider_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rider_full_name"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/prf_tv_rating_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/_0"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_rider_name" />
+
+
+                <RatingBar
+                    android:id="@+id/prf_rating_star"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:numStars="5"
+                    android:progressTint="@color/white"
+                    android:rating="0"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/prf_tv_rating_number"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_rider_name" />
+
+                <TextView
+                    android:id="@+id/prf_view_ratings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/view_ratings"
+                    android:textColor="@color/gold"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_rider_name" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/prf_iv_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/prf_details_constraint"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="35dp"
+                android:contentDescription="@string/rider_info_icon"
+                android:src="@drawable/ic_profile"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/prf_tv_rider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prf_details_constraint"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="26dp"
+                android:layout_toEndOf="@id/prf_iv_icon"
+                android:text="@string/rider_info"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/prf_divider1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/prf_tv_rider"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="22dp"
+                android:background="?android:attr/listDivider"
+                android:backgroundTint="@color/white" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/prf_info_constraint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prf_divider1"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="17dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/prf_profile_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="25dp"
+                    android:src="@drawable/default_profile"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/prf_tv_full_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/rider_full_name"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/prf_tv_phone_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/_601234567890"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_full_name" />
+
+                <TextView
+                    android:id="@+id/prf_tv_ic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/_000609089090"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_phone_number" />
+
+                <TextView
+                    android:id="@+id/prf_tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/johnny04_gmail_com"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_ic" />
+
+                <TextView
+                    android:id="@+id/prf_tv_plate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/plate_number_profile"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_email" />
+
+                <TextView
+                    android:id="@+id/prf_tv_plate_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/plate_number"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/prf_tv_plate"
+                    app:layout_constraintTop_toBottomOf="@id/prf_tv_email" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/prf_card_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/prf_info_constraint"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/primary_green"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/prf_tv_notification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="13dp"
+                        android:text="@string/notification"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="RelativeOverlap" />
+
+                    <Switch
+                        android:id="@+id/prf_switch_notification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:buttonTint="@color/white"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <View
+                        android:id="@+id/prf_divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/prf_tv_notification"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="7dp"
+                        android:background="?android:attr/listDivider"
+                        android:backgroundTint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/prf_tv_my_wallet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/prf_divider2"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="18dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:text="@string/my_wallet"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_wallet_white" />
+
+                    <TextView
+                        android:id="@+id/prf_tv_reset_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/prf_tv_my_wallet"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="6dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:text="@string/reset_password"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_lock" />
+
+                    <TextView
+                        android:id="@+id/prf_tv_get_help"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/prf_tv_reset_password"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="6dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:text="@string/get_help"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_help" />
+
+                    <TextView
+                        android:id="@+id/prf_tv_log_out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/prf_tv_get_help"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="18dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center"
+                        android:text="@string/log_out"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:drawableStartCompat="@drawable/ic_logout" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

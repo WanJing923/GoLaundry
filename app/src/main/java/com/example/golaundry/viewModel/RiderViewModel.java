@@ -28,7 +28,6 @@ public class RiderViewModel extends ViewModel {
     private final FirebaseAuth mAuth;
     private final DatabaseReference riderRef;
 
-
     public RiderViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
@@ -56,11 +55,11 @@ public class RiderViewModel extends ViewModel {
 
         if (FPfilepath != null && DLfilepath != null) {
             StorageReference fpFileRef = FirebaseStorage.getInstance().getReference()
-                    .child("Riders/" + riderId).child("FacePhoto");
+                    .child("Riders/" + riderId).child(Objects.requireNonNull(FPfilepath.getLastPathSegment()));
             UploadTask fpUploadTask = fpFileRef.putFile(FPfilepath);
 
             StorageReference dlFileRef = FirebaseStorage.getInstance().getReference()
-                    .child("Riders/" + riderId).child("DrivingLicense");
+                    .child("Riders/" + riderId).child(Objects.requireNonNull(DLfilepath.getLastPathSegment()));
             UploadTask dlUploadTask = dlFileRef.putFile(DLfilepath);
 
             Task<List<Object>> combinedUploadTask = Tasks.whenAllSuccess(fpUploadTask, dlUploadTask);
@@ -74,8 +73,8 @@ public class RiderViewModel extends ViewModel {
                 Uri fpDownloadUri = (Uri) downloadUrlTask.getResult().get(0);
                 Uri dlDownloadUri = (Uri) downloadUrlTask.getResult().get(1);
 
-                newRider.setFacePhoto("Riders/" + riderId + "/" + fpDownloadUri.toString());
-                newRider.setDrivingLicensePhoto("Riders/" + riderId + "/" + dlDownloadUri.toString());
+                newRider.setFacePhoto(fpDownloadUri.toString());
+                newRider.setDrivingLicensePhoto(dlDownloadUri.toString());
 
                 return db.getReference("riders").child(riderId).setValue(newRider);
             }).addOnCompleteListener(dbTask -> {
@@ -92,7 +91,7 @@ public class RiderViewModel extends ViewModel {
 
     public LiveData<RiderModel> getRiderData(String currentUserId) {
         MutableLiveData<RiderModel> riderData = new MutableLiveData<>();
-        riderRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        riderRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -108,6 +107,23 @@ public class RiderViewModel extends ViewModel {
         });
 
         return riderData;
+    }
+
+    public LiveData<Boolean> updateNotificationData(String currentUserId, boolean updatedValue) {
+        MutableLiveData<Boolean> notificationStatusData = new MutableLiveData<>();
+
+        riderRef.child(currentUserId).child("notification").setValue(updatedValue).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                notificationStatusData.setValue(true);
+            } else {
+                // Update failed
+                Exception e = task.getException();
+                if (e != null) {
+                    notificationStatusData.setValue(false);
+                }
+            }
+        });
+        return notificationStatusData;
     }
 
 }

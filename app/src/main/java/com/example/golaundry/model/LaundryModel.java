@@ -16,6 +16,9 @@ public class LaundryModel {
     private String userType;
     private boolean notification;
 
+    public LaundryModel() {
+    }
+
     public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification) {
         this.shopName = shopName;
         this.contactNo = contactNo;

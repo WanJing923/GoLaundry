@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private final int SELECT_PROFILE_PICTURE = 5;
     private Uri profilePicUri;
     String imageURL;
+    ImageView ProfilePictureImageView;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -97,7 +99,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 userNameEditText = findViewById(R.id.aep_et_name);
                 icNoEditText = findViewById(R.id.aep_et_enter_ic_no);
                 phoneNoEditText = findViewById(R.id.aep_et_phone_number);
-                ImageView ProfilePictureImageView = findViewById(R.id.aep_iv_profile);
+                ProfilePictureImageView = findViewById(R.id.aep_iv_profile);
 
                 //take away +60
                 String phoneNoShow = user.getPhoneNo().replace("+60", "");
@@ -163,6 +165,15 @@ public class EditProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_PROFILE_PICTURE && data != null && data.getData() != null) {
                 // Handle selected profile pic image
                 profilePicUri = data.getData();
+
+                //show what user select
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), profilePicUri);
+                    ProfilePictureImageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
