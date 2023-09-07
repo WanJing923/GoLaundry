@@ -102,19 +102,19 @@ public class ProfileLaundryFragment extends Fragment {
             });
         });
 
-//        //take break
+//        //take break > show dialog and choose
 //        takeBreakTextView.setOnClickListener(view1 -> {
 //            Intent intent = new Intent(getContext(), EditProfileActivity.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //            startActivity(intent);
 //        });
 
-//        //intent to wallet
-//        myWalletTextView.setOnClickListener(view1 -> {
-//            Intent intent = new Intent(getContext(), MembershipActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        });
+        //intent to wallet
+        myWalletTextView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), WalletActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
         //intent to reset password
         resetPasswordTextView.setOnClickListener(view1 -> {

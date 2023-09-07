@@ -33,7 +33,7 @@
             android:textSize="25sp" />
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/ams_toolbar"
@@ -81,6 +81,515 @@
                 android:textSize="14sp" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/ams_card_laundry_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/ams_tv_manage_shop"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="22dp"
+                android:visibility="invisible"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="10dp"
+
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ams_laundry_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="109dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="19dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/image"
+                        android:contentDescription="@string/laundry_image" />
+
+                    <LinearLayout
+                        android:id="@+id/ams_linear_Address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ams_laundry_image"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginEnd="19dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <ImageView
+                            android:id="@+id/ams_iv_address"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_location"
+                            app:tint="@color/normal_green"
+                            android:contentDescription="@string/location_icon" />
+
+                        <TextView
+                            android:id="@+id/ams_tv_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:hint="@string/_34_tingkat_nibong_1_bandar_bayan_lepas_11950_bayan_lepas_pulau_penang"
+                            android:padding="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ams_linear_phoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ams_linear_Address"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginEnd="19dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <ImageView
+                            android:id="@+id/ams_iv_phone"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_phone_number"
+                            app:tint="@color/normal_green"
+                            android:contentDescription="@string/phone_icon" />
+
+                        <TextView
+                            android:id="@+id/ams_tv_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:hint="@string/_012_4567890"
+                            android:padding="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ams_linear_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ams_linear_phoneNumber"
+                        android:layout_marginStart="19dp"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginEnd="19dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <ImageView
+                            android:id="@+id/ams_iv_time"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_time"
+                            app:tint="#0C8292"
+                            android:contentDescription="@string/time_icon" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:weightSum="7">
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_monday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2"
+                                tools:ignore="NestedWeights">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_monday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/monday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"
+                                    tools:ignore="NestedWeights" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_monday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="TooDeepLayout" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_monday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_tuesday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_tuesday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/tuesday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_tuesday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_tuesday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_wednesday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_wednesday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/wednesday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_tv_wednesday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_tv_wednesday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_thursday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_thursday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/thursday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_tv_thursday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="#D6EFEE"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_thursday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_friday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_friday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/friday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_friday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_friday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_saturday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_saturday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/saturday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_saturday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_saturday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ams_linear_sunday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="15dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/ams_tv_sunday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/sunday"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_sunday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/ams_btn_sunday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/ams_card_shop_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,6 +599,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="10dp"
+                android:visibility="visible"
                 android:background="@drawable/custom_button"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
@@ -198,5 +708,5 @@
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
