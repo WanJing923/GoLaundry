@@ -574,6 +574,7 @@
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout
+                android:id="@+id/fms_manage_services_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fms_cv_show_laundry_details">

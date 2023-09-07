@@ -10,9 +10,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.golaundry.viewModel.LaundryViewModel;
@@ -64,13 +68,40 @@ public class ManageShopFragment extends Fragment {
         //manage services
         ImageView editServicesImageView = view.findViewById(R.id.fms_iv_edit_services);
         RecyclerView servicesRecyclerView = view.findViewById(R.id.fms_rv_service);
+        RelativeLayout manageServicesLayout = view.findViewById(R.id.fms_manage_services_layout);
 
         //get laundry data
         mLaundryViewModel.getLaundryData(currentUserId).observe(getViewLifecycleOwner(), laundry -> {
             if (laundry != null) {
-                String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
-                locationTextView.setText(address);
-                phoneTextView.setText(laundry.getPhoneNo());
+                if (!laundry.getIsBreak()){
+                    //show item that before laundry setup, hide others
+                    beforeSetupCardView.setVisibility(View.VISIBLE);
+                    msgTextView.setVisibility(View.VISIBLE);
+                    afterSetupCardView.setVisibility(View.INVISIBLE);
+                    manageServicesLayout.setVisibility(View.INVISIBLE);
+
+                    String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
+                    locationTextView.setText(address);
+                    phoneTextView.setText(laundry.getPhoneNo());
+
+                } else {
+                    beforeSetupCardView.setVisibility(View.INVISIBLE);
+                    msgTextView.setVisibility(View.INVISIBLE);
+                    afterSetupCardView.setVisibility(View.VISIBLE);
+                    manageServicesLayout.setVisibility(View.VISIBLE);
+
+                    String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
+                    addressTextView.setText(address);
+                    phoneNoTextView.setText(laundry.getPhoneNo());
+
+                    //rmb to add opening hrs
+
+
+
+                    //show services to adapter
+
+
+                }
 
             }
         });
@@ -82,6 +113,31 @@ public class ManageShopFragment extends Fragment {
             startActivity(intent);
         });
 
+        //intent to edit services
+        editImageView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), LaundryEditServicesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // First clear current all the menu items
+        menu.clear();
+        inflater.inflate(R.menu.menu_top, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.tm_btn_notification) {
+            //intent notification
+            Intent intent = new Intent(getActivity(), NotificationActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.LaundryModel;
-import com.example.golaundry.model.UserModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -125,6 +124,22 @@ public class LaundryViewModel extends ViewModel {
         return notificationStatusData;
     }
 
+    public LiveData<Boolean> updateBreakData(String currentUserId, boolean updateValue) {
+        MutableLiveData<Boolean> breakStatusData = new MutableLiveData<>();
+
+        laundryRef.child(currentUserId).child("isBreak").setValue(updateValue).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                breakStatusData.setValue(true);
+            } else {
+                // Update failed
+                Exception e = task.getException();
+                if (e != null) {
+                    breakStatusData.setValue(false);
+                }
+            }
+        });
+        return breakStatusData;
+    }
 
 
 

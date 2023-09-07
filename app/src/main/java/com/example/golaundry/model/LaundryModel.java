@@ -15,11 +15,13 @@ public class LaundryModel {
     private String status;
     private String userType;
     private boolean notification;
+    private boolean setup;
+    private boolean isBreak;
 
     public LaundryModel() {
     }
 
-    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification) {
+    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak) {
         this.shopName = shopName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -33,6 +35,8 @@ public class LaundryModel {
         this.status = status;
         this.userType = userType;
         this.notification = notification;
+        this.setup = setup;
+        this.isBreak = isBreak;
     }
 
     public String getShopName() {
@@ -137,5 +141,21 @@ public class LaundryModel {
 
     public void setNotification(boolean notification) {
         this.notification = notification;
+    }
+
+    public boolean getSetup() {
+        return setup;
+    }
+
+    public void setSetup(boolean setup) {
+        this.setup = setup;
+    }
+
+    public boolean getIsBreak() {
+        return isBreak;
+    }
+
+    public void setIsBreak(boolean isBreak) {
+        this.isBreak = isBreak;
     }
 }
