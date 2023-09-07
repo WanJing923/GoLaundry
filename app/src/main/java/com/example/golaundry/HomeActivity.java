@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 1:
-                                    replace(new UserOrderFragment());
+                                    replace(new ManageShopFragment());
                                     break;
 
                                 case 2:
@@ -141,7 +141,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 1:
-                                    replace(new UserOrderFragment());
+                                    replace(new FindOrderFragment());
                                     break;
 
                                 case 2:

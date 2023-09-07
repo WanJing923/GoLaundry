@@ -56,6 +56,7 @@ public class HomeRiderFragment extends Fragment {
 
         TextView riderNameTextView = view.findViewById(R.id.fhr_tv_name);
         TextView ratingsTextView = view.findViewById(R.id.fhr_tv_rating_num);
+        TextView viewRatingsTextView = view.findViewById(R.id.fhr_tv_view_ratings);
 
         mRiderViewModel.getRiderData(currentRiderId).observe(getViewLifecycleOwner(), rider -> {
             if (rider != null) {
@@ -63,6 +64,11 @@ public class HomeRiderFragment extends Fragment {
             }
         });
 
+        viewRatingsTextView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), RatingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
 
 
