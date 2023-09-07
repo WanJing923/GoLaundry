@@ -32,9 +32,6 @@
             android:name=".LaundryServicesActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageShopActivity"
-            android:exported="false" />
-        <activity
             android:name=".ReportActivity"
             android:exported="false" />
         <activity

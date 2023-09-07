@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D6EFEE"
-    tools:context=".ManageShopActivity">
+    tools:context=".ManageShopFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ams_toolbar"
@@ -139,8 +139,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center"
-                                android:text="@string/location"
+                                android:gravity="start"
+                                android:text="@string/address"
                                 android:textColor="@color/black"
                                 android:textSize="15sp" />
                         </LinearLayout>
@@ -164,7 +164,7 @@
                             android:weightSum="1">
 
                             <ImageView
-                                android:id="@+id/mf_phone"
+                                android:id="@+id/ams_phone"
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
                                 android:layout_weight="1"
@@ -182,7 +182,7 @@
                             android:weightSum="1">
 
                             <TextView
-                                android:id="@+id/mf_tv_phone_number"
+                                android:id="@+id/ams_tv_phone_number"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"

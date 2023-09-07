@@ -64,6 +64,11 @@ public class HomeLaundryFragment extends Fragment {
             }
         });
 
+        viewRatingsTextView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), RatingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
 
 //        BarChart barChart = view.findViewById(R.id.fh_order_chart);
