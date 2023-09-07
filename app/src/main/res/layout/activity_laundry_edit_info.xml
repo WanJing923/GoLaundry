@@ -8,7 +8,7 @@
     tools:context=".ManageShopFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/fms_toolbar"
+        android:id="@+id/alei_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/fms_tv_go_laundry"
+            android:id="@+id/ams_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -36,7 +36,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fms_toolbar"
+        android:layout_below="@id/alei_toolbar"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/fms_tv_manage_shop"
+                android:id="@+id/alei_tv_manage_shop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -58,158 +58,28 @@
                 tools:ignore="RelativeOverlap" />
 
             <ImageView
-                android:id="@+id/fms_iv_edit"
+                android:id="@+id/alei_iv_done"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="22dp"
-                android:contentDescription="@string/edit_shop_icon"
-                android:src="@drawable/ic_edit_gold" />
-
-            <TextView
-                android:id="@+id/fms_tv_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fms_tv_manage_shop"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="22dp"
-                android:text="@string/update_the_laundry_shop_information_to_start_your_go_laundry_business"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:src="@drawable/ic_done"
+                android:contentDescription="@string/icon_done" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/fms_card_shop_info"
+                android:id="@+id/alei_card_laundry_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_below="@id/fms_tv_msg"
+                android:layout_below="@id/alei_tv_manage_shop"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="22dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/custom_button"
-                android:visibility="invisible"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="10dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/fms_layout1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginTop="20dp">
-
-                        <LinearLayout
-                            android:id="@+id/fms_linear2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:id="@+id/fms_iv_location"
-                                android:layout_width="0dp"
-                                android:layout_height="30dp"
-                                android:layout_weight="1"
-                                android:contentDescription="@string/location_icon"
-                                android:src="@drawable/ic_location"
-                                app:tint="@color/primary_green" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/fms_linear_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginStart="7dp"
-                            android:layout_toEndOf="@id/fms_linear2"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <TextView
-                                android:id="@+id/fms_tv_location"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="start"
-                                android:text="@string/address"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/fms_layout1"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp">
-
-                        <LinearLayout
-                            android:id="@+id/fms_linear3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <ImageView
-                                android:id="@+id/fms_phone"
-                                android:layout_width="0dp"
-                                android:layout_height="30dp"
-                                android:layout_weight="1"
-                                android:contentDescription="@string/phone_icon"
-                                android:src="@drawable/ic_phone"
-                                app:tint="@color/primary_green" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="7dp"
-                            android:layout_toEndOf="@id/fms_linear3"
-                            android:orientation="horizontal"
-                            android:weightSum="1">
-
-                            <TextView
-                                android:id="@+id/fms_tv_phone_number"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:text="@string/_601234567890"
-                                android:textColor="@color/black"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-                    </RelativeLayout>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/fms_cv_show_laundry_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_below="@id/fms_tv_manage_shop"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="19dp"
                 android:backgroundTint="@color/white"
-                android:visibility="visible"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -218,23 +88,23 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/fms_iv_image"
-                        android:layout_width="350dp"
+                        android:id="@+id/alei_laundry_image"
+                        android:layout_width="wrap_content"
                         android:layout_height="109dp"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="19dp"
-                        android:contentDescription="@string/laundry"
                         android:scaleType="fitXY"
-                        android:src="@drawable/laundry_images" />
+                        android:src="@drawable/image"
+                        android:contentDescription="@string/laundry_image" />
 
                     <LinearLayout
-                        android:id="@+id/fms_address"
+                        android:id="@+id/alei_linear_Address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fms_iv_image"
+                        android:layout_below="@id/alei_laundry_image"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="11dp"
                         android:layout_marginEnd="19dp"
@@ -242,34 +112,34 @@
                         android:weightSum="3">
 
                         <ImageView
-                            android:id="@+id/fms_iv_address"
+                            android:id="@+id/alei_iv_address"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:contentDescription="@string/location"
                             android:src="@drawable/ic_location"
-                            app:tint="@color/normal_green" />
+                            app:tint="@color/normal_green"
+                            android:contentDescription="@string/location_icon" />
 
                         <TextView
-                            android:id="@+id/fms_tv_address"
+                            android:id="@+id/alei_tv_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="14dp"
+                            android:layout_marginStart="5dp"
                             android:layout_weight="2"
                             android:gravity="center_vertical"
+                            android:hint="@string/_34_tingkat_nibong_1_bandar_bayan_lepas_11950_bayan_lepas_pulau_penang"
                             android:padding="10dp"
-                            android:text="@string/_34_tingkat_nibong_1_bandar_bayan_lepas_11950_bayan_lepas_pulau_penang"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/fms_phone_info"
+                        android:id="@+id/alei_linear_phoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fms_address"
+                        android:layout_below="@id/alei_linear_Address"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="11dp"
                         android:layout_marginEnd="19dp"
@@ -277,34 +147,34 @@
                         android:weightSum="3">
 
                         <ImageView
-                            android:id="@+id/fms_iv_phone"
+                            android:id="@+id/alei_iv_phone"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:contentDescription="@string/call"
                             android:src="@drawable/ic_phone_number"
-                            app:tint="@color/normal_green" />
+                            app:tint="@color/normal_green"
+                            android:contentDescription="@string/phone_icon" />
 
                         <TextView
-                            android:id="@+id/fms_tv_phone"
+                            android:id="@+id/alei_tv_phone"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="14dp"
+                            android:layout_marginStart="5dp"
                             android:layout_weight="2"
                             android:gravity="center_vertical"
+                            android:hint="@string/_012_4567890"
                             android:padding="10dp"
-                            android:text="@string/_012_4567890"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/fms_operation_hour"
+                        android:id="@+id/alei_linear_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/fms_phone_info"
+                        android:layout_below="@id/alei_linear_phoneNumber"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="11dp"
                         android:layout_marginEnd="19dp"
@@ -312,29 +182,28 @@
                         android:weightSum="3">
 
                         <ImageView
-                            android:id="@+id/fms_iv_time"
+                            android:id="@+id/alei_iv_time"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:contentDescription="@string/hours"
                             android:src="@drawable/ic_time"
-                            app:tint="@color/normal_green" />
+                            app:tint="@color/normal_green"
+                            android:contentDescription="@string/time_icon" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
+                            android:layout_marginStart="5dp"
                             android:layout_weight="2"
                             android:orientation="vertical"
                             android:weightSum="7">
 
                             <LinearLayout
-                                android:id="@+id/fms_monday"
+                                android:id="@+id/alei_linear_monday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
@@ -342,7 +211,7 @@
                                 tools:ignore="NestedWeights">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_monday"
+                                    android:id="@+id/alei_tv_monday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -350,22 +219,41 @@
                                     android:gravity="center_vertical"
                                     android:text="@string/monday"
                                     android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+                                    tools:ignore="NestedWeights" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_monday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_monday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="TooDeepLayout" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_monday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/fms_tuesday"
+                                android:id="@+id/alei_linear_tuesday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -376,7 +264,7 @@
                                 android:weightSum="2">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_tuesday"
+                                    android:id="@+id/alei_tv_tuesday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -386,20 +274,39 @@
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_tuesday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_tuesday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_tuesday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/fms_wednesday"
+                                android:id="@+id/alei_linear_wednesday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -410,7 +317,7 @@
                                 android:weightSum="2">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_wednesday"
+                                    android:id="@+id/alei_tv_wednesday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -420,20 +327,39 @@
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_wednesday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_tv_wednesday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_tv_wednesday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/fms_thursday"
+                                android:id="@+id/alei_linear_thursday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -444,7 +370,7 @@
                                 android:weightSum="2">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_thursday"
+                                    android:id="@+id/alei_tv_thursday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -454,20 +380,39 @@
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_thursday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_tv_thursday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="#D6EFEE"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_thursday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/fms_friday"
+                                android:id="@+id/alei_linear_friday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -478,7 +423,7 @@
                                 android:weightSum="2">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_friday"
+                                    android:id="@+id/alei_tv_friday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -488,20 +433,39 @@
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_friday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_friday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_friday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/fms_saturday"
+                                android:id="@+id/alei_linear_saturday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -512,7 +476,7 @@
                                 android:weightSum="2">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_saturday"
+                                    android:id="@+id/alei_tv_saturday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -522,20 +486,39 @@
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_saturday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_saturday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_saturday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/fms_sunday"
+                                android:id="@+id/alei_linear_sunday"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -547,7 +530,7 @@
                                 android:weightSum="2">
 
                                 <TextView
-                                    android:id="@+id/fms_tv_sunday"
+                                    android:id="@+id/alei_tv_sunday"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -557,61 +540,41 @@
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/fms_tv_sunday_time"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/_9am_9pm"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_sunday_start_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:id="@+id/alei_btn_sunday_end_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:backgroundTint="@color/cyan"
+                                        android:text="@string/_00_00"
+                                        tools:ignore="NestedWeights"
+                                        android:textColor="@color/black"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fms_cv_show_laundry_details">
-
-                <TextView
-                    android:id="@+id/fms_tv_manage_services"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="22dp"
-                    android:layout_marginTop="28dp"
-                    android:text="@string/manage_services"
-                    android:textColor="@color/gold"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:ignore="RelativeOverlap" />
-
-                <ImageView
-                    android:id="@+id/fms_iv_edit_services"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginEnd="22dp"
-                    android:contentDescription="@string/edit_shop_icon"
-                    android:src="@drawable/ic_edit_gold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fms_rv_service"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/fms_tv_manage_services"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="30dp" />
-
-            </RelativeLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
