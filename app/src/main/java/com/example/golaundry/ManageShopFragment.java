@@ -114,7 +114,7 @@ public class ManageShopFragment extends Fragment {
         });
 
         //intent to edit services
-        editImageView.setOnClickListener(view1 -> {
+        laundryImagesImageView.setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(), LaundryEditServicesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
