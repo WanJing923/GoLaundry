@@ -81,73 +81,58 @@ public class UserViewModel extends ViewModel {
         return signInResult;
     }
 
-    //check status here, login user in front
-//    public LiveData<Boolean> checkUserStatus(String email) {
-//        MutableLiveData<Boolean> statusLiveData = new MutableLiveData<>();
-//        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()) {
-//                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-//                        UserModel user = userSnapshot.getValue(UserModel.class);
-//                        if (user != null && user.getStatus().equals("active")) {
-//                            statusLiveData.setValue(true);
-//                            return;
-//                        }
-//                    }
-//                }
-//                statusLiveData.setValue(false);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                // Handle database error
-//                statusLiveData.setValue(false);
-//            }
-//        });
-//
-//        return statusLiveData;
-//    }
-
-    //before login, check user role
+    //before login, check user status and email exist
     public LiveData<Boolean> checkUserRole(String email) {
         MutableLiveData<Boolean> roleLiveData = new MutableLiveData<>();
-
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference("laundry");
         DatabaseReference riderRef = FirebaseDatabase.getInstance().getReference("riders");
 
         ValueEventListener listener = new ValueEventListener() {
+            int searchCounter = 0;
+            boolean userExists = false;
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean userExists = false;
-
                 if (snapshot.exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String status = dataSnapshot.child("status").getValue(String.class);
-                        if ("active".equals(status)) {
-                            userExists = true;
-                            break;
-                        }
-                    }
+                    userExists = true;
                 }
 
-                roleLiveData.setValue(userExists);
+                // Increment the search counter
+                searchCounter++;
+
+                // Check if we have searched all three tables
+                if (searchCounter == 3) {
+                    roleLiveData.setValue(userExists);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle database error
-                roleLiveData.setValue(false);
+
+                // Increment the search counter
+                searchCounter++;
+
+                // Check if we have searched all three tables
+                if (searchCounter == 3) {
+                    roleLiveData.setValue(false);
+                }
             }
         };
 
+        // Search in the userRef table
         userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+
+        // Search in the laundryRef table
         laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+
+        // Search in the riderRef table
         riderRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
 
         return roleLiveData;
     }
+
 
 
     //get user role data

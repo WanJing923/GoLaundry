@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:timePickerDialogTheme">@style/CustomTimePickerDialog</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -45,6 +46,14 @@
         <item name="cornerFamily">rounded</item>
         <item name="color">@color/black</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomTimePickerDialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:timePickerStyle">@style/CustomTimePicker</item>
+    </style>
+
+    <style name="CustomTimePicker">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>
