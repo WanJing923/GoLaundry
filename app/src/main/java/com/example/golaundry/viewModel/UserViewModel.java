@@ -117,65 +117,22 @@ public class UserViewModel extends ViewModel {
         DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference("laundry");
         DatabaseReference riderRef = FirebaseDatabase.getInstance().getReference("riders");
 
-        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean userExists = false;
+
                 if (snapshot.exists()) {
-                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        UserModel user = userSnapshot.getValue(UserModel.class);
-                        if (user != null && user.getStatus().equals("active")) {
-                            roleLiveData.setValue(true);
-                        } else {
-                            roleLiveData.setValue(false);
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String status = dataSnapshot.child("status").getValue(String.class);
+                        if ("active".equals(status)) {
+                            userExists = true;
+                            break;
                         }
-                        return;
                     }
                 }
-                laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            for (DataSnapshot laundrySnapshot : snapshot.getChildren()) {
-                                LaundryModel laundry = laundrySnapshot.getValue(LaundryModel.class);
-                                if (laundry != null && laundry.getStatus().equals("active")) {
-                                    roleLiveData.setValue(true);
-                                } else {
-                                    roleLiveData.setValue(false);
-                                }
-                                return;
-                            }
-                        } else {
-                            riderRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        for (DataSnapshot riderSnapshot : snapshot.getChildren()) {
-                                            RiderModel rider = riderSnapshot.getValue(RiderModel.class);
-                                            if (rider != null && rider.getStatus().equals("active")) {
-                                                roleLiveData.setValue(true);
-                                            } else {
-                                                roleLiveData.setValue(false);
-                                            }
-                                            return;
-                                        }
-                                    }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    // Handle database error
-                                    roleLiveData.setValue(false);
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle database error
-                        roleLiveData.setValue(false);
-                    }
-                });
+                roleLiveData.setValue(userExists);
             }
 
             @Override
@@ -183,10 +140,15 @@ public class UserViewModel extends ViewModel {
                 // Handle database error
                 roleLiveData.setValue(false);
             }
-        });
+        };
+
+        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+        laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+        riderRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
 
         return roleLiveData;
     }
+
 
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
