@@ -29,6 +29,7 @@ public class ProfileLaundryFragment extends Fragment {
 
     LaundryViewModel mLaundryViewModel;
     boolean notificationValue;
+    boolean laundryIsBreak;
 
     public ProfileLaundryFragment() {
         // Required empty public constructor
@@ -40,6 +41,7 @@ public class ProfileLaundryFragment extends Fragment {
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,6 +87,14 @@ public class ProfileLaundryFragment extends Fragment {
                 //notification switch
                 notificationSwitch.setChecked(laundry.getNotification());
                 notificationValue = laundry.getNotification();
+
+                if (!laundry.getIsBreak()){
+                    takeBreakTextView.setText("Take a break");
+                } else {
+                    takeBreakTextView.setText("End break");
+                }
+                laundryIsBreak = laundry.getIsBreak();
+
             }
         });
 
@@ -102,19 +112,12 @@ public class ProfileLaundryFragment extends Fragment {
             });
         });
 
-//        //take break
-//        takeBreakTextView.setOnClickListener(view1 -> {
-//            Intent intent = new Intent(getContext(), EditProfileActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        });
-
-//        //intent to wallet
-//        myWalletTextView.setOnClickListener(view1 -> {
-//            Intent intent = new Intent(getContext(), MembershipActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        });
+        //intent to wallet
+        myWalletTextView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), WalletActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
         //intent to reset password
         resetPasswordTextView.setOnClickListener(view1 -> {
@@ -133,6 +136,20 @@ public class ProfileLaundryFragment extends Fragment {
         //logout
         logOutTextView.setOnClickListener(view1 -> {
             showLogoutConfirmationDialog();
+        });
+
+        takeBreakTextView.setOnClickListener(view1 -> {
+            if (laundryIsBreak){
+                LaundryEndBreakDialog dialogFragment = new LaundryEndBreakDialog();
+                dialogFragment.setTargetFragment(this, 0);
+                assert getFragmentManager() != null;
+                dialogFragment.show(getFragmentManager(), "break_end_dialog");
+            } else {
+                LaundryTakeBreakDialog dialogFragment = new LaundryTakeBreakDialog();
+                dialogFragment.setTargetFragment(this, 0);
+                assert getFragmentManager() != null;
+                dialogFragment.show(getFragmentManager(), "break_confirmation_dialog");
+            }
         });
 
         return view;

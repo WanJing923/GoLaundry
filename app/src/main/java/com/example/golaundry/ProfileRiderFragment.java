@@ -119,11 +119,11 @@ public class ProfileRiderFragment extends Fragment {
         });
 
         //intent to wallet
-//        myWalletTextView.setOnClickListener(view1 -> {
-//            Intent intent = new Intent(getContext(), MembershipActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        });
+        myWalletTextView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), WalletActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
         //intent to reset password
         resetPasswordTextView.setOnClickListener(view1 -> {
