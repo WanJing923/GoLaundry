@@ -233,7 +233,10 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Switch" />
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -296,6 +299,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
                                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 
@@ -358,6 +363,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
                                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 
@@ -420,6 +427,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
                                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 
@@ -481,6 +490,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
                                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 
@@ -543,6 +554,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
                                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 
@@ -606,6 +619,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
                                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                                 </LinearLayout>
 

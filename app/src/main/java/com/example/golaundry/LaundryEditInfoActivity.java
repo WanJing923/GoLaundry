@@ -3,6 +3,7 @@ package com.example.golaundry;
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -25,34 +26,67 @@ import java.util.Objects;
 public class LaundryEditInfoActivity extends AppCompatActivity {
 
     LaundryViewModel mLaundryViewModel;
-
-    private Button timeMonday;
-    private Button timeTuesday;
-    private Button timeWednesday;
-    private Button timeThursday;
-    private Button timeFriday;
-    private Button timeSaturday;
-    private Button timeSunday;
+    private Button timeMonday, timeTuesday, timeWednesday, timeThursday, timeFriday, timeSaturday, timeSunday;
     List<String> allTimeRanges; //store all time ranges
     String currentUserId;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch switch1,switch2,switch3,switch4,switch5,switch6,switch7;
-
+    Switch switch1, switch2, switch3, switch4, switch5, switch6, switch7;
     private final Calendar[] startTimes = new Calendar[7];
     private final Calendar[] endTimes = new Calendar[7];
+    boolean isChecked1, isChecked2, isChecked3, isChecked4, isChecked5, isChecked6, isChecked7;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_laundry_edit_info);
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         allTimeRanges = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             allTimeRanges.add("off"); //if user not select time, default as off day
         }
 
-        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
+            if (shop != null) {
+                List<String> timeRangesList = shop.getAllTimeRanges();
+
+                for (int i = 0; i < timeRangesList.size(); i++) {
+                    String timeRange = timeRangesList.get(i);
+                    switch (i) {
+                        case 0:
+                            switch1.setChecked(!"off".equals(timeRange));
+                            timeMonday.setText(timeRange);
+                            break;
+                        case 1:
+                            switch2.setChecked(!"off".equals(timeRange));
+                            timeTuesday.setText(timeRange);
+                            break;
+                        case 2:
+                            switch3.setChecked(!"off".equals(timeRange));
+                            timeWednesday.setText(timeRange);
+                            break;
+                        case 3:
+                            switch4.setChecked(!"off".equals(timeRange));
+                            timeThursday.setText(timeRange);
+                            break;
+                        case 4:
+                            switch5.setChecked(!"off".equals(timeRange));
+                            timeFriday.setText(timeRange);
+                            break;
+                        case 5:
+                            switch6.setChecked(!"off".equals(timeRange));
+                            timeSaturday.setText(timeRange);
+                            break;
+                        case 6:
+                            switch7.setChecked(!"off".equals(timeRange));
+                            timeSunday.setText(timeRange);
+                            break;
+                    }
+                }
+            }
+        });
 
         // set each time range
         for (int i = 0; i < 7; i++) {
@@ -77,25 +111,45 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         switch7 = findViewById(R.id.switch7);
 
         switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked1 = isChecked;
             timeMonday.setEnabled(isChecked);
+            timeMonday.setText(isChecked ? "Select" : "OFF");
         });
+
         switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked2 = isChecked;
             timeTuesday.setEnabled(isChecked);
+            timeTuesday.setText(isChecked ? "Select" : "OFF");
         });
+
         switch3.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked3 = isChecked;
             timeWednesday.setEnabled(isChecked);
+            timeWednesday.setText(isChecked ? "Select" : "OFF");
         });
+
         switch4.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked4 = isChecked;
             timeThursday.setEnabled(isChecked);
+            timeThursday.setText(isChecked ? "Select" : "OFF");
         });
+
         switch5.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked5 = isChecked;
             timeFriday.setEnabled(isChecked);
+            timeFriday.setText(isChecked ? "Select" : "OFF");
         });
+
         switch6.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked6 = isChecked;
             timeSaturday.setEnabled(isChecked);
+            timeSaturday.setText(isChecked ? "Select" : "OFF");
         });
+
         switch7.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isChecked7 = isChecked;
             timeSunday.setEnabled(isChecked);
+            timeSunday.setText(isChecked ? "Select" : "OFF");
         });
 
         // Set click listeners for each button
@@ -195,49 +249,50 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         }
 
         String time = startTimeText + " - " + endTimeText;
+
         switch (dayIndex) {
             case 0:
                 timeMonday.setText(time);
+                if (isChecked1) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
             case 1:
                 timeTuesday.setText(time);
+                if (isChecked2) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
             case 2:
                 timeWednesday.setText(time);
+                if (isChecked3) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
             case 3:
                 timeThursday.setText(time);
+                if (isChecked4) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
             case 4:
                 timeFriday.setText(time);
+                if (isChecked5) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
             case 5:
                 timeSaturday.setText(time);
+                if (isChecked6) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
             case 6:
                 timeSunday.setText(time);
+                if (isChecked7) {
+                    allTimeRanges.set(dayIndex, time);
+                }
                 break;
-        }
-
-        //update the allTimeRanges list
-        if (dayIndex < allTimeRanges.size()) {
-            if (dayIndex == 0 && !switch1.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else if (dayIndex == 1 && !switch2.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else if (dayIndex == 2 && !switch3.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else if (dayIndex == 3 && !switch4.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else if (dayIndex == 4 && !switch5.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else if (dayIndex == 5 && !switch6.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else if (dayIndex == 6 && !switch7.isChecked()) {
-                allTimeRanges.set(dayIndex, "off");
-            } else {
-                allTimeRanges.set(dayIndex, time);
-            }
         }
     }
 

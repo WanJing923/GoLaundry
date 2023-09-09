@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.LaundryModel;
+import com.example.golaundry.model.LaundryShopModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -149,7 +150,7 @@ public class LaundryViewModel extends ViewModel {
             if (task.isSuccessful()) {
                 timeRangesStatus.setValue(true);
             } else {
-                // Update failed
+                //failed
                 Exception e = task.getException();
                 if (e != null) {
                     timeRangesStatus.setValue(false);
@@ -159,8 +160,23 @@ public class LaundryViewModel extends ViewModel {
         return timeRangesStatus;
     }
 
+    public LiveData<LaundryShopModel> getShopData(String currentUserId) {
+        MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
+        shopRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    LaundryShopModel shop = dataSnapshot.getValue(LaundryShopModel.class);
+                    shopData.setValue(shop);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
 
-
-
+        return shopData;
+    }
 }
