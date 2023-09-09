@@ -50,10 +50,10 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
         mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
             if (shop != null) {
-                List<String> timeRangesList = shop.getAllTimeRanges();
+                allTimeRanges = shop.getAllTimeRanges();
 
-                for (int i = 0; i < timeRangesList.size(); i++) {
-                    String timeRange = timeRangesList.get(i);
+                for (int i = 0; i < allTimeRanges.size(); i++) {
+                    String timeRange = allTimeRanges.get(i);
                     switch (i) {
                         case 0:
                             switch1.setChecked(!"off".equals(timeRange));
@@ -113,43 +113,78 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked1 = isChecked;
             timeMonday.setEnabled(isChecked);
-            timeMonday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeMonday.setText("OFF");
+                allTimeRanges.set(0, "off");
+            } else {
+                timeMonday.setText("Select");
+            }
         });
 
         switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked2 = isChecked;
             timeTuesday.setEnabled(isChecked);
-            timeTuesday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeTuesday.setText("OFF");
+                allTimeRanges.set(1, "off");
+            } else {
+                timeTuesday.setText("Select");
+            }
         });
 
         switch3.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked3 = isChecked;
             timeWednesday.setEnabled(isChecked);
-            timeWednesday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeWednesday.setText("OFF");
+                allTimeRanges.set(2, "off");
+            } else {
+                timeWednesday.setText("Select");
+            }
         });
 
         switch4.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked4 = isChecked;
             timeThursday.setEnabled(isChecked);
-            timeThursday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeThursday.setText("OFF");
+                allTimeRanges.set(3, "off");
+            } else {
+                timeThursday.setText("Select");
+            }
         });
 
         switch5.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked5 = isChecked;
             timeFriday.setEnabled(isChecked);
-            timeFriday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeFriday.setText("OFF");
+                allTimeRanges.set(4, "off");
+            } else {
+                timeFriday.setText("Select");
+            }
         });
 
         switch6.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked6 = isChecked;
             timeSaturday.setEnabled(isChecked);
-            timeSaturday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeSaturday.setText("OFF");
+                allTimeRanges.set(5, "off");
+            } else {
+                timeSaturday.setText("Select");
+            }
         });
 
         switch7.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked7 = isChecked;
             timeSunday.setEnabled(isChecked);
-            timeSunday.setText(isChecked ? "Select" : "OFF");
+            if (!isChecked) {
+                timeSunday.setText("OFF");
+                allTimeRanges.set(6, "off");
+            } else {
+                timeSunday.setText("Select");
+            }
         });
 
         // Set click listeners for each button
