@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,10 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     private Button timeFriday;
     private Button timeSaturday;
     private Button timeSunday;
-    List<String> allTimeRanges; // List to store all time ranges
+    List<String> allTimeRanges; //store all time ranges
+    String currentUserId;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    Switch switch1,switch2,switch3,switch4,switch5,switch6,switch7;
 
     private final Calendar[] startTimes = new Calendar[7];
     private final Calendar[] endTimes = new Calendar[7];
@@ -43,9 +47,14 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_laundry_edit_info);
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
 
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        allTimeRanges = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            allTimeRanges.add("off"); //if user not select time, default as off day
+        }
 
-        // Set each time range for 7 days
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        // set each time range
         for (int i = 0; i < 7; i++) {
             startTimes[i] = Calendar.getInstance();
             endTimes[i] = Calendar.getInstance();
@@ -58,6 +67,36 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         timeFriday = findViewById(R.id.alei_btn_friday_time);
         timeSaturday = findViewById(R.id.alei_btn_saturday_time);
         timeSunday = findViewById(R.id.alei_btn_sunday_time);
+
+        switch1 = findViewById(R.id.switch1);
+        switch2 = findViewById(R.id.switch2);
+        switch3 = findViewById(R.id.switch3);
+        switch4 = findViewById(R.id.switch4);
+        switch5 = findViewById(R.id.switch5);
+        switch6 = findViewById(R.id.switch6);
+        switch7 = findViewById(R.id.switch7);
+
+        switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeMonday.setEnabled(isChecked);
+        });
+        switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeTuesday.setEnabled(isChecked);
+        });
+        switch3.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeWednesday.setEnabled(isChecked);
+        });
+        switch4.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeThursday.setEnabled(isChecked);
+        });
+        switch5.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeFriday.setEnabled(isChecked);
+        });
+        switch6.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeSaturday.setEnabled(isChecked);
+        });
+        switch7.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            timeSunday.setEnabled(isChecked);
+        });
 
         // Set click listeners for each button
         timeMonday.setOnClickListener(v -> showTimePickerDialog(0));
@@ -76,7 +115,15 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         if (allTimeRanges == null) {
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
         } else {
-//insert to db
+            mLaundryViewModel.updateOpeningHoursData(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
+                if (timeRangesStatus != null && timeRangesStatus) {
+                    Toast.makeText(this, "Opening hours updated", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "Opening hours update failed!", Toast.LENGTH_SHORT).show();
+                }
+                ;
+            });
         }
     }
 
@@ -126,6 +173,12 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         Calendar start = startTimes[dayIndex];
         Calendar end = endTimes[dayIndex];
 
+        //if the selected times are within the same day
+        if (end.before(start)) {
+            Toast.makeText(this, "Time range should be within the same day", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         long differenceInMillis = end.getTimeInMillis() - start.getTimeInMillis();
         boolean isLessThanOneHour = differenceInMillis < 3600000;
 
@@ -142,7 +195,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         }
 
         String time = startTimeText + " - " + endTimeText;
-
         switch (dayIndex) {
             case 0:
                 timeMonday.setText(time);
@@ -167,17 +219,27 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 break;
         }
 
-        //create a new list
-        if (allTimeRanges == null) {
-            allTimeRanges = new ArrayList<>();
-        } else {
-            allTimeRanges.clear();
-        }
-
-        //add into list for all days
-        for (int i = 0; i < 7; i++) {
-            String timeRange = sdf.format(startTimes[i].getTime()) + " - " + sdf.format(endTimes[i].getTime());
-            allTimeRanges.add(timeRange);
+        //update the allTimeRanges list
+        if (dayIndex < allTimeRanges.size()) {
+            if (dayIndex == 0 && !switch1.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else if (dayIndex == 1 && !switch2.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else if (dayIndex == 2 && !switch3.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else if (dayIndex == 3 && !switch4.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else if (dayIndex == 4 && !switch5.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else if (dayIndex == 5 && !switch6.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else if (dayIndex == 6 && !switch7.isChecked()) {
+                allTimeRanges.set(dayIndex, "off");
+            } else {
+                allTimeRanges.set(dayIndex, time);
+            }
         }
     }
+
+
 }

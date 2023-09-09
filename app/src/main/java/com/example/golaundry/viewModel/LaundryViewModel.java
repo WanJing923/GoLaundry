@@ -28,12 +28,13 @@ public class LaundryViewModel extends ViewModel {
     private final FirebaseDatabase db;
     private final FirebaseAuth mAuth;
     private final DatabaseReference laundryRef;
+    private final DatabaseReference shopRef;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
-
+        shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -139,6 +140,23 @@ public class LaundryViewModel extends ViewModel {
             }
         });
         return breakStatusData;
+    }
+
+    public LiveData<Boolean> updateOpeningHoursData(String currentUserId, List<String> allTimeRanges) {
+        MutableLiveData<Boolean> timeRangesStatus = new MutableLiveData<>();
+
+        shopRef.child(currentUserId).child("allTimeRanges").setValue(allTimeRanges).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                timeRangesStatus.setValue(true);
+            } else {
+                // Update failed
+                Exception e = task.getException();
+                if (e != null) {
+                    timeRangesStatus.setValue(false);
+                }
+            }
+        });
+        return timeRangesStatus;
     }
 
 
