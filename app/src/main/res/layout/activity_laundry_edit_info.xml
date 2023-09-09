@@ -210,17 +210,34 @@
                                 android:weightSum="2"
                                 tools:ignore="NestedWeights">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_monday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/monday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp"
-                                    tools:ignore="NestedWeights" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_monday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/monday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp" />
+
+                                    <Switch
+                                        android:id="@+id/switch1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -235,6 +252,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="monday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"
@@ -256,16 +274,35 @@
                                 android:orientation="horizontal"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_tuesday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/tuesday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_tuesday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/tuesday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:id="@+id/switch2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -280,6 +317,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="tuesday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"
@@ -300,16 +338,35 @@
                                 android:orientation="horizontal"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_wednesday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/wednesday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_wednesday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/wednesday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:id="@+id/switch3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -324,6 +381,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="wednesday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"
@@ -344,16 +402,35 @@
                                 android:orientation="horizontal"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_thursday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/thursday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_thursday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/thursday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:id="@+id/switch4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -367,7 +444,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:backgroundTint="#D6EFEE"
+                                        android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="thursday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"
@@ -387,16 +465,35 @@
                                 android:orientation="horizontal"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_friday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/friday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_friday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/friday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:id="@+id/switch5"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -411,6 +508,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="friday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"
@@ -431,16 +529,35 @@
                                 android:orientation="horizontal"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_saturday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/saturday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_saturday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/saturday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:id="@+id/switch6"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -455,6 +572,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="saturday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"
@@ -476,16 +594,35 @@
                                 android:orientation="horizontal"
                                 android:weightSum="2">
 
-                                <TextView
-                                    android:id="@+id/alei_tv_sunday"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/sunday"
-                                    android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <TextView
+                                        android:id="@+id/alei_tv_sunday"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/sunday"
+                                        android:textColor="@color/black"
+                                        android:textSize="14sp"
+                                        tools:ignore="NestedWeights" />
+
+                                    <Switch
+                                        android:id="@+id/switch7"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Switch"
+                                        android:thumbTint="@color/cyan"
+                                        android:trackTint="@color/black"
+                                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -500,6 +637,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:backgroundTint="@color/cyan"
+                                        android:enabled="false"
                                         android:tag="sunday"
                                         android:text="@string/_00_00"
                                         android:textColor="@color/black"

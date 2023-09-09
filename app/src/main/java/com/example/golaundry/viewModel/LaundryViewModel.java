@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.LaundryModel;
+import com.example.golaundry.model.LaundryShopModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,12 +29,13 @@ public class LaundryViewModel extends ViewModel {
     private final FirebaseDatabase db;
     private final FirebaseAuth mAuth;
     private final DatabaseReference laundryRef;
+    private final DatabaseReference shopRef;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
-
+        shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -141,8 +143,40 @@ public class LaundryViewModel extends ViewModel {
         return breakStatusData;
     }
 
+    public LiveData<Boolean> updateOpeningHoursData(String currentUserId, List<String> allTimeRanges) {
+        MutableLiveData<Boolean> timeRangesStatus = new MutableLiveData<>();
 
+        shopRef.child(currentUserId).child("allTimeRanges").setValue(allTimeRanges).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                timeRangesStatus.setValue(true);
+            } else {
+                //failed
+                Exception e = task.getException();
+                if (e != null) {
+                    timeRangesStatus.setValue(false);
+                }
+            }
+        });
+        return timeRangesStatus;
+    }
 
+    public LiveData<LaundryShopModel> getShopData(String currentUserId) {
+        MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
+        shopRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    LaundryShopModel shop = dataSnapshot.getValue(LaundryShopModel.class);
+                    shopData.setValue(shop);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
 
+        return shopData;
+    }
 }
