@@ -299,7 +299,7 @@
     <string name="manage_services">Manage Services</string>
     <string name="icon_done">icon done</string>
     <string name="icon_add">icon add</string>
-    <string name="new_service">New Service</string>
+    <string name="add_service">Add Service</string>
     <string name="service_name">Service Name</string>
     <string name="for_each">for each</string>
     <string name="report">Report</string>

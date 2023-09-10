@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,8 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryShopModel;
 import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
@@ -39,7 +42,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
     LaundryViewModel mLaundryViewModel;
     private Button timeMonday, timeTuesday, timeWednesday, timeThursday, timeFriday, timeSaturday, timeSunday;
-    List<String> allTimeRanges; //store all time ranges
+    List<String> allTimeRanges;
     String currentUserId;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch switch1, switch2, switch3, switch4, switch5, switch6, switch7;
@@ -49,15 +52,21 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     private final int SELECT_LAUNDRY_IMAGE = 6;
     private Uri LaundryPicUri;
     ImageView LaundryPictureImageView;
-    String laundryPicUriString;
-    String imageUrl;
-    Uri LaundryPicUriOld;
+    String laundryPicUriString, imageUrl;
+    boolean laundryIsSetup;
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_laundry_edit_info);
+
+        Toolbar toolbar = findViewById(R.id.alei_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_left));
+
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
@@ -67,9 +76,21 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         }
 
         LaundryPictureImageView = findViewById(R.id.alei_laundry_image);
+        TextView addressTextView = findViewById(R.id.alei_tv_address);
+        TextView phoneNoTextView = findViewById(R.id.alei_tv_phone);
+
+        mLaundryViewModel.getLaundryData(currentUserId).observe(this, laundry -> {
+            if (laundry != null) {
+                String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
+                addressTextView.setText(address);
+                phoneNoTextView.setText(laundry.getPhoneNo());
+                laundryIsSetup = laundry.getSetup();
+            }
+        });
 
         mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
             if (shop != null) {
+                LaundryShopModel shopModel = shop;
                 allTimeRanges = shop.getAllTimeRanges();
                 for (int i = 0; i < allTimeRanges.size(); i++) {
                     String timeRange = allTimeRanges.get(i);
@@ -273,7 +294,13 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
             mLaundryViewModel.updateShopInfoNoImage(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
                     Toast.makeText(this, "Shop opening hours updated", Toast.LENGTH_SHORT).show();
-                    finish();
+                    if (laundryIsSetup) {
+                        finish();
+                    } else {
+                        Intent intent = new Intent(LaundryEditInfoActivity.this, LaundryEditServicesActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
                 } else {
                     Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -406,4 +433,15 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            //close the current activity
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
