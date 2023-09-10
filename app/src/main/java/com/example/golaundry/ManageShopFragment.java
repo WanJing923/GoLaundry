@@ -73,7 +73,7 @@ public class ManageShopFragment extends Fragment {
         //get laundry data
         mLaundryViewModel.getLaundryData(currentUserId).observe(getViewLifecycleOwner(), laundry -> {
             if (laundry != null) {
-                if (!laundry.getIsBreak()){
+                if (!laundry.getSetup()){
                     //show item that before laundry setup, hide others
                     beforeSetupCardView.setVisibility(View.VISIBLE);
                     msgTextView.setVisibility(View.VISIBLE);

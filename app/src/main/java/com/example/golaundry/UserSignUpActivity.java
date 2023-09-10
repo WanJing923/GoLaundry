@@ -38,7 +38,7 @@ public class UserSignUpActivity extends AppCompatActivity {
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         //toolbar function
-        Toolbar toolbar = (Toolbar) findViewById(R.id.usua_toolbar);
+        Toolbar toolbar = findViewById(R.id.usua_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

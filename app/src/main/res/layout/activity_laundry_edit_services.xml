@@ -75,34 +75,145 @@
                 android:layout_marginTop="16dp"
                 android:layout_below="@id/als_tv_manage_services"/>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/als_service_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_below="@id/als_rv_service"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="25dp"
+                android:background="@drawable/custom_button"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/als_service_et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:autofillHints="Service name"
+                        android:background="@drawable/custom_service"
+                        android:hint="@string/service_name"
+                        android:inputType="textPersonName"
+                        android:padding="15dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:id="@+id/als_service_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@id/als_service_et_name"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="7dp"
+                        android:background="?android:attr/listDivider"
+                        android:backgroundTint="@color/black" />
+
+                    <EditText
+                        android:id="@+id/als_service_et_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/als_service_divider"
+                        android:autofillHints="Description"
+                        android:background="@drawable/custom_service"
+                        android:gravity="top|start"
+                        android:hint="@string/description"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:maxLines="10"
+                        android:padding="15dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/als_service_tv_rm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/als_service_et_desc"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/rm"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/als_service_et_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/als_service_et_desc"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@id/als_service_tv_rm"
+                        android:autofillHints="Price"
+                        android:background="@drawable/custom_service"
+                        android:hint="@string/_0"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_color"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/als_service_tv_for_each"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/als_service_et_desc"
+                        android:layout_marginStart="41dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@id/als_service_et_price"
+                        android:text="@string/for_each"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/als_service_et_price_for_each"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/als_service_et_desc"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toEndOf="@id/als_service_tv_for_each"
+                        android:autofillHints="Each price"
+                        android:background="@drawable/custom_service"
+                        android:hint="@string/_0"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_color"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/als_rv_service">
+                android:layout_below="@id/als_service_card">
 
                 <ImageView
                     android:id="@+id/als_iv_add"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_centerInParent="true"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_add_address"
-                    android:layout_marginTop="16dp"
-                    android:contentDescription="@string/icon_add" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/als_iv_add"
                     android:layout_centerInParent="true"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="1dp"
-                    android:text="@string/new_service"
-                    android:textColor="@color/primary_green"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="20dp"
+                    android:contentDescription="@string/icon_add"
+                    android:src="@drawable/ic_add_address" />
 
             </RelativeLayout>
         </RelativeLayout>

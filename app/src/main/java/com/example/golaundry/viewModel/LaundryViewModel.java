@@ -58,7 +58,7 @@ public class LaundryViewModel extends ViewModel {
 
         if (BLfilepath != null) {
             StorageReference fpFileRef = FirebaseStorage.getInstance().getReference()
-                    .child("Laundry/" + laundryId).child("FacePhoto");
+                    .child("Laundry/" + laundryId).child(Objects.requireNonNull(BLfilepath.getLastPathSegment()));
             UploadTask fpUploadTask = fpFileRef.putFile(BLfilepath);
 
             Task<List<Object>> combinedUploadTask = Tasks.whenAllSuccess(fpUploadTask);
@@ -143,9 +143,42 @@ public class LaundryViewModel extends ViewModel {
         return breakStatusData;
     }
 
-    public LiveData<Boolean> updateOpeningHoursData(String currentUserId, List<String> allTimeRanges) {
-        MutableLiveData<Boolean> timeRangesStatus = new MutableLiveData<>();
+    public LiveData<Boolean> updateShopInfo(String currentUserId, LaundryShopModel shopInfo) {
+        MutableLiveData<Boolean> shopInfoStatus = new MutableLiveData<>();
+        Uri laundryImageUri = Uri.parse(shopInfo.getImages());
 
+        if (laundryImageUri != null) {
+            StorageReference laundryFileRef = FirebaseStorage.getInstance().getReference()
+                    .child("LaundryShop/" + currentUserId).child(Objects.requireNonNull(laundryImageUri.getLastPathSegment()));
+            UploadTask laundryUploadTask = laundryFileRef.putFile(laundryImageUri);
+
+            Task<List<Object>> combinedUploadTask = Tasks.whenAllSuccess(laundryUploadTask);
+
+            combinedUploadTask.continueWithTask(uploadTask -> {
+                Task<Uri> laundryDownloadUrlTask = laundryFileRef.getDownloadUrl();
+                return Tasks.whenAllSuccess(laundryDownloadUrlTask);
+
+            }).continueWithTask(downloadUrlTask -> {
+                Uri DownloadUri = (Uri) downloadUrlTask.getResult().get(0);
+                shopInfo.setImages(DownloadUri.toString());
+                return db.getReference("laundryShop").child(currentUserId).setValue(shopInfo);
+
+            }).addOnCompleteListener(dbTask -> {
+                if (dbTask.isSuccessful()) {
+                    shopInfoStatus.setValue(true);
+                } else {
+                    shopInfoStatus.setValue(false);
+                }
+
+            });
+        } else {
+            shopInfoStatus.setValue(false);
+        }
+        return shopInfoStatus;
+    }
+
+    public LiveData<Boolean> updateShopInfoNoImage(String currentUserId, List<String> allTimeRanges) {
+        MutableLiveData<Boolean> timeRangesStatus = new MutableLiveData<>();
         shopRef.child(currentUserId).child("allTimeRanges").setValue(allTimeRanges).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 timeRangesStatus.setValue(true);
@@ -158,7 +191,7 @@ public class LaundryViewModel extends ViewModel {
             }
         });
         return timeRangesStatus;
-    }
+    };
 
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();

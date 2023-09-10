@@ -224,7 +224,6 @@ public class ProfileUserFragment extends Fragment {
         //user click switch turn on or off
         notificationSwitch.setOnClickListener(view1 -> {
             boolean updatedValue = !notificationValue;
-
             //update notification data
             mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
                 if (notificationStatusData != null && notificationStatusData) {

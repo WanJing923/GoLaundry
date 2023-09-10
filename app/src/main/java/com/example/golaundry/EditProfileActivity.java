@@ -61,7 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.aep_toolbar);
+        Toolbar toolbar = findViewById(R.id.aep_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -187,7 +187,6 @@ public class EditProfileActivity extends AppCompatActivity {
         String fullName = userNameEditText.getText().toString().trim();
         String icNo = icNoEditText.getText().toString().trim();
         String phoneNo = phoneNoEditText.getText().toString().trim();
-//        String profilePicPhoto = String.valueOf(profilePicUri);
 
         //validate to check if name is empty
         if (fullName.isEmpty()) {
