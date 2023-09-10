@@ -50,6 +50,8 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     private Uri LaundryPicUri;
     ImageView LaundryPictureImageView;
     String laundryPicUriString;
+    String imageUrl;
+    Uri LaundryPicUriOld;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -103,7 +105,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                     }
                 }
                 //show image
-                String imageUrl = shop.getImages();
+                imageUrl = shop.getImages();
                 if (!Objects.equals(imageUrl, "")) {
                     setImages(imageUrl, LaundryPictureImageView);
                 }
@@ -268,17 +270,24 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         if (allTimeRanges == null) {
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
         } else if (LaundryPicUri == null) {
-            Toast.makeText(this, "Laundry image is required!", Toast.LENGTH_SHORT).show();
+            mLaundryViewModel.updateShopInfoNoImage(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
+                if (timeRangesStatus != null && timeRangesStatus) {
+                    Toast.makeText(this, "Shop opening hours updated", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } else {
             LaundryShopModel shopInfo = new LaundryShopModel(laundryPicUriString, allTimeRanges);
-
             mLaundryViewModel.updateShopInfo(currentUserId, shopInfo).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
                     Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     Toast.makeText(this, "Shop info update failed!", Toast.LENGTH_SHORT).show();
-                };
+                }
             });
         }
     }

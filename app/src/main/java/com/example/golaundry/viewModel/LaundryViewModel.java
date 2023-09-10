@@ -177,6 +177,22 @@ public class LaundryViewModel extends ViewModel {
         return shopInfoStatus;
     }
 
+    public LiveData<Boolean> updateShopInfoNoImage(String currentUserId, List<String> allTimeRanges) {
+        MutableLiveData<Boolean> timeRangesStatus = new MutableLiveData<>();
+        shopRef.child(currentUserId).child("allTimeRanges").setValue(allTimeRanges).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                timeRangesStatus.setValue(true);
+            } else {
+                //failed
+                Exception e = task.getException();
+                if (e != null) {
+                    timeRangesStatus.setValue(false);
+                }
+            }
+        });
+        return timeRangesStatus;
+    };
+
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
         shopRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
