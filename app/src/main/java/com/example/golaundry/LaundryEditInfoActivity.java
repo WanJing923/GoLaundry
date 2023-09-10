@@ -2,7 +2,12 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,15 +18,22 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.golaundry.model.LaundryShopModel;
+import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class LaundryEditInfoActivity extends AppCompatActivity {
 
@@ -34,6 +46,10 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     private final Calendar[] startTimes = new Calendar[7];
     private final Calendar[] endTimes = new Calendar[7];
     boolean isChecked1, isChecked2, isChecked3, isChecked4, isChecked5, isChecked6, isChecked7;
+    private final int SELECT_LAUNDRY_IMAGE = 6;
+    private Uri LaundryPicUri;
+    ImageView LaundryPictureImageView;
+    String laundryPicUriString;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -48,10 +64,11 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
             allTimeRanges.add("off"); //if user not select time, default as off day
         }
 
+        LaundryPictureImageView = findViewById(R.id.alei_laundry_image);
+
         mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
             if (shop != null) {
                 allTimeRanges = shop.getAllTimeRanges();
-
                 for (int i = 0; i < allTimeRanges.size(); i++) {
                     String timeRange = allTimeRanges.get(i);
                     switch (i) {
@@ -84,6 +101,11 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                             timeSunday.setText(timeRange);
                             break;
                     }
+                }
+                //show image
+                String imageUrl = shop.getImages();
+                if (!Objects.equals(imageUrl, "")) {
+                    setImages(imageUrl, LaundryPictureImageView);
                 }
             }
         });
@@ -120,7 +142,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 timeMonday.setText("Select");
             }
         });
-
         switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked2 = isChecked;
             timeTuesday.setEnabled(isChecked);
@@ -131,7 +152,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 timeTuesday.setText("Select");
             }
         });
-
         switch3.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked3 = isChecked;
             timeWednesday.setEnabled(isChecked);
@@ -142,7 +162,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 timeWednesday.setText("Select");
             }
         });
-
         switch4.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked4 = isChecked;
             timeThursday.setEnabled(isChecked);
@@ -153,7 +172,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 timeThursday.setText("Select");
             }
         });
-
         switch5.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked5 = isChecked;
             timeFriday.setEnabled(isChecked);
@@ -164,7 +182,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 timeFriday.setText("Select");
             }
         });
-
         switch6.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked6 = isChecked;
             timeSaturday.setEnabled(isChecked);
@@ -175,7 +192,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 timeSaturday.setText("Select");
             }
         });
-
         switch7.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isChecked7 = isChecked;
             timeSunday.setEnabled(isChecked);
@@ -187,7 +203,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
             }
         });
 
-        // Set click listeners for each button
+        //click listeners for each button
         timeMonday.setOnClickListener(v -> showTimePickerDialog(0));
         timeTuesday.setOnClickListener(v -> showTimePickerDialog(1));
         timeWednesday.setOnClickListener(v -> showTimePickerDialog(2));
@@ -198,20 +214,71 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
         ImageView doneImageView = findViewById(R.id.alei_iv_done);
         doneImageView.setOnClickListener(v -> updateInfo());
+
+        //let laundry select image
+        LaundryPictureImageView.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Laundry Shop Picture"), SELECT_LAUNDRY_IMAGE);
+        });
+    }
+
+    private void setImages(String imageUrl, ImageView LaundryPictureImageView) {
+        //referenceFromUrl to get StorageReference
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+
+            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                //show
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                LaundryPictureImageView.setImageBitmap(bitmap);
+
+            }).addOnFailureListener(e -> {
+                Toast.makeText(LaundryEditInfoActivity.this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //process images
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_LAUNDRY_IMAGE && data != null && data.getData() != null) {
+                //handle selected laundry image
+                LaundryPicUri = data.getData();
+                laundryPicUriString = String.valueOf(LaundryPicUri);
+                //show what user select
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), LaundryPicUri);
+                    LaundryPictureImageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void updateInfo() {
         if (allTimeRanges == null) {
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
+        } else if (LaundryPicUri == null) {
+            Toast.makeText(this, "Laundry image is required!", Toast.LENGTH_SHORT).show();
         } else {
-            mLaundryViewModel.updateOpeningHoursData(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
+            LaundryShopModel shopInfo = new LaundryShopModel(laundryPicUriString, allTimeRanges);
+
+            mLaundryViewModel.updateShopInfo(currentUserId, shopInfo).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
-                    Toast.makeText(this, "Opening hours updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(this, "Opening hours update failed!", Toast.LENGTH_SHORT).show();
-                }
-                ;
+                    Toast.makeText(this, "Shop info update failed!", Toast.LENGTH_SHORT).show();
+                };
             });
         }
     }
@@ -330,6 +397,4 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 }
