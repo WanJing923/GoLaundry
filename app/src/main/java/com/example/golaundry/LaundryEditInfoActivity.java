@@ -54,7 +54,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     ImageView LaundryPictureImageView;
     String laundryPicUriString, imageUrl;
     boolean laundryIsSetup;
-    boolean isLaundryImageNew;
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override

@@ -11,12 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.R;
 import com.example.golaundry.model.LaundryServiceModel;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -41,13 +44,13 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHold
         LaundryServiceModel service = serviceList.get(position);
 
         //bind data
-        holder.serviceNameEditText.setText(service.getName());
-        holder.serviceDescriptionEditText.setText(service.getDescription());
+        holder.serviceNameTextView.setText(service.getName());
+        holder.serviceDescriptionTextView.setText(service.getDescription());
         @SuppressLint("DefaultLocale")
         String price = String.format("%.2f", (service.getPrice()));
-        holder.servicePriceEditText.setText(price);
+        holder.servicePriceTextView.setText(price);
         String quantity = String.valueOf(service.getQuantity());
-        holder.servicePriceForEachEditText.setText(quantity);
+        holder.servicePriceForEachTextView.setText(quantity);
 
         holder.deleteImageView.setOnClickListener(v -> {
             removeItemWithConfirmation(position);
@@ -83,18 +86,18 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        EditText serviceNameEditText;
-        EditText serviceDescriptionEditText;
-        EditText servicePriceEditText;
-        EditText servicePriceForEachEditText;
+        TextView serviceNameTextView;
+        TextView serviceDescriptionTextView;
+        TextView servicePriceTextView;
+        TextView servicePriceForEachTextView;
         ImageView deleteImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            serviceNameEditText = itemView.findViewById(R.id.service_et_name);
-            serviceDescriptionEditText = itemView.findViewById(R.id.service_et_desc);
-            servicePriceEditText = itemView.findViewById(R.id.service_et_price);
-            servicePriceForEachEditText = itemView.findViewById(R.id.service_et_price_for_each);
+            serviceNameTextView = itemView.findViewById(R.id.service_tv_name);
+            serviceDescriptionTextView = itemView.findViewById(R.id.service_tv_desc);
+            servicePriceTextView = itemView.findViewById(R.id.service_tv_price);
+            servicePriceForEachTextView = itemView.findViewById(R.id.service_tv_price_for_each);
             deleteImageView = itemView.findViewById(R.id.service_iv_delete);
         }
     }

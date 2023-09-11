@@ -2,8 +2,11 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,7 +66,7 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
         //initialize the serviceList
         serviceList = new ArrayList<>();
 
-        mLaundryViewModel.getServiceData(currentUserId).observe(this, services -> {
+        mLaundryViewModel.getServiceData(currentUserId).observe(LaundryEditServicesActivity.this, services -> {
             if (services != null) {
                 serviceList.clear();
                 serviceList.addAll(services);
@@ -116,16 +120,27 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
             if (serviceList.isEmpty()) {
                 Toast.makeText(this, "Service list is empty. Add services before uploading.", Toast.LENGTH_SHORT).show();
             } else {
-                mLaundryViewModel.uploadServiceData(currentUserId, serviceList).observe(this, uploadServiceStatus -> {
+                mLaundryViewModel.uploadServiceData(currentUserId, serviceList).observe(LaundryEditServicesActivity.this, uploadServiceStatus -> {
                     if (uploadServiceStatus) {
                         Toast.makeText(this, "Shop services updated", Toast.LENGTH_SHORT).show();
-
                         if (laundryIsSetup) {
                             finish();
                         } else {
                             //already check laundry image, opening hrs, and services not null, so just update db setup to true
                             mLaundryViewModel.updateSetupData(currentUserId, true).observe(this, updateSetupStatus -> {
-                                finish();
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                builder.setTitle("Thank you for joining us!")
+                                        .setMessage("Your laundry shop account has been setup and successfully uploaded to be discovered by the customers.");
+
+                                SpannableString spannableString = new SpannableString("OK");
+                                spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+
+                                builder.setPositiveButton(spannableString, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    finish();
+                                }).show();
+
                             });
                         }
                     } else {
