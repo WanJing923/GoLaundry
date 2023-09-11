@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -236,27 +237,39 @@ public class LaundryViewModel extends ViewModel {
         return serviceData;
     }
 
-    public LiveData<Boolean> uploadServiceData(String currentUserId, LaundryServiceModel service) {
+    public LiveData<Boolean> uploadServiceData(String currentUserId, ArrayList<LaundryServiceModel> service) {
         MutableLiveData<Boolean> uploadServiceStatus = new MutableLiveData<>();
 
-        String serviceId = serviceRef.child(currentUserId).child("services").push().getKey();
-
-        if (serviceId != null) {
-            serviceRef.child(currentUserId).child("services").child(serviceId).setValue(service)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            uploadServiceStatus.setValue(true);
-                        } else {
-                            Exception e = task.getException();
-                            if (e != null) {
-                                uploadServiceStatus.setValue(false);
-                            }
+        serviceRef.child(currentUserId).child("services").setValue(service)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        uploadServiceStatus.setValue(true);
+                    } else {
+                        Exception e = task.getException();
+                        if (e != null) {
+                            uploadServiceStatus.setValue(false);
                         }
-                    });
-        } else {
-            uploadServiceStatus.setValue(false);
-        }
+                    }
+                });
+
         return uploadServiceStatus;
+    }
+
+    public LiveData<Boolean> updateSetupData(String currentUserId, boolean updateValue) {
+        MutableLiveData<Boolean> updateSetupStatus = new MutableLiveData<>();
+
+        laundryRef.child(currentUserId).child("setup").setValue(updateValue).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                updateSetupStatus.setValue(true);
+            } else {
+                // Update failed
+                Exception e = task.getException();
+                if (e != null) {
+                    updateSetupStatus.setValue(false);
+                }
+            }
+        });
+        return updateSetupStatus;
     }
 
 }

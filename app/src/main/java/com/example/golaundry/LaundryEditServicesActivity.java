@@ -37,7 +37,6 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
     EditText serviceNameEditText, serviceDescriptionEditText, servicePriceEditText, servicePriceForEachEditText;
     boolean laundryIsSetup;
 
-
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +94,7 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
         });
 
         servicesRecyclerView = findViewById(R.id.als_rv_service);
-        mServiceAdapter = new ServiceAdapter(serviceList,this);
+        mServiceAdapter = new ServiceAdapter(serviceList, this);
         servicesRecyclerView.setAdapter(mServiceAdapter);
         servicesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -105,37 +104,28 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
             }
         });
 
-//        mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
-//            if (shop == null) {
-//
-//            }
-//        });
-
         doneImageView.setOnClickListener(v -> {
             if (serviceList.isEmpty()) {
                 Toast.makeText(this, "Service list is empty. Add services before uploading.", Toast.LENGTH_SHORT).show();
             } else {
-                for (LaundryServiceModel service : serviceList) {
-                    mLaundryViewModel.uploadServiceData(currentUserId, service).observe(this, uploadServiceStatus -> {
-                        if (uploadServiceStatus) {
-                            Toast.makeText(this, "Shop services updated", Toast.LENGTH_SHORT).show();
+                mLaundryViewModel.uploadServiceData(currentUserId, serviceList).observe(this, uploadServiceStatus -> {
+                    if (uploadServiceStatus) {
+                        Toast.makeText(this, "Shop services updated", Toast.LENGTH_SHORT).show();
 
-                            if (laundryIsSetup) {
-                                finish();
-                            } else {
-
-                                //check all profile, opening hrs, and services not null
-                                //update db setup to true
-                            }
+                        if (laundryIsSetup) {
+                            finish();
                         } else {
-                            Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
+                            //already check laundry image, opening hrs, and services not null, so just update db setup to true
+                            mLaundryViewModel.updateSetupData(currentUserId, true).observe(this, updateSetupStatus -> {
+                                finish();
+                            });
                         }
-                    });
-                }
+                    } else {
+                        Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
-
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
