@@ -217,16 +217,22 @@ public class LaundryViewModel extends ViewModel {
         return shopData;
     }
 
-    public LiveData<LaundryServiceModel> getServiceData(String currentUserId) {
-        MutableLiveData<LaundryServiceModel> serviceData = new MutableLiveData<>();
+    public LiveData<List<LaundryServiceModel>> getServiceData(String currentUserId) {
+        MutableLiveData<List<LaundryServiceModel>> serviceData = new MutableLiveData<>();
 
-        serviceRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        serviceRef.child(currentUserId).child("services").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    LaundryServiceModel service = dataSnapshot.getValue(LaundryServiceModel.class);
-                    serviceData.setValue(service);
+                List<LaundryServiceModel> services = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryServiceModel service = snapshot.getValue(LaundryServiceModel.class);
+                    if (service != null) {
+                        services.add(service);
+                    }
                 }
+
+                serviceData.setValue(services);
             }
 
             @Override
@@ -236,6 +242,7 @@ public class LaundryViewModel extends ViewModel {
 
         return serviceData;
     }
+
 
     public LiveData<Boolean> uploadServiceData(String currentUserId, ArrayList<LaundryServiceModel> service) {
         MutableLiveData<Boolean> uploadServiceStatus = new MutableLiveData<>();

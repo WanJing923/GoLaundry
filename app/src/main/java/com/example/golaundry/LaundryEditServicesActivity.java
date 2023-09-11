@@ -62,6 +62,14 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
         //initialize the serviceList
         serviceList = new ArrayList<>();
 
+        mLaundryViewModel.getServiceData(currentUserId).observe(this, services -> {
+            if (services != null) {
+                serviceList.clear();
+                serviceList.addAll(services);
+                mServiceAdapter.notifyDataSetChanged();
+            }
+        });
+
         addImageView.setOnClickListener(v -> {
             String name = serviceNameEditText.getText().toString();
             String description = serviceDescriptionEditText.getText().toString();
