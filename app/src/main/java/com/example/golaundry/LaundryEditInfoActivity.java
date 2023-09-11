@@ -54,6 +54,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     ImageView LaundryPictureImageView;
     String laundryPicUriString, imageUrl;
     boolean laundryIsSetup;
+    boolean isLaundryImageNew;
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
@@ -90,7 +91,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
         mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
             if (shop != null) {
-                LaundryShopModel shopModel = shop;
+
                 allTimeRanges = shop.getAllTimeRanges();
                 for (int i = 0; i < allTimeRanges.size(); i++) {
                     String timeRange = allTimeRanges.get(i);
@@ -287,7 +288,29 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         }
     }
 
+    public boolean areAllElementsOff(List<String> allTimeRanges) {
+        for (String timeRange : allTimeRanges) {
+            if (!timeRange.equals("off")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void updateInfo() {
+
+        if (Objects.equals(imageUrl, "")){
+            if (LaundryPicUri == null) {
+                Toast.makeText(this, "Please upload laundry image", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if (areAllElementsOff(allTimeRanges)) {
+            Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (allTimeRanges == null) {
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
         } else if (LaundryPicUri == null) {

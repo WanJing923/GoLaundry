@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.LaundryModel;
+import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -30,12 +31,14 @@ public class LaundryViewModel extends ViewModel {
     private final FirebaseAuth mAuth;
     private final DatabaseReference laundryRef;
     private final DatabaseReference shopRef;
+    private final DatabaseReference serviceRef;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
+        serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -191,7 +194,7 @@ public class LaundryViewModel extends ViewModel {
             }
         });
         return timeRangesStatus;
-    };
+    }
 
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
@@ -206,10 +209,56 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+
             }
         });
 
         return shopData;
     }
+
+    public LiveData<LaundryServiceModel> getServiceData(String currentUserId) {
+        MutableLiveData<LaundryServiceModel> serviceData = new MutableLiveData<>();
+
+        serviceRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    LaundryServiceModel service = dataSnapshot.getValue(LaundryServiceModel.class);
+                    serviceData.setValue(service);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return serviceData;
+    }
+
+    public LiveData<Boolean> uploadServiceData(String currentUserId, LaundryServiceModel service) {
+        MutableLiveData<Boolean> uploadServiceStatus = new MutableLiveData<>();
+
+        String serviceId = serviceRef.child(currentUserId).child("services").push().getKey();
+
+        if (serviceId != null) {
+            serviceRef.child(currentUserId).child("services").child(serviceId).setValue(service)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            uploadServiceStatus.setValue(true);
+                        } else {
+                            Exception e = task.getException();
+                            if (e != null) {
+                                uploadServiceStatus.setValue(false);
+                            }
+                        }
+                    });
+        } else {
+            uploadServiceStatus.setValue(false);
+        }
+        return uploadServiceStatus;
+    }
+
 }
+
+
