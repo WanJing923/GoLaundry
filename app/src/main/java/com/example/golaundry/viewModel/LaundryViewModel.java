@@ -8,7 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.LaundryModel;
+import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +23,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class LaundryViewModel extends ViewModel {
@@ -30,12 +35,14 @@ public class LaundryViewModel extends ViewModel {
     private final FirebaseAuth mAuth;
     private final DatabaseReference laundryRef;
     private final DatabaseReference shopRef;
+    private final DatabaseReference serviceRef;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
+        serviceRef = FirebaseDatabase.getInstance("https://golaundry-906c7-default-rtdb.firebaseio.com/").getReference().child("laundryService");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -191,7 +198,7 @@ public class LaundryViewModel extends ViewModel {
             }
         });
         return timeRangesStatus;
-    };
+    }
 
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
@@ -206,10 +213,88 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+
             }
         });
 
         return shopData;
     }
+
+    public LiveData<List<LaundryServiceModel>> getServiceData(String currentUserId) {
+        MutableLiveData<List<LaundryServiceModel>> serviceData = new MutableLiveData<>();
+
+        serviceRef.child(currentUserId).child("services").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryServiceModel> services = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryServiceModel service = snapshot.getValue(LaundryServiceModel.class);
+                    if (service != null) {
+                        services.add(service);
+                    }
+                }
+                serviceData.setValue(services);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return serviceData;
+    }
+
+    public LiveData<Boolean> uploadServiceData(String currentUserId, ArrayList<LaundryServiceModel> service) {
+        MutableLiveData<Boolean> uploadServiceStatus = new MutableLiveData<>();
+
+//        serviceRef.child(currentUserId).child("services").setValue(service).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if (task.isSuccessful()) {
+//                    uploadServiceStatus.setValue(true);
+//                } else {
+//                    Exception e = task.getException();
+//                    if (e != null) {
+//                        uploadServiceStatus.setValue(false);
+//                    }
+//                }
+//            }
+//        });
+
+        serviceRef.child(currentUserId).child("services").setValue(service)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        uploadServiceStatus.setValue(true);
+                    } else {
+                        Exception e = task.getException();
+                        if (e != null) {
+                            uploadServiceStatus.setValue(false);
+                        }
+                    }
+                });
+
+        return uploadServiceStatus;
+    }
+
+
+    public LiveData<Boolean> updateSetupData(String currentUserId, boolean updateValue) {
+        MutableLiveData<Boolean> updateSetupStatus = new MutableLiveData<>();
+
+        laundryRef.child(currentUserId).child("setup").setValue(updateValue).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                updateSetupStatus.setValue(true);
+            } else {
+                // Update failed
+                Exception e = task.getException();
+                if (e != null) {
+                    updateSetupStatus.setValue(false);
+                }
+            }
+        });
+        return updateSetupStatus;
+    }
+
 }
+
+

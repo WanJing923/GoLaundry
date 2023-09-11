@@ -1,13 +1,20 @@
 package com.example.golaundry;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,8 +39,9 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
     ServiceAdapter mServiceAdapter;
     RecyclerView servicesRecyclerView;
     EditText serviceNameEditText, serviceDescriptionEditText, servicePriceEditText, servicePriceForEachEditText;
+    boolean laundryIsSetup;
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,35 +63,92 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
         ImageView doneImageView = findViewById(R.id.als_iv_done);
         ImageView addImageView = findViewById(R.id.als_iv_add);
 
-        // Initialize the serviceList
+        //initialize the serviceList
         serviceList = new ArrayList<>();
+
+        mLaundryViewModel.getServiceData(currentUserId).observe(LaundryEditServicesActivity.this, services -> {
+            if (services != null) {
+                serviceList.clear();
+                serviceList.addAll(services);
+                mServiceAdapter.notifyDataSetChanged();
+            }
+        });
 
         addImageView.setOnClickListener(v -> {
             String name = serviceNameEditText.getText().toString();
             String description = serviceDescriptionEditText.getText().toString();
-
-            // Convert the price and priceForEach strings to their respective numeric types
             String priceText = servicePriceEditText.getText().toString();
-            double price = Double.parseDouble(priceText);
-
             String priceForEachText = servicePriceForEachEditText.getText().toString();
-            int priceForEach = Integer.parseInt(priceForEachText);
 
-            LaundryServiceModel service = new LaundryServiceModel(name, description, price, priceForEach);
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(description) ||
+                    TextUtils.isEmpty(priceText) || TextUtils.isEmpty(priceForEachText)) {
+                Toast.makeText(this, "Please enter all information", Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    double price = Double.parseDouble(priceText);
+                    int priceForEach = Integer.parseInt(priceForEachText);
 
-            addItem(service);
+                    LaundryServiceModel service = new LaundryServiceModel(name, description, price, priceForEach);
+                    addItem(service);
 
-            // Clear the input fields
-            serviceNameEditText.setText("");
-            serviceDescriptionEditText.setText("");
-            servicePriceEditText.setText("");
-            servicePriceForEachEditText.setText("");
+                    //clear
+                    serviceNameEditText.setText("");
+                    serviceDescriptionEditText.setText("");
+                    servicePriceEditText.setText("");
+                    servicePriceForEachEditText.setText("");
+
+                    // refresh recycler view
+                    mServiceAdapter.notifyDataSetChanged();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Invalid numeric input", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
         servicesRecyclerView = findViewById(R.id.als_rv_service);
-        mServiceAdapter = new ServiceAdapter(serviceList);
+        mServiceAdapter = new ServiceAdapter(serviceList, this);
         servicesRecyclerView.setAdapter(mServiceAdapter);
         servicesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mLaundryViewModel.getLaundryData(currentUserId).observe(this, laundry -> {
+            if (laundry != null) {
+                laundryIsSetup = laundry.getSetup();
+            }
+        });
+
+        doneImageView.setOnClickListener(v -> {
+            if (serviceList.isEmpty()) {
+                Toast.makeText(this, "Service list is empty. Add services before uploading.", Toast.LENGTH_SHORT).show();
+            } else {
+                mLaundryViewModel.uploadServiceData(currentUserId, serviceList).observe(LaundryEditServicesActivity.this, uploadServiceStatus -> {
+                    if (uploadServiceStatus) {
+                        Toast.makeText(this, "Shop services updated", Toast.LENGTH_SHORT).show();
+                        if (laundryIsSetup) {
+                            finish();
+                        } else {
+                            //already check laundry image, opening hrs, and services not null, so just update db setup to true
+                            mLaundryViewModel.updateSetupData(currentUserId, true).observe(this, updateSetupStatus -> {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                builder.setTitle("Thank you for joining us!")
+                                        .setMessage("Your laundry shop account has been setup and successfully uploaded to be discovered by the customers.");
+
+                                SpannableString spannableString = new SpannableString("OK");
+                                spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+
+                                builder.setPositiveButton(spannableString, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    finish();
+                                }).show();
+
+                            });
+                        }
+                    } else {
+                        Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")

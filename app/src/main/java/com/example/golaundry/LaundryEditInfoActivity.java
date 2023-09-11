@@ -90,7 +90,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
         mLaundryViewModel.getShopData(currentUserId).observe(this, shop -> {
             if (shop != null) {
-                LaundryShopModel shopModel = shop;
+
                 allTimeRanges = shop.getAllTimeRanges();
                 for (int i = 0; i < allTimeRanges.size(); i++) {
                     String timeRange = allTimeRanges.get(i);
@@ -287,7 +287,29 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         }
     }
 
+    public boolean areAllElementsOff(List<String> allTimeRanges) {
+        for (String timeRange : allTimeRanges) {
+            if (!timeRange.equals("off")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void updateInfo() {
+
+        if (Objects.equals(imageUrl, "")){
+            if (LaundryPicUri == null) {
+                Toast.makeText(this, "Please upload laundry image", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if (areAllElementsOff(allTimeRanges)) {
+            Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (allTimeRanges == null) {
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
         } else if (LaundryPicUri == null) {
@@ -300,6 +322,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                         Intent intent = new Intent(LaundryEditInfoActivity.this, LaundryEditServicesActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                        finish();
                     }
                 } else {
                     Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
