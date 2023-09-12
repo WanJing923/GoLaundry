@@ -42,7 +42,7 @@ public class LaundryViewModel extends ViewModel {
         db = FirebaseDatabase.getInstance();
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
-        serviceRef = FirebaseDatabase.getInstance("https://golaundry-906c7-default-rtdb.firebaseio.com/").getReference().child("laundryService");
+        serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -57,6 +57,7 @@ public class LaundryViewModel extends ViewModel {
                         signUpResult.setValue(false);
                     }
                 });
+
         return signUpResult;
     }
 
@@ -109,19 +110,21 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+                //
             }
         });
 
         return laundryData;
     }
 
+    //laundry on or off notification
     public LiveData<Boolean> updateNotificationData(String currentUserId, boolean updatedValue) {
         MutableLiveData<Boolean> notificationStatusData = new MutableLiveData<>();
 
         laundryRef.child(currentUserId).child("notification").setValue(updatedValue).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 notificationStatusData.setValue(true);
+
             } else {
                 // Update failed
                 Exception e = task.getException();
@@ -130,9 +133,11 @@ public class LaundryViewModel extends ViewModel {
                 }
             }
         });
+
         return notificationStatusData;
     }
 
+    //laundry break or end break
     public LiveData<Boolean> updateBreakData(String currentUserId, boolean updateValue) {
         MutableLiveData<Boolean> breakStatusData = new MutableLiveData<>();
 
@@ -140,7 +145,7 @@ public class LaundryViewModel extends ViewModel {
             if (task.isSuccessful()) {
                 breakStatusData.setValue(true);
             } else {
-                // Update failed
+                // failed
                 Exception e = task.getException();
                 if (e != null) {
                     breakStatusData.setValue(false);
@@ -150,6 +155,7 @@ public class LaundryViewModel extends ViewModel {
         return breakStatusData;
     }
 
+    //edit shop info
     public LiveData<Boolean> updateShopInfo(String currentUserId, LaundryShopModel shopInfo) {
         MutableLiveData<Boolean> shopInfoStatus = new MutableLiveData<>();
         Uri laundryImageUri = Uri.parse(shopInfo.getImages());
@@ -200,6 +206,7 @@ public class LaundryViewModel extends ViewModel {
         return timeRangesStatus;
     }
 
+    //get laundry shop image and opening hours
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
         shopRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
@@ -213,13 +220,14 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+//
             }
         });
 
         return shopData;
     }
 
+    //get services
     public LiveData<List<LaundryServiceModel>> getServiceData(String currentUserId) {
         MutableLiveData<List<LaundryServiceModel>> serviceData = new MutableLiveData<>();
 
@@ -245,22 +253,9 @@ public class LaundryViewModel extends ViewModel {
         return serviceData;
     }
 
+    //edit services
     public LiveData<Boolean> uploadServiceData(String currentUserId, ArrayList<LaundryServiceModel> service) {
         MutableLiveData<Boolean> uploadServiceStatus = new MutableLiveData<>();
-
-//        serviceRef.child(currentUserId).child("services").setValue(service).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()) {
-//                    uploadServiceStatus.setValue(true);
-//                } else {
-//                    Exception e = task.getException();
-//                    if (e != null) {
-//                        uploadServiceStatus.setValue(false);
-//                    }
-//                }
-//            }
-//        });
 
         serviceRef.child(currentUserId).child("services").setValue(service)
                 .addOnCompleteListener(task -> {
@@ -277,7 +272,7 @@ public class LaundryViewModel extends ViewModel {
         return uploadServiceStatus;
     }
 
-
+    //after all info given
     public LiveData<Boolean> updateSetupData(String currentUserId, boolean updateValue) {
         MutableLiveData<Boolean> updateSetupStatus = new MutableLiveData<>();
 

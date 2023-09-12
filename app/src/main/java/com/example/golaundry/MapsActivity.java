@@ -45,7 +45,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker movingPin;
     private LatLng currentPinPosition;
     private boolean shouldUpdateLocation = true;
-    String formattedAddress;
+    String formattedAddress,area;
 
     public MapsActivity() {
     }
@@ -185,10 +185,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -229,7 +227,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (!Objects.requireNonNull(addresses).isEmpty()) {
                 Address address = addresses.get(0);
-                formattedAddress = address.getAddressLine(0); // Get the first line of the address
+                area = address.getLocality();
+                formattedAddress = address.getAddressLine(0); // full address
 
                 TextView addressTextView = findViewById(R.id.mf_tv_address);
                 addressTextView.setText(formattedAddress);
@@ -254,6 +253,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (LastLocation != null) {
             Intent returnIntent = new Intent();
             returnIntent.putExtra("formattedAddress", formattedAddress);
+            returnIntent.putExtra("area", area);
             setResult(RESULT_OK, returnIntent);
         }
         finish();
