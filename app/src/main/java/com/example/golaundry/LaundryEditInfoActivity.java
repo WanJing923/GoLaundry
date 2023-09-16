@@ -341,7 +341,7 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
             });
 
         } else {
-            LaundryShopModel shopInfo = new LaundryShopModel(laundryPicUriString, allTimeRanges);
+            LaundryShopModel shopInfo = new LaundryShopModel(currentUserId, laundryPicUriString, allTimeRanges);
             mLaundryViewModel.updateShopInfo(currentUserId, shopInfo).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
                     Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();

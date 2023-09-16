@@ -171,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/uof_et_search_bar"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="35dp"
                 android:text="@string/discover"
                 android:textColor="@color/normal_green"
                 android:textSize="20sp"

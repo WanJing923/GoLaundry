@@ -59,7 +59,7 @@
             android:rating="2.5" />
 
         <TextView
-            android:id="@+id/lic_tv_service_chosen"
+            android:id="@+id/lic_tv_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/lic_tv_rating"
@@ -70,13 +70,13 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/lic_tv_service"
+            android:id="@+id/lic_tv_distance_km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/lic_tv_rating"
             android:layout_marginStart="5dp"
             android:layout_marginTop="1dp"
-            android:layout_toEndOf="@id/lic_tv_service_chosen"
+            android:layout_toEndOf="@id/lic_tv_distance"
             android:text="@string/_13_5km"
             android:textColor="@color/black"
             android:textSize="12sp" />
@@ -104,8 +104,8 @@
             android:layout_marginTop="22dp"
             android:layout_marginEnd="21dp"
             android:layout_marginBottom="17dp"
-            android:src="@drawable/ic_love"
-            android:contentDescription="@string/saved_laundry" />
+            android:contentDescription="@string/saved_laundry"
+            android:src="@drawable/ic_love" />
 
         <com.greenfrvr.hashtagview.HashtagView
             android:id="@+id/lic_hashtag1"
@@ -114,7 +114,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="4dp"
-            android:layout_below="@id/lic_tv_service_chosen">
+            android:layout_below="@id/lic_tv_distance">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="4dp"
             android:layout_toEndOf="@id/lic_hashtag1"
-            android:layout_below="@id/lic_tv_service_chosen">
+            android:layout_below="@id/lic_tv_distance">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -156,7 +156,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="4dp"
             android:layout_toEndOf="@id/lic_hashtag2"
-            android:layout_below="@id/lic_tv_service_chosen">
+            android:layout_below="@id/lic_tv_distance">
 
             <TextView
                 android:layout_width="wrap_content"

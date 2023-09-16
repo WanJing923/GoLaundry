@@ -1,16 +1,19 @@
 package com.example.golaundry.viewModel;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,9 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class LaundryViewModel extends ViewModel {
@@ -36,6 +37,8 @@ public class LaundryViewModel extends ViewModel {
     private final DatabaseReference laundryRef;
     private final DatabaseReference shopRef;
     private final DatabaseReference serviceRef;
+    private final LiveData<List<LaundryModel>> allLaundryData;
+    private final LiveData<List<LaundryShopModel>> allShopData;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
@@ -43,6 +46,8 @@ public class LaundryViewModel extends ViewModel {
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
         serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
+        allLaundryData = getAllLaundryData();
+        allShopData = getAllShopData();
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -52,6 +57,7 @@ public class LaundryViewModel extends ViewModel {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String laundryId = Objects.requireNonNull(task.getResult().getUser()).getUid();
+                        newLaundry.setLaundryId(laundryId);
                         uploadImageAndCreateLaundry(laundryId, newLaundry, signUpResult);
                     } else {
                         signUpResult.setValue(false);
@@ -289,6 +295,123 @@ public class LaundryViewModel extends ViewModel {
         });
         return updateSetupStatus;
     }
+
+    public LiveData<List<LaundryModel>> getAllLaundryData() {
+        MutableLiveData<List<LaundryModel>> allLaundryData = new MutableLiveData<>();
+
+        laundryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryModel> allLaundry = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryModel eachLaundry = snapshot.getValue(LaundryModel.class);
+                    if (eachLaundry != null) {
+                        allLaundry.add(eachLaundry);
+                    }
+                }
+                allLaundryData.setValue(allLaundry);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return allLaundryData;
+    }
+
+    public LiveData<List<LaundryShopModel>> getAllShopData() {
+        MutableLiveData<List<LaundryShopModel>> allShopData = new MutableLiveData<>();
+
+        shopRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryShopModel> allShop = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryShopModel eachShop = snapshot.getValue(LaundryShopModel.class);
+                    if (eachShop != null) {
+                        allShop.add(eachShop);
+                    }
+                }
+                allShopData.setValue(allShop);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return allShopData;
+    }
+
+    public MediatorLiveData<List<CombineLaundryData>> getCombinedData() {
+        MediatorLiveData<List<CombineLaundryData>> combinedLaundryData = new MediatorLiveData<>();
+
+        combinedLaundryData.addSource(allLaundryData, laundryData -> {
+            if (laundryData != null && allShopData.getValue() != null) {
+                List<CombineLaundryData> combinedDataList = combineData(laundryData, allShopData.getValue());
+                combinedLaundryData.setValue(combinedDataList);
+            }
+        });
+        combinedLaundryData.addSource(allShopData, shopData -> {
+            if (allLaundryData.getValue() != null) {
+                List<CombineLaundryData> combinedDataList = combineData(allLaundryData.getValue(), shopData);
+                combinedLaundryData.setValue(combinedDataList);
+            }
+        });
+
+        return combinedLaundryData;
+    }
+
+    public LiveData<List<LaundryServiceModel>> getAllServiceData(String laundryId) {
+        MutableLiveData<List<LaundryServiceModel>> allServicesData = new MutableLiveData<>();
+
+        serviceRef.child(laundryId).child("services").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryServiceModel> allServices = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryServiceModel service = snapshot.getValue(LaundryServiceModel.class);
+                    if (service != null) {
+                        allServices.add(service);
+                    }
+                }
+                allServicesData.setValue(allServices);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return allServicesData;
+    }
+
+    public List<CombineLaundryData> combineData(List<LaundryModel> laundryData, List<LaundryShopModel> shopData) {
+
+        List<CombineLaundryData> combinedDataList = new ArrayList<>();
+
+        for (LaundryModel laundry : laundryData) {
+            for (LaundryShopModel shop : shopData) {
+                if (laundry.getLaundryId().equals(shop.getLaundryId())) {
+                    String laundryId = laundry.getLaundryId();
+                    LiveData<List<LaundryServiceModel>> serviceData = getAllServiceData(laundryId);
+                    Observer<List<LaundryServiceModel>> observer = servicesData -> {
+                        if (servicesData != null) {
+                            CombineLaundryData mCombinedData = new CombineLaundryData(laundry, shop, servicesData);
+                            combinedDataList.add(mCombinedData);
+                        }
+                    };
+                    serviceData.observeForever(observer);
+                }
+            }
+        }
+
+        return combinedDataList;
+    }
+
 
 }
 

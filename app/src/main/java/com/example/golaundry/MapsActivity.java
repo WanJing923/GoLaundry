@@ -256,7 +256,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             returnIntent.putExtra("formattedAddress", formattedAddress);
             returnIntent.putExtra("area", area);
             setResult(RESULT_OK, returnIntent);
-            Log.d("MapsActivity", "Selected Area: " + area);
+//            Log.d("MapsActivity", "Selected Area: " + area);
         }
         finish();
     }
