@@ -73,9 +73,6 @@ public class UserOrderFragment extends Fragment {
         super.onCreate(savedInstanceState);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
-//        //initialize
-//        laundryList = new ArrayList<>();
-//        mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext());
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -99,6 +96,8 @@ public class UserOrderFragment extends Fragment {
         //initialize
         laundryList = new ArrayList<>();
         mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext());
+        laundryRecyclerView.setAdapter(mUserOrderShowLaundryAdapter);
+        laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mLaundryViewModel.getCombinedData().observe(getViewLifecycleOwner(), combinedDataList -> {
             if (combinedDataList != null) {
@@ -107,9 +106,6 @@ public class UserOrderFragment extends Fragment {
                 mUserOrderShowLaundryAdapter.notifyDataSetChanged();
             }
         });
-
-        laundryRecyclerView.setAdapter(mUserOrderShowLaundryAdapter);
-        laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         setDiscoverTv();
         getCurrentArea();

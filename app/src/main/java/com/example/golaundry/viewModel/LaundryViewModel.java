@@ -361,13 +361,11 @@ public class LaundryViewModel extends ViewModel {
                 combinedLaundryData.setValue(combinedDataList);
             }
         });
-
         return combinedLaundryData;
     }
 
     public LiveData<List<LaundryServiceModel>> getAllServiceData(String laundryId) {
         MutableLiveData<List<LaundryServiceModel>> allServicesData = new MutableLiveData<>();
-
         serviceRef.child(laundryId).child("services").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -380,19 +378,15 @@ public class LaundryViewModel extends ViewModel {
                 }
                 allServicesData.setValue(allServices);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
         return allServicesData;
     }
 
     public List<CombineLaundryData> combineData(List<LaundryModel> laundryData, List<LaundryShopModel> shopData) {
-
         List<CombineLaundryData> combinedDataList = new ArrayList<>();
-
         for (LaundryModel laundry : laundryData) {
             for (LaundryShopModel shop : shopData) {
                 if (laundry.getLaundryId().equals(shop.getLaundryId())) {
@@ -408,7 +402,6 @@ public class LaundryViewModel extends ViewModel {
                 }
             }
         }
-
         return combinedDataList;
     }
 
