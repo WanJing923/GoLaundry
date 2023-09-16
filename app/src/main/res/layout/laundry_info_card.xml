@@ -109,10 +109,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lic_rv_hashtags"
-            android:layout_width="330dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/lic_iv_saved"
             android:layout_below="@id/lic_tv_distance"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="4dp"
             android:orientation="horizontal" />
 
