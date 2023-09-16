@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -99,13 +100,22 @@ public class UserOrderFragment extends Fragment {
         laundryRecyclerView.setAdapter(mUserOrderShowLaundryAdapter);
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mLaundryViewModel.getCombinedData().observe(getViewLifecycleOwner(), combinedDataList -> {
-            if (combinedDataList != null) {
-                laundryList.clear();
-                laundryList.addAll(combinedDataList);
-                mUserOrderShowLaundryAdapter.notifyDataSetChanged();
-            }
+        mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData -> {
+            mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
+                if (allLaundryData != null && allShopData != null) {
+                    LiveData<List<CombineLaundryData>> combinedLiveData = mLaundryViewModel.combineAndNotifyData(allLaundryData, allShopData);
+
+                    combinedLiveData.observe(getViewLifecycleOwner(), combinedDataList -> {
+                        if (combinedDataList != null) {
+                            laundryList.clear();
+                            laundryList.addAll(combinedDataList);
+                            mUserOrderShowLaundryAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            });
         });
+
 
         setDiscoverTv();
         getCurrentArea();

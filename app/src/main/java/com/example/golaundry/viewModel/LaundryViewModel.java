@@ -37,8 +37,6 @@ public class LaundryViewModel extends ViewModel {
     private final DatabaseReference laundryRef;
     private final DatabaseReference shopRef;
     private final DatabaseReference serviceRef;
-    private final LiveData<List<LaundryModel>> allLaundryData;
-    private final LiveData<List<LaundryShopModel>> allShopData;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
@@ -46,8 +44,6 @@ public class LaundryViewModel extends ViewModel {
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
         serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
-        allLaundryData = getAllLaundryData();
-        allShopData = getAllShopData();
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -346,24 +342,6 @@ public class LaundryViewModel extends ViewModel {
         return allShopData;
     }
 
-    public MediatorLiveData<List<CombineLaundryData>> getCombinedData() {
-        MediatorLiveData<List<CombineLaundryData>> combinedLaundryData = new MediatorLiveData<>();
-
-        combinedLaundryData.addSource(allLaundryData, laundryData -> {
-            if (laundryData != null && allShopData.getValue() != null) {
-                List<CombineLaundryData> combinedDataList = combineData(laundryData, allShopData.getValue());
-                combinedLaundryData.setValue(combinedDataList);
-            }
-        });
-        combinedLaundryData.addSource(allShopData, shopData -> {
-            if (allLaundryData.getValue() != null) {
-                List<CombineLaundryData> combinedDataList = combineData(allLaundryData.getValue(), shopData);
-                combinedLaundryData.setValue(combinedDataList);
-            }
-        });
-        return combinedLaundryData;
-    }
-
     public LiveData<List<LaundryServiceModel>> getAllServiceData(String laundryId) {
         MutableLiveData<List<LaundryServiceModel>> allServicesData = new MutableLiveData<>();
         serviceRef.child(laundryId).child("services").addValueEventListener(new ValueEventListener() {
@@ -378,6 +356,7 @@ public class LaundryViewModel extends ViewModel {
                 }
                 allServicesData.setValue(allServices);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -385,24 +364,28 @@ public class LaundryViewModel extends ViewModel {
         return allServicesData;
     }
 
-    public List<CombineLaundryData> combineData(List<LaundryModel> laundryData, List<LaundryShopModel> shopData) {
+    public LiveData<List<CombineLaundryData>> combineAndNotifyData(List<LaundryModel> laundryData, List<LaundryShopModel> shopData) {
+        MutableLiveData<List<CombineLaundryData>> combinedLaundryDataLiveData = new MutableLiveData<>();
         List<CombineLaundryData> combinedDataList = new ArrayList<>();
+
         for (LaundryModel laundry : laundryData) {
             for (LaundryShopModel shop : shopData) {
                 if (laundry.getLaundryId().equals(shop.getLaundryId())) {
                     String laundryId = laundry.getLaundryId();
                     LiveData<List<LaundryServiceModel>> serviceData = getAllServiceData(laundryId);
-                    Observer<List<LaundryServiceModel>> observer = servicesData -> {
+
+                    // Observe the serviceData and combine it when available
+                    serviceData.observeForever(servicesData -> {
                         if (servicesData != null) {
                             CombineLaundryData mCombinedData = new CombineLaundryData(laundry, shop, servicesData);
                             combinedDataList.add(mCombinedData);
+                            combinedLaundryDataLiveData.setValue(combinedDataList);
                         }
-                    };
-                    serviceData.observeForever(observer);
+                    });
                 }
             }
         }
-        return combinedDataList;
+        return combinedLaundryDataLiveData;
     }
 
 

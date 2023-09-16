@@ -16,10 +16,10 @@
         <ImageView
             android:id="@+id/lic_laundry_image"
             android:layout_width="match_parent"
-            android:layout_height="109dp"
+            android:layout_height="140dp"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY"
-            android:src="@drawable/image"
+            android:src="@drawable/laundry_images"
             android:contentDescription="@string/laundry_images" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_below="@id/lic_tv_laundry_name"
             android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
-            android:text="@string/_5_0"
+            android:text="@string/_0"
             android:textColor="@color/black"
             android:textSize="12sp" />
 
@@ -56,7 +56,7 @@
             android:layout_toEndOf="@id/lic_tv_rating"
             android:numStars="5"
             android:progressTint="#195860"
-            android:rating="2.5" />
+            android:rating="0" />
 
         <TextView
             android:id="@+id/lic_tv_distance"
@@ -90,9 +90,9 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="22dp"
             android:layout_marginEnd="21dp"
+            android:contentDescription="@string/more"
             android:src="@drawable/ic_right"
-            app:tint="#0C8292"
-            android:contentDescription="@string/more" />
+            app:tint="#0C8292" />
 
         <ImageView
             android:id="@+id/lic_iv_saved"
@@ -105,69 +105,16 @@
             android:layout_marginEnd="21dp"
             android:layout_marginBottom="17dp"
             android:contentDescription="@string/saved_laundry"
-            android:src="@drawable/ic_love" />
+            android:src="@drawable/ic_love_grey" />
 
-        <com.greenfrvr.hashtagview.HashtagView
-            android:id="@+id/lic_hashtag1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lic_rv_hashtags"
+            android:layout_width="330dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/lic_tv_distance"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="16dp"
             android:layout_marginTop="4dp"
-            android:layout_below="@id/lic_tv_distance">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/washing"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:background="#0C8292"
-                android:textSize="12sp"/>
+            android:orientation="horizontal" />
 
-        </com.greenfrvr.hashtagview.HashtagView>
-
-        <com.greenfrvr.hashtagview.HashtagView
-            android:id="@+id/lic_hashtag2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@id/lic_hashtag1"
-            android:layout_below="@id/lic_tv_distance">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ironing"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:background="@color/normal_green"
-                android:textSize="12sp"/>
-        </com.greenfrvr.hashtagview.HashtagView>
-
-        <com.greenfrvr.hashtagview.HashtagView
-            android:id="@+id/lic_hashtag3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_toEndOf="@id/lic_hashtag2"
-            android:layout_below="@id/lic_tv_distance">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dry_cleaning"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:background="@color/normal_green"
-                android:textSize="12sp"/>
-
-        </com.greenfrvr.hashtagview.HashtagView>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
