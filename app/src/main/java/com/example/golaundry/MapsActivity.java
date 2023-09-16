@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker movingPin;
     private LatLng currentPinPosition;
     private boolean shouldUpdateLocation = true;
-    String formattedAddress,area;
+    String formattedAddress, area;
 
     public MapsActivity() {
     }
@@ -149,7 +150,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 formattedAddress = address.getAddressLine(0);
-
+                area = address.getLocality();
                 // Update the address in the TextView
                 TextView addressTextView = findViewById(R.id.mf_tv_address);
                 addressTextView.setText(formattedAddress);
@@ -237,7 +238,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        // Update the moving pin's position
+        //update moving pin's position
         if (movingPin != null) {
             movingPin.setPosition(latLng);
         }
@@ -255,6 +256,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             returnIntent.putExtra("formattedAddress", formattedAddress);
             returnIntent.putExtra("area", area);
             setResult(RESULT_OK, returnIntent);
+            Log.d("MapsActivity", "Selected Area: " + area);
         }
         finish();
     }

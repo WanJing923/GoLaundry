@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
-            return;
         }
     }
 }

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -298,34 +299,44 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
     private void updateInfo() {
 
+        ProgressBar mProgressBar = findViewById(R.id.alei_progressbar);
+        // show the visibility of progress bar to show loading
+        mProgressBar.setVisibility(View.VISIBLE);
+
         if (Objects.equals(imageUrl, "")){
             if (LaundryPicUri == null) {
                 Toast.makeText(this, "Please upload laundry image", Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
                 return;
             }
         }
 
         if (areAllElementsOff(allTimeRanges)) {
+            mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (allTimeRanges == null) {
+            mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
         } else if (LaundryPicUri == null) {
             mLaundryViewModel.updateShopInfoNoImage(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
                     Toast.makeText(this, "Shop opening hours updated", Toast.LENGTH_SHORT).show();
                     if (laundryIsSetup) {
+                        mProgressBar.setVisibility(View.GONE);
                         finish();
                     } else {
                         Intent intent = new Intent(LaundryEditInfoActivity.this, LaundryEditServicesActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                        mProgressBar.setVisibility(View.GONE);
                         finish();
                     }
                 } else {
                     Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.GONE);
                 }
             });
 
@@ -335,7 +346,9 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
                 if (timeRangesStatus != null && timeRangesStatus) {
                     Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();
                     finish();
+                    mProgressBar.setVisibility(View.GONE);
                 } else {
+                    mProgressBar.setVisibility(View.GONE);
                     Toast.makeText(this, "Shop info update failed!", Toast.LENGTH_SHORT).show();
                 }
             });
