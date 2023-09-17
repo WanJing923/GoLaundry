@@ -1,16 +1,19 @@
 package com.example.golaundry.viewModel;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,9 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class LaundryViewModel extends ViewModel {
@@ -42,7 +43,7 @@ public class LaundryViewModel extends ViewModel {
         db = FirebaseDatabase.getInstance();
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
-        serviceRef = FirebaseDatabase.getInstance("https://golaundry-906c7-default-rtdb.firebaseio.com/").getReference().child("laundryService");
+        serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -52,11 +53,13 @@ public class LaundryViewModel extends ViewModel {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String laundryId = Objects.requireNonNull(task.getResult().getUser()).getUid();
+                        newLaundry.setLaundryId(laundryId);
                         uploadImageAndCreateLaundry(laundryId, newLaundry, signUpResult);
                     } else {
                         signUpResult.setValue(false);
                     }
                 });
+
         return signUpResult;
     }
 
@@ -109,19 +112,21 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+                //
             }
         });
 
         return laundryData;
     }
 
+    //laundry on or off notification
     public LiveData<Boolean> updateNotificationData(String currentUserId, boolean updatedValue) {
         MutableLiveData<Boolean> notificationStatusData = new MutableLiveData<>();
 
         laundryRef.child(currentUserId).child("notification").setValue(updatedValue).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 notificationStatusData.setValue(true);
+
             } else {
                 // Update failed
                 Exception e = task.getException();
@@ -130,9 +135,11 @@ public class LaundryViewModel extends ViewModel {
                 }
             }
         });
+
         return notificationStatusData;
     }
 
+    //laundry break or end break
     public LiveData<Boolean> updateBreakData(String currentUserId, boolean updateValue) {
         MutableLiveData<Boolean> breakStatusData = new MutableLiveData<>();
 
@@ -140,7 +147,7 @@ public class LaundryViewModel extends ViewModel {
             if (task.isSuccessful()) {
                 breakStatusData.setValue(true);
             } else {
-                // Update failed
+                // failed
                 Exception e = task.getException();
                 if (e != null) {
                     breakStatusData.setValue(false);
@@ -150,6 +157,7 @@ public class LaundryViewModel extends ViewModel {
         return breakStatusData;
     }
 
+    //edit shop info
     public LiveData<Boolean> updateShopInfo(String currentUserId, LaundryShopModel shopInfo) {
         MutableLiveData<Boolean> shopInfoStatus = new MutableLiveData<>();
         Uri laundryImageUri = Uri.parse(shopInfo.getImages());
@@ -200,6 +208,7 @@ public class LaundryViewModel extends ViewModel {
         return timeRangesStatus;
     }
 
+    //get laundry shop image and opening hours
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
         shopRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
@@ -213,13 +222,14 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+//
             }
         });
 
         return shopData;
     }
 
+    //get services
     public LiveData<List<LaundryServiceModel>> getServiceData(String currentUserId) {
         MutableLiveData<List<LaundryServiceModel>> serviceData = new MutableLiveData<>();
 
@@ -245,22 +255,9 @@ public class LaundryViewModel extends ViewModel {
         return serviceData;
     }
 
+    //edit services
     public LiveData<Boolean> uploadServiceData(String currentUserId, ArrayList<LaundryServiceModel> service) {
         MutableLiveData<Boolean> uploadServiceStatus = new MutableLiveData<>();
-
-//        serviceRef.child(currentUserId).child("services").setValue(service).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()) {
-//                    uploadServiceStatus.setValue(true);
-//                } else {
-//                    Exception e = task.getException();
-//                    if (e != null) {
-//                        uploadServiceStatus.setValue(false);
-//                    }
-//                }
-//            }
-//        });
 
         serviceRef.child(currentUserId).child("services").setValue(service)
                 .addOnCompleteListener(task -> {
@@ -277,7 +274,7 @@ public class LaundryViewModel extends ViewModel {
         return uploadServiceStatus;
     }
 
-
+    //after all info given
     public LiveData<Boolean> updateSetupData(String currentUserId, boolean updateValue) {
         MutableLiveData<Boolean> updateSetupStatus = new MutableLiveData<>();
 
@@ -294,6 +291,103 @@ public class LaundryViewModel extends ViewModel {
         });
         return updateSetupStatus;
     }
+
+    public LiveData<List<LaundryModel>> getAllLaundryData() {
+        MutableLiveData<List<LaundryModel>> allLaundryData = new MutableLiveData<>();
+
+        laundryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryModel> allLaundry = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryModel eachLaundry = snapshot.getValue(LaundryModel.class);
+                    if (eachLaundry != null) {
+                        allLaundry.add(eachLaundry);
+                    }
+                }
+                allLaundryData.setValue(allLaundry);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return allLaundryData;
+    }
+
+    public LiveData<List<LaundryShopModel>> getAllShopData() {
+        MutableLiveData<List<LaundryShopModel>> allShopData = new MutableLiveData<>();
+
+        shopRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryShopModel> allShop = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryShopModel eachShop = snapshot.getValue(LaundryShopModel.class);
+                    if (eachShop != null) {
+                        allShop.add(eachShop);
+                    }
+                }
+                allShopData.setValue(allShop);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return allShopData;
+    }
+
+    public LiveData<List<LaundryServiceModel>> getAllServiceData(String laundryId) {
+        MutableLiveData<List<LaundryServiceModel>> allServicesData = new MutableLiveData<>();
+        serviceRef.child(laundryId).child("services").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LaundryServiceModel> allServices = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    LaundryServiceModel service = snapshot.getValue(LaundryServiceModel.class);
+                    if (service != null) {
+                        allServices.add(service);
+                    }
+                }
+                allServicesData.setValue(allServices);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        return allServicesData;
+    }
+
+    public LiveData<List<CombineLaundryData>> combineAndNotifyData(List<LaundryModel> laundryData, List<LaundryShopModel> shopData) {
+        MutableLiveData<List<CombineLaundryData>> combinedLaundryDataLiveData = new MutableLiveData<>();
+        List<CombineLaundryData> combinedDataList = new ArrayList<>();
+
+        for (LaundryModel laundry : laundryData) {
+            for (LaundryShopModel shop : shopData) {
+                if (laundry.getLaundryId().equals(shop.getLaundryId())) {
+                    String laundryId = laundry.getLaundryId();
+                    LiveData<List<LaundryServiceModel>> serviceData = getAllServiceData(laundryId);
+
+                    // Observe the serviceData and combine it when available
+                    serviceData.observeForever(servicesData -> {
+                        if (servicesData != null) {
+                            CombineLaundryData mCombinedData = new CombineLaundryData(laundry, shop, servicesData);
+                            combinedDataList.add(mCombinedData);
+                            combinedLaundryDataLiveData.setValue(combinedDataList);
+                        }
+                    });
+                }
+            }
+        }
+        return combinedLaundryDataLiveData;
+    }
+
 
 }
 

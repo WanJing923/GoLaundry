@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +47,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker movingPin;
     private LatLng currentPinPosition;
     private boolean shouldUpdateLocation = true;
-    String formattedAddress;
+    String formattedAddress, area;
 
     public MapsActivity() {
     }
@@ -74,12 +76,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         //intent back to previous activity
-        findViewById(R.id.map_next_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                returnWithLocation();
-            }
-        });
+        findViewById(R.id.map_next_button).setOnClickListener(v -> returnWithLocation());
 
     }
 
@@ -98,43 +95,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setMyLocationEnabled(true);
 
         //create the moving pin marker
-        movingPin = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0)) // Initial position
-                .title("Moving Pin"));
+        movingPin = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Moving Pin"));
 
         //set up the OnCameraMoveStartedListener to detect camera movements
-        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-            @Override
-            public void onCameraMoveStarted(int reason) {
-                // Check if the user initiated the camera movement
-                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
-                    //user-initiated camera movement, do not update camera position
-                } else {
-                    // update the camera to the current location
-                    updateCameraToCurrentLocation();
-                }
+        mMap.setOnCameraMoveStartedListener(reason -> {
+            // Check if the user initiated the camera movement
+            if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                //user-initiated camera movement, do not update camera position
+            } else {
+                // update the camera to the current location
+                updateCameraToCurrentLocation();
             }
         });
 
         //set up the OnMapClickListener to update current pin position when user clicks on the map
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull LatLng latLng) {
-                shouldUpdateLocation = false; //disable auto updates
-                //update current pin position
-                currentPinPosition = latLng;
-                //update position of the moving pin marker
-                if (movingPin != null) {
-                    movingPin.setPosition(currentPinPosition);
-                }
-                //update the camera
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                //reverse geocoding to get address
-                updateAddressForLocation(latLng);
-
-                shouldUpdateLocation = true; //enable auto updates
-                onConnected(null); //restart location updates
+        mMap.setOnMapClickListener(latLng -> {
+            shouldUpdateLocation = false; //disable auto updates
+            //update current pin position
+            currentPinPosition = latLng;
+            //update position of the moving pin marker
+            if (movingPin != null) {
+                movingPin.setPosition(currentPinPosition);
             }
+            //update the camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            //reverse geocoding to get address
+            updateAddressForLocation(latLng);
+
+            shouldUpdateLocation = true; //enable auto updates
+            onConnected(null); //restart location updates
         });
     }
 
@@ -149,7 +138,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 formattedAddress = address.getAddressLine(0);
-
+                area = address.getLocality();
                 // Update the address in the TextView
                 TextView addressTextView = findViewById(R.id.mf_tv_address);
                 addressTextView.setText(formattedAddress);
@@ -185,10 +174,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -229,8 +216,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (!Objects.requireNonNull(addresses).isEmpty()) {
                 Address address = addresses.get(0);
-                formattedAddress = address.getAddressLine(0); // Get the first line of the address
-
+                area = address.getLocality();
+                formattedAddress = address.getAddressLine(0); // full address
                 TextView addressTextView = findViewById(R.id.mf_tv_address);
                 addressTextView.setText(formattedAddress);
             }
@@ -238,7 +225,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        // Update the moving pin's position
+        //update moving pin's position
         if (movingPin != null) {
             movingPin.setPosition(latLng);
         }
@@ -254,7 +241,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (LastLocation != null) {
             Intent returnIntent = new Intent();
             returnIntent.putExtra("formattedAddress", formattedAddress);
+            returnIntent.putExtra("area", area);
             setResult(RESULT_OK, returnIntent);
+//            Log.d("MapsActivity", "Selected Area: " + area);
         }
         finish();
     }

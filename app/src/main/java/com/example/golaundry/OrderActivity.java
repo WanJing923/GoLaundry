@@ -16,14 +16,11 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        btn_next = (AppCompatButton) findViewById(R.id.order_btn_next);
+        btn_next = findViewById(R.id.order_btn_next);
 
-        btn_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(OrderActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
+        btn_next.setOnClickListener(view -> {
+            Intent intent = new Intent(OrderActivity.this, HomeActivity.class);
+            startActivity(intent);
         });
     }
 }

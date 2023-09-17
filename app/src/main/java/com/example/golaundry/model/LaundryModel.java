@@ -1,7 +1,7 @@
 package com.example.golaundry.model;
 
 public class LaundryModel {
-
+    private String laundryId;
     private String shopName;
     private String contactNo;
     private String emailAddress;
@@ -21,7 +21,8 @@ public class LaundryModel {
     public LaundryModel() {
     }
 
-    public LaundryModel(String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak) {
+    public LaundryModel(String laundryId, String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak) {
+        this.laundryId = laundryId;
         this.shopName = shopName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -37,6 +38,14 @@ public class LaundryModel {
         this.notification = notification;
         this.setup = setup;
         this.isBreak = isBreak;
+    }
+
+    public String getLaundryId() {
+        return laundryId;
+    }
+
+    public void setLaundryId(String laundryId) {
+        this.laundryId = laundryId;
     }
 
     public String getShopName() {

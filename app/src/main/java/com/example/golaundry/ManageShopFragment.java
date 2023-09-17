@@ -60,7 +60,6 @@ public class ManageShopFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-
         //initialize
         laundryServiceList = new ArrayList<>();
         mShowServiceAdapter = new ShowServiceAdapter(laundryServiceList, getContext());

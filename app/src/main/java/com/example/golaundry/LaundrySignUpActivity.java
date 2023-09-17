@@ -56,23 +56,16 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back));
 
-        findViewById(R.id.lsua_et_upload_BL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Business License"), SELECT_BUSINESS_LICENSE);
-            }
+        findViewById(R.id.lsua_et_upload_BL).setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Business License"), SELECT_BUSINESS_LICENSE);
         });
 
-        findViewById(R.id.lsua_et_choose_location).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Inside a method or an event handler
-                Intent intent = new Intent(LaundrySignUpActivity.this, MapsActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_MAP);
-            }
+        findViewById(R.id.lsua_et_choose_location).setOnClickListener(v -> {
+            Intent intent = new Intent(LaundrySignUpActivity.this, MapsActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_MAP);
         });
 
         findViewById(R.id.lsua_btn_register).setOnClickListener(new View.OnClickListener() {
@@ -261,7 +254,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             findViewById(R.id.lsua_et_confirm_password).requestFocus();
         } else {
 
-            LaundryModel newLaundry = new LaundryModel(fullName, "+60" + contactNo, emailAddress, formattedAddress, addressDetails, BusinessLicensePhoto, fullName, "+60" + phoneNo, icNo, registerDateTime, "terminated", "laundry", true, false, false);
+            LaundryModel newLaundry = new LaundryModel("",fullName, "+60" + contactNo, emailAddress, formattedAddress, addressDetails, BusinessLicensePhoto, fullName, "+60" + phoneNo, icNo, registerDateTime, "terminated", "laundry", true, false, false);
 
             mLaundryViewModel.signUpLaundryWithImage(emailAddress, password, newLaundry)
                     .observe(this, signUpSuccess -> {

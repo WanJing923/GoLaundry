@@ -34,10 +34,10 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/uof_toolbar">
+        android:layout_below="@id/uof_toolbar"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,15 +52,15 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="23dp"
                 android:layout_marginEnd="23dp"
+                android:height="48dp"
+                android:autofillHints="enter laundry shop name"
                 android:background="@drawable/custom_button"
                 android:drawableEnd="@drawable/ic_search"
                 android:hint="@string/search_laundry_shop"
-                android:padding="10dp"
-                android:height="48dp"
-                android:textSize="14sp"
                 android:inputType="text"
+                android:padding="10dp"
                 android:textColor="@color/black"
-                android:autofillHints="enter laundry shop name" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/uof_tv_last_recently"
@@ -72,7 +72,8 @@
                 android:text="@string/last_recently_ordered"
                 android:textColor="@color/normal_green"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="invisible" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/uof_cv_recently_order"
@@ -84,6 +85,7 @@
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="22dp"
                 android:backgroundTint="@color/primary_green"
+                android:visibility="invisible"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp">
 
@@ -167,9 +169,9 @@
                 android:id="@+id/uof_tv_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/uof_cv_recently_order"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="17dp"
+                android:layout_below="@id/uof_et_search_bar"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="35dp"
                 android:text="@string/discover"
                 android:textColor="@color/normal_green"
                 android:textSize="20sp"
@@ -179,9 +181,9 @@
                 android:id="@+id/uof_tv_current_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/uof_cv_recently_order"
+                android:layout_below="@id/uof_et_search_bar"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:text="@string/default_address"
                 android:textColor="@color/black"
@@ -193,12 +195,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/uof_tv_discover"
-                android:layout_marginStart="23dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
                 android:text="@string/all"
-                android:textStyle="bold"
                 android:textColor="@color/normal_green"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/uof_tv_filter"
@@ -232,9 +234,9 @@
         android:layout_marginStart="23dp"
         android:layout_marginEnd="23dp"
         android:backgroundTint="@color/white"
+        android:visibility="invisible"
         app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        android:visibility="invisible">
+        app:cardElevation="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -244,8 +246,8 @@
                 android:id="@+id/uof_tv_filter_laundry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="36dp"
                 android:layout_marginEnd="25dp"
                 android:text="@string/filter_laundry_shops"
                 android:textColor="@color/normal_green"
@@ -256,9 +258,9 @@
                 android:id="@+id/uof_tv_filter_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_marginStart="14dp"
                 android:layout_below="@id/uof_tv_filter_laundry"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="14dp"
                 android:text="@string/ratings"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -267,34 +269,34 @@
                 android:id="@+id/uof_tv_filter_rating_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_marginStart="1dp"
                 android:layout_below="@id/uof_tv_filter_laundry"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="14dp"
                 android:layout_toEndOf="@id/uof_tv_filter_rating"
                 android:text="@string/_3"
                 android:textColor="@color/black"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/uof_sb_rating"
                 android:layout_width="242dp"
                 android:layout_height="wrap_content"
-                android:max="5"
-                android:layout_marginTop="33dp"
+                android:layout_below="@id/uof_tv_filter_rating"
                 android:layout_marginStart="36dp"
+                android:layout_marginTop="33dp"
                 android:layout_marginEnd="36dp"
+                android:max="5"
                 android:progress="5"
                 android:progressTint="@color/normal_green"
-                android:thumbTint="@color/normal_green"
-                android:layout_below="@id/uof_tv_filter_rating"/>
+                android:thumbTint="@color/normal_green" />
 
             <TextView
                 android:id="@+id/uof_tv_filter_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="14dp"
                 android:layout_below="@+id/uof_sb_rating"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/distance"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -303,34 +305,34 @@
                 android:id="@+id/uof_tv_filter_distance_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="1dp"
                 android:layout_below="@+id/uof_sb_rating"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="24dp"
                 android:layout_toEndOf="@id/uof_tv_filter_distance"
                 android:text="@string/_3km"
                 android:textColor="@color/black"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/uof_sb_distance"
                 android:layout_width="242dp"
                 android:layout_height="wrap_content"
-                android:max="5"
-                android:layout_marginTop="28dp"
+                android:layout_below="@id/uof_tv_filter_distance"
                 android:layout_marginStart="36dp"
+                android:layout_marginTop="28dp"
                 android:layout_marginEnd="36dp"
+                android:max="5"
                 android:progress="3"
                 android:progressTint="#0C8292"
-                android:thumbTint="#0C8292"
-                android:layout_below="@id/uof_tv_filter_distance"/>
+                android:thumbTint="#0C8292" />
 
             <TextView
                 android:id="@+id/uof_tv_filter_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="14dp"
                 android:layout_below="@+id/uof_sb_distance"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/services"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -339,85 +341,85 @@
                 android:id="@+id/uof_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3"
+                android:layout_below="@id/uof_tv_filter_service"
                 android:layout_marginTop="9dp"
-                android:layout_below="@id/uof_tv_filter_service">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/ouf_tv_service1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="11dp"
+                    android:layout_weight="1"
                     android:background="@drawable/custom_button"
                     android:backgroundTint="@color/primary_green"
-                    android:textColor="@color/white"
                     android:text="@string/washing"
-                    android:textSize="16sp"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/uof_tv_service2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
+                    android:layout_weight="1"
                     android:background="@drawable/custom_button"
                     android:backgroundTint="#0C8292"
-                    android:textColor="@color/white"
                     android:text="@string/ironing"
-                    android:textSize="16sp"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/uof_tv_service3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
+                    android:layout_marginEnd="11dp"
+                    android:layout_weight="1"
                     android:background="@drawable/custom_button"
                     android:backgroundTint="@color/primary_green"
-                    android:textColor="@color/white"
                     android:text="@string/drying"
-                    android:layout_marginEnd="11dp"
-                    android:textSize="16sp"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/uof_service2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
+                android:layout_below="@id/uof_service"
                 android:layout_marginTop="12dp"
-                android:layout_below="@id/uof_service">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/uof_tv_service4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="11dp"
+                    android:layout_marginEnd="11dp"
+                    android:layout_weight="1"
                     android:background="@drawable/custom_button"
                     android:backgroundTint="#0C8292"
-                    android:textColor="@color/white"
                     android:text="@string/dry_cleaning"
-                    android:layout_marginEnd="11dp"
-                    android:textSize="16sp"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/uof_btn_filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/uof_service2"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="46dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="26dp"
                 android:background="@drawable/custom_button"
-                android:layout_below="@id/uof_service2"
                 android:backgroundTint="#D6EFEE"
-                android:textColor="@color/black"
                 android:text="@string/filter"
-                android:layout_marginEnd="15dp"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

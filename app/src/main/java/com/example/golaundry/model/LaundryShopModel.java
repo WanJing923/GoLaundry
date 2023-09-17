@@ -3,16 +3,25 @@ package com.example.golaundry.model;
 import java.util.List;
 
 public class LaundryShopModel {
-
+    private String laundryId;
     private String images;
     private List<String> allTimeRanges;
 
     public LaundryShopModel() {
     }
 
-    public LaundryShopModel(String images, List<String> allTimeRanges) {
+    public LaundryShopModel(String laundryId, String images, List<String> allTimeRanges) {
+        this.laundryId = laundryId;
         this.images = images;
         this.allTimeRanges = allTimeRanges;
+    }
+
+    public String getLaundryId() {
+        return laundryId;
+    }
+
+    public void setLaundryId(String laundryId) {
+        this.laundryId = laundryId;
     }
 
     public String getImages() {
