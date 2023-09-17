@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 public class UserGetLocationHolder extends ViewModel {
     private String fullAddress;
     private String area;
-    private boolean hasGetCurrentAreaBeenCalled = false;
+    private boolean isGetCurrentLocation = false;
 
     public String getArea() {
         return area;
@@ -23,11 +23,11 @@ public class UserGetLocationHolder extends ViewModel {
         this.fullAddress = fullAddress;
     }
 
-    public boolean hasGetCurrentAreaBeenCalled() {
-        return hasGetCurrentAreaBeenCalled;
+    public boolean getIsGetCurrentLocation() {
+        return isGetCurrentLocation;
     }
 
-    public void setGetCurrentAreaCalled(boolean called) {
-        hasGetCurrentAreaBeenCalled = called;
+    public void setIsGetCurrentLocation(boolean called) {
+        isGetCurrentLocation = called;
     }
 }

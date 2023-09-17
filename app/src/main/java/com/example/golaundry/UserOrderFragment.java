@@ -108,9 +108,9 @@ public class UserOrderFragment extends Fragment {
             currentLocationTextView.setText(currentArea);
         }
 
-        if (!mUserGetLocationHolder.hasGetCurrentAreaBeenCalled() && mUserGetLocationHolder.getFullAddress() == null) {
+        if (!mUserGetLocationHolder.getIsGetCurrentLocation() && mUserGetLocationHolder.getFullAddress() == null) {
             getCurrentArea();
-            mUserGetLocationHolder.setGetCurrentAreaCalled(true);
+            mUserGetLocationHolder.setIsGetCurrentLocation(true);
         } else {
             fullAddress = mUserGetLocationHolder.getFullAddress();
             currentArea = mUserGetLocationHolder.getArea();
