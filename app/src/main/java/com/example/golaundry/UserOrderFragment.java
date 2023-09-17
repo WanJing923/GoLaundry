@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -62,10 +63,24 @@ public class UserOrderFragment extends Fragment {
     CardView recentlyOrderCardView;
     boolean recentlyOrderVisible;
     private static final int REQUEST_CODE_MAP = 7;
-    String currentArea;
+    String currentArea,fullAddress;
+    private boolean isCurrentAreaObtained = false;
 
     public UserOrderFragment() {
-        // Required empty public constructor
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isCurrentAreaObtained", isCurrentAreaObtained);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            isCurrentAreaObtained = savedInstanceState.getBoolean("isCurrentAreaObtained");
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -94,12 +109,19 @@ public class UserOrderFragment extends Fragment {
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
 
+        if (!isCurrentAreaObtained) {
+            getCurrentArea();
+            isCurrentAreaObtained = true;
+        }
+        setDiscoverTv();
+
         //initialize
         laundryList = new ArrayList<>();
-        mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext());
+        mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext(),fullAddress);
         laundryRecyclerView.setAdapter(mUserOrderShowLaundryAdapter);
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //adapter
         mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData -> {
             mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
                 if (allLaundryData != null && allShopData != null) {
@@ -116,9 +138,10 @@ public class UserOrderFragment extends Fragment {
             });
         });
 
+        String newFullAddress = fullAddress;
+        mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
-        setDiscoverTv();
-        getCurrentArea();
+
         return view;
     }
 
@@ -144,10 +167,10 @@ public class UserOrderFragment extends Fragment {
                     assert addresses != null;
                     if (!addresses.isEmpty()) {
                         Address address = addresses.get(0);
+                        fullAddress = address.getAddressLine(0);
                         currentArea = address.getLocality();
                         currentLocationTextView.setText(currentArea);
                     }
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -174,8 +197,12 @@ public class UserOrderFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_MAP && data != null) {
                 currentArea = data.getStringExtra("area");
+                fullAddress = data.getStringExtra("formattedAddress");
                 currentLocationTextView.setText(currentArea);
-//                Log.d("UserOrderFragment", "Updated currentArea: " + currentArea);
+
+                if (mUserOrderShowLaundryAdapter != null) {
+                    mUserOrderShowLaundryAdapter.updateFullAddress(fullAddress);
+                }
             }
         }
     }
@@ -199,7 +226,6 @@ public class UserOrderFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // First clear current all the menu items
         menu.clear();
         inflater.inflate(R.menu.menu_top, menu);
         super.onCreateOptionsMenu(menu, inflater);
