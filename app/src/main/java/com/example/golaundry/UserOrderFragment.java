@@ -44,6 +44,7 @@ import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
+import com.example.golaundry.viewModel.UserGetLocationHolder;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
@@ -54,6 +55,7 @@ import java.util.Objects;
 
 public class UserOrderFragment extends Fragment {
 
+    UserGetLocationHolder mUserGetLocationHolder;
     String currentUserId;
     LaundryViewModel mLaundryViewModel;
     ArrayList<CombineLaundryData> laundryList;
@@ -64,23 +66,13 @@ public class UserOrderFragment extends Fragment {
     boolean recentlyOrderVisible;
     private static final int REQUEST_CODE_MAP = 7;
     String currentArea,fullAddress;
-    private boolean isCurrentAreaObtained = false;
 
     public UserOrderFragment() {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("isCurrentAreaObtained", isCurrentAreaObtained);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            isCurrentAreaObtained = savedInstanceState.getBoolean("isCurrentAreaObtained");
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -88,13 +80,13 @@ public class UserOrderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        mLaundryViewModel = new ViewModelProvider(requireActivity()).get(LaundryViewModel.class);
+        mUserGetLocationHolder = new ViewModelProvider(requireActivity()).get(UserGetLocationHolder.class);
     }
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_order, container, false);
 
@@ -103,17 +95,27 @@ public class UserOrderFragment extends Fragment {
 //        EditText searchBarEditText = view.findViewById(R.id.uof_et_search_bar);
         currentLocationTextView = view.findViewById(R.id.uof_tv_current_address);
         laundryRecyclerView = view.findViewById(R.id.uof_rv_laundry);
+        setDiscoverTv();
 
         currentLocationTextView.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), MapsActivity.class);
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
 
-        if (!isCurrentAreaObtained) {
+        if (currentArea == null) {
             getCurrentArea();
-            isCurrentAreaObtained = true;
+        } else {
+            currentLocationTextView.setText(currentArea);
         }
-        setDiscoverTv();
+
+        if (!mUserGetLocationHolder.hasGetCurrentAreaBeenCalled() && mUserGetLocationHolder.getFullAddress() == null) {
+            getCurrentArea();
+            mUserGetLocationHolder.setGetCurrentAreaCalled(true);
+        } else {
+            fullAddress = mUserGetLocationHolder.getFullAddress();
+            currentArea = mUserGetLocationHolder.getArea();
+            currentLocationTextView.setText(currentArea);
+        }
 
         //initialize
         laundryList = new ArrayList<>();
@@ -140,7 +142,6 @@ public class UserOrderFragment extends Fragment {
 
         String newFullAddress = fullAddress;
         mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
-
 
         return view;
     }
@@ -196,12 +197,18 @@ public class UserOrderFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_MAP && data != null) {
-                currentArea = data.getStringExtra("area");
+                String newArea = data.getStringExtra("area");
                 fullAddress = data.getStringExtra("formattedAddress");
-                currentLocationTextView.setText(currentArea);
+                currentLocationTextView.setText(newArea);
 
-                if (mUserOrderShowLaundryAdapter != null) {
-                    mUserOrderShowLaundryAdapter.updateFullAddress(fullAddress);
+                if (!Objects.equals(currentArea, newArea)) {
+                    currentArea = newArea;
+                    currentLocationTextView.setText(currentArea);
+                    if (mUserOrderShowLaundryAdapter != null) {
+                        mUserOrderShowLaundryAdapter.updateFullAddress(fullAddress);
+                    }
+                    mUserGetLocationHolder.setFullAddress(fullAddress);
+                    mUserGetLocationHolder.setArea(currentArea);
                 }
             }
         }
