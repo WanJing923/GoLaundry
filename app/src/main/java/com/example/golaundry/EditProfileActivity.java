@@ -160,12 +160,10 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PROFILE_PICTURE && data != null && data.getData() != null) {
                 // Handle selected profile pic image
                 profilePicUri = data.getData();
-
                 //show what user select
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), profilePicUri);
@@ -173,7 +171,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }

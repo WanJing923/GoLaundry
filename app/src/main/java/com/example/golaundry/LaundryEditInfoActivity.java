@@ -424,6 +424,9 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
 
         String time = startTimeText + " - " + endTimeText;
 
+        if (time.equals("00:00 - 00:00")){
+            time = "off";
+        }
         switch (dayIndex) {
             case 0:
                 timeMonday.setText(time);

@@ -225,7 +225,6 @@ public class LaundryViewModel extends ViewModel {
 //
             }
         });
-
         return shopData;
     }
 
@@ -251,7 +250,6 @@ public class LaundryViewModel extends ViewModel {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
         return serviceData;
     }
 
@@ -270,7 +268,6 @@ public class LaundryViewModel extends ViewModel {
                         }
                     }
                 });
-
         return uploadServiceStatus;
     }
 
@@ -313,7 +310,6 @@ public class LaundryViewModel extends ViewModel {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
         return allLaundryData;
     }
 
@@ -324,7 +320,6 @@ public class LaundryViewModel extends ViewModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<LaundryShopModel> allShop = new ArrayList<>();
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     LaundryShopModel eachShop = snapshot.getValue(LaundryShopModel.class);
                     if (eachShop != null) {
@@ -338,7 +333,6 @@ public class LaundryViewModel extends ViewModel {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
         return allShopData;
     }
 
@@ -374,7 +368,6 @@ public class LaundryViewModel extends ViewModel {
                     String laundryId = laundry.getLaundryId();
                     LiveData<List<LaundryServiceModel>> serviceData = getAllServiceData(laundryId);
 
-                    // Observe the serviceData and combine it when available
                     serviceData.observeForever(servicesData -> {
                         if (servicesData != null) {
                             CombineLaundryData mCombinedData = new CombineLaundryData(laundry, shop, servicesData);
