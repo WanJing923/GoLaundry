@@ -65,7 +65,7 @@ public class UserOrderFragment extends Fragment {
     CardView recentlyOrderCardView;
     boolean recentlyOrderVisible;
     private static final int REQUEST_CODE_MAP = 7;
-    String currentArea,fullAddress;
+    String currentArea, fullAddress;
 
     public UserOrderFragment() {
     }
@@ -119,7 +119,7 @@ public class UserOrderFragment extends Fragment {
 
         //initialize
         laundryList = new ArrayList<>();
-        mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext(),fullAddress);
+        mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext(), fullAddress);
         laundryRecyclerView.setAdapter(mUserOrderShowLaundryAdapter);
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

@@ -18,15 +18,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.OrderActivity;
 import com.example.golaundry.R;
+import com.example.golaundry.UserSignUpActivity;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.viewModel.LaundryViewModel;
+import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
@@ -42,10 +50,12 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     private final List<CombineLaundryData> laundryList;
     private final Context context;
     private String fullAddress;
-    String imageUrl;
+    String imageUrl, currentUserId;
     @SuppressLint("StaticFieldLeak")
     static ImageView laundryImageView;
     Double distance;
+    SaveLaundryViewModel mSaveLaundryViewModel;
+    boolean isSavedLaundry;
 
     public UserOrderShowLaundryAdapter(List<CombineLaundryData> laundryList, Context context, String fullAddress) {
         this.laundryList = laundryList;
@@ -63,10 +73,12 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.laundry_info_card, parent, false);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        mSaveLaundryViewModel = new ViewModelProvider((FragmentActivity) context).get(SaveLaundryViewModel.class);
         return new ViewHolder(view);
     }
 
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
+    @SuppressLint({"SetTextI18n", "DefaultLocale", "NotifyDataSetChanged"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CombineLaundryData laundry = laundryList.get(position);
@@ -97,17 +109,61 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
 
         //show distance
         String laundryAddress = laundry.getLaundry().getAddress();
-        LatLng laundryLatLng = getLocationFromAddress(context,laundryAddress);
-        LatLng userLatLng = getLocationFromAddress(context,fullAddress);
+        LatLng laundryLatLng = getLocationFromAddress(context, laundryAddress);
+        LatLng userLatLng = getLocationFromAddress(context, fullAddress);
         if (laundryLatLng != null && userLatLng != null) {
             distance = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
-            holder.kmTextView.setText(String.format("%.2f",distance/1000)+"km");
+            holder.kmTextView.setText(String.format("%.2f", distance / 1000) + "km");
         }
 
-        //save laundry shop
-//        savedImageView
+        //saved laundry before or not
+        isSaveLaundry(laundry.getLaundry().getLaundryId(), holder.savedImageView);
+        //save and unsaved laundry shop
+        holder.savedImageView.setOnClickListener(v -> {
+            String laundryId = laundry.getLaundry().getLaundryId();
+            saveLaundryShop(laundryId, holder.savedImageView);
+        });
     }
 
+    //show the user whether is saved or not
+    private void isSaveLaundry(String laundryId, ImageView savedImageView) {
+        mSaveLaundryViewModel.isSavedLaundry(laundryId, currentUserId).observe((LifecycleOwner) context, isSavedResult -> {
+            if (isSavedResult != null && isSavedResult) {
+                savedImageView.setImageResource(R.drawable.ic_love);
+                isSavedLaundry = true;
+            } else {
+                savedImageView.setImageResource(R.drawable.ic_love_grey);
+                isSavedLaundry = false;
+            }
+        });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void saveLaundryShop(String laundryId, ImageView savedImageView) { //have laundry id and user id, add laundry id to that table
+        if (isSavedLaundry) {
+            mSaveLaundryViewModel.saveLaundryRemove(currentUserId, laundryId).observe((LifecycleOwner) context, unsavedLaundryStatus -> {
+                if (unsavedLaundryStatus != null && unsavedLaundryStatus) {
+                    isSavedLaundry = false;
+                    Toast.makeText(context, "Removed saved laundry shop", Toast.LENGTH_SHORT).show();
+                    savedImageView.setImageResource(R.drawable.ic_love_grey);
+                } else {
+                    Toast.makeText(context, "Fail to removed saved laundry shop", Toast.LENGTH_SHORT).show();
+                    savedImageView.setImageResource(R.drawable.ic_love);
+                }
+            });
+        } else {
+            mSaveLaundryViewModel.saveLaundryAdd(currentUserId, laundryId).observe((LifecycleOwner) context, saveLaundryStatus -> {
+                if (saveLaundryStatus != null && saveLaundryStatus) {
+                    isSavedLaundry = true;
+                    Toast.makeText(context, "Saved laundry shop", Toast.LENGTH_SHORT).show();
+                    savedImageView.setImageResource(R.drawable.ic_love);
+                } else {
+                    Toast.makeText(context, "Fail to saved laundry shop", Toast.LENGTH_SHORT).show();
+                    savedImageView.setImageResource(R.drawable.ic_love_grey);
+                }
+            });
+        }
+    }
 
 
     public LatLng getLocationFromAddress(Context context, String theAddress) {
@@ -120,7 +176,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
                 return null;
             }
             Address location = address.get(0);
-            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
 
         } catch (IOException ex) {
             ex.printStackTrace();

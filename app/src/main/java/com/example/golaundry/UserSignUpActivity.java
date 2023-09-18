@@ -61,7 +61,6 @@ public class UserSignUpActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Do nothing
             }
         });
 
@@ -131,8 +130,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.icRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_ic_no).requestFocus();
             return;
-        }
-        else if (icNo.length() != 12) {
+        } else if (icNo.length() != 12) {
             mProgressBar.setVisibility(View.GONE);
             icNoEditText.setError("NRIC number is invalid!");
             Toast.makeText(this, R.string.icInvalidToast, Toast.LENGTH_SHORT).show();
