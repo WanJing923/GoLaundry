@@ -25,6 +25,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,6 +68,7 @@ public class UserOrderFragment extends Fragment {
     boolean recentlyOrderVisible;
     private static final int REQUEST_CODE_MAP = 7;
     String currentArea, fullAddress;
+    TextView noResultsTextView, filterTextView, allTextView;
 
     public UserOrderFragment() {
     }
@@ -92,9 +95,11 @@ public class UserOrderFragment extends Fragment {
 
         discoverTextView = view.findViewById(R.id.uof_tv_discover);
         recentlyOrderCardView = view.findViewById(R.id.uof_cv_recently_order);
-//        EditText searchBarEditText = view.findViewById(R.id.uof_et_search_bar);
         currentLocationTextView = view.findViewById(R.id.uof_tv_current_address);
         laundryRecyclerView = view.findViewById(R.id.uof_rv_laundry);
+        noResultsTextView = view.findViewById(R.id.uof_tv_no_result);
+        filterTextView = view.findViewById(R.id.uof_tv_filter);
+        allTextView = view.findViewById(R.id.uof_tv_all);
         setDiscoverTv();
 
         currentLocationTextView.setOnClickListener(v -> {
@@ -143,7 +148,50 @@ public class UserOrderFragment extends Fragment {
         String newFullAddress = fullAddress;
         mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
+        EditText searchBarEditText = view.findViewById(R.id.uof_et_search_bar);
+        searchBarEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchLaundryList(charSequence.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //
+            }
+        });
+
+
+
         return view;
+    }
+
+    private void searchLaundryList(String query) {
+        ArrayList<CombineLaundryData> filteredList = new ArrayList<>();
+        for (CombineLaundryData laundry : laundryList) {
+            if (laundry.getLaundry().getShopName().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(laundry);
+            }
+        }
+        if (filteredList.isEmpty()) {
+            noResultsTextView.setVisibility(View.VISIBLE);
+            laundryRecyclerView.setVisibility(View.GONE);
+            discoverTextView.setVisibility(View.GONE);
+            currentLocationTextView.setVisibility(View.GONE);
+            filterTextView.setVisibility(View.GONE);
+            allTextView.setVisibility(View.GONE);
+        } else {
+            noResultsTextView.setVisibility(View.GONE);
+            laundryRecyclerView.setVisibility(View.VISIBLE);
+            discoverTextView.setVisibility(View.VISIBLE);
+            currentLocationTextView.setVisibility(View.VISIBLE);
+            filterTextView.setVisibility(View.VISIBLE);
+            allTextView.setVisibility(View.VISIBLE);
+            mUserOrderShowLaundryAdapter.filterList(filteredList);
+        }
     }
 
     private void getCurrentArea() {

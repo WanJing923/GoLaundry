@@ -63,6 +63,18 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/uof_tv_no_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/uof_et_search_bar"
+                android:layout_marginTop="17dp"
+                android:layout_centerInParent="true"
+                android:text="@string/result_not_found"
+                android:textColor="@color/normal_green"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <TextView
                 android:id="@+id/uof_tv_last_recently"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

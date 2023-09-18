@@ -319,4 +319,5 @@
     <string name="laundry_image">Laundry Image</string>
     <string name="time_icon">time icon</string>
     <string name="_00_00">00:00 – 00:00</string>
+    <string name="result_not_found">Result not found</string>
 </resources>

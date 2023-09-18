@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,15 +48,15 @@ import java.util.Objects;
 
 public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderShowLaundryAdapter.ViewHolder> {
 
-    private final List<CombineLaundryData> laundryList;
+    private List<CombineLaundryData> laundryList;
     private final Context context;
     private String fullAddress;
     String imageUrl, currentUserId;
-    @SuppressLint("StaticFieldLeak")
-    static ImageView laundryImageView;
+//    ImageView laundryImageView;
     Double distance;
     SaveLaundryViewModel mSaveLaundryViewModel;
     boolean isSavedLaundry;
+    ArrayList<CombineLaundryData> searchDataList;
 
     public UserOrderShowLaundryAdapter(List<CombineLaundryData> laundryList, Context context, String fullAddress) {
         this.laundryList = laundryList;
@@ -90,7 +91,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         //show image
         imageUrl = laundry.getShop().getImages();
         if (!Objects.equals(imageUrl, "")) {
-            setImages(imageUrl);
+            setImages(imageUrl, holder.laundryImageView);
         }
 
         //go to laundry info
@@ -123,6 +124,12 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
             String laundryId = laundry.getLaundry().getLaundryId();
             saveLaundryShop(laundryId, holder.savedImageView);
         });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filterList(ArrayList<CombineLaundryData> filteredList) {
+        laundryList = filteredList;
+        notifyDataSetChanged();
     }
 
     //show the user whether is saved or not
@@ -165,36 +172,34 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         }
     }
 
-
     public LatLng getLocationFromAddress(Context context, String theAddress) {
+        if (!Geocoder.isPresent()) {
+            return null;
+        }
         Geocoder coder = new Geocoder(context);
         List<Address> address;
         LatLng p1 = null;
         try {
             address = coder.getFromLocationName(theAddress, 5);
-            if (address == null) {
+            if (address == null || address.isEmpty()) {
                 return null;
             }
             Address location = address.get(0);
             p1 = new LatLng(location.getLatitude(), location.getLongitude());
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         return p1;
     }
 
-    private void setImages(String imageUrl) {
+    private void setImages(String imageUrl, ImageView laundryImageView) {
         StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-
         try {
             File localFile = File.createTempFile("tempfile", ".jpg");
-
             mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
                 //show
                 Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                 laundryImageView.setImageBitmap(bitmap);
-
             }).addOnFailureListener(e -> {
                 Toast.makeText(context, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
             });
@@ -213,6 +218,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         TextView shopNameTextView, ratingsTextView, kmTextView;
         RatingBar ratingsBar;
         RecyclerView servicesRecyclerView;
+        ImageView laundryImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);

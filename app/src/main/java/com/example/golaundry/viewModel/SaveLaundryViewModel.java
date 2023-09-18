@@ -26,7 +26,7 @@ public class SaveLaundryViewModel extends ViewModel {
     public SaveLaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-        savedLaundryRef = FirebaseDatabase.getInstance().getReference().child("savedLaundry");
+        savedLaundryRef = db.getReference().child("savedLaundry");
     }
 
     public LiveData<Boolean> isSavedLaundry(String laundryId, String userId) { // Check whether user saved laundry table have this laundry id or not
