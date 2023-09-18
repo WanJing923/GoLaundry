@@ -34,8 +34,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +49,9 @@ import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserGetLocationHolder;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,17 +62,18 @@ import java.util.Objects;
 public class UserOrderFragment extends Fragment {
 
     UserGetLocationHolder mUserGetLocationHolder;
-    String currentUserId;
+    String currentUserId, currentArea, fullAddress;
     LaundryViewModel mLaundryViewModel;
     ArrayList<CombineLaundryData> laundryList;
     UserOrderShowLaundryAdapter mUserOrderShowLaundryAdapter;
     RecyclerView laundryRecyclerView;
-    TextView discoverTextView, currentLocationTextView;
-    CardView recentlyOrderCardView;
+    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView;
+    CardView recentlyOrderCardView, filterCardView;
     boolean recentlyOrderVisible;
     private static final int REQUEST_CODE_MAP = 7;
-    String currentArea, fullAddress;
-    TextView noResultsTextView, filterTextView, allTextView;
+    int currentRatingsFilter = 0;
+    int currentDistanceFilter = 0;
+    SeekBar ratingsFilterSeekBar, distanceFilterSeekBar;
 
     public UserOrderFragment() {
     }
@@ -100,19 +105,25 @@ public class UserOrderFragment extends Fragment {
         noResultsTextView = view.findViewById(R.id.uof_tv_no_result);
         filterTextView = view.findViewById(R.id.uof_tv_filter);
         allTextView = view.findViewById(R.id.uof_tv_all);
+        filterCardView = view.findViewById(R.id.uof_cv_filter);
+        filterCardView = view.findViewById(R.id.uof_cv_filter);
+        ratingsFilterSeekBar = view.findViewById(R.id.uof_sb_rating);
+        distanceFilterSeekBar = view.findViewById(R.id.uof_sb_distance);
+        Button filterDoneButton = view.findViewById(R.id.uof_btn_filter);
+        filterRatingsTextView = view.findViewById(R.id.uof_tv_filter_rating_number);
+        filterDistanceTextView = view.findViewById(R.id.uof_tv_filter_distance_number);
         setDiscoverTv();
 
+        //get current location or choose another location
         currentLocationTextView.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), MapsActivity.class);
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
-
         if (currentArea == null) {
             getCurrentArea();
         } else {
             currentLocationTextView.setText(currentArea);
         }
-
         if (!mUserGetLocationHolder.getIsGetCurrentLocation() && mUserGetLocationHolder.getFullAddress() == null) {
             getCurrentArea();
             mUserGetLocationHolder.setIsGetCurrentLocation(true);
@@ -122,13 +133,13 @@ public class UserOrderFragment extends Fragment {
             currentLocationTextView.setText(currentArea);
         }
 
-        //initialize
+        //initialize adapter
         laundryList = new ArrayList<>();
         mUserOrderShowLaundryAdapter = new UserOrderShowLaundryAdapter(laundryList, getContext(), fullAddress);
         laundryRecyclerView.setAdapter(mUserOrderShowLaundryAdapter);
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //adapter
+        //get data and put into adapter
         mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData -> {
             mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
                 if (allLaundryData != null && allShopData != null) {
@@ -144,29 +155,104 @@ public class UserOrderFragment extends Fragment {
                 }
             });
         });
-
         String newFullAddress = fullAddress;
         mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
+        //search laundry shop name
         EditText searchBarEditText = view.findViewById(R.id.uof_et_search_bar);
         searchBarEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchLaundryList(charSequence.toString());
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 //
             }
         });
 
+        //filter laundry shop
+        filterTextView.setOnClickListener(v -> {
+            filterCardView.setVisibility(View.VISIBLE);
+        });
+        setupSeekBarListeners();
+        filterDoneButton.setOnClickListener(v ->
+            applyFilters(currentRatingsFilter, currentDistanceFilter)
+        );
 
 
         return view;
+    }
+
+    private void applyFilters(int ratingsFilter, int distanceFilter) {
+        ArrayList<CombineLaundryData> filteredList = new ArrayList<>();
+        boolean itemsFound = false;
+
+        for (CombineLaundryData laundry : laundryList) {
+//            if (laundry.getLaundry().getRating() >= ratingsFilter) {
+            String laundryAddress = laundry.getLaundry().getAddress();
+            LatLng laundryLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), laundryAddress);
+            LatLng userLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), fullAddress);
+            if (laundryLatLng != null && userLatLng != null) {
+                double distance = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
+                if (distance <= distanceFilter * 1000) {
+                    filteredList.add(laundry);
+                    itemsFound = true;
+                }
+            }
+//            }
+
+            if (itemsFound) {
+                noResultsTextView.setVisibility(View.GONE);
+            } else {
+                noResultsTextView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        // Update the filtered list
+        mUserOrderShowLaundryAdapter.filterList(filteredList);
+        filterCardView.setVisibility(View.GONE);
+    }
+
+    private void setupSeekBarListeners() {
+        ratingsFilterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                currentRatingsFilter = progress;
+                filterRatingsTextView.setText(String.valueOf(currentRatingsFilter));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //
+            }
+        });
+
+        distanceFilterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                currentDistanceFilter = progress;
+                filterDistanceTextView.setText(currentDistanceFilter +"km");
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //
+            }
+        });
     }
 
     private void searchLaundryList(String query) {
