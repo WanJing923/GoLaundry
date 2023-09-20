@@ -132,6 +132,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     }
 
     //show the user whether is saved or not
+    @SuppressLint("NotifyDataSetChanged")
     private void isSaveLaundry(String laundryId, ImageView savedImageView) {
         mSaveLaundryViewModel.isSavedLaundry(laundryId, currentUserId).observe((LifecycleOwner) context, isSavedResult -> {
             if (isSavedResult != null && isSavedResult) {
@@ -140,6 +141,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
             } else {
                 savedImageView.setImageResource(R.drawable.ic_love_grey);
             }
+            notifyDataSetChanged();
         });
     }
 
@@ -155,7 +157,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
                     Toast.makeText(context, "Fail to removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 }
-//                notifyDataSetChanged();
+                notifyDataSetChanged();
             });
         } else {
             mSaveLaundryViewModel.saveLaundryAdd(currentUserId, laundryId).observe((LifecycleOwner) context, saveLaundryStatus -> {
@@ -167,7 +169,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
                     Toast.makeText(context, "Fail to saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 }
-//                notifyDataSetChanged();
+                notifyDataSetChanged();
             });
         }
     }
