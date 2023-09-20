@@ -1,7 +1,9 @@
 package com.example.golaundry;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -39,6 +42,7 @@ public class OrderActivity extends AppCompatActivity {
 
     //    AppCompatButton btn_next;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,12 @@ public class OrderActivity extends AppCompatActivity {
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
         mSaveLaundryViewModel = new ViewModelProvider(this).get(SaveLaundryViewModel.class);
         String laundryId = getIntent().getStringExtra("laundryId");
+
+        Toolbar toolbar = findViewById(R.id.oa_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
         TextView laundryShopNameTextView = findViewById(R.id.ol_tv_laundry_name);
         TextView ratingsTextView = findViewById(R.id.ol_tv_rating);
@@ -177,5 +187,14 @@ public class OrderActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

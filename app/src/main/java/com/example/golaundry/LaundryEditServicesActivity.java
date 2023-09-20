@@ -86,9 +86,8 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
             } else {
                 try {
                     double price = Double.parseDouble(priceText);
-                    int priceForEach = Integer.parseInt(priceForEachText);
 
-                    LaundryServiceModel service = new LaundryServiceModel(name, description, price, priceForEach);
+                    LaundryServiceModel service = new LaundryServiceModel(name, description, price, priceForEachText);
                     addItem(service);
 
                     //clear

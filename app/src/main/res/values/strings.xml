@@ -320,4 +320,5 @@
     <string name="time_icon">time icon</string>
     <string name="_00_00">00:00 – 00:00</string>
     <string name="result_not_found">Result not found</string>
+    <string name="_0_kg">0 kg</string>
 </resources>
