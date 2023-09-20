@@ -52,16 +52,15 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     private final Context context;
     private String fullAddress;
     String imageUrl, currentUserId;
-//    ImageView laundryImageView;
     Double distance;
     SaveLaundryViewModel mSaveLaundryViewModel;
-    boolean isSavedLaundry;
-    ArrayList<CombineLaundryData> searchDataList;
+    List<String> savedLaundryIds;
 
     public UserOrderShowLaundryAdapter(List<CombineLaundryData> laundryList, Context context, String fullAddress) {
         this.laundryList = laundryList;
         this.context = context;
         this.fullAddress = fullAddress;
+        savedLaundryIds = new ArrayList<>();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -137,37 +136,38 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         mSaveLaundryViewModel.isSavedLaundry(laundryId, currentUserId).observe((LifecycleOwner) context, isSavedResult -> {
             if (isSavedResult != null && isSavedResult) {
                 savedImageView.setImageResource(R.drawable.ic_love);
-                isSavedLaundry = true;
+                savedLaundryIds.add(laundryId);
             } else {
                 savedImageView.setImageResource(R.drawable.ic_love_grey);
-                isSavedLaundry = false;
             }
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void saveLaundryShop(String laundryId, ImageView savedImageView) { //have laundry id and user id, add laundry id to that table
-        if (isSavedLaundry) {
+        if (savedLaundryIds.contains(laundryId)) {
             mSaveLaundryViewModel.saveLaundryRemove(currentUserId, laundryId).observe((LifecycleOwner) context, unsavedLaundryStatus -> {
                 if (unsavedLaundryStatus != null && unsavedLaundryStatus) {
-                    isSavedLaundry = false;
+                    savedLaundryIds.remove(laundryId);
                     Toast.makeText(context, "Removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 } else {
                     Toast.makeText(context, "Fail to removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 }
+//                notifyDataSetChanged();
             });
         } else {
             mSaveLaundryViewModel.saveLaundryAdd(currentUserId, laundryId).observe((LifecycleOwner) context, saveLaundryStatus -> {
                 if (saveLaundryStatus != null && saveLaundryStatus) {
-                    isSavedLaundry = true;
+                    savedLaundryIds.add(laundryId);
                     Toast.makeText(context, "Saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 } else {
                     Toast.makeText(context, "Fail to saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 }
+//                notifyDataSetChanged();
             });
         }
     }
