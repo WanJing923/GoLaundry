@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -124,8 +125,12 @@ public class OrderActivity extends AppCompatActivity {
 
         isSaveLaundry(laundryId, savedLaundryImageView);
         //save and unsaved laundry shop
-        savedLaundryImageView.setOnClickListener(v ->
-                saveLaundryShop(laundryId, savedLaundryImageView));
+        savedLaundryImageView.setOnClickListener(v -> saveLaundryShop(laundryId, savedLaundryImageView));
+
+
+
+
+//        EditText noteEditText = findViewById(R.id.os_et_notes);
 
 //        btn_next = findViewById(R.id.order_btn_next);
 //

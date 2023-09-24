@@ -140,6 +140,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
                 savedLaundryIds.add(laundryId);
             } else {
                 savedImageView.setImageResource(R.drawable.ic_love_grey);
+                savedLaundryIds.remove(laundryId);
             }
             notifyDataSetChanged();
         });

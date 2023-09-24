@@ -24,9 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/os_tv_service_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="19dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/custom_edittext"
         android:orientation="vertical"
         android:weightSum="2">
@@ -63,7 +64,8 @@
                 android:layout_weight="1"
                 android:text="@string/rm9_00_for_each_9kg"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="NestedWeights" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -76,24 +78,24 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="11dp"
+                    android:contentDescription="@string/add"
                     android:src="@drawable/ic_add_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/add" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/os_tv_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="@string/_3"
+                    android:text="@string/_0"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/os_iv_less"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/os_iv_add"
+                    app:layout_constraintStart_toEndOf="@id/os_iv_less"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
@@ -101,49 +103,12 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="11dp"
+                    android:contentDescription="@string/less"
                     android:src="@drawable/ic_less_white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/less" />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/os_tv_notes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/os_cv_card"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/leave_a_note"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/os_et_notes"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_below="@id/os_tv_notes"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="19dp"
-        android:background="@drawable/custom_edittext"
-        android:ems="10"
-        android:padding="5dp"
-        android:gravity="center_horizontal|start"
-        android:hint="@string/note"
-        android:inputType="textLongMessage"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="Tell laundry" />
-
 </RelativeLayout>

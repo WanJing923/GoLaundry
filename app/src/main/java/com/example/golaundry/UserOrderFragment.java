@@ -140,21 +140,20 @@ public class UserOrderFragment extends Fragment {
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //get data and put into adapter
-        mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData -> {
-            mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
-                if (allLaundryData != null && allShopData != null) {
-                    LiveData<List<CombineLaundryData>> combinedLiveData = mLaundryViewModel.combineAndNotifyData(allLaundryData, allShopData);
+        mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData ->
+                mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
+                    if (allLaundryData != null && allShopData != null) {
+                        LiveData<List<CombineLaundryData>> combinedLiveData = mLaundryViewModel.combineAndNotifyData(allLaundryData, allShopData);
 
-                    combinedLiveData.observe(getViewLifecycleOwner(), combinedDataList -> {
-                        if (combinedDataList != null) {
-                            laundryList.clear();
-                            laundryList.addAll(combinedDataList);
-                            mUserOrderShowLaundryAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            });
-        });
+                        combinedLiveData.observe(getViewLifecycleOwner(), combinedDataList -> {
+                            if (combinedDataList != null) {
+                                laundryList.clear();
+                                laundryList.addAll(combinedDataList);
+                                mUserOrderShowLaundryAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }));
         String newFullAddress = fullAddress;
         mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
@@ -183,9 +182,8 @@ public class UserOrderFragment extends Fragment {
         });
         setupSeekBarListeners();
         filterDoneButton.setOnClickListener(v ->
-            applyFilters(currentRatingsFilter, currentDistanceFilter)
+                applyFilters(currentRatingsFilter, currentDistanceFilter)
         );
-
 
         return view;
     }
@@ -227,10 +225,12 @@ public class UserOrderFragment extends Fragment {
                 currentRatingsFilter = progress;
                 filterRatingsTextView.setText(String.valueOf(currentRatingsFilter));
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 //
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //
@@ -242,12 +242,14 @@ public class UserOrderFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 currentDistanceFilter = progress;
-                filterDistanceTextView.setText(currentDistanceFilter +"km");
+                filterDistanceTextView.setText(currentDistanceFilter + "km");
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 //
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //
