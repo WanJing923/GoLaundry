@@ -31,7 +31,7 @@ public class SaveLaundryViewModel extends ViewModel {
 
     public LiveData<Boolean> isSavedLaundry(String laundryId, String userId) { // Check whether user saved laundry table have this laundry id or not
         MutableLiveData<Boolean> isSavedResult = new MutableLiveData<>();
-        savedLaundryRef.child(userId).child(laundryId).child("saved").addListenerForSingleValueEvent(new ValueEventListener() {
+        savedLaundryRef.child(userId).child(laundryId).child("saved").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){

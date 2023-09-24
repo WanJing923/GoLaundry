@@ -53,15 +53,12 @@
                 <include layout="@layout/order_laundry" />
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ao_laundry_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/oa_laundry_details">
-
-                <include layout="@layout/order_service" />
-
-            </LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
             <LinearLayout
                 android:id="@+id/ao_fee"
@@ -69,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ao_laundry_service">
 
-                <include layout="@layout/order_service" />
+                <include layout="@layout/order_note" />
 
             </LinearLayout>
 

@@ -18,9 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_alignParentTop="true"
+            android:contentDescription="@string/laundry_images"
             android:scaleType="fitXY"
-            android:src="@drawable/laundry_images"
-            android:contentDescription="@string/laundry_images" />
+            android:src="@drawable/laundry_images" />
 
         <TextView
             android:id="@+id/lic_tv_laundry_name"
@@ -107,16 +107,22 @@
             android:contentDescription="@string/saved_laundry"
             android:src="@drawable/ic_love_grey" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lic_rv_hashtags"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/lic_iv_saved"
             android:layout_below="@id/lic_tv_distance"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginTop="4dp"
-            android:orientation="horizontal" />
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/lic_iv_saved">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lic_rv_hashtags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </androidx.core.widget.NestedScrollView>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -191,15 +191,12 @@ public class EditProfileActivity extends AppCompatActivity {
             userNameEditText.setError("Full name is required");
             Toast.makeText(this, R.string.fullNameRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.aep_et_name).requestFocus();
-            return;
         }
         //validate to check if gender is selected
         else if (Objects.equals(selectedGender, "Select gender")) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, R.string.genderRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.aep_spinner_gender).requestFocus();
-            return;
-
         }
         //validate to check if ic no is empty
         else if (icNo.isEmpty()) {
@@ -219,7 +216,6 @@ public class EditProfileActivity extends AppCompatActivity {
             phoneNoEditText.setError("Phone number is required!");
             Toast.makeText(this, R.string.phoneNoRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.aep_et_phone_number).requestFocus();
-            return;
         }
         //validate to check if phone number is less than 9 characters
         else if (phoneNo.length() < 9) {
@@ -227,9 +223,7 @@ public class EditProfileActivity extends AppCompatActivity {
             phoneNoEditText.setError("Phone number must be at least 9 characters!");
             Toast.makeText(this, R.string.phoneNoLessToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.aep_et_phone_number).requestFocus();
-            return;
         } else {
-
             //if user didn't choose an image, will just upload db fields
             if (profilePicUri == null) {
                 Map<String, Object> updates = new HashMap<>();
@@ -283,7 +277,6 @@ public class EditProfileActivity extends AppCompatActivity {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

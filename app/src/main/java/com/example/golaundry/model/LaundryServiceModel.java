@@ -5,12 +5,12 @@ public class LaundryServiceModel {
     private String name;
     private String description;
     private double price;
-    private int quantity;
+    private String quantity;
 
     public LaundryServiceModel() {
     }
 
-    public LaundryServiceModel(String name, String description, double price, int quantity) {
+    public LaundryServiceModel(String name, String description, double price, String quantity) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -41,13 +41,11 @@ public class LaundryServiceModel {
         this.price = price;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
-
-
 }

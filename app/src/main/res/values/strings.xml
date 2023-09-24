@@ -84,7 +84,7 @@
     <string name="filter_laundry_shops">Filter laundry shops</string>
     <string name="ratings">Ratings:\u0020</string>
     <string name="distance">Distance:\u0020</string>
-    <string name="_3km">0km</string>
+    <string name="_3km">10km</string>
     <string name="services">Services:\u0020</string>
     <string name="ironing">Ironing</string>
     <string name="drying">Drying</string>
@@ -108,7 +108,7 @@
     <string name="location">location</string>
     <string name="save">save</string>
     <string name="all_clothes_will_be_washed_at_30_u2103_including_tumble_dried_and_folding">All clothes will be washed at 30℃, including tumble dried and folding.</string>
-    <string name="note">Please separate the clothes by colors, thank you.</string>
+    <string name="note">Note for laundry shop…</string>
     <string name="leave_a_note">Leave a note</string>
     <string name="rm9_00_for_each_9kg">RM9.00 for each 9kg</string>
     <string name="less">less</string>
@@ -320,4 +320,5 @@
     <string name="time_icon">time icon</string>
     <string name="_00_00">00:00 – 00:00</string>
     <string name="result_not_found">Result not found</string>
+    <string name="_0_kg">0 kg</string>
 </resources>
