@@ -7,21 +7,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.golaundry.adapter.ShowServiceAdapter;
+import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
 import com.example.golaundry.model.CombineLaundryData;
+import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,20 +38,28 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity{
 
     LaundryViewModel mLaundryViewModel;
     SaveLaundryViewModel mSaveLaundryViewModel;
     String currentUserId;
     boolean isSavedLaundry;
+    ArrayList<LaundryServiceModel> laundryServiceList;
+    UserOrderLaundryServicesAdapter mUserOrderLaundryServicesAdapter;
+    Map<String, Integer> selectedServices;
+    String laundryId,note;
+    OrderModel mOrderModel;
 
-    //    AppCompatButton btn_next;
-
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +67,7 @@ public class OrderActivity extends AppCompatActivity {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
         mSaveLaundryViewModel = new ViewModelProvider(this).get(SaveLaundryViewModel.class);
-        String laundryId = getIntent().getStringExtra("laundryId");
+        laundryId = getIntent().getStringExtra("laundryId");
 
         Toolbar toolbar = findViewById(R.id.oa_toolbar);
         setSupportActionBar(toolbar);
@@ -127,17 +143,59 @@ public class OrderActivity extends AppCompatActivity {
         //save and unsaved laundry shop
         savedLaundryImageView.setOnClickListener(v -> saveLaundryShop(laundryId, savedLaundryImageView));
 
+        //show services
+        RecyclerView servicesRecyclerView = findViewById(R.id.ao_laundry_service);
+        laundryServiceList = new ArrayList<>();
+        mUserOrderLaundryServicesAdapter = new UserOrderLaundryServicesAdapter(laundryServiceList, this);
+        mLaundryViewModel.getServiceData(laundryId).observe(OrderActivity.this, services -> {
+            if (services != null) {
+                laundryServiceList.clear();
+                laundryServiceList.addAll(services);
+                mUserOrderLaundryServicesAdapter.notifyDataSetChanged();
+            }
+        });
+        servicesRecyclerView.setAdapter(mUserOrderLaundryServicesAdapter);
+        servicesRecyclerView.setLayoutManager(new LinearLayoutManager(OrderActivity.this));
+
+        //extra note
+        EditText noteEditText = findViewById(R.id.os_et_notes);
+        note = noteEditText.getText().toString();
+
+        Button nextButton = findViewById(R.id.order_btn_next);
+        nextButton.setOnClickListener(view -> {
+            createOrderModel();
+            Intent intent = new Intent(OrderActivity.this, NewAddressActivity.class);
+            intent.putExtra("orderData", mOrderModel);
+            startActivity(intent);
+        });
+    }
+
+    public OrderModel createOrderModel() {
+        Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
+        Map<String, String> addressInfo = new HashMap<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String dateTime = sdf.format(new Date());
+
+        //implement checking
+        if(selectedServices.isEmpty()){
+            Toast.makeText(OrderActivity.this, "Please select at least one service", Toast.LENGTH_SHORT).show();
+        } else if (note.isEmpty()){
+            note = "";
+        }
+
+        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note,"None",addressInfo,dateTime,"Order created");
+        return mOrderModel;
+    }
 
 
+    public void retrieveSelectedServices() {
+        selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
 
-//        EditText noteEditText = findViewById(R.id.os_et_notes);
-
-//        btn_next = findViewById(R.id.order_btn_next);
-//
-//        btn_next.setOnClickListener(view -> {
-//            Intent intent = new Intent(OrderActivity.this, HomeActivity.class);
-//            startActivity(intent);
-//        });
+        for (Map.Entry<String, Integer> entry : selectedServices.entrySet()) {
+            String serviceName = entry.getKey();
+            int currentQty = entry.getValue();
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

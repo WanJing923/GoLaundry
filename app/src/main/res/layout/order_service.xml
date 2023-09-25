@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:text="@string/all_clothes_will_be_washed_at_30_u2103_including_tumble_dried_and_folding"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             android:weightSum="3">
 
             <TextView
-                android:id="@+id/os_tv_perqty"
+                android:id="@+id/os_tv_per_qty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/second_green">
+
+    <TextView
+        android:id="@+id/order_tv_laundry_fee_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/white"
+        android:text="@string/_0_00"/>
+
+    <TextView
+        android:id="@+id/order_tv_laundry_fee_rm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/order_tv_laundry_fee_amount"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/white"
+        android:text="@string/rm"/>
+
+    <TextView
+        android:id="@+id/order_tv_laundry_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/order_tv_laundry_fee_rm"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/white"
+        android:text="@string/laundry_fee"/>
+
+    <TextView
+        android:id="@+id/order_tv_member_discount_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_below="@id/order_tv_laundry_fee"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="19dp"
+        android:textColor="@color/gold"
+        android:text="@string/_0_00"/>
+
+    <TextView
+        android:id="@+id/order_tv_member_discount_rm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_below="@id/order_tv_laundry_fee_rm"
+        android:layout_toStartOf="@id/order_tv_member_discount_amount"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/gold"
+        android:text="@string/membership_rate_gl20_20_rm"/>
+
+    <TextView
+        android:id="@+id/order_tv_delivery_fee_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/order_tv_member_discount_amount"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:text="@string/_0_00"/>
+
+    <TextView
+        android:id="@+id/order_tv_delivery_fee_rm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/order_tv_member_discount_amount"
+        android:layout_toStartOf="@id/order_tv_delivery_fee_amount"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/white"
+        android:text="@string/rm"/>
+
+    <TextView
+        android:id="@+id/order_tv_delivery_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/order_tv_member_discount_amount"
+        android:layout_toStartOf="@id/order_tv_delivery_fee_rm"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/white"
+        android:text="@string/delivery_fee"/>
+
+    <TextView
+        android:id="@+id/order_tv_total_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/order_tv_delivery_fee"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/gold"
+        android:text="@string/_0_00"/>
+
+    <TextView
+        android:id="@+id/order_tv_total_rm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/order_tv_delivery_fee"
+        android:layout_toStartOf="@id/order_tv_total_amount"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/gold"
+        android:text="@string/rm"/>
+
+    <TextView
+        android:id="@+id/order_tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_below="@id/order_tv_delivery_fee"
+        android:layout_toStartOf="@id/order_tv_total_rm"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/gold"
+        android:text="@string/total"/>
+
+</RelativeLayout>

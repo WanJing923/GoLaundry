@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primary_green">
+    android:background="@color/second_green">
 
     <TextView
-        android:id="@+id/ol_tv__pickup_location"
+        android:id="@+id/ol_tv_pickup_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -22,7 +22,7 @@
         android:id="@+id/ol_cv_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ol_tv__pickup_location"
+        android:layout_below="@id/ol_tv_pickup_location"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="19dp"
         android:layout_marginTop="1dp"
