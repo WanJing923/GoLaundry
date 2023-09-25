@@ -12,7 +12,7 @@
         android:textSize="16sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="19dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="2dp"
         android:textColor="@color/white"
         android:text="@string/_0_00"/>
@@ -49,7 +49,7 @@
         android:layout_below="@id/order_tv_laundry_fee"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="19dp"
+        android:layout_marginEnd="20dp"
         android:textColor="@color/gold"
         android:text="@string/_0_00"/>
 
@@ -72,7 +72,7 @@
         android:textSize="16sp"
         android:layout_below="@id/order_tv_member_discount_amount"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="19dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
         android:textColor="@color/white"
         android:text="@string/_0_00"/>
@@ -108,7 +108,7 @@
         android:textSize="16sp"
         android:layout_below="@id/order_tv_delivery_fee"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="19dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
         android:textColor="@color/gold"
         android:text="@string/_0_00"/>

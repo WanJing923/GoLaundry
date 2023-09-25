@@ -11,6 +11,7 @@ import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.RiderModel;
+import com.example.golaundry.model.UserAddressModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ public class UserViewModel extends ViewModel {
     private final DatabaseReference userMembershipRef;
     private final DatabaseReference allMembershipRef;
     private final FirebaseAuth mAuth;
+    private final DatabaseReference userAddressRef;
 
     //constructor
     public UserViewModel() {
@@ -40,6 +42,7 @@ public class UserViewModel extends ViewModel {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
+        userAddressRef = db.getReference().child("userAddress");
     }
 
     //create user auth
@@ -65,20 +68,6 @@ public class UserViewModel extends ViewModel {
                     }
                 });
         return signUpResult;
-    }
-
-    //login into account, all users(not using cause of the check status function)
-    public LiveData<Boolean> loginUser(String email, String password) {
-        MutableLiveData<Boolean> signInResult = new MutableLiveData<>();
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        signInResult.setValue(true);
-                    } else {
-                        signInResult.setValue(false);
-                    }
-                });
-        return signInResult;
     }
 
     //before login, check user status and email exist
@@ -132,8 +121,6 @@ public class UserViewModel extends ViewModel {
 
         return roleLiveData;
     }
-
-
 
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
@@ -265,7 +252,28 @@ public class UserViewModel extends ViewModel {
         return updateUserProfilePicResult;
     }
 
+    //check and get user address
+    public LiveData<UserAddressModel> getUserDefaultAddress(String currentUserId) {
+        MutableLiveData<UserAddressModel> addressData = new MutableLiveData<>();
+        userAddressRef.child(currentUserId).orderByChild("defaultAddress").equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        UserAddressModel defaultAddress = childSnapshot.getValue(UserAddressModel.class);
+                        addressData.setValue(defaultAddress);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //
+            }
+        });
 
+        return addressData;
+    }
 
 
 }

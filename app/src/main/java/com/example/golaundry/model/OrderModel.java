@@ -13,11 +13,15 @@ public class OrderModel implements Serializable {
     private Map<String, String> addressInfo;
     private String dateTime;
     private String currentStatus;
+    private double laundryFee;
+    private double membershipDiscount;
+    private double deliveryFee;
+    private double totalFee;
 
     public OrderModel() {
     }
 
-    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String note, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus) {
+    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String note, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, double membershipDiscount, double deliveryFee, double totalFee) {
         this.laundryId = laundryId;
         this.currentUserId = currentUserId;
         this.selectedServices = selectedServices;
@@ -26,6 +30,10 @@ public class OrderModel implements Serializable {
         this.addressInfo = addressInfo;
         this.dateTime = dateTime;
         this.currentStatus = currentStatus;
+        this.laundryFee = laundryFee;
+        this.membershipDiscount = membershipDiscount;
+        this.deliveryFee = deliveryFee;
+        this.totalFee = totalFee;
     }
 
     public String getLaundryId() {
@@ -90,5 +98,37 @@ public class OrderModel implements Serializable {
 
     public void setCurrentStatus(String currentStatus) {
         this.currentStatus = currentStatus;
+    }
+
+    public double getLaundryFee() {
+        return laundryFee;
+    }
+
+    public void setLaundryFee(double laundryFee) {
+        this.laundryFee = laundryFee;
+    }
+
+    public double getMembershipDiscount() {
+        return membershipDiscount;
+    }
+
+    public void setMembershipDiscount(double membershipDiscount) {
+        this.membershipDiscount = membershipDiscount;
+    }
+
+    public double getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(double deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public double getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(double totalFee) {
+        this.totalFee = totalFee;
     }
 }

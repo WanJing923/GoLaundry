@@ -2,10 +2,7 @@ package com.example.golaundry;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,9 +12,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,9 +20,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.golaundry.adapter.ShowServiceAdapter;
 import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
-import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
@@ -47,7 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class OrderActivity extends AppCompatActivity{
+public class OrderActivity extends AppCompatActivity {
 
     LaundryViewModel mLaundryViewModel;
     SaveLaundryViewModel mSaveLaundryViewModel;
@@ -55,8 +48,7 @@ public class OrderActivity extends AppCompatActivity{
     boolean isSavedLaundry;
     ArrayList<LaundryServiceModel> laundryServiceList;
     UserOrderLaundryServicesAdapter mUserOrderLaundryServicesAdapter;
-    Map<String, Integer> selectedServices;
-    String laundryId,note;
+    String laundryId, note;
     OrderModel mOrderModel;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
@@ -170,7 +162,7 @@ public class OrderActivity extends AppCompatActivity{
         });
     }
 
-    public OrderModel createOrderModel() {
+    public void createOrderModel() {
         Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
         Map<String, String> addressInfo = new HashMap<>();
 
@@ -178,25 +170,13 @@ public class OrderActivity extends AppCompatActivity{
         String dateTime = sdf.format(new Date());
 
         //implement checking
-        if(selectedServices.isEmpty()){
-            Toast.makeText(OrderActivity.this, "Please select at least one service", Toast.LENGTH_SHORT).show();
-        } else if (note.isEmpty()){
+        if (note.isEmpty()) {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note,"None",addressInfo,dateTime,"Order created");
-        return mOrderModel;
+        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, dateTime, "Order created",0,0,0,0);
     }
 
-
-    public void retrieveSelectedServices() {
-        selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
-
-        for (Map.Entry<String, Integer> entry : selectedServices.entrySet()) {
-            String serviceName = entry.getKey();
-            int currentQty = entry.getValue();
-        }
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void saveLaundryShop(String laundryId, ImageView savedImageView) { //have laundry id and user id, add laundry id to that table
