@@ -14,14 +14,14 @@ public class OrderModel implements Serializable {
     private String dateTime;
     private String currentStatus;
     private double laundryFee;
-    private double membershipDiscount;
+    private String membershipDiscount;
     private double deliveryFee;
     private double totalFee;
 
     public OrderModel() {
     }
 
-    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String note, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, double membershipDiscount, double deliveryFee, double totalFee) {
+    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String note, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee) {
         this.laundryId = laundryId;
         this.currentUserId = currentUserId;
         this.selectedServices = selectedServices;
@@ -108,11 +108,11 @@ public class OrderModel implements Serializable {
         this.laundryFee = laundryFee;
     }
 
-    public double getMembershipDiscount() {
+    public String getMembershipDiscount() {
         return membershipDiscount;
     }
 
-    public void setMembershipDiscount(double membershipDiscount) {
+    public void setMembershipDiscount(String membershipDiscount) {
         this.membershipDiscount = membershipDiscount;
     }
 

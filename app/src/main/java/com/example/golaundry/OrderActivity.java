@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,16 +22,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
+import com.example.golaundry.holder.OrderServicesHolder;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
+import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +54,10 @@ public class OrderActivity extends AppCompatActivity {
     UserOrderLaundryServicesAdapter mUserOrderLaundryServicesAdapter;
     String laundryId, note;
     OrderModel mOrderModel;
+    double distance,deliveryFee;
+    double totalLaundryFee;
+    UserViewModel mUserViewModel;
+    String membershipRate;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
@@ -60,6 +68,7 @@ public class OrderActivity extends AppCompatActivity {
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
         mSaveLaundryViewModel = new ViewModelProvider(this).get(SaveLaundryViewModel.class);
         laundryId = getIntent().getStringExtra("laundryId");
+        distance = getIntent().getDoubleExtra("distance", 0.0);
 
         Toolbar toolbar = findViewById(R.id.oa_toolbar);
         setSupportActionBar(toolbar);
@@ -156,10 +165,31 @@ public class OrderActivity extends AppCompatActivity {
         Button nextButton = findViewById(R.id.order_btn_next);
         nextButton.setOnClickListener(view -> {
             createOrderModel();
-            Intent intent = new Intent(OrderActivity.this, NewAddressActivity.class);
+            Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
             intent.putExtra("orderData", mOrderModel);
             startActivity(intent);
         });
+
+        //calculate laundry fees
+        Map<String, OrderServicesHolder> servicesInfo = mUserOrderLaundryServicesAdapter.getServicesInfo();
+        totalLaundryFee = 0.0;
+        for (String serviceName : servicesInfo.keySet()) {
+            OrderServicesHolder orderServicesHolder = servicesInfo.get(serviceName);
+            assert orderServicesHolder != null;
+            double price = orderServicesHolder.getPrice();
+            int userQty = orderServicesHolder.getUserSelected();
+            double totalPrice = price * userQty;
+            totalLaundryFee += totalPrice;
+        }
+
+        mUserViewModel.getUserData(currentUserId).observe(this, user -> {
+            if (user != null) {
+                membershipRate = user.getMembershipRate();
+
+            }
+        });
+
+        deliveryFee = distance * 0.5;
     }
 
     public void createOrderModel() {
@@ -169,12 +199,11 @@ public class OrderActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
         String dateTime = sdf.format(new Date());
 
-        //implement checking
         if (note.isEmpty()) {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, dateTime, "Order created",0,0,0,0);
+        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, dateTime, "Order created", totalLaundryFee, membershipRate, deliveryFee, 0);
     }
 
 

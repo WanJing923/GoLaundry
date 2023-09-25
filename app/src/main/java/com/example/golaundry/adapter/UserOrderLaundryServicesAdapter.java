@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.OrderActivity;
 import com.example.golaundry.R;
+import com.example.golaundry.holder.OrderServicesHolder;
 import com.example.golaundry.model.LaundryServiceModel;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
     private final ArrayList<LaundryServiceModel> laundryServiceList;
     private final Context context;
     private final Map<LaundryServiceModel, Integer> serviceQuantityMap = new HashMap<>();
+    double price;
 
     public UserOrderLaundryServicesAdapter(ArrayList<LaundryServiceModel> laundryServiceList, Context context) {
         this.laundryServiceList = laundryServiceList;
@@ -62,10 +64,11 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
         //bind data
         holder.serviceNameTextView.setText(service.getName());
         holder.serviceDescriptionTextView.setText(service.getDescription());
+        price = service.getPrice() * 2; //multiply by 2
         @SuppressLint("DefaultLocale")
-        String price = String.format("%.2f", (service.getPrice()));
+        String finalPrice = String.format("%.2f", price);
         String quantity = service.getQuantity();
-        holder.servicePricePerQtyTextView.setText("RM" + price + " for each " + quantity);
+        holder.servicePricePerQtyTextView.setText("RM" + finalPrice + " for each " + quantity);
 
         final AtomicInteger finalQty = new AtomicInteger(currentQty);
         holder.addQtyImageView.setOnClickListener(view -> {
@@ -103,7 +106,20 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
         return selectedServices;
     }
 
+    public Map<String, OrderServicesHolder> getServicesInfo() {
+        Map<String, OrderServicesHolder> servicesInfo = new HashMap<>();
 
+        for (LaundryServiceModel service : laundryServiceList) {
+            Integer currentQty = serviceQuantityMap.get(service);
+            if (currentQty == null || currentQty == 0) {
+                //
+            } else if (currentQty > 0) {
+                servicesInfo.put(service.getName(), new OrderServicesHolder(service.getName(),price,service.getQuantity(),currentQty));
+            }
+        }
+
+        return servicesInfo;
+    }
 
     @Override
     public int getItemCount() {
