@@ -26,6 +26,7 @@ import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,7 +111,6 @@ public class OrderLocationActivity extends AppCompatActivity {
 
                     editAddressImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
-                        intent.putExtra("defaultAddress", false);
                         startActivity(intent);
                     });
                 } else {
@@ -119,7 +119,6 @@ public class OrderLocationActivity extends AppCompatActivity {
                     editAddressImageView.setImageResource(R.drawable.ic_add_address);
                     editAddressImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
-                        intent.putExtra("defaultAddress", true);
                         startActivity(intent);
                     });
                 }
@@ -204,6 +203,19 @@ public class OrderLocationActivity extends AppCompatActivity {
 
             }
         });
+
+        AddressModel selectedAddress = getIntent().getParcelableExtra("selectedAddresses");
+        if (selectedAddress != null) {
+            String name = selectedAddress.getName();
+            String details = selectedAddress.getDetails();
+            String address = selectedAddress.getAddress();
+            addressNameTextView.setText(name);
+            String userAddress = details + ", " + address;
+            addressTextView.setText(userAddress);
+        }
+
+
+
     }
 
     @Override

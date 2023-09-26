@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/primary_green">
 
@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="19dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/custom_edittext"
         android:orientation="vertical"
         android:weightSum="2">
@@ -26,25 +27,25 @@
             android:weightSum="3">
 
             <TextView
-                android:id="@+id/la_tv_default_location"
+                android:id="@+id/la_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="11dp"
-                android:text="@string/default_location"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/name"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/la_iv_edit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="11dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_edit_gold"
+                android:id="@+id/la_iv_delete"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_delete"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -56,10 +57,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_gravity="center_horizontal"
             android:text="@string/no2_taman_nencagah_lintang_minden_11700_gelugor_pulau_pinang"
             android:textColor="@color/white"

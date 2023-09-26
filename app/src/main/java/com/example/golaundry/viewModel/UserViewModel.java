@@ -11,7 +11,6 @@ import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.OrderModel;
-import com.example.golaundry.model.UserAddressModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -273,6 +272,7 @@ public class UserViewModel extends ViewModel {
         MutableLiveData<Boolean> addressData = new MutableLiveData<>();
 
         String addressId = String.valueOf(UUID.randomUUID());
+        newAddress.setAddressId(addressId);
 
         userAddressRef.child(currentUserId).child(addressId).setValue(newAddress)
                 .addOnSuccessListener(aVoid ->
@@ -298,6 +298,19 @@ public class UserViewModel extends ViewModel {
 
         return orderData;
     }
+
+    public void deleteAddressForUser(String currentUserId, String addressKey) {
+        MutableLiveData<Boolean> deleteStatus = new MutableLiveData<>();
+
+        userAddressRef.child(currentUserId).child(addressKey).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    deleteStatus.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    deleteStatus.setValue(false);
+                });
+    }
+
 
 
 }
