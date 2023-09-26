@@ -73,7 +73,7 @@
         android:layout_marginBottom="45dp"
         android:background="@drawable/custom_login"
         android:hint="@string/e_g_meet_me_at_the_lobby"
-        android:inputType="date"
+        android:inputType="text"
         android:padding="15dp"
         android:singleLine="true"
         android:textColor="@color/white"

@@ -15,8 +15,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.UserAddressModel;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -24,12 +27,15 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class OrderLocationActivity extends AppCompatActivity {
 
     UserViewModel mUserViewModel;
-    String currentUserId;
+    String currentUserId,name,details,address,selectedDate;
+    OrderModel orderData;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -55,6 +61,7 @@ public class OrderLocationActivity extends AppCompatActivity {
         TextView totalAmountTextView = findViewById(R.id.order_tv_total_amount);
         ImageView editAddressImageView = findViewById(R.id.ol_iv_edit);
         EditText dateEditText = findViewById(R.id.order_et_date);
+        EditText noteToRiderEditText = findViewById(R.id.order_et_note_rider);
 
         dateEditText.setOnClickListener(view -> {
             Calendar calendar = Calendar.getInstance();
@@ -62,36 +69,57 @@ public class OrderLocationActivity extends AppCompatActivity {
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            long minDate = calendar.getTimeInMillis();
+
             DatePickerDialog datePickerDialog = new DatePickerDialog(OrderLocationActivity.this, R.style.CustomDatePickerDialog, (view1, year1, month1, dayOfMonth) -> {
-                String selectedDate = (month1 + 1) + "/" + dayOfMonth + "/" + year1;
+                selectedDate = (month1 + 1) + "/" + dayOfMonth + "/" + year1;
                 dateEditText.setText(selectedDate);
             }, year, month, day);
+
+            datePickerDialog.getDatePicker().setMinDate(minDate);
             datePickerDialog.show();
         });
 
-        mUserViewModel.getUserDefaultAddress(currentUserId).observe(this, defaultAddress -> {
-            if (defaultAddress == null) {
+        mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
+            if (addresses == null || addresses.isEmpty()) {
                 addressNameTextView.setText("Add Default Address");
                 addressTextView.setText("");
                 editAddressImageView.setImageResource(R.drawable.ic_add_address);
 
                 editAddressImageView.setOnClickListener(view -> {
                     Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
-                    intent.putExtra("userId", currentUserId);
                     intent.putExtra("defaultAddress", true);
                     startActivity(intent);
                 });
             } else {
-                if (defaultAddress.isDefaultAddress()) {
-                    String name = defaultAddress.getName();
+                AddressModel defaultAddress = null;
+                for (AddressModel address : addresses) {
+                    if (address.isDefaultAddress()) {
+                        defaultAddress = address;
+                        break;
+                    }
+                }
+                if (defaultAddress != null) {
+                    name = defaultAddress.getName();
+                    details = defaultAddress.getDetails();
+                    address = defaultAddress.getAddress();
                     addressNameTextView.setText(name);
-                    String address = defaultAddress.getAddressDetails() + ", " + defaultAddress.getAddress();
-                    addressTextView.setText(address);
+                    String userAddress = details + ", " + address;
+                    addressTextView.setText(userAddress);
 
                     editAddressImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(OrderLocationActivity.this, ChooseLocationActivity.class);
-                        intent.putExtra("userId", currentUserId);
                         intent.putExtra("defaultAddress", false);
+                        startActivity(intent);
+                    });
+                } else {
+                    addressNameTextView.setText("Add Default Address");
+                    addressTextView.setText("");
+                    editAddressImageView.setImageResource(R.drawable.ic_add_address);
+                    editAddressImageView.setOnClickListener(view -> {
+                        Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
+                        intent.putExtra("defaultAddress", true);
                         startActivity(intent);
                     });
                 }
@@ -99,6 +127,7 @@ public class OrderLocationActivity extends AppCompatActivity {
         });
 
         OrderModel mOrderModel = (OrderModel) getIntent().getSerializableExtra("orderData");
+        orderData = mOrderModel;
         if (mOrderModel != null) {
             String membershipRate = mOrderModel.getMembershipDiscount();
             double membershipDiscount = 0.0;
@@ -139,10 +168,42 @@ public class OrderLocationActivity extends AppCompatActivity {
             totalAmountTextView.setText(formattedTotal);
         }
 
-//        Button placeButton = findViewById(R.id.ola_btn_place_order);
-//        placeButton.setOnClickListener(view -> {
-//
-//        });
+        Button placeButton = findViewById(R.id.ola_btn_place_order);
+        placeButton.setOnClickListener(view -> {
+
+            String noteToRider = noteToRiderEditText.getText().toString();
+            ProgressBar mProgressBar = findViewById(R.id.ola_progressbar);
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            if (selectedDate==null){
+                mProgressBar.setVisibility(View.GONE);
+                dateEditText.setError("Pick up date is required!");
+                dateEditText.requestFocus();
+            } else if (address==null){
+                mProgressBar.setVisibility(View.GONE);
+                Toast.makeText(OrderLocationActivity.this, "Address info is required!", Toast.LENGTH_SHORT).show();
+            } else {
+                //get the address info
+                Map<String, String> addressData = new HashMap<>();
+                addressData.put("name", name);
+                addressData.put("details", details);
+                addressData.put("address", address);
+                orderData.setAddressInfo("AddressInfo", addressData);
+                orderData.setPickUpDate(selectedDate);
+                orderData.setNoteToRider(noteToRider);
+
+                mUserViewModel.addOrder(currentUserId,orderData).observe(OrderLocationActivity.this,orderStatus ->{
+                    if (orderStatus){
+                        Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(OrderLocationActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
+                    }
+                    mProgressBar.setVisibility(View.GONE);
+                });
+
+            }
+        });
     }
 
     @Override

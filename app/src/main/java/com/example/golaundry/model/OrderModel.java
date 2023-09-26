@@ -8,7 +8,7 @@ public class OrderModel implements Serializable {
     private String laundryId;
     private String currentUserId;
     private Map<String, Integer> selectedServices;
-    private String note;
+    private String noteToLaundry;
     private String riderId;
     private Map<String, String> addressInfo;
     private String dateTime;
@@ -17,15 +17,17 @@ public class OrderModel implements Serializable {
     private String membershipDiscount;
     private double deliveryFee;
     private double totalFee;
+    private String pickUpDate;
+    private String noteToRider;
 
     public OrderModel() {
     }
 
-    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String note, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee) {
+    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider) {
         this.laundryId = laundryId;
         this.currentUserId = currentUserId;
         this.selectedServices = selectedServices;
-        this.note = note;
+        this.noteToLaundry = noteToLaundry;
         this.riderId = riderId;
         this.addressInfo = addressInfo;
         this.dateTime = dateTime;
@@ -34,6 +36,8 @@ public class OrderModel implements Serializable {
         this.membershipDiscount = membershipDiscount;
         this.deliveryFee = deliveryFee;
         this.totalFee = totalFee;
+        this.pickUpDate = pickUpDate;
+        this.noteToRider = noteToRider;
     }
 
     public String getLaundryId() {
@@ -60,12 +64,12 @@ public class OrderModel implements Serializable {
         this.selectedServices = selectedServices;
     }
 
-    public String getNote() {
-        return note;
+    public String getNoteToLaundry() {
+        return noteToLaundry;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setNoteToLaundry(String noteToLaundry) {
+        this.noteToLaundry = noteToLaundry;
     }
 
     public String getRiderId() {
@@ -80,7 +84,7 @@ public class OrderModel implements Serializable {
         return addressInfo;
     }
 
-    public void setAddressInfo(Map<String, String> addressInfo) {
+    public void setAddressInfo(String info, Map<String, String> addressInfo) {
         this.addressInfo = addressInfo;
     }
 
@@ -130,5 +134,21 @@ public class OrderModel implements Serializable {
 
     public void setTotalFee(double totalFee) {
         this.totalFee = totalFee;
+    }
+
+    public String getPickUpDate() {
+        return pickUpDate;
+    }
+
+    public void setPickUpDate(String pickUpDate) {
+        this.pickUpDate = pickUpDate;
+    }
+
+    public String getNoteToRider() {
+        return noteToRider;
+    }
+
+    public void setNoteToRider(String noteToRider) {
+        this.noteToRider = noteToRider;
     }
 }

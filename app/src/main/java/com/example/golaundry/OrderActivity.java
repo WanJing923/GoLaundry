@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -169,6 +167,7 @@ public class OrderActivity extends AppCompatActivity {
             Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
             intent.putExtra("orderData", mOrderModel);
             startActivity(intent);
+            finish();
         });
 
         mUserViewModel.getUserData(currentUserId).observe(this, user -> {
@@ -203,7 +202,7 @@ public class OrderActivity extends AppCompatActivity {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, dateTime, "Order created", totalLaundryFee, membershipRate, deliveryFee, 0);
+        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, dateTime, "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "","");
     }
 
 
