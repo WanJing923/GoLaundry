@@ -109,7 +109,7 @@ public class OrderLocationActivity extends AppCompatActivity {
                     addressTextView.setText(userAddress);
 
                     editAddressImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(OrderLocationActivity.this, ChooseLocationActivity.class);
+                        Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
                         intent.putExtra("defaultAddress", false);
                         startActivity(intent);
                     });

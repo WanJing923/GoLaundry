@@ -74,9 +74,6 @@
             android:name=".EditLocationActivity"
             android:exported="false" />
         <activity
-            android:name=".ChooseLocationActivity"
-            android:exported="false" />
-        <activity
             android:name=".LaundrySignUpActivity"
             android:exported="false" />
         <activity

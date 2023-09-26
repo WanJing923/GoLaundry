@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/nwa_tv_go_laundry"
+            android:id="@+id/ela_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -48,9 +48,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/my_addresses"
                 android:textColor="@color/gold"
                 android:textSize="20sp"
@@ -59,64 +59,47 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ela_rv_address"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/ela_tv_my_address"
                 android:layout_marginTop="1dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/ela_tv_my_address">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ela_rv_address">
 
                 <ImageView
-                    android:id="@+id/lna_btn_add_new_address"
+                    android:id="@+id/ela_btn_add_new_address"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="15dp"
                     android:contentDescription="@string/add_new_address"
                     android:src="@drawable/ic_add_address" />
 
                 <TextView
-                    android:id="@+id/lna_tv_add_address"
+                    android:id="@+id/ela_tv_add_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/lna_btn_add_new_address"
+                    android:layout_below="@id/ela_btn_add_new_address"
                     android:layout_centerInParent="true"
-                    android:layout_marginStart="11dp"
                     android:layout_marginTop="1dp"
-                    android:layout_marginBottom="2dp"
                     android:text="@string/new_address"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </RelativeLayout>
 
-            <!--            <LinearLayout-->
-            <!--                android:id="@+id/ela_new_address_linear"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:weightSum="2"-->
-            <!--                android:layout_below="@id/ela_rv_address"-->
-            <!--                android:orientation="horizontal">-->
-
-            <!--                <include-->
-            <!--                    layout="@layout/location_new_address"/>-->
-
-            <!--            </LinearLayout>-->
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/nwa_btn_save"
+                android:id="@+id/ela_btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="19dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/custom_button"
-                android:backgroundTint="#D6EFEE"
+                android:backgroundTint="@color/cyan"
                 android:text="@string/done" />
         </RelativeLayout>
     </ScrollView>
