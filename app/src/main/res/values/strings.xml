@@ -328,7 +328,7 @@
     <string name="place_order">Place Order</string>
     <string name="select_date">Select date</string>
     <string name="pick_up_date">Pick Up Date</string>
-    <string name="your_order_will_be_picked_up_within_the_working_hours_on_the_chosen_date_please_make_sure_you_packs_the_order_as_well">Your order will be picked up within the working hours on the chosen date. Please make sure you packs the order as well</string>
+    <string name="your_order_will_be_picked_up_within_the_working_hours_on_the_chosen_date_please_make_sure_you_packs_the_order_as_well">Your order will be picked up within the working hours. Please make sure you packs the order well.</string>
     <string name="note_to_rider">Note to rider</string>
     <string name="e_g_meet_me_at_the_lobby">e.g. Meet me at the lobby</string>
 </resources>

@@ -66,6 +66,7 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mSaveLaundryViewModel = new ViewModelProvider(this).get(SaveLaundryViewModel.class);
         laundryId = getIntent().getStringExtra("laundryId");
         distance = getIntent().getDoubleExtra("distance", 0.0);
@@ -170,6 +171,19 @@ public class OrderActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        mUserViewModel.getUserData(currentUserId).observe(this, user -> {
+            if (user != null) {
+                membershipRate = user.getMembershipRate();
+            }
+        });
+
+        deliveryFee = distance * 0.5;
+    }
+
+    public void createOrderModel() {
+        Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
+        Map<String, String> addressInfo = new HashMap<>();
+
         //calculate laundry fees
         Map<String, OrderServicesHolder> servicesInfo = mUserOrderLaundryServicesAdapter.getServicesInfo();
         totalLaundryFee = 0.0;
@@ -181,20 +195,6 @@ public class OrderActivity extends AppCompatActivity {
             double totalPrice = price * userQty;
             totalLaundryFee += totalPrice;
         }
-
-        mUserViewModel.getUserData(currentUserId).observe(this, user -> {
-            if (user != null) {
-                membershipRate = user.getMembershipRate();
-
-            }
-        });
-
-        deliveryFee = distance * 0.5;
-    }
-
-    public void createOrderModel() {
-        Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
-        Map<String, String> addressInfo = new HashMap<>();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
         String dateTime = sdf.format(new Date());

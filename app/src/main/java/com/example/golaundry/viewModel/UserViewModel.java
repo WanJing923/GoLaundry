@@ -133,10 +133,9 @@ public class UserViewModel extends ViewModel {
                     userData.setValue(user);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+                //
             }
         });
 
@@ -264,6 +263,8 @@ public class UserViewModel extends ViewModel {
                         addressData.setValue(defaultAddress);
                         break;
                     }
+                } else {
+                    addressData.setValue(null);
                 }
             }
             @Override

@@ -104,8 +104,9 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         LatLng laundryLatLng = getLocationFromAddress(context, laundryAddress);
         LatLng userLatLng = getLocationFromAddress(context, fullAddress);
         if (laundryLatLng != null && userLatLng != null) {
-            distance = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
-            finalDistance = String.format("%.2f", distance / 1000);
+            double dis = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
+            distance = dis/1000;
+            finalDistance = String.format("%.2f", distance);
             holder.kmTextView.setText(finalDistance + "km");
         }
 

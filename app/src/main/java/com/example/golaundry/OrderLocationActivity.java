@@ -3,12 +3,18 @@ package com.example.golaundry;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.golaundry.model.OrderModel;
@@ -17,6 +23,7 @@ import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class OrderLocationActivity extends AppCompatActivity {
@@ -36,6 +43,7 @@ public class OrderLocationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         TextView addressTextView = findViewById(R.id.ol_tv_address);
@@ -45,17 +53,47 @@ public class OrderLocationActivity extends AppCompatActivity {
         TextView laundryFeeAmountTextView = findViewById(R.id.order_tv_laundry_fee_amount);
         TextView deliveryFeeAmountTextView = findViewById(R.id.order_tv_delivery_fee_amount);
         TextView totalAmountTextView = findViewById(R.id.order_tv_total_amount);
+        ImageView editAddressImageView = findViewById(R.id.ol_iv_edit);
+        EditText dateEditText = findViewById(R.id.order_et_date);
+
+        dateEditText.setOnClickListener(view -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(OrderLocationActivity.this, R.style.CustomDatePickerDialog, (view1, year1, month1, dayOfMonth) -> {
+                String selectedDate = (month1 + 1) + "/" + dayOfMonth + "/" + year1;
+                dateEditText.setText(selectedDate);
+            }, year, month, day);
+            datePickerDialog.show();
+        });
 
         mUserViewModel.getUserDefaultAddress(currentUserId).observe(this, defaultAddress -> {
             if (defaultAddress == null) {
-                addressNameTextView.setText("Add Address");
-                addressTextView.setText("No address found");
+                addressNameTextView.setText("Add Default Address");
+                addressTextView.setText("");
+                editAddressImageView.setImageResource(R.drawable.ic_add_address);
+
+                editAddressImageView.setOnClickListener(view -> {
+                    Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
+                    intent.putExtra("userId", currentUserId);
+                    intent.putExtra("defaultAddress", true);
+                    startActivity(intent);
+                });
             } else {
                 if (defaultAddress.isDefaultAddress()) {
                     String name = defaultAddress.getName();
                     addressNameTextView.setText(name);
                     String address = defaultAddress.getAddressDetails() + ", " + defaultAddress.getAddress();
                     addressTextView.setText(address);
+
+                    editAddressImageView.setOnClickListener(view -> {
+                        Intent intent = new Intent(OrderLocationActivity.this, ChooseLocationActivity.class);
+                        intent.putExtra("userId", currentUserId);
+                        intent.putExtra("defaultAddress", false);
+                        startActivity(intent);
+                    });
                 }
             }
         });
