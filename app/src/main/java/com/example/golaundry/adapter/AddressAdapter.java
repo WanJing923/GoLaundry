@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -29,12 +31,13 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     private final Context context;
     private final AddressModel selectedAddresses;
     UserViewModel mUserViewModel;
-    String currentUserId,addressId;
+    String currentUserId;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
     public AddressAdapter(List<AddressModel> addressList, Context context, UserViewModel mUserViewModel) {
         this.addressList = addressList;
         this.context = context;
+        this.mUserViewModel = mUserViewModel;
         this.selectedAddresses = new AddressModel();
     }
 
@@ -50,12 +53,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         AddressModel address = addressList.get(position);
-        addressId = address.getAddressId();
+        String addressId = address.getAddressId();
 
         String name = address.getName();
         boolean defaultAddress = address.isDefaultAddress();
-        if (defaultAddress){
-            holder.nameTextView.setText("Default Address: "+name);
+        if (defaultAddress) {
+            holder.nameTextView.setText("Default Address: " + name);
         } else {
             holder.nameTextView.setText(name);
         }
@@ -64,7 +67,13 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         String showAddress = details + ", " + fullAddress;
         holder.addressTextView.setText(showAddress);
 
-        holder.deleteImageView.setOnClickListener(view -> removeItemWithConfirmation(position));
+        holder.deleteImageView.setOnClickListener(view -> {
+            if (defaultAddress){
+                Toast.makeText(context, "Default address is not able to be removed. Please contact help center if needed.", Toast.LENGTH_LONG).show();
+            } else {
+                removeItemWithConfirmation(position, addressId);
+            }
+        });
 
         boolean isSelected = (position == selectedPosition);
         if (isSelected) {
@@ -94,7 +103,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         return null;
     }
 
-    public void removeItemWithConfirmation(int position) {
+    public void removeItemWithConfirmation(int position, String addressId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Confirm Deletion");
         builder.setMessage("Are you sure you want to delete this address?");
@@ -107,7 +116,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
         builder.setPositiveButton(spannableStringYes, (dialog, which) -> {
             addressList.remove(position);
-            mUserViewModel.deleteAddressForUser(currentUserId,addressId);
+            mUserViewModel.deleteAddressForUser(currentUserId, addressId);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, getItemCount());
         });

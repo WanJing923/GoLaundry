@@ -20,6 +20,7 @@ import com.example.golaundry.adapter.AddressAdapter;
 import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.model.OrderDataHolder;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,8 @@ public class EditLocationActivity extends AppCompatActivity {
     String currentUserId;
     ArrayList<AddressModel> addressList;
     AddressAdapter mAddressAdapter;
+    OrderDataHolder mOrderDataHolder;
+    OrderModel orderData;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
@@ -47,6 +50,8 @@ public class EditLocationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
+        mOrderDataHolder = new ViewModelProvider(this).get(OrderDataHolder.class);
+        orderData = mOrderDataHolder.getOrderData();
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
@@ -65,6 +70,9 @@ public class EditLocationActivity extends AppCompatActivity {
         });
 
         OrderModel orderData = (OrderModel) getIntent().getSerializableExtra("orderData");
+        if (orderData != null) {
+            mOrderDataHolder.setOrderData(orderData);
+        }
 
         Button doneButton = findViewById(R.id.ela_btn_save);
         doneButton.setOnClickListener(v -> {
