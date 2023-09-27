@@ -21,14 +21,18 @@ import android.widget.Toast;
 
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.UserAddressModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -82,48 +86,56 @@ public class OrderLocationActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
-            if (addresses == null || addresses.isEmpty()) {
-                addressNameTextView.setText("Add Default Address");
-                addressTextView.setText("");
-                editAddressImageView.setImageResource(R.drawable.ic_add_address);
+        AddressModel selectedAddress = (AddressModel) getIntent().getSerializableExtra("selectedAddresses");
+        if (selectedAddress != null) {
+            String name = selectedAddress.getName();
+            String details = selectedAddress.getDetails();
+            String address = selectedAddress.getAddress();
+            addressNameTextView.setText(name);
+            String userAddress = details + ", " + address;
+            addressTextView.setText(userAddress);
 
-                editAddressImageView.setOnClickListener(view -> {
-                    Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
-                    intent.putExtra("defaultAddress", true);
-                    startActivity(intent);
-                });
-            } else {
-                AddressModel defaultAddress = null;
-                for (AddressModel address : addresses) {
-                    if (address.isDefaultAddress()) {
-                        defaultAddress = address;
-                        break;
-                    }
-                }
-                if (defaultAddress != null) {
-                    name = defaultAddress.getName();
-                    details = defaultAddress.getDetails();
-                    address = defaultAddress.getAddress();
-                    addressNameTextView.setText(name);
-                    String userAddress = details + ", " + address;
-                    addressTextView.setText(userAddress);
-
-                    editAddressImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
-                        startActivity(intent);
-                    });
-                } else {
+            editAddressImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
+                startActivity(intent);
+            });
+        } else {
+            mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
+                if (addresses == null || addresses.isEmpty()) {
                     addressNameTextView.setText("Add Default Address");
                     addressTextView.setText("");
                     editAddressImageView.setImageResource(R.drawable.ic_add_address);
+
                     editAddressImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
+                        intent.putExtra("orderData", orderData);
+                        intent.putExtra("defaultAddress", true);
                         startActivity(intent);
                     });
+                } else {
+                    AddressModel defaultAddress = addresses.stream().filter(AddressModel::isDefaultAddress).findFirst().orElse(null);
+                    if (defaultAddress != null) {
+                        String name = defaultAddress.getName();
+                        String details = defaultAddress.getDetails();
+                        String address = defaultAddress.getAddress();
+                        addressNameTextView.setText(name);
+                        String userAddress = details + ", " + address;
+                        addressTextView.setText(userAddress);
+
+                        editAddressImageView.setOnClickListener(view -> {
+                            Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
+                            intent.putExtra("orderData", orderData);
+                            intent.putExtra("defaultAddress", defaultAddress.isDefaultAddress());
+                            startActivity(intent);
+                        });
+                    } else {
+                        addressNameTextView.setText("Add Default Address");
+                        addressTextView.setText("");
+                        editAddressImageView.setImageResource(R.drawable.ic_add_address);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         OrderModel mOrderModel = (OrderModel) getIntent().getSerializableExtra("orderData");
         orderData = mOrderModel;
@@ -191,7 +203,12 @@ public class OrderLocationActivity extends AppCompatActivity {
                 orderData.setPickUpDate(selectedDate);
                 orderData.setNoteToRider(noteToRider);
 
-                mUserViewModel.addOrder(currentUserId,orderData).observe(OrderLocationActivity.this,orderStatus ->{
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String dateTime = sdf.format(new Date());
+
+                OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime,"Order created");
+
+                mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel).observe(OrderLocationActivity.this,orderStatus ->{
                     if (orderStatus){
                         Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
                         finish();
@@ -203,18 +220,6 @@ public class OrderLocationActivity extends AppCompatActivity {
 
             }
         });
-
-        AddressModel selectedAddress = getIntent().getParcelableExtra("selectedAddresses");
-        if (selectedAddress != null) {
-            String name = selectedAddress.getName();
-            String details = selectedAddress.getDetails();
-            String address = selectedAddress.getAddress();
-            addressNameTextView.setText(name);
-            String userAddress = details + ", " + address;
-            addressTextView.setText(userAddress);
-        }
-
-
 
     }
 

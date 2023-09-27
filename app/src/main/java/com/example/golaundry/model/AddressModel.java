@@ -3,7 +3,9 @@ package com.example.golaundry.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class AddressModel implements Parcelable {
+import java.io.Serializable;
+
+public class AddressModel implements Serializable {
     private String addressId;
     private String name;
     private String address;
@@ -11,7 +13,6 @@ public class AddressModel implements Parcelable {
     private boolean defaultAddress;
 
     public AddressModel() {
-        // Default constructor
     }
 
     public AddressModel(String addressId,String name, String address, String details, boolean defaultAddress) {
@@ -21,26 +22,6 @@ public class AddressModel implements Parcelable {
         this.details = details;
         this.defaultAddress = defaultAddress;
     }
-
-    protected AddressModel(Parcel in) {
-        addressId = in.readString();
-        name = in.readString();
-        address = in.readString();
-        details = in.readString();
-        defaultAddress = in.readByte() != 0;
-    }
-
-    public static final Creator<AddressModel> CREATOR = new Creator<AddressModel>() {
-        @Override
-        public AddressModel createFromParcel(Parcel in) {
-            return new AddressModel(in);
-        }
-
-        @Override
-        public AddressModel[] newArray(int size) {
-            return new AddressModel[size];
-        }
-    };
 
     public String getAddressId() {
         return addressId;
@@ -65,17 +46,20 @@ public class AddressModel implements Parcelable {
     public boolean isDefaultAddress() {
         return defaultAddress;
     }
-    @Override
-    public int describeContents() {
-        return 0;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(addressId);
-        dest.writeString(name);
-        dest.writeString(address);
-        dest.writeString(details);
-        dest.writeByte((byte) (defaultAddress ? 1 : 0));
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public void setDefaultAddress(boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 }

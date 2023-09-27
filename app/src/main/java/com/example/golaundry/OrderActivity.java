@@ -163,11 +163,14 @@ public class OrderActivity extends AppCompatActivity {
 
         Button nextButton = findViewById(R.id.order_btn_next);
         nextButton.setOnClickListener(view -> {
-            createOrderModel();
-            Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
-            intent.putExtra("orderData", mOrderModel);
-            startActivity(intent);
-            finish();
+            Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
+            if (selectedServices != null ){
+                createOrderModel();
+                Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
+                intent.putExtra("orderData", mOrderModel);
+                startActivity(intent);
+                finish();
+            }
         });
 
         mUserViewModel.getUserData(currentUserId).observe(this, user -> {
@@ -195,14 +198,11 @@ public class OrderActivity extends AppCompatActivity {
             totalLaundryFee += totalPrice;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String dateTime = sdf.format(new Date());
-
         if (note.isEmpty()) {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, dateTime, "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "","");
+        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "","");
     }
 
 

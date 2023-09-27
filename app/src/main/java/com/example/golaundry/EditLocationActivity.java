@@ -20,6 +20,7 @@ import com.example.golaundry.adapter.AddressAdapter;
 import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -57,22 +58,27 @@ public class EditLocationActivity extends AppCompatActivity {
 
         mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
             if (addresses != null) {
+                addressList.clear();
                 addressList.addAll(addresses);
                 mAddressAdapter.notifyDataSetChanged();
             }
         });
 
+        OrderModel orderData = (OrderModel) getIntent().getSerializableExtra("orderData");
+
         Button doneButton = findViewById(R.id.ela_btn_save);
         doneButton.setOnClickListener(v -> {
-            ArrayList<AddressModel> selectedAddresses = mAddressAdapter.getSelectedAddresses();
+            AddressModel selectedAddresses = mAddressAdapter.getSelectedAddresses();
             Intent intent = new Intent(this, OrderLocationActivity.class);
-            intent.putParcelableArrayListExtra("selectedAddresses", selectedAddresses);
+            intent.putExtra("selectedAddresses", selectedAddresses);
+            intent.putExtra("orderData", orderData);
             startActivity(intent);
         });
 
         ImageView addAddressButton = findViewById(R.id.ela_btn_add_new_address);
         addAddressButton.setOnClickListener(view -> {
             Intent intent = new Intent(EditLocationActivity.this, NewAddressActivity.class);
+            intent.putExtra("orderData", orderData);
             startActivity(intent);
         });
 

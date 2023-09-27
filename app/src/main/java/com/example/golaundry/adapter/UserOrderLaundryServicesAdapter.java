@@ -102,6 +102,7 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
         }
         if (!hasNonZeroQty) {
             Toast.makeText(context.getApplicationContext(), "Please select at least one service", Toast.LENGTH_SHORT).show();
+            selectedServices = null;
         }
         return selectedServices;
     }

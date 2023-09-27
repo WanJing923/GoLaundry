@@ -11,6 +11,7 @@ import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +37,7 @@ public class UserViewModel extends ViewModel {
     private final DatabaseReference allMembershipRef;
     private final FirebaseAuth mAuth;
     private final DatabaseReference userAddressRef;
-    private final DatabaseReference userOrderRef;
+    private final DatabaseReference userOrderRef,orderStatusRef;
 
     //constructor
     public UserViewModel() {
@@ -47,6 +48,7 @@ public class UserViewModel extends ViewModel {
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
         userAddressRef = db.getReference().child("userAddress");
         userOrderRef = db.getReference().child("userOrder");
+        orderStatusRef = db.getReference().child("orderStatus");
     }
 
     //create user auth
@@ -284,10 +286,16 @@ public class UserViewModel extends ViewModel {
         return addressData;
     }
 
-    public MutableLiveData<Boolean> addOrder(String currentUserId, OrderModel newOrder) {
+    public MutableLiveData<Boolean> addOrder(String currentUserId, OrderModel newOrder, OrderStatusModel mOrderStatusModel) {
         MutableLiveData<Boolean> orderData = new MutableLiveData<>();
-
         String orderId = String.valueOf(UUID.randomUUID());
+
+        orderStatusRef.child(orderId).setValue(mOrderStatusModel)
+                .addOnSuccessListener(aVoid ->
+                        orderData.setValue(true))
+                .addOnFailureListener(e ->
+                        orderData.setValue(false)
+                );
 
         userOrderRef.child(currentUserId).child(orderId).setValue(newOrder)
                 .addOnSuccessListener(aVoid ->

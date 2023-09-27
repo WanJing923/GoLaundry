@@ -27,14 +27,15 @@ import java.util.Objects;
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
     private final List<AddressModel> addressList;
     private final Context context;
-    private final ArrayList<AddressModel> selectedAddresses;
+    private final AddressModel selectedAddresses;
     UserViewModel mUserViewModel;
     String currentUserId,addressId;
+    private int selectedPosition = RecyclerView.NO_POSITION;
 
     public AddressAdapter(List<AddressModel> addressList, Context context, UserViewModel mUserViewModel) {
         this.addressList = addressList;
         this.context = context;
-        this.selectedAddresses = new ArrayList<>();
+        this.selectedAddresses = new AddressModel();
     }
 
     @NonNull
@@ -44,16 +45,20 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         return new ViewHolder(view);
     }
 
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-
         AddressModel address = addressList.get(position);
-
         addressId = address.getAddressId();
 
         String name = address.getName();
-        holder.nameTextView.setText(name);
+        boolean defaultAddress = address.isDefaultAddress();
+        if (defaultAddress){
+            holder.nameTextView.setText("Default Address: "+name);
+        } else {
+            holder.nameTextView.setText(name);
+        }
         String details = address.getDetails();
         String fullAddress = address.getAddress();
         String showAddress = details + ", " + fullAddress;
@@ -61,31 +66,32 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
         holder.deleteImageView.setOnClickListener(view -> removeItemWithConfirmation(position));
 
-        boolean isSelected = isAddressSelected(address);
+        boolean isSelected = (position == selectedPosition);
         if (isSelected) {
             holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cyan));
         } else {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
+
         holder.itemView.setOnClickListener(view -> toggleSelection(address));
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void toggleSelection(AddressModel address) {
-        if (isAddressSelected(address)) {
-            selectedAddresses.remove(address);
+        int clickedPosition = addressList.indexOf(address);
+        if (clickedPosition == selectedPosition) {
+            selectedPosition = RecyclerView.NO_POSITION;
         } else {
-            selectedAddresses.add(address);
+            selectedPosition = clickedPosition;
         }
         notifyDataSetChanged();
     }
 
-    public boolean isAddressSelected(AddressModel address) {
-        return selectedAddresses.contains(address);
-    }
-
-    public ArrayList<AddressModel> getSelectedAddresses() {
-        return selectedAddresses;
+    public AddressModel getSelectedAddresses() {
+        if (selectedPosition != RecyclerView.NO_POSITION) {
+            return addressList.get(selectedPosition);
+        }
+        return null;
     }
 
     public void removeItemWithConfirmation(int position) {

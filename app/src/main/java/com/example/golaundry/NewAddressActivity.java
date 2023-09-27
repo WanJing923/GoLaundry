@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.golaundry.model.AddressModel;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -56,6 +57,8 @@ public class NewAddressActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
 
+        OrderModel orderData = (OrderModel) getIntent().getSerializableExtra("orderData");
+
         saveButton.setOnClickListener(view -> {
             ProgressBar mProgressBar = findViewById(R.id.nwa_progressbar);
             mProgressBar.setVisibility(View.VISIBLE);
@@ -77,11 +80,19 @@ public class NewAddressActivity extends AppCompatActivity {
                 detailsEditText.setError("Address details is required!");
                 detailsEditText.requestFocus();
             } else {
-                AddressModel mAddressModel = new AddressModel(name,address,details,defaultAddress);
-                mUserViewModel.addUserAddress(currentUserId,mAddressModel).observe(NewAddressActivity.this,addressStatus ->{
-                    if (addressStatus){
-                        Toast.makeText(NewAddressActivity.this, "New address added", Toast.LENGTH_SHORT).show();
-                        finish();
+                AddressModel mAddressModel = new AddressModel("", name, address, details, defaultAddress);
+                mUserViewModel.addUserAddress(currentUserId, mAddressModel).observe(NewAddressActivity.this, addressStatus -> {
+                    if (addressStatus) {
+                        if (orderData != null) {
+                            Intent intent = new Intent(NewAddressActivity.this, EditLocationActivity.class);
+                            intent.putExtra("orderData", orderData);
+                            startActivity(intent);
+                            Toast.makeText(NewAddressActivity.this, "New address added", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(NewAddressActivity.this, "New address added", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     } else {
                         Toast.makeText(NewAddressActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
                     }
