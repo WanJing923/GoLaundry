@@ -321,4 +321,14 @@
     <string name="_00_00">00:00 – 00:00</string>
     <string name="result_not_found">Result not found</string>
     <string name="_0_kg">0 kg</string>
+    <string name="_0_00">0.00</string>
+    <string name="laundry_fee">Laundry fee:</string>
+    <string name="membership_rate_gl20_20_rm">Membership Rate(GL20): -20% : -RM</string>
+    <string name="total">Total:</string>
+    <string name="place_order">Place Order</string>
+    <string name="select_date">Select date</string>
+    <string name="pick_up_date">Pick Up Date</string>
+    <string name="your_order_will_be_picked_up_within_the_working_hours_on_the_chosen_date_please_make_sure_you_packs_the_order_as_well">Your order will be picked up within the working hours. Please make sure you packs the order well.</string>
+    <string name="note_to_rider">Note to rider</string>
+    <string name="e_g_meet_me_at_the_lobby">e.g. Meet me at the lobby</string>
 </resources>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_green"
+    android:background="@color/second_green"
     tools:context=".OrderLocationActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -35,26 +34,70 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ola_toolbar">
+        android:layout_below="@id/ola_toolbar"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/linear1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
                 android:orientation="horizontal"
+                android:weightSum="2"
                 tools:ignore="UselessParent">
 
-                <include
-                    layout="@layout/order_location"/>
+                <include layout="@layout/order_location" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linear1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <include layout="@layout/order_date_note" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linear2"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <include layout="@layout/order_price" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/ola_btn_place_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linear3"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/cyan"
+                android:text="@string/place_order" />
+
+            <ProgressBar
+                android:id="@+id/ola_progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </RelativeLayout>
+
+
     </ScrollView>
 </RelativeLayout>

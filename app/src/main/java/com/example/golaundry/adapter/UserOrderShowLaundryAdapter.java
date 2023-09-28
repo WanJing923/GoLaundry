@@ -51,8 +51,8 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     private List<CombineLaundryData> laundryList;
     private final Context context;
     private String fullAddress;
-    String imageUrl, currentUserId;
-    Double distance;
+    String imageUrl, currentUserId,finalDistance;
+    double distance;
     SaveLaundryViewModel mSaveLaundryViewModel;
     List<String> savedLaundryIds;
 
@@ -93,14 +93,6 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
             setImages(imageUrl, holder.laundryImageView);
         }
 
-        //go to laundry info
-        holder.rightImageView.setOnClickListener(view -> { //go to laundry info, order activity
-            Context context = view.getContext();
-            Intent intent = new Intent(context, OrderActivity.class);
-            intent.putExtra("laundryId", laundry.getLaundry().getLaundryId());
-            context.startActivity(intent);
-        });
-
         //load laundry services
         List<LaundryServiceModel> serviceList = laundry.getServiceList();
         HashtagAdapter hashtagAdapter = new HashtagAdapter(serviceList);
@@ -112,9 +104,20 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         LatLng laundryLatLng = getLocationFromAddress(context, laundryAddress);
         LatLng userLatLng = getLocationFromAddress(context, fullAddress);
         if (laundryLatLng != null && userLatLng != null) {
-            distance = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
-            holder.kmTextView.setText(String.format("%.2f", distance / 1000) + "km");
+            double dis = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
+            distance = dis/1000;
+            finalDistance = String.format("%.2f", distance);
+            holder.kmTextView.setText(finalDistance + "km");
         }
+
+        //go to laundry info
+        holder.rightImageView.setOnClickListener(view -> { //go to laundry info, order activity
+            Context context = view.getContext();
+            Intent intent = new Intent(context, OrderActivity.class);
+            intent.putExtra("laundryId", laundry.getLaundry().getLaundryId());
+            intent.putExtra("distance", distance);
+            context.startActivity(intent);
+        });
 
         //saved laundry before or not
         isSaveLaundry(laundry.getLaundry().getLaundryId(), holder.savedImageView);

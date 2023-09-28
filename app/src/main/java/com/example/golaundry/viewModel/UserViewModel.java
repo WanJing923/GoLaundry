@@ -7,10 +7,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
-import com.example.golaundry.model.LaundryModel;
-import com.example.golaundry.model.RiderModel;
+import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -22,8 +23,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public class UserViewModel extends ViewModel {
 
@@ -32,6 +36,8 @@ public class UserViewModel extends ViewModel {
     private final DatabaseReference userMembershipRef;
     private final DatabaseReference allMembershipRef;
     private final FirebaseAuth mAuth;
+    private final DatabaseReference userAddressRef;
+    private final DatabaseReference userOrderRef,orderStatusRef;
 
     //constructor
     public UserViewModel() {
@@ -40,6 +46,9 @@ public class UserViewModel extends ViewModel {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
+        userAddressRef = db.getReference().child("userAddress");
+        userOrderRef = db.getReference().child("userOrder");
+        orderStatusRef = db.getReference().child("orderStatus");
     }
 
     //create user auth
@@ -67,27 +76,12 @@ public class UserViewModel extends ViewModel {
         return signUpResult;
     }
 
-    //login into account, all users(not using cause of the check status function)
-    public LiveData<Boolean> loginUser(String email, String password) {
-        MutableLiveData<Boolean> signInResult = new MutableLiveData<>();
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        signInResult.setValue(true);
-                    } else {
-                        signInResult.setValue(false);
-                    }
-                });
-        return signInResult;
-    }
-
     //before login, check user status and email exist
     public LiveData<Boolean> checkUserRole(String email) {
         MutableLiveData<Boolean> roleLiveData = new MutableLiveData<>();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference("laundry");
         DatabaseReference riderRef = FirebaseDatabase.getInstance().getReference("riders");
-
         ValueEventListener listener = new ValueEventListener() {
             int searchCounter = 0;
             boolean userExists = false;
@@ -97,11 +91,7 @@ public class UserViewModel extends ViewModel {
                 if (snapshot.exists()) {
                     userExists = true;
                 }
-
-                // Increment the search counter
                 searchCounter++;
-
-                // Check if we have searched all three tables
                 if (searchCounter == 3) {
                     roleLiveData.setValue(userExists);
                 }
@@ -109,12 +99,7 @@ public class UserViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle database error
-
-                // Increment the search counter
                 searchCounter++;
-
-                // Check if we have searched all three tables
                 if (searchCounter == 3) {
                     roleLiveData.setValue(false);
                 }
@@ -133,8 +118,6 @@ public class UserViewModel extends ViewModel {
         return roleLiveData;
     }
 
-
-
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
         MutableLiveData<UserModel> userData = new MutableLiveData<>();
@@ -149,7 +132,7 @@ public class UserViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+                //
             }
         });
 
@@ -265,6 +248,76 @@ public class UserViewModel extends ViewModel {
         return updateUserProfilePicResult;
     }
 
+    //check and get user address
+    public LiveData<List<AddressModel>> getAllAddressesForUser(String currentUserId) {
+        MutableLiveData<List<AddressModel>> addressesData = new MutableLiveData<>();
+
+        userAddressRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<AddressModel> addressesList = new ArrayList<>();
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    AddressModel address = childSnapshot.getValue(AddressModel.class);
+                    addressesList.add(address);
+                }
+                addressesData.setValue(addressesList);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                addressesData.setValue(null);
+            }
+        });
+        return addressesData;
+    }
+
+    public MutableLiveData<Boolean> addUserAddress(String currentUserId, AddressModel newAddress) {
+        MutableLiveData<Boolean> addressData = new MutableLiveData<>();
+
+        String addressId = String.valueOf(UUID.randomUUID());
+        newAddress.setAddressId(addressId);
+
+        userAddressRef.child(currentUserId).child(addressId).setValue(newAddress)
+                .addOnSuccessListener(aVoid ->
+                        addressData.setValue(true))
+                .addOnFailureListener(e ->
+                        addressData.setValue(false)
+                );
+
+        return addressData;
+    }
+
+    public MutableLiveData<Boolean> addOrder(String currentUserId, OrderModel newOrder, OrderStatusModel mOrderStatusModel) {
+        MutableLiveData<Boolean> orderData = new MutableLiveData<>();
+        String orderId = String.valueOf(UUID.randomUUID());
+
+        orderStatusRef.child(orderId).setValue(mOrderStatusModel)
+                .addOnSuccessListener(aVoid ->
+                        orderData.setValue(true))
+                .addOnFailureListener(e ->
+                        orderData.setValue(false)
+                );
+
+        userOrderRef.child(currentUserId).child(orderId).setValue(newOrder)
+                .addOnSuccessListener(aVoid ->
+                        orderData.setValue(true))
+                .addOnFailureListener(e ->
+                        orderData.setValue(false)
+                );
+
+        return orderData;
+    }
+
+    public void deleteAddressForUser(String currentUserId, String addressKey) {
+        MutableLiveData<Boolean> deleteStatus = new MutableLiveData<>();
+
+        userAddressRef.child(currentUserId).child(addressKey).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    deleteStatus.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    deleteStatus.setValue(false);
+                });
+    }
 
 
 
