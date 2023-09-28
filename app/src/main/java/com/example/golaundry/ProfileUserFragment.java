@@ -245,7 +245,7 @@ public class ProfileUserFragment extends Fragment {
 
         //intent to top up
         view.findViewById(R.id.puf_iv_topup).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), MembershipActivity.class);
+            Intent intent = new Intent(getContext(), TopUpActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });

@@ -61,10 +61,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toa_tv_top_up"
+                android:layout_centerInParent="true"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="40dp"
                 android:gravity="start"
-                android:layout_centerInParent="true"
                 android:text="@string/current_balance"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -105,7 +105,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <EditText
-                    android:id="@+id/toa_tv_amount"
+                    android:id="@+id/toa_et_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/_0_00"
@@ -136,4 +136,10 @@
                 android:layout_alignParentBottom="true"/>
         </RelativeLayout>
     </ScrollView>
+    <ProgressBar
+        android:id="@+id/toa_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -11,8 +11,10 @@ import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.model.LaundryModel;
+import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
+import com.example.golaundry.model.TopUpModel;
 import com.example.golaundry.model.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +40,7 @@ public class UserViewModel extends ViewModel {
     private final DatabaseReference allMembershipRef;
     private final FirebaseAuth mAuth;
     private final DatabaseReference userAddressRef;
-    private final DatabaseReference userOrderRef,orderStatusRef;
+    private final DatabaseReference userOrderRef, orderStatusRef, topUpRef, membershipHistoryRef;
 
     //constructor
     public UserViewModel() {
@@ -50,6 +52,8 @@ public class UserViewModel extends ViewModel {
         userAddressRef = db.getReference().child("userAddress");
         userOrderRef = db.getReference().child("userOrder");
         orderStatusRef = db.getReference().child("orderStatus");
+        topUpRef = db.getReference().child("topUpHistory");
+        membershipHistoryRef = db.getReference().child("membershipHistory");
     }
 
     //create user auth
@@ -263,6 +267,7 @@ public class UserViewModel extends ViewModel {
                 }
                 addressesData.setValue(addressesList);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 addressesData.setValue(null);
@@ -320,8 +325,136 @@ public class UserViewModel extends ViewModel {
                 });
     }
 
+    public MutableLiveData<Boolean> topUpBalance(String currentUserId, TopUpModel topUpModel) {
+        MutableLiveData<Boolean> topUpStatus = new MutableLiveData<>();
 
+        topUpRef.child(currentUserId).setValue(topUpModel)
+                .addOnSuccessListener(aVoid ->
+                        topUpStatus.setValue(true))
+                .addOnFailureListener(e ->
+                        topUpStatus.setValue(false)
+                );
 
+        return topUpStatus;
+    }
+
+    public LiveData<CurrentMembershipModel> getCurrentMembership(String currentUserId) {
+        MutableLiveData<CurrentMembershipModel> membershipData = new MutableLiveData<>();
+        userMembershipRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    CurrentMembershipModel membershipModel = dataSnapshot.getValue(CurrentMembershipModel.class);
+                    membershipData.setValue(membershipModel);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //
+            }
+        });
+
+        return membershipData;
+    }
+
+    public LiveData<Boolean> updateCurrentMembership(String currentUserId, CurrentMembershipModel currentMembershipModel) {
+        MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
+
+        userMembershipRef.child(currentUserId).setValue(currentMembershipModel)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        updateStatus.setValue(true);
+                    } else {
+                        Exception e = task.getException();
+                        if (e != null) {
+                            updateStatus.setValue(false);
+                        }
+                    }
+                });
+        return updateStatus;
+    }
+
+    public LiveData<Boolean> updateMonthlyTopUp(String currentUserId, double monthlyTopUpAmount) {
+        MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
+
+        userMembershipRef.child(currentUserId).child("monthlyTopUp").setValue(monthlyTopUpAmount)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        updateStatus.setValue(true);
+                    } else {
+                        Exception e = task.getException();
+                        if (e != null) {
+                            updateStatus.setValue(false);
+                        }
+                    }
+                });
+        return updateStatus;
+    }
+
+    public LiveData<Boolean> getMembershipHistory(String currentUserId, String monthYear) {
+        MutableLiveData<Boolean> membershipData = new MutableLiveData<>();
+        membershipHistoryRef.child(currentUserId).child(monthYear).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    membershipData.setValue(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                membershipData.setValue(false);
+            }
+        });
+
+        return membershipData;
+    }
+
+    public LiveData<Boolean> updateMembershipHistory(String currentUserId, String monthYear, double monthlyTopUp) {
+        MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
+
+        userMembershipRef.child(currentUserId).child(monthYear).child("monthlyTopUp").setValue(monthlyTopUp)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        updateStatus.setValue(true);
+                    } else {
+                        Exception e = task.getException();
+                        if (e != null) {
+                            updateStatus.setValue(false);
+                        }
+                    }
+                });
+        return updateStatus;
+    }
+
+    public LiveData<Boolean> updateUserMembershipBalance(String currentUserId, double balance, String membershipRate) {
+        MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
+
+        userRef.child(currentUserId).child("balance").setValue(balance).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+
+                userRef.child(currentUserId).child("membershipRate").setValue(membershipRate)
+                        .addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                updateStatus.setValue(true);
+                            } else {
+                                Exception e = task1.getException();
+                                if (e != null) {
+                                    updateStatus.setValue(false);
+                                }
+                            }
+                        });
+
+            } else {
+                Exception e = task.getException();
+                if (e != null) {
+                    updateStatus.setValue(false);
+                }
+            }
+        });
+        return updateStatus;
+    }
 
 
 }
