@@ -112,7 +112,7 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
+                Log.e("FirebaseError", "Error in Firebase ValueEventListener: " + databaseError.getMessage());
             }
         });
 
@@ -369,7 +369,7 @@ public class LaundryViewModel extends ViewModel {
                     LiveData<List<LaundryServiceModel>> serviceData = getAllServiceData(laundryId);
 
                     serviceData.observeForever(servicesData -> {
-                        if (servicesData != null) {
+                        if (servicesData != null && !servicesData.isEmpty()) {
                             CombineLaundryData mCombinedData = new CombineLaundryData(laundry, shop, servicesData);
                             combinedDataList.add(mCombinedData);
                             combinedLaundryDataLiveData.setValue(combinedDataList);
@@ -380,6 +380,7 @@ public class LaundryViewModel extends ViewModel {
         }
         return combinedLaundryDataLiveData;
     }
+
 
 
 }

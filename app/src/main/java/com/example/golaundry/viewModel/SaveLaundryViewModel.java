@@ -13,7 +13,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -80,5 +82,24 @@ public class SaveLaundryViewModel extends ViewModel {
         return saveLaundryStatus;
     }
 
+    public LiveData<List<String>> getSavedLaundryId(String userId) {
+        MutableLiveData<List<String>> savedLaundryIds = new MutableLiveData<>();
+        savedLaundryRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> laundryIds = new ArrayList<>();
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    String laundryId = childSnapshot.getKey();
+                    laundryIds.add(laundryId);
+                }
+                savedLaundryIds.setValue(laundryIds);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        return savedLaundryIds;
+    }
 
 }

@@ -65,6 +65,16 @@
                 android:layout_below="@id/asl_tv_saved_laundry"
                 android:layout_marginTop="18dp"/>
 
+            <TextView
+                android:id="@+id/asl_tv_no_laundry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/no_laundry_saved"
+                android:textColor="@color/gold"
+                android:visibility="invisible"
+                android:textSize="16sp" />
+
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

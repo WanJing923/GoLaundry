@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
+import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.UserModel;
@@ -318,6 +319,8 @@ public class UserViewModel extends ViewModel {
                     deleteStatus.setValue(false);
                 });
     }
+
+
 
 
 

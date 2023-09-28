@@ -275,7 +275,7 @@
     <string name="rider_info_icon">Rider info icon</string>
     <string name="plate_number_profile">Plate Number:</string>
     <string name="cash_out">Cash Out</string>
-    <string name="current_balance">Current Balance:</string>
+    <string name="current_balance">Current Balance: RM0.00</string>
     <string name="_00_00_0000_00_00">00-00-0000 00:00</string>
     <string name="_000_00">000.00</string>
     <string name="minus">-</string>
@@ -331,4 +331,6 @@
     <string name="your_order_will_be_picked_up_within_the_working_hours_on_the_chosen_date_please_make_sure_you_packs_the_order_as_well">Your order will be picked up within the working hours. Please make sure you packs the order well.</string>
     <string name="note_to_rider">Note to rider</string>
     <string name="e_g_meet_me_at_the_lobby">e.g. Meet me at the lobby</string>
+    <string name="no_laundry_saved">No laundry saved</string>
+    <string name="enter_top_up_amount">Enter top up amount:</string>
 </resources>

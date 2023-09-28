@@ -26,6 +26,9 @@
         android:theme="@style/Theme.GoLaundry"
         tools:targetApi="31">
         <activity
+            android:name=".TopUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".MyAddressesActivity"
             android:exported="false" />
         <activity
