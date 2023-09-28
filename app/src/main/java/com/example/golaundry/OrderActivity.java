@@ -179,7 +179,7 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        deliveryFee = distance * 0.5;
+        deliveryFee = (distance * 0.5) * 2;
     }
 
     public void createOrderModel() {
@@ -192,7 +192,7 @@ public class OrderActivity extends AppCompatActivity {
         for (String serviceName : servicesInfo.keySet()) {
             OrderServicesHolder orderServicesHolder = servicesInfo.get(serviceName);
             assert orderServicesHolder != null;
-            double price = orderServicesHolder.getPrice();
+            double price = mUserOrderLaundryServicesAdapter.getPriceForService(serviceName, laundryServiceList);
             int userQty = orderServicesHolder.getUserSelected();
             double totalPrice = price * userQty;
             totalLaundryFee += totalPrice;

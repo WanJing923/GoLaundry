@@ -88,9 +88,9 @@ public class OrderLocationActivity extends AppCompatActivity {
 
         AddressModel selectedAddress = (AddressModel) getIntent().getSerializableExtra("selectedAddresses");
         if (selectedAddress != null) {
-            String name = selectedAddress.getName();
-            String details = selectedAddress.getDetails();
-            String address = selectedAddress.getAddress();
+            name = selectedAddress.getName();
+            details = selectedAddress.getDetails();
+            address = selectedAddress.getAddress();
             addressNameTextView.setText(name);
             String userAddress = details + ", " + address;
             addressTextView.setText(userAddress);
@@ -106,6 +106,8 @@ public class OrderLocationActivity extends AppCompatActivity {
                     addressTextView.setText("");
                     editAddressImageView.setImageResource(R.drawable.ic_add_address);
 
+                    address = null;
+
                     editAddressImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
                         intent.putExtra("orderData", orderData);
@@ -115,9 +117,9 @@ public class OrderLocationActivity extends AppCompatActivity {
                 } else {
                     AddressModel defaultAddress = addresses.stream().filter(AddressModel::isDefaultAddress).findFirst().orElse(null);
                     if (defaultAddress != null) {
-                        String name = defaultAddress.getName();
-                        String details = defaultAddress.getDetails();
-                        String address = defaultAddress.getAddress();
+                        name = defaultAddress.getName();
+                        details = defaultAddress.getDetails();
+                        address = defaultAddress.getAddress();
                         addressNameTextView.setText(name);
                         String userAddress = details + ", " + address;
                         addressTextView.setText(userAddress);
@@ -129,6 +131,7 @@ public class OrderLocationActivity extends AppCompatActivity {
                             startActivity(intent);
                         });
                     } else {
+                        address = null;
                         addressNameTextView.setText("Add Default Address");
                         addressTextView.setText("");
                         editAddressImageView.setImageResource(R.drawable.ic_add_address);

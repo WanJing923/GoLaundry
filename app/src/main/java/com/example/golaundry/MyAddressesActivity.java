@@ -11,88 +11,58 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.golaundry.adapter.AddressAdapter;
-import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
+import com.example.golaundry.adapter.MyAddressesAdapter;
 import com.example.golaundry.model.AddressModel;
-import com.example.golaundry.model.LaundryServiceModel;
-import com.example.golaundry.model.OrderDataHolder;
-import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-public class EditLocationActivity extends AppCompatActivity {
+public class MyAddressesActivity extends AppCompatActivity {
 
     UserViewModel mUserViewModel;
     String currentUserId;
     ArrayList<AddressModel> addressList;
-    AddressAdapter mAddressAdapter;
-    OrderDataHolder mOrderDataHolder;
-    OrderModel orderData;
+    MyAddressesAdapter mMyAddressesAdapter;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_location);
+        setContentView(R.layout.activity_my_addresses);
 
-        Toolbar toolbar = findViewById(R.id.ela_toolbar);
+        Toolbar toolbar = findViewById(R.id.maa_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
-        mOrderDataHolder = new ViewModelProvider(this).get(OrderDataHolder.class);
-        orderData = mOrderDataHolder.getOrderData();
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        RecyclerView addressRecyclerView = findViewById(R.id.ela_rv_address);
+        RecyclerView addressRecyclerView = findViewById(R.id.maa_rv_address);
         addressList = new ArrayList<>();
-        mAddressAdapter = new AddressAdapter(addressList, this,mUserViewModel);
-        addressRecyclerView.setAdapter(mAddressAdapter);
-        addressRecyclerView.setLayoutManager(new LinearLayoutManager(EditLocationActivity.this));
+        mMyAddressesAdapter = new MyAddressesAdapter(addressList, this,mUserViewModel);
+        addressRecyclerView.setAdapter(mMyAddressesAdapter);
+        addressRecyclerView.setLayoutManager(new LinearLayoutManager(MyAddressesActivity.this));
 
         mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
             if (addresses != null) {
                 addressList.clear();
                 addressList.addAll(addresses);
-                mAddressAdapter.notifyDataSetChanged();
+                mMyAddressesAdapter.notifyDataSetChanged();
             }
         });
 
-        OrderModel orderData = (OrderModel) getIntent().getSerializableExtra("orderData");
-        if (orderData != null) {
-            mOrderDataHolder.setOrderData(orderData);
-        }
-
-        Button doneButton = findViewById(R.id.ela_btn_save);
-        doneButton.setOnClickListener(v -> {
-            AddressModel selectedAddresses = mAddressAdapter.getSelectedAddresses();
-            Intent intent = new Intent(this, OrderLocationActivity.class);
-            intent.putExtra("selectedAddresses", selectedAddresses);
-            intent.putExtra("orderData", orderData);
-            startActivity(intent);
-            finish();
-        });
-
-        ImageView addAddressButton = findViewById(R.id.ela_btn_add_new_address);
+        ImageView addAddressButton = findViewById(R.id.maa_btn_add_new_address);
         addAddressButton.setOnClickListener(view -> {
-            Intent intent = new Intent(EditLocationActivity.this, NewAddressActivity.class);
-            intent.putExtra("orderData", orderData);
+            Intent intent = new Intent(MyAddressesActivity.this, NewAddressActivity.class);
             startActivity(intent);
-            finish();
         });
-
-
     }
 
     @Override

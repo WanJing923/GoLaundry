@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -24,11 +26,21 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -267,8 +279,78 @@ public class HomeUserFragment<membershipRate> extends Fragment {
             startActivity(intent);
         });
 
+//        lineChart = view.findViewById(R.id.fhu_spending_chart);
+
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    ArrayList<String> months = new ArrayList<>();
+//                    ArrayList<Integer> values = new ArrayList<>();
+//
+//                    // Define your custom order for months
+//                    String[] monthOrder = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+//
+//                    // Iterate through the custom order of months
+//                    for (String monthName : monthOrder) {
+//                        DataSnapshot monthSnapshot = dataSnapshot.child(monthName);
+//                        if (monthSnapshot.exists()) {
+//                            int spendingAmount = monthSnapshot.getValue(Integer.class);
+//
+//                            // Add month names to the months list
+//                            months.add(monthName);
+//
+//                            // Add spending amounts to the values list
+//                            values.add(spendingAmount);
+//                        }
+//                    }
+//
+//                    // Call a method to display the data in a LineChart
+//                    displayDataInLineChart(months, values);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                // Handle any errors here
+//            }
+//        });
+
         return view;
     }
+//    private void displayDataInLineChart(ArrayList<String> months, ArrayList<Integer> values) {
+//
+//        // Populate the entries list with values
+//        ArrayList<Entry> entries = new ArrayList<>();
+//        for (int i = 0; i < months.size(); i++) {
+//            entries.add(new Entry(i, values.get(i)));
+//        }
+//
+//        LineDataSet dataSet = new LineDataSet(entries, "");
+//        dataSet.setColor(Color.BLUE);
+//        dataSet.setLineWidth(2f);
+//        dataSet.setCircleColor(Color.RED);
+//
+//        LineData lineData = new LineData(dataSet);
+//        lineChart.setData(lineData);
+//
+//        // Configure X-axis (months)
+//        XAxis xAxis = lineChart.getXAxis();
+//        xAxis.setValueFormatter(new IndexAxisValueFormatter(months));
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+//        xAxis.setGranularity(1f);
+//
+//        // Configure Y-axis (spending amounts)
+//        YAxis yAxisLeft = lineChart.getAxisLeft();
+//        yAxisLeft.setGranularity(1f);
+//
+//        // Refresh the chart
+//        lineChart.invalidate();
+//        lineChart.setTouchEnabled(false);
+//        lineChart.getDescription().setEnabled(false);
+//    }
 
     private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
         //referenceFromUrl to get StorageReference

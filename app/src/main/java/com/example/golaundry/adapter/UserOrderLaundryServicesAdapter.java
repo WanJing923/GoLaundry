@@ -24,6 +24,7 @@ import com.example.golaundry.model.LaundryServiceModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,6 +32,7 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
     private final ArrayList<LaundryServiceModel> laundryServiceList;
     private final Context context;
     private final Map<LaundryServiceModel, Integer> serviceQuantityMap = new HashMap<>();
+    private final Map<LaundryServiceModel, Double> servicePriceMap = new HashMap<>();
     double price;
 
     public UserOrderLaundryServicesAdapter(ArrayList<LaundryServiceModel> laundryServiceList, Context context) {
@@ -39,6 +41,9 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
 
         for (LaundryServiceModel service : laundryServiceList) {
             serviceQuantityMap.put(service, 0);
+        }
+        for (LaundryServiceModel service : laundryServiceList) {
+            servicePriceMap.put(service, 0.0);
         }
     }
 
@@ -64,7 +69,8 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
         //bind data
         holder.serviceNameTextView.setText(service.getName());
         holder.serviceDescriptionTextView.setText(service.getDescription());
-        price = service.getPrice() * 2; //multiply by 2
+        double price = service.getPrice() * 2; //multiply by 2
+        servicePriceMap.put(service, price);
         @SuppressLint("DefaultLocale")
         String finalPrice = String.format("%.2f", price);
         String quantity = service.getQuantity();
@@ -86,6 +92,16 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
         });
 
     }
+
+    public double getPriceForService(String serviceName, List<LaundryServiceModel> laundryServiceList) {
+        for (LaundryServiceModel service : laundryServiceList) {
+            if (service.getName().equals(serviceName)) {
+                return service.getPrice() * 2;
+            }
+        }
+        return 0.0;
+    }
+
 
     public Map<String, Integer> getSelectedServices() {
         Map<String, Integer> selectedServices = new HashMap<>();
@@ -115,6 +131,7 @@ public class UserOrderLaundryServicesAdapter extends RecyclerView.Adapter<UserOr
             if (currentQty == null || currentQty == 0) {
                 //
             } else if (currentQty > 0) {
+                double price = getPriceForService(service.getName(), laundryServiceList);
                 servicesInfo.put(service.getName(), new OrderServicesHolder(service.getName(),price,service.getQuantity(),currentQty));
             }
         }

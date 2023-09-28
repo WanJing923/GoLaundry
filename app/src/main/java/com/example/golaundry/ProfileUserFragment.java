@@ -265,11 +265,11 @@ public class ProfileUserFragment extends Fragment {
         });
 
         //my addresses
-//        view.findViewById(R.id.puf_tv_my_address).setOnClickListener(view1 -> {
-//            Intent intent = new Intent(getContext(), MyAddressesActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        });
+        view.findViewById(R.id.puf_tv_my_address).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MyAddressesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
         //reset password
         view.findViewById(R.id.puf_tv_reset_password).setOnClickListener(view1 -> {
