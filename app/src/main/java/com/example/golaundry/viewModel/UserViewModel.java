@@ -126,7 +126,7 @@ public class UserViewModel extends ViewModel {
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
         MutableLiveData<UserModel> userData = new MutableLiveData<>();
-        userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        userRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -340,7 +340,7 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<CurrentMembershipModel> getCurrentMembership(String currentUserId) {
         MutableLiveData<CurrentMembershipModel> membershipData = new MutableLiveData<>();
-        userMembershipRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        userMembershipRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -375,10 +375,10 @@ public class UserViewModel extends ViewModel {
         return updateStatus;
     }
 
-    public LiveData<Boolean> updateMonthlyTopUp(String currentUserId, double monthlyTopUpAmount) {
+    public LiveData<Boolean> updateMonthlyTopUp(String currentUserId, CurrentMembershipModel currentMembershipModel) {
         MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
 
-        userMembershipRef.child(currentUserId).child("monthlyTopUp").setValue(monthlyTopUpAmount)
+        userMembershipRef.child(currentUserId).setValue(currentMembershipModel)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         updateStatus.setValue(true);
@@ -414,7 +414,7 @@ public class UserViewModel extends ViewModel {
     public LiveData<Boolean> updateMembershipHistory(String currentUserId, String monthYear, double monthlyTopUp) {
         MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
 
-        userMembershipRef.child(currentUserId).child(monthYear).child("monthlyTopUp").setValue(monthlyTopUp)
+        membershipHistoryRef.child(currentUserId).child(monthYear).child("monthlyTopUp").setValue(monthlyTopUp)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         updateStatus.setValue(true);
@@ -455,6 +455,8 @@ public class UserViewModel extends ViewModel {
         });
         return updateStatus;
     }
+
+
 
 
 }
