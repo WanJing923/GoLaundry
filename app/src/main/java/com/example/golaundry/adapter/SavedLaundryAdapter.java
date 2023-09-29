@@ -45,12 +45,11 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
     private final Context context;
     String imageUrl, currentUserId;
     SaveLaundryViewModel mSaveLaundryViewModel;
-    List<String> savedLaundryIds;
+    boolean isSavedLaundry;
 
     public SavedLaundryAdapter(List<CombineLaundryData> laundryList, Context context) {
         this.laundryList = laundryList;
         this.context = context;
-        savedLaundryIds = new ArrayList<>();
     }
 
     @NonNull
@@ -85,6 +84,7 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
 
         holder.kmTextView.setVisibility(View.GONE);
         holder.rightImageView.setVisibility(View.GONE);
+        holder.distanceTextView.setVisibility(View.GONE);
 
         //saved laundry before or not
         isSaveLaundry(laundry.getLaundry().getLaundryId(), holder.savedImageView);
@@ -96,45 +96,41 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
     }
 
     //show the user whether is saved or not
-    @SuppressLint("NotifyDataSetChanged")
-    private void isSaveLaundry(String laundryId, ImageView savedImageView) {
+    private void isSaveLaundry(String laundryId, ImageView savedLaundryImageView) {
         mSaveLaundryViewModel.isSavedLaundry(laundryId, currentUserId).observe((LifecycleOwner) context, isSavedResult -> {
             if (isSavedResult != null && isSavedResult) {
-                savedImageView.setImageResource(R.drawable.ic_love);
-                savedLaundryIds.add(laundryId);
+                isSavedLaundry = true;
+                savedLaundryImageView.setImageResource(R.drawable.ic_love);
             } else {
-                savedImageView.setImageResource(R.drawable.ic_love_grey);
-                savedLaundryIds.remove(laundryId);
+                isSavedLaundry = false;
+                savedLaundryImageView.setImageResource(R.drawable.ic_love_grey);
             }
-            notifyDataSetChanged();
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void saveLaundryShop(String laundryId, ImageView savedImageView) { //have laundry id and user id, add laundry id to that table
-        if (savedLaundryIds.contains(laundryId)) {
+        if (isSavedLaundry) {
             mSaveLaundryViewModel.saveLaundryRemove(currentUserId, laundryId).observe((LifecycleOwner) context, unsavedLaundryStatus -> {
                 if (unsavedLaundryStatus != null && unsavedLaundryStatus) {
-                    savedLaundryIds.remove(laundryId);
+                    isSavedLaundry = false;
                     Toast.makeText(context, "Removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 } else {
                     Toast.makeText(context, "Fail to removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 }
-                notifyDataSetChanged();
             });
         } else {
             mSaveLaundryViewModel.saveLaundryAdd(currentUserId, laundryId).observe((LifecycleOwner) context, saveLaundryStatus -> {
                 if (saveLaundryStatus != null && saveLaundryStatus) {
-                    savedLaundryIds.add(laundryId);
+                    isSavedLaundry = true;
                     Toast.makeText(context, "Saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 } else {
                     Toast.makeText(context, "Fail to saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 }
-                notifyDataSetChanged();
             });
         }
     }
@@ -162,7 +158,7 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView savedImageView, rightImageView;
-        TextView shopNameTextView, ratingsTextView, kmTextView;
+        TextView shopNameTextView, ratingsTextView, kmTextView,distanceTextView;
         RatingBar ratingsBar;
         RecyclerView servicesRecyclerView;
         ImageView laundryImageView;
@@ -173,6 +169,7 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
             shopNameTextView = itemView.findViewById(R.id.lic_tv_laundry_name);
             ratingsTextView = itemView.findViewById(R.id.lic_tv_rating);
             ratingsBar = itemView.findViewById(R.id.lic_rating_star);
+            distanceTextView = itemView.findViewById(R.id.lic_tv_distance);
             kmTextView = itemView.findViewById(R.id.lic_tv_distance_km);
             savedImageView = itemView.findViewById(R.id.lic_iv_saved);
             rightImageView = itemView.findViewById(R.id.lic_iv_right);

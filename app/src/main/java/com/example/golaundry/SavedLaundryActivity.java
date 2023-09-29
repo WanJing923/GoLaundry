@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -27,10 +29,16 @@ import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SavedLaundryActivity extends AppCompatActivity {
 
@@ -41,9 +49,7 @@ public class SavedLaundryActivity extends AppCompatActivity {
     RecyclerView laundryRecyclerView;
     ArrayList<CombineLaundryData> laundryList;
     SavedLaundryAdapter mSavedLaundryAdapter;
-    List<LaundryModel> allLaundryData;
-    List<LaundryShopModel> allShopData;
-
+    TextView noLaundryTextView;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
@@ -62,7 +68,7 @@ public class SavedLaundryActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
         laundryRecyclerView = findViewById(R.id.asl_rv_saved_laundry);
-        TextView noLaundryTextView = findViewById(R.id.asl_tv_no_laundry);
+        noLaundryTextView = findViewById(R.id.asl_tv_no_laundry);
 
         //initialize adapter
         laundryList = new ArrayList<>();
@@ -70,26 +76,61 @@ public class SavedLaundryActivity extends AppCompatActivity {
         laundryRecyclerView.setAdapter(mSavedLaundryAdapter);
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(SavedLaundryActivity.this));
 
-        List<LaundryModel> allLaundryData = new ArrayList<>();
-        List<LaundryShopModel> allShopData = new ArrayList<>();
-        MediatorLiveData<List<CombineLaundryData>> combinedLiveData = new MediatorLiveData<>();
-
         mSaveLaundryViewModel.getSavedLaundryId(currentUserId).observe(SavedLaundryActivity.this, allLaundryId -> {
-            if (allLaundryId != null) {
+            if (allLaundryId.size() != 0) {
+                List<LaundryModel> laundryLiveData = new ArrayList<>();
+                List<LaundryShopModel> shopLiveData = new ArrayList<>();
+
+                AtomicInteger laundryTaskCounter = new AtomicInteger(allLaundryId.size());
+                AtomicInteger shopTaskCounter = new AtomicInteger(allLaundryId.size());
+
                 for (String laundryId : allLaundryId) {
-                    LiveData<LaundryModel> laundryLiveData = mLaundryViewModel.getLaundryData(laundryId);
-                    LiveData<LaundryShopModel> shopLiveData = mLaundryViewModel.getShopData(laundryId);
+                    DatabaseReference laundryReference = FirebaseDatabase.getInstance().getReference().child("laundry").child(laundryId);
+                    DatabaseReference shopReference = FirebaseDatabase.getInstance().getReference().child("laundryShop").child(laundryId);
 
-                    combinedLiveData.addSource(laundryLiveData, laundryDataStatus -> {
-                        combinedLiveData.addSource(shopLiveData, shopData -> {
-                            if (laundryDataStatus != null && shopData != null) {
-                                allLaundryData.add(laundryDataStatus);
-                                allShopData.add(shopData);
-
-                                List<CombineLaundryData> combinedDataList = mLaundryViewModel.combineAndNotifyData(allLaundryData, allShopData).getValue();
-                                combinedLiveData.setValue(combinedDataList);
+                    laundryReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot laundryDataSnapshot) {
+                            if (laundryDataSnapshot.exists()) {
+                                LaundryModel laundry = laundryDataSnapshot.getValue(LaundryModel.class);
+                                laundryLiveData.add(laundry);
                             }
-                        });
+                            if (laundryTaskCounter.decrementAndGet() == 0) {
+                                LiveData<List<CombineLaundryData>> combinedDataList = mLaundryViewModel.combineAndNotifyData(laundryLiveData, shopLiveData);
+                                combinedDataList.observe(SavedLaundryActivity.this, combinedData -> {
+                                    laundryList.clear();
+                                    laundryList.addAll(combinedData);
+                                    mSavedLaundryAdapter.notifyDataSetChanged();
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+
+                    shopReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot shopDataSnapshot) {
+                            if (shopDataSnapshot.exists()) {
+                                LaundryShopModel shop = shopDataSnapshot.getValue(LaundryShopModel.class);
+                                shopLiveData.add(shop);
+                            }
+                            if (shopTaskCounter.decrementAndGet() == 0) {
+                                LiveData<List<CombineLaundryData>> combinedDataList = mLaundryViewModel.combineAndNotifyData(laundryLiveData, shopLiveData);
+                                combinedDataList.observe(SavedLaundryActivity.this, combinedData -> {
+                                    laundryList.clear();
+                                    laundryList.addAll(combinedData);
+                                    mSavedLaundryAdapter.notifyDataSetChanged();
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle onCancelled event if needed
+                        }
                     });
                 }
             } else {
@@ -97,13 +138,7 @@ public class SavedLaundryActivity extends AppCompatActivity {
             }
         });
 
-        combinedLiveData.observe(SavedLaundryActivity.this, combinedDataList -> {
-            if (combinedDataList != null) {
-                laundryList.clear();
-                laundryList.addAll(combinedDataList);
-                mSavedLaundryAdapter.notifyDataSetChanged();
-            }
-        });
+
 
     }
 
