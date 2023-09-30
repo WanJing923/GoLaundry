@@ -83,7 +83,7 @@
                 android:textColor="@color/normal_green"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/uof_cv_recently_order"
@@ -95,7 +95,7 @@
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="22dp"
                 android:backgroundTint="@color/primary_green"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp">
 

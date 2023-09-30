@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserGetLocationHolder;
+import com.example.golaundry.viewModel.UserViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.SphericalUtil;
@@ -57,6 +59,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserOrderFragment extends Fragment {
@@ -64,16 +67,18 @@ public class UserOrderFragment extends Fragment {
     UserGetLocationHolder mUserGetLocationHolder;
     String currentUserId, currentArea, fullAddress;
     LaundryViewModel mLaundryViewModel;
+    UserViewModel mUserViewModel;
     ArrayList<CombineLaundryData> laundryList;
     UserOrderShowLaundryAdapter mUserOrderShowLaundryAdapter;
     RecyclerView laundryRecyclerView;
-    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView;
+    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView,lastRecentTextView;
     CardView recentlyOrderCardView, filterCardView;
     boolean recentlyOrderVisible;
     private static final int REQUEST_CODE_MAP = 7;
     int currentRatingsFilter = 0;
     int currentDistanceFilter = 0;
     SeekBar ratingsFilterSeekBar, distanceFilterSeekBar;
+    String laundryIdLRO;
 
     public UserOrderFragment() {
     }
@@ -90,9 +95,10 @@ public class UserOrderFragment extends Fragment {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mLaundryViewModel = new ViewModelProvider(requireActivity()).get(LaundryViewModel.class);
         mUserGetLocationHolder = new ViewModelProvider(requireActivity()).get(UserGetLocationHolder.class);
+        mUserViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -112,7 +118,47 @@ public class UserOrderFragment extends Fragment {
         Button filterDoneButton = view.findViewById(R.id.uof_btn_filter);
         filterRatingsTextView = view.findViewById(R.id.uof_tv_filter_rating_number);
         filterDistanceTextView = view.findViewById(R.id.uof_tv_filter_distance_number);
-        setDiscoverTv();
+        lastRecentTextView = view.findViewById(R.id.uof_tv_last_recently);
+
+        TextView laundryNameLROTextView = view.findViewById(R.id.uof_tv_laundry_name);
+        TextView ratingsLROTextView = view.findViewById(R.id.uof_tv_rating);
+        RatingBar starLRORatingBar = view.findViewById(R.id.uof_rb_star);
+        TextView servicesTextView = view.findViewById(R.id.uof_tv_service);
+
+        mUserViewModel.getLatestOrder(currentUserId).observe(getViewLifecycleOwner(), latestOrder -> {
+            if (latestOrder != null) {
+                lastRecentTextView.setVisibility(View.VISIBLE);
+                recentlyOrderCardView.setVisibility(View.VISIBLE);
+                laundryIdLRO = latestOrder.getLaundryId();
+
+                mLaundryViewModel.getLaundryData(laundryIdLRO).observe(getViewLifecycleOwner(), laundryLRO -> {
+                    if (laundryLRO != null) {
+                        String shopNameLRO = laundryLRO.getShopName();
+                        laundryNameLROTextView.setText(shopNameLRO);
+                    }
+                });
+
+                Map<String, Integer> selectedServicesLRO = latestOrder.getSelectedServices();
+                if (selectedServicesLRO != null && !selectedServicesLRO.isEmpty()) {
+                    StringBuilder servicesBuilder = new StringBuilder();
+                    int entryCount = 0;
+                    for (Map.Entry<String, Integer> entry : selectedServicesLRO.entrySet()) {
+                        String serviceName = entry.getKey();
+                        int serviceCount = entry.getValue();
+                        servicesBuilder.append(serviceName).append(" (").append(serviceCount).append(")");
+                        entryCount++;
+                        if (entryCount < selectedServicesLRO.size()) {
+                            servicesBuilder.append(", ");
+                        }
+                    }
+                    servicesTextView.setText(servicesBuilder.toString());
+                } else {
+                    servicesTextView.setText("No services selected");
+                }
+            }
+        });
+
+        setDiscoverTv(); //show or not show latest order card
 
         //get current location or choose another location
         currentLocationTextView.setOnClickListener(v -> {
@@ -344,9 +390,11 @@ public class UserOrderFragment extends Fragment {
 
         if (recentlyOrderVisible) {
             params1.addRule(RelativeLayout.BELOW, R.id.uof_cv_recently_order);
+            params2.addRule(RelativeLayout.BELOW, R.id.uof_cv_recently_order);
             params2.setMargins(25, 35, 0, 0);
         } else {
             params1.addRule(RelativeLayout.BELOW, R.id.uof_et_search_bar);
+            params2.addRule(RelativeLayout.BELOW, R.id.uof_et_search_bar);
             params2.setMargins(25, 35, 0, 0);
         }
 

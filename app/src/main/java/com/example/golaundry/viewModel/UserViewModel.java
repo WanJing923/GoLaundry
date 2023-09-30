@@ -318,6 +318,28 @@ public class UserViewModel extends ViewModel {
         return orderData;
     }
 
+    public MutableLiveData<OrderModel> getLatestOrder(String currentUserId) {
+        MutableLiveData<OrderModel> orderData = new MutableLiveData<>();// get the latest order only
+        userOrderRef.child(currentUserId).orderByChild("dateTime").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel latestOrder = orderSnapshot.getValue(OrderModel.class);
+                        orderData.setValue(latestOrder);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        return orderData;
+    }
+
+
     public void deleteAddressForUser(String currentUserId, String addressKey) {
         MutableLiveData<Boolean> deleteStatus = new MutableLiveData<>();
 
@@ -386,8 +408,6 @@ public class UserViewModel extends ViewModel {
 
         return updateStatus;
     }
-
-
 
     public LiveData<Boolean> updateMonthlyTopUp(String currentUserId, CurrentMembershipModel currentMembershipModel) {
         MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
