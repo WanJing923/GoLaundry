@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -290,29 +291,35 @@ public class LaundryViewModel extends ViewModel {
         return updateSetupStatus;
     }
 
-    public LiveData<List<LaundryModel>> getAllLaundryData() {
-        MutableLiveData<List<LaundryModel>> allLaundryData = new MutableLiveData<>();
+    public LiveData<List<LaundryModel>> getFilteredLaundryData() {
+        MutableLiveData<List<LaundryModel>> filteredLaundryData = new MutableLiveData<>();
 
         laundryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<LaundryModel> allLaundry = new ArrayList<>();
+                List<LaundryModel> filteredLaundry = new ArrayList<>();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    LaundryModel eachLaundry = snapshot.getValue(LaundryModel.class);
-                    if (eachLaundry != null) {
-                        allLaundry.add(eachLaundry);
+                    LaundryModel laundry = snapshot.getValue(LaundryModel.class);
+
+                    if (laundry != null) {
+                        if (!laundry.getIsBreak() && laundry.getSetup()) {
+                            filteredLaundry.add(laundry);
+                        }
                     }
                 }
-                allLaundryData.setValue(allLaundry);
+
+                filteredLaundryData.setValue(filteredLaundry);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        return allLaundryData;
+
+        return filteredLaundryData;
     }
+
 
     public LiveData<List<LaundryShopModel>> getAllShopData() {
         MutableLiveData<List<LaundryShopModel>> allShopData = new MutableLiveData<>();

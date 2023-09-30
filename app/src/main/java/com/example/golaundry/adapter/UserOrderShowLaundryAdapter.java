@@ -179,6 +179,11 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     }
 
     public LatLng getLocationFromAddress(Context context, String theAddress) {
+
+        if (theAddress == null || theAddress.isEmpty()) {
+            return null;
+        }
+
         if (!Geocoder.isPresent()) {
             return null;
         }

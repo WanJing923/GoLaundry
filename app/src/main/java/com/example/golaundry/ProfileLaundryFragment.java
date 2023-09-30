@@ -166,7 +166,7 @@ public class ProfileLaundryFragment extends Fragment {
     //logout user
     public void logout() {
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getContext(), LoginFragment.class);
+        Intent intent = new Intent(getContext(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();
     }

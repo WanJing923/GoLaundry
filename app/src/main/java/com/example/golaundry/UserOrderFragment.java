@@ -140,11 +140,10 @@ public class UserOrderFragment extends Fragment {
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //get data and put into adapter
-        mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData ->
+        mLaundryViewModel.getFilteredLaundryData().observe(getViewLifecycleOwner(), allLaundryData ->
                 mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
                     if (allLaundryData != null && allShopData != null) {
                         LiveData<List<CombineLaundryData>> combinedLiveData = mLaundryViewModel.combineAndNotifyData(allLaundryData, allShopData);
-
                         combinedLiveData.observe(getViewLifecycleOwner(), combinedDataList -> {
                             if (combinedDataList != null) {
                                 laundryList.clear();
@@ -164,12 +163,10 @@ public class UserOrderFragment extends Fragment {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchLaundryList(charSequence.toString());
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 //
@@ -177,9 +174,7 @@ public class UserOrderFragment extends Fragment {
         });
 
         //filter laundry shop
-        filterTextView.setOnClickListener(v -> {
-            filterCardView.setVisibility(View.VISIBLE);
-        });
+        filterTextView.setOnClickListener(v -> filterCardView.setVisibility(View.VISIBLE));
         setupSeekBarListeners();
         filterDoneButton.setOnClickListener(v ->
                 applyFilters(currentRatingsFilter, currentDistanceFilter)
@@ -225,15 +220,11 @@ public class UserOrderFragment extends Fragment {
                 currentRatingsFilter = progress;
                 filterRatingsTextView.setText(String.valueOf(currentRatingsFilter));
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //
             }
         });
 
@@ -244,15 +235,11 @@ public class UserOrderFragment extends Fragment {
                 currentDistanceFilter = progress;
                 filterDistanceTextView.setText(currentDistanceFilter + "km");
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //
             }
         });
     }
