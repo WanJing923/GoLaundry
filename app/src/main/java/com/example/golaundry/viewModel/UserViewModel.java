@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -126,7 +127,7 @@ public class UserViewModel extends ViewModel {
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
         MutableLiveData<UserModel> userData = new MutableLiveData<>();
-        userRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -147,18 +148,22 @@ public class UserViewModel extends ViewModel {
     //get current membership
     public LiveData<CurrentMembershipModel> getCurrentMembershipData(String currentUserId) {
         MutableLiveData<CurrentMembershipModel> userCurrentMembershipData = new MutableLiveData<>();
-        userMembershipRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+
+        DatabaseReference currentUserRef = userMembershipRef.child(currentUserId);
+        currentUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     CurrentMembershipModel currentMembership = dataSnapshot.getValue(CurrentMembershipModel.class);
                     userCurrentMembershipData.setValue(currentMembership);
+                } else {
+                    userCurrentMembershipData.setValue(null);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
+                userCurrentMembershipData.setValue(null);
             }
         });
 
@@ -361,7 +366,13 @@ public class UserViewModel extends ViewModel {
     public LiveData<Boolean> updateCurrentMembership(String currentUserId, CurrentMembershipModel currentMembershipModel) {
         MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
 
-        userMembershipRef.child(currentUserId).setValue(currentMembershipModel)
+        DatabaseReference currentUserRef = userMembershipRef.child(currentUserId);
+        Map<String, Object> updates = new HashMap<>();
+
+        updates.put("monthYear", currentMembershipModel.getMonthYear());
+        updates.put("monthlyTopUp", currentMembershipModel.getMonthlyTopUp());
+
+        currentUserRef.updateChildren(updates)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         updateStatus.setValue(true);
@@ -372,8 +383,11 @@ public class UserViewModel extends ViewModel {
                         }
                     }
                 });
+
         return updateStatus;
     }
+
+
 
     public LiveData<Boolean> updateMonthlyTopUp(String currentUserId, CurrentMembershipModel currentMembershipModel) {
         MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
@@ -456,7 +470,23 @@ public class UserViewModel extends ViewModel {
         return updateStatus;
     }
 
+    public LiveData<Boolean> updateUserMembership(String currentUserId, String membershipRate) {
+        MutableLiveData<Boolean> updateStatus = new MutableLiveData<>();
 
+        userRef.child(currentUserId).child("membershipRate").setValue(membershipRate)
+                .addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        updateStatus.setValue(true);
+                    } else {
+                        Exception e = task1.getException();
+                        if (e != null) {
+                            updateStatus.setValue(false);
+                        }
+                    }
+                });
+
+        return updateStatus;
+    }
 
 
 }

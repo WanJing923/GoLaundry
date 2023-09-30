@@ -197,7 +197,7 @@
                         android:layout_below="@id/puf_tv_month"
                         android:layout_marginTop="4dp"
                         android:layout_toEndOf="@id/puf_tv_balance"
-                        android:text="@string/_0"
+                        android:text="@string/_0_00"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -220,14 +220,14 @@
                         android:layout_below="@id/puf_tv_balance"
                         android:layout_marginTop="4dp"
                         android:layout_toEndOf="@id/puf_tv_top_up"
-                        android:text="@string/_0"
+                        android:text="@string/_0_00"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <ProgressBar
                         android:id="@+id/puf_progressBar"
                         style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="250dp"
+                        android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/puf_tv_top_up_amount"
                         android:layout_marginStart="18dp"

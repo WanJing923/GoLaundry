@@ -147,10 +147,10 @@
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginTop="19dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="18dp"
-                        android:src="@drawable/ic_new_order"
-                        android:contentDescription="@string/topup" />
+                        android:contentDescription="@string/topup"
+                        android:src="@drawable/ic_new_order" />
 
                     <TextView
                         android:id="@+id/fhu_tv_balance"
@@ -201,7 +201,7 @@
                     <ProgressBar
                         android:id="@+id/fhu_progressBar"
                         style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="250dp"
+                        android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/fhu_tv_monthly_amount"
                         android:layout_marginStart="18dp"

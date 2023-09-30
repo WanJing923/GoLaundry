@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -46,8 +47,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class HomeUserFragment<membershipRate> extends Fragment {
@@ -73,7 +77,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_user, container, false);
         //toolbar and back button
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fhu_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.fhu_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -93,6 +97,63 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         TextView messageStartTextView = view.findViewById(R.id.fhu_tv_messagestart);
         TextView messageEndTextView = view.findViewById(R.id.fhu_tv_messageend);
         ImageView ProfilePictureImageView = view.findViewById(R.id.fhu_civ_profile_pic);
+
+        //show current month
+        Calendar calendar = Calendar.getInstance();
+        String[] monthName = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        String currentMonth = monthName[calendar.get(Calendar.MONTH)];
+        currentMonthTextView.setText(currentMonth);
+
+        String currentMonthYear = currentMonthYear();
+
+        //show membership and monthly top up data
+        mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
+            if (currentMembership != null) {
+                if (Objects.equals(currentMembership.getMonthYear(), currentMonthYear)){
+                    @SuppressLint("DefaultLocale")
+                    String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
+                    monthlyAmountTextView.setText(monthlyTopUpStr);
+                    monthlyTopUp = currentMembership.getMonthlyTopUp();
+                } else {
+                    CurrentMembershipModel currentMembershipModel = new CurrentMembershipModel(currentMonthYear, 0);
+                    mUserViewModel.updateCurrentMembership(currentUserId, currentMembershipModel).observe(getViewLifecycleOwner(), updateStatus -> {
+                        if (updateStatus) {
+                            //update membership history
+                            mUserViewModel.updateMembershipHistory(currentUserId, currentMonthYear, 0).observe(getViewLifecycleOwner(), updateMembershipHistoryStatus -> {
+                                if (updateMembershipHistoryStatus) {
+
+                                    //update user table current membership rate
+                                    String newMembershipRate = "None";
+
+                                    mUserViewModel.updateUserMembership(currentUserId, newMembershipRate).observe(getViewLifecycleOwner(), updateUserStatus -> {
+                                        if (updateUserStatus) {
+                                            @SuppressLint("DefaultLocale")
+                                            String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
+                                            monthlyAmountTextView.setText(monthlyTopUpStr);
+                                            monthlyTopUp = currentMembership.getMonthlyTopUp();
+
+                                        } else {
+                                            Toast.makeText(getContext(), "Update user membership history failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } else {
+                                    Toast.makeText(getContext(), "Update user membership history failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(getContext(), "Update current membership failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+
+            }
+            else {
+                Toast.makeText(getContext(), "Null current membership", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //get user and membership data
         mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
@@ -124,7 +185,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                             membershipProgressBar.setProgress(progressStartStrFinal);
 
                             //progress bar percentage text view
-                            double progressPercentage = ((double) monthlyTopUp / progressEndStrFinal) * 100;
+                            double progressPercentage = (monthlyTopUp / progressEndStrFinal) * 100;
                             int progressTv = (int) Math.round(progressPercentage);
                             String progressTvStr = String.valueOf(progressTv);
                             progressBarTextView.setText(progressTvStr + "%");
@@ -139,7 +200,6 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                     });
 
                 } else if (user.getMembershipRate().equals("GL05")) { //if membership rate is GL05
-
                     mUserViewModel.getAllMembershipData("GL10").observe(getViewLifecycleOwner(), allMemberships -> {
                         if (allMemberships != null) {
 
@@ -164,9 +224,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 
                         }
                     });
-
                 } else if (user.getMembershipRate().equals("GL10")) {
-
                     mUserViewModel.getAllMembershipData("GL20").observe(getViewLifecycleOwner(), allMemberships -> {
                         if (allMemberships != null) {
 
@@ -191,9 +249,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 
                         }
                     });
-
                 } else if (user.getMembershipRate().equals("GL20")) {
-
                     mUserViewModel.getAllMembershipData("GL30").observe(getViewLifecycleOwner(), allMemberships -> {
                         if (allMemberships != null) {
 
@@ -218,33 +274,26 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 
                         }
                     });
-
                 } else {
-
                     membershipProgressBar.setProgress(100);
                     progressBarTextView.setText("100%");
                     messageStartTextView.setText("You have reach the highest member rate");
                     messageAmountTextView.setVisibility(View.GONE);
                     messageEndTextView.setVisibility(View.GONE);
-
                 }
             }
         });
 
-        //show current month
-        Calendar calendar = Calendar.getInstance();
-        String[] monthName = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        String currentMonth = monthName[calendar.get(Calendar.MONTH)];
-        currentMonthTextView.setText(currentMonth);
+        view.findViewById(R.id.fhu_iv_topup).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), TopUpActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
-        //show membership and monthly top up data
-        mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
-            if (currentMembership != null) {
-                @SuppressLint("DefaultLocale")
-                String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
-                monthlyAmountTextView.setText(monthlyTopUpStr);
-                monthlyTopUp = currentMembership.getMonthlyTopUp();
-            }
+        view.findViewById(R.id.fhu_cv_balance).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MembershipActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
 //        BarChart barChart = view.findViewById(R.id.fhu_spending_chart);
@@ -273,12 +322,6 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 //        barChart.setScaleEnabled(false);
 
         //intent to membership activity, show all memberships
-        view.findViewById(R.id.fhu_cv_balance).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), MembershipActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
 //        lineChart = view.findViewById(R.id.fhu_spending_chart);
 
 //        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -320,6 +363,13 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 
         return view;
     }
+
+    public String currentMonthYear() {
+        Date currentDate = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        return dateFormat.format(currentDate);
+    }
+
 //    private void displayDataInLineChart(ArrayList<String> months, ArrayList<Integer> values) {
 //
 //        // Populate the entries list with values
