@@ -48,6 +48,7 @@ import com.example.golaundry.adapter.UserOrderShowLaundryAdapter;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserGetLocationHolder;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -79,6 +80,7 @@ public class UserOrderFragment extends Fragment {
     int currentDistanceFilter = 0;
     SeekBar ratingsFilterSeekBar, distanceFilterSeekBar;
     String laundryIdLRO;
+    OrderModel latestOrderData;
 
     public UserOrderFragment() {
     }
@@ -124,12 +126,16 @@ public class UserOrderFragment extends Fragment {
         TextView ratingsLROTextView = view.findViewById(R.id.uof_tv_rating);
         RatingBar starLRORatingBar = view.findViewById(R.id.uof_rb_star);
         TextView servicesTextView = view.findViewById(R.id.uof_tv_service);
+        Button repeatOrderButton = view.findViewById(R.id.uof_btn_repeat_order);
 
         mUserViewModel.getLatestOrder(currentUserId).observe(getViewLifecycleOwner(), latestOrder -> {
             if (latestOrder != null) {
+                latestOrderData = latestOrder;
                 lastRecentTextView.setVisibility(View.VISIBLE);
                 recentlyOrderCardView.setVisibility(View.VISIBLE);
                 laundryIdLRO = latestOrder.getLaundryId();
+
+                setDiscoverTv();
 
                 mLaundryViewModel.getLaundryData(laundryIdLRO).observe(getViewLifecycleOwner(), laundryLRO -> {
                     if (laundryLRO != null) {
@@ -158,18 +164,24 @@ public class UserOrderFragment extends Fragment {
             }
         });
 
+        repeatOrderButton.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), OrderLocationActivity.class);
+            intent.putExtra("latestOrderData", latestOrderData);
+            startActivity(intent);
+        });
+
         setDiscoverTv(); //show or not show latest order card
 
-        //get current location or choose another location
-        currentLocationTextView.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), MapsActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_MAP);
-        });
         if (currentArea == null) {
             getCurrentArea();
         } else {
             currentLocationTextView.setText(currentArea);
         }
+        //get current location or choose another location
+        currentLocationTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), MapsActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_MAP);
+        });
         if (!mUserGetLocationHolder.getIsGetCurrentLocation() && mUserGetLocationHolder.getFullAddress() == null) {
             getCurrentArea();
             mUserGetLocationHolder.setIsGetCurrentLocation(true);

@@ -227,7 +227,7 @@
     <string name="rate_order">Rate Order</string>
     <string name="laundry_service">Laundry Service:</string>
     <string name="laundry_service_optional">Laundry Service:(optional)</string>
-    <string name="tell_this_laundy_shop">Tell this laundry shop…</string>
+    <string name="tell_this_laundry_shop">Tell this laundry shop…</string>
     <string name="rider_service">Rider Service:</string>
     <string name="rider_service_optional">Rider Service:(optional)</string>
     <string name="tell_this_rider">Tell this rider…</string>

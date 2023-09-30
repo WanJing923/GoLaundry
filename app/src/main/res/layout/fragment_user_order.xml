@@ -83,7 +83,7 @@
                 android:textColor="@color/normal_green"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/uof_cv_recently_order"
@@ -95,7 +95,7 @@
                 android:layout_marginTop="19dp"
                 android:layout_marginEnd="22dp"
                 android:backgroundTint="@color/primary_green"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp">
 
@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/uof_tv_laundry_name"
                         android:layout_marginStart="18dp"
-                        android:text="@string/_5_0"
+                        android:text="@string/_0"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
@@ -135,7 +135,7 @@
                         android:layout_toEndOf="@id/uof_tv_rating"
                         android:numStars="5"
                         android:progressTint="@color/white"
-                        android:rating="5" />
+                        android:rating="0" />
 
                     <TextView
                         android:id="@+id/uof_tv_service_chosen"
@@ -161,7 +161,7 @@
                         android:textSize="14sp" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/uof_btn_order"
+                        android:id="@+id/uof_btn_repeat_order"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/uof_tv_service_chosen"

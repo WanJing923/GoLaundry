@@ -164,7 +164,7 @@ public class OrderActivity extends AppCompatActivity {
         Button nextButton = findViewById(R.id.order_btn_next);
         nextButton.setOnClickListener(view -> {
             Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
-            if (selectedServices != null ){
+            if (selectedServices != null) {
                 createOrderModel();
                 Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
                 intent.putExtra("orderData", mOrderModel);

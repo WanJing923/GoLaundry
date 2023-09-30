@@ -39,8 +39,13 @@ import java.util.Objects;
 public class OrderLocationActivity extends AppCompatActivity {
 
     UserViewModel mUserViewModel;
-    String currentUserId,name,details,address,selectedDate;
+    String currentUserId,name,details,address,selectedDate,currentMembershipUser;
     OrderModel orderData;
+    String laundryIdLRO,currentStatusLRO,noteToLaundryLRO,noteToRiderLRO,membershipRateLRO;
+    double laundryFeeLRO,deliveryFeeLRO,totalFeeLRO;
+    Map<String, Integer> selectedServicesLRO;
+    Map<String, String> addressInfoLRO;
+    OrderModel latestOrderData;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
@@ -67,6 +72,24 @@ public class OrderLocationActivity extends AppCompatActivity {
         ImageView editAddressImageView = findViewById(R.id.ol_iv_edit);
         EditText dateEditText = findViewById(R.id.order_et_date);
         EditText noteToRiderEditText = findViewById(R.id.order_et_note_rider);
+        TextView noteToLaundryTextView = findViewById(R.id.order_tv_note_laundry);
+        EditText noteToLaundryEditText = findViewById(R.id.order_et_note_laundry);
+
+        Intent intentLRO = getIntent();
+        if (intentLRO.hasExtra("latestOrderData")) {
+            latestOrderData = (OrderModel) intentLRO.getSerializableExtra("latestOrderData");
+            assert latestOrderData != null;
+            laundryIdLRO = latestOrderData.getLaundryId();
+            laundryFeeLRO = latestOrderData.getLaundryFee();
+            membershipRateLRO = latestOrderData.getMembershipDiscount();
+            selectedServicesLRO = latestOrderData.getSelectedServices();
+            addressInfoLRO = latestOrderData.getAddressInfo();
+            currentStatusLRO = latestOrderData.getCurrentStatus();
+            deliveryFeeLRO = latestOrderData.getDeliveryFee();
+            noteToLaundryLRO = latestOrderData.getNoteToLaundry();
+            noteToRiderLRO = latestOrderData.getNoteToRider();
+            totalFeeLRO = latestOrderData.getTotalFee();
+        }
 
         dateEditText.setOnClickListener(view -> {
             Calendar calendar = Calendar.getInstance();
@@ -86,11 +109,10 @@ public class OrderLocationActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        AddressModel selectedAddress = (AddressModel) getIntent().getSerializableExtra("selectedAddresses");
-        if (selectedAddress != null) {
-            name = selectedAddress.getName();
-            details = selectedAddress.getDetails();
-            address = selectedAddress.getAddress();
+        if (addressInfoLRO!=null){
+            name = addressInfoLRO.get("name");
+            details = addressInfoLRO.get("details");
+            address = addressInfoLRO.get("address");
             addressNameTextView.setText(name);
             String userAddress = details + ", " + address;
             addressTextView.setText(userAddress);
@@ -99,45 +121,66 @@ public class OrderLocationActivity extends AppCompatActivity {
                 Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
                 startActivity(intent);
             });
+
+            noteToRiderEditText.setText(noteToRiderLRO);
+            noteToLaundryTextView.setVisibility(View.VISIBLE);
+            noteToLaundryEditText.setVisibility(View.VISIBLE);
+            noteToLaundryEditText.setText(noteToLaundryLRO);
+
         } else {
-            mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
-                if (addresses == null || addresses.isEmpty()) {
-                    addressNameTextView.setText("Add Default Address");
-                    addressTextView.setText("");
-                    editAddressImageView.setImageResource(R.drawable.ic_add_address);
+            AddressModel selectedAddress = (AddressModel) getIntent().getSerializableExtra("selectedAddresses");
+            if (selectedAddress != null) {
+                name = selectedAddress.getName();
+                details = selectedAddress.getDetails();
+                address = selectedAddress.getAddress();
+                addressNameTextView.setText(name);
+                String userAddress = details + ", " + address;
+                addressTextView.setText(userAddress);
 
-                    address = null;
-
-                    editAddressImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
-                        intent.putExtra("orderData", orderData);
-                        intent.putExtra("defaultAddress", true);
-                        startActivity(intent);
-                    });
-                } else {
-                    AddressModel defaultAddress = addresses.stream().filter(AddressModel::isDefaultAddress).findFirst().orElse(null);
-                    if (defaultAddress != null) {
-                        name = defaultAddress.getName();
-                        details = defaultAddress.getDetails();
-                        address = defaultAddress.getAddress();
-                        addressNameTextView.setText(name);
-                        String userAddress = details + ", " + address;
-                        addressTextView.setText(userAddress);
-
-                        editAddressImageView.setOnClickListener(view -> {
-                            Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
-                            intent.putExtra("orderData", orderData);
-                            intent.putExtra("defaultAddress", defaultAddress.isDefaultAddress());
-                            startActivity(intent);
-                        });
-                    } else {
-                        address = null;
+                editAddressImageView.setOnClickListener(view -> {
+                    Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
+                    startActivity(intent);
+                });
+            } else {
+                mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
+                    if (addresses == null || addresses.isEmpty()) {
                         addressNameTextView.setText("Add Default Address");
                         addressTextView.setText("");
                         editAddressImageView.setImageResource(R.drawable.ic_add_address);
+
+                        address = null;
+
+                        editAddressImageView.setOnClickListener(view -> {
+                            Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
+                            intent.putExtra("orderData", orderData);
+                            intent.putExtra("defaultAddress", true);
+                            startActivity(intent);
+                        });
+                    } else {
+                        AddressModel defaultAddress = addresses.stream().filter(AddressModel::isDefaultAddress).findFirst().orElse(null);
+                        if (defaultAddress != null) {
+                            name = defaultAddress.getName();
+                            details = defaultAddress.getDetails();
+                            address = defaultAddress.getAddress();
+                            addressNameTextView.setText(name);
+                            String userAddress = details + ", " + address;
+                            addressTextView.setText(userAddress);
+
+                            editAddressImageView.setOnClickListener(view -> {
+                                Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
+                                intent.putExtra("orderData", orderData);
+                                intent.putExtra("defaultAddress", defaultAddress.isDefaultAddress());
+                                startActivity(intent);
+                            });
+                        } else {
+                            address = null;
+                            addressNameTextView.setText("Add Default Address");
+                            addressTextView.setText("");
+                            editAddressImageView.setImageResource(R.drawable.ic_add_address);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         OrderModel mOrderModel = (OrderModel) getIntent().getSerializableExtra("orderData");
@@ -180,6 +223,52 @@ public class OrderLocationActivity extends AppCompatActivity {
             double total = laundryFee - membershipDiscount + deliveryFee;
             String formattedTotal = decimalFormat.format(total);
             totalAmountTextView.setText(formattedTotal);
+        } else {
+            orderData = latestOrderData;
+            mUserViewModel.getUserData(currentUserId).observe(OrderLocationActivity.this, user -> {
+                if (user != null) {
+                    currentMembershipUser = user.getMembershipRate();
+                    if (currentMembershipUser!=null){
+                        String membershipRate = currentMembershipUser;
+                        double membershipDiscount = 0.0;
+                        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                        if (Objects.equals(membershipRate, "None")) {
+                            membershipRateTextView.setText("No membership rate: -RM");
+                            membershipRateAmountTextView.setText("0.00");
+                        } else if (membershipRate.equals("GL05")) {
+                            membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -5%: -RM");
+                            membershipDiscount = 0.05 * orderData.getLaundryFee();
+                            String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
+                            membershipRateAmountTextView.setText(formattedMembershipDiscount);
+                        } else if (membershipRate.equals("GL10")) {
+                            membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -10%: -RM");
+                            membershipDiscount = 0.1 * orderData.getLaundryFee();
+                            String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
+                            membershipRateAmountTextView.setText(formattedMembershipDiscount);
+                        } else if (membershipRate.equals("GL20")) {
+                            membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -20%: -RM");
+                            membershipDiscount = 0.2 * orderData.getLaundryFee();
+                            String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
+                            membershipRateAmountTextView.setText(formattedMembershipDiscount);
+                        } else { //gl30
+                            membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -30%: -RM");
+                            membershipDiscount = 0.3 * orderData.getLaundryFee();
+                            String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
+                            membershipRateAmountTextView.setText(formattedMembershipDiscount);
+                        }
+                        String formattedLaundryFeeAmount = decimalFormat.format(orderData.getLaundryFee());
+                        laundryFeeAmountTextView.setText(formattedLaundryFeeAmount);
+                        String formattedDeliveryFeeAmount = decimalFormat.format(orderData.getDeliveryFee());
+                        deliveryFeeAmountTextView.setText(formattedDeliveryFeeAmount);
+
+                        double laundryFee = Double.parseDouble(formattedLaundryFeeAmount);
+                        double deliveryFee = Double.parseDouble(formattedDeliveryFeeAmount);
+                        double total = laundryFee - membershipDiscount + deliveryFee;
+                        String formattedTotal = decimalFormat.format(total);
+                        totalAmountTextView.setText(formattedTotal);
+                    }
+                }
+            });
         }
 
         Button placeButton = findViewById(R.id.ola_btn_place_order);
@@ -206,13 +295,21 @@ public class OrderLocationActivity extends AppCompatActivity {
                 orderData.setPickUpDate(selectedDate);
                 orderData.setNoteToRider(noteToRider);
 
+                if (noteToLaundryLRO!=null){
+                    String noteToLaundry = noteToLaundryEditText.getText().toString();
+                    orderData.setNoteToLaundry(noteToLaundry);
+                }
+
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                 String dateTime = sdf.format(new Date());
+                orderData.setDateTime(dateTime);
 
                 OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime,"Order created");
 
                 mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel).observe(OrderLocationActivity.this,orderStatus ->{
                     if (orderStatus){
+                        //add on chart table,
+                        //add on deduct balance
                         Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
