@@ -42,7 +42,7 @@ public class OrderLocationActivity extends AppCompatActivity {
     String currentUserId,name,details,address,selectedDate,currentMembershipUser;
     OrderModel orderData;
     String laundryIdLRO,currentStatusLRO,noteToLaundryLRO,noteToRiderLRO,membershipRateLRO;
-    double laundryFeeLRO,deliveryFeeLRO,totalFeeLRO;
+    double laundryFeeLRO,deliveryFeeLRO,totalFeeLRO,currentBalanceUser;
     Map<String, Integer> selectedServicesLRO;
     Map<String, String> addressInfoLRO;
     OrderModel latestOrderData;
@@ -228,6 +228,7 @@ public class OrderLocationActivity extends AppCompatActivity {
             mUserViewModel.getUserData(currentUserId).observe(OrderLocationActivity.this, user -> {
                 if (user != null) {
                     currentMembershipUser = user.getMembershipRate();
+                    currentBalanceUser = user.getBalance();
                     if (currentMembershipUser!=null){
                         String membershipRate = currentMembershipUser;
                         double membershipDiscount = 0.0;
@@ -306,17 +307,24 @@ public class OrderLocationActivity extends AppCompatActivity {
 
                 OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime,"Order created");
 
-                mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel).observe(OrderLocationActivity.this,orderStatus ->{
-                    if (orderStatus){
-                        //add on chart table,
-                        //add on deduct balance
-                        Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(OrderLocationActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
-                    }
+                //deduct balance checking
+                double newBalance = currentBalanceUser - orderData.getTotalFee();
+                if (newBalance >= 0) {
+                    //enough balance
+                    mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel).observe(OrderLocationActivity.this,orderStatus ->{
+                        if (orderStatus){
+                            //add on chart table,
+                            Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(OrderLocationActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
+                        }
+                        mProgressBar.setVisibility(View.GONE);
+                    });
+                } else {
+                    Toast.makeText(OrderLocationActivity.this, "Insufficient balance! Please reload.", Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.GONE);
-                });
+                }
 
             }
         });
