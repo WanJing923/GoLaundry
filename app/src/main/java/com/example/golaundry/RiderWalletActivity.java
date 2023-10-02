@@ -14,10 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.golaundry.model.CashOutModel;
-import com.example.golaundry.model.CurrentMembershipModel;
-import com.example.golaundry.model.TopUpModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
-import com.example.golaundry.viewModel.UserViewModel;
+import com.example.golaundry.viewModel.RiderViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
@@ -25,36 +23,35 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class WalletActivity extends AppCompatActivity {
+public class RiderWalletActivity extends AppCompatActivity {
 
-    LaundryViewModel mLaundryViewModel;
+    RiderViewModel mRiderViewModel;
     double balance;
-
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wallet);
-        mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        setContentView(R.layout.activity_rider_wallet);
+        mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
 
-        Toolbar toolbar = findViewById(R.id.aw_toolbar);
+        Toolbar toolbar = findViewById(R.id.arw_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon((getResources().getDrawable(R.drawable.ic_toolbar_back)));
 
         String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        TextView balanceAmountTextView = findViewById(R.id.aw_tv_current_balance);
-        EditText cashOutAmountEditText = findViewById(R.id.aw_et_amount);
-        Button doneButton = findViewById(R.id.aw_btn_cash_out);
-        ProgressBar mProgressBar = findViewById(R.id.aw_progressbar);
+        TextView balanceAmountTextView = findViewById(R.id.arw_tv_current_balance);
+        EditText cashOutAmountEditText = findViewById(R.id.arw_et_amount);
+        Button doneButton = findViewById(R.id.arw_btn_cash_out);
+        ProgressBar mProgressBar = findViewById(R.id.arw_progressbar);
 
-        mLaundryViewModel.getLaundryData(currentUserId).observe(WalletActivity.this, laundry -> {
-            if (laundry != null) {
+        mRiderViewModel.getRiderData(currentUserId).observe(RiderWalletActivity.this, rider -> {
+            if (rider != null) {
                 //show user balance
-                balance = laundry.getBalance();
-                @SuppressLint("DefaultLocale") String showBalance = String.format("%.2f", laundry.getBalance());
+                balance = rider.getBalance();
+                @SuppressLint("DefaultLocale") String showBalance = String.format("%.2f", rider.getBalance());
                 balanceAmountTextView.setText("Current balance: RM" + showBalance);
             }
         });
@@ -70,7 +67,7 @@ public class WalletActivity extends AppCompatActivity {
 
                 double newBalance = balance - amount;
                 if (newBalance >= 0) {
-                    mLaundryViewModel.cashOutBalance(currentUserId, mCashOutModel,newBalance).observe(WalletActivity.this, cashOutStatus -> {
+                    mRiderViewModel.cashOutBalanceRider(currentUserId, mCashOutModel,newBalance).observe(RiderWalletActivity.this, cashOutStatus -> {
                         if (cashOutStatus) {
                             mProgressBar.setVisibility(View.GONE);
                             Toast.makeText(this, "Cash out successful", Toast.LENGTH_SHORT).show();
@@ -81,7 +78,7 @@ public class WalletActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Toast.makeText(WalletActivity.this, "Cash out amount cannot larger than current balance!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RiderWalletActivity.this, "Cash out amount cannot larger than current balance!", Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.GONE);
                 }
 
@@ -91,6 +88,16 @@ public class WalletActivity extends AppCompatActivity {
                 cashOutAmountEditText.requestFocus();
             }
         });
+
+
+
+
+
+
+
+
+
+
 
     }
 }

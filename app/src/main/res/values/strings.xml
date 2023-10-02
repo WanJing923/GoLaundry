@@ -333,4 +333,5 @@
     <string name="e_g_meet_me_at_the_lobby">e.g. Meet me at the lobby</string>
     <string name="no_laundry_saved">No laundry saved</string>
     <string name="enter_top_up_amount">Enter top up amount:</string>
+    <string name="enter_cash_out_amount">Enter cash out amount:</string>
 </resources>

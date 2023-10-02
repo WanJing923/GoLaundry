@@ -8,7 +8,7 @@
     tools:context=".WalletActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/aw_toolbar"
+        android:id="@+id/arw_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/aw_tv_go_laundry"
+            android:id="@+id/arw_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -36,7 +36,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/aw_toolbar"
+        android:layout_below="@id/arw_toolbar"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/aw_tv_my_wallet"
+                android:id="@+id/arw_tv_my_wallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -57,10 +57,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/aw_tv_current_balance"
+                android:id="@+id/arw_tv_current_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/aw_tv_my_wallet"
+                android:layout_below="@id/arw_tv_my_wallet"
                 android:layout_centerInParent="true"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="40dp"
@@ -70,10 +70,10 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/aw_tv_top_up_amount"
+                android:id="@+id/arw_tv_top_up_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/aw_tv_current_balance"
+                android:layout_below="@id/arw_tv_current_balance"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="70dp"
                 android:gravity="top"
@@ -82,10 +82,10 @@
                 android:textSize="15sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/aw_constraint_wallet"
+                android:id="@+id/arw_constraint_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/aw_tv_top_up_amount"
+                android:layout_below="@id/arw_tv_top_up_amount"
                 android:layout_marginStart="42dp"
                 android:layout_marginEnd="42dp"
                 android:layout_marginTop="23dp"
@@ -93,7 +93,7 @@
                 android:background="@drawable/custom_login">
 
                 <TextView
-                    android:id="@+id/aw_tv_rm"
+                    android:id="@+id/arw_tv_rm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/rm"
@@ -105,7 +105,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <EditText
-                    android:id="@+id/aw_et_amount"
+                    android:id="@+id/arw_et_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/_0_00"
@@ -114,13 +114,13 @@
                     android:inputType="number"
                     android:layout_marginStart="10dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/aw_tv_rm"
+                    app:layout_constraintStart_toEndOf="@id/arw_tv_rm"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/aw_btn_cash_out"
+                android:id="@+id/arw_btn_cash_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="42dp"
@@ -139,7 +139,7 @@
         </RelativeLayout>
     </ScrollView>
     <ProgressBar
-        android:id="@+id/aw_progressbar"
+        android:id="@+id/arw_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

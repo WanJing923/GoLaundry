@@ -53,7 +53,7 @@ public class ProfileRiderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_rider, container, false);
 
         //toolbar and back button
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.prf_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.prf_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -120,7 +120,7 @@ public class ProfileRiderFragment extends Fragment {
 
         //intent to wallet
         myWalletTextView.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), WalletActivity.class);
+            Intent intent = new Intent(getContext(), RiderWalletActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });

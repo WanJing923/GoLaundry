@@ -11,10 +11,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.CashOutModel;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
+import com.example.golaundry.model.TopUpModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +40,7 @@ public class LaundryViewModel extends ViewModel {
     private final FirebaseAuth mAuth;
     private final DatabaseReference laundryRef;
     private final DatabaseReference shopRef;
-    private final DatabaseReference serviceRef;
+    private final DatabaseReference serviceRef, cashOutRef;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
@@ -46,6 +48,7 @@ public class LaundryViewModel extends ViewModel {
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
         serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
+        cashOutRef = FirebaseDatabase.getInstance().getReference().child("laundryCashOut");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -320,7 +323,6 @@ public class LaundryViewModel extends ViewModel {
         return filteredLaundryData;
     }
 
-
     public LiveData<List<LaundryShopModel>> getAllShopData() {
         MutableLiveData<List<LaundryShopModel>> allShopData = new MutableLiveData<>();
 
@@ -389,7 +391,19 @@ public class LaundryViewModel extends ViewModel {
         return combinedLaundryDataLiveData;
     }
 
+    public MutableLiveData<Boolean> cashOutBalance(String currentUserId, CashOutModel mCashOutModel, double newBalance) {
+        MutableLiveData<Boolean> cashOutStatus = new MutableLiveData<>();
 
+        cashOutRef.child(currentUserId).setValue(mCashOutModel).addOnSuccessListener(aVoid ->
+
+                laundryRef.child(currentUserId).child("balance").setValue(newBalance).addOnSuccessListener(aVoid1 -> {
+                    cashOutStatus.setValue(true);
+                }).addOnFailureListener(e -> cashOutStatus.setValue(false))
+
+        ).addOnFailureListener(e -> cashOutStatus.setValue(false));
+
+        return cashOutStatus;
+    }
 
 }
 
