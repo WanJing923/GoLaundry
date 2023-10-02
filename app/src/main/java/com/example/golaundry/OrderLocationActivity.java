@@ -267,6 +267,7 @@ public class OrderLocationActivity extends AppCompatActivity {
                         double total = laundryFee - membershipDiscount + deliveryFee;
                         String formattedTotal = decimalFormat.format(total);
                         totalAmountTextView.setText(formattedTotal);
+                        orderData.setTotalFee(total);
                     }
                 }
             });
@@ -311,9 +312,8 @@ public class OrderLocationActivity extends AppCompatActivity {
                 double newBalance = currentBalanceUser - orderData.getTotalFee();
                 if (newBalance >= 0) {
                     //enough balance
-                    mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel).observe(OrderLocationActivity.this,orderStatus ->{
+                    mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel,orderData.getTotalFee(),newBalance).observe(OrderLocationActivity.this,orderStatus ->{
                         if (orderStatus){
-                            //add on chart table,
                             Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {

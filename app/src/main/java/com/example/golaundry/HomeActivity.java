@@ -47,12 +47,12 @@ public class HomeActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     String userType = snapshot.child("userType").getValue(String.class);
                     if (Objects.requireNonNull(userType).equals("user")) {
-                        replace(new HomeUserFragment<>());
+                        replace(new HomeUserFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {
                                 case 0:
-                                    replace(new HomeUserFragment<>());
+                                    replace(new HomeUserFragment());
                                     break;
 
                                 case 1:

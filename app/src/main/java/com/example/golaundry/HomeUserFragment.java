@@ -7,9 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,6 +24,7 @@ import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -35,7 +33,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -52,12 +50,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class HomeUserFragment<membershipRate> extends Fragment {
+public class HomeUserFragment extends Fragment {
     private LineChart orderLineChart;
     private BarChart spendingBarChart;
     UserViewModel mUserViewModel;
@@ -352,11 +349,11 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(currentUserId).child(currentYear);
         DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(currentUserId).child(currentYear);
 
-        ArrayList<Integer> spendingValues = new ArrayList<>();
+        ArrayList<Double> spendingValues = new ArrayList<>();
         ArrayList<Integer> orderValues = new ArrayList<>();
 
         for (int i = 0; i < months.size(); i++) {
-            spendingValues.add(0);
+            spendingValues.add(0.0);
             orderValues.add(0);
         }
 
@@ -367,13 +364,14 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                     for (String month : months) {
                         DataSnapshot monthSnapshot = dataSnapshot.child(month);
                         if (monthSnapshot.exists()) {
-                            Integer spendingValue = monthSnapshot.getValue(Integer.class);
-                            spendingValues.set(months.indexOf(month), spendingValue != null ? spendingValue : 0);
+                            Double spendingValue = monthSnapshot.getValue(Double.class);
+                            spendingValues.set(months.indexOf(month), spendingValue != null ? spendingValue : 0.0);
                         }
                     }
                     displaySpendingBarChart(months, spendingValues);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -402,7 +400,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
     private void displayOrderLineChart(ArrayList<String> months, ArrayList<Integer> values) {
         ArrayList<Entry> entries = new ArrayList<>();
         for (int i = 0; i < months.size(); i++) {
-            //the month name to its 1 to 12
+            // the month name to its 1 to 12
             int monthNumber = Arrays.asList(monthName).indexOf(months.get(i)) + 1;
             entries.add(new Entry(monthNumber, values.get(i)));
         }
@@ -412,8 +410,23 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         dataSet.setLineWidth(2f);
         dataSet.setCircleColor(Color.RED);
 
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getPointLabel(Entry entry) {
+                return String.valueOf((int) entry.getY());
+            }
+        });
+
         LineData lineData = new LineData(dataSet);
         orderLineChart.setData(lineData);
+
+        YAxis yAxis = orderLineChart.getAxisLeft();
+        yAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                return String.valueOf((int) value);
+            }
+        });
 
         //months as numbers
         XAxis xAxis = orderLineChart.getXAxis();
@@ -427,11 +440,12 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         orderLineChart.getDescription().setEnabled(false);
     }
 
-    private void displaySpendingBarChart(ArrayList<String> months, ArrayList<Integer> values) {
+    private void displaySpendingBarChart(ArrayList<String> months, ArrayList<Double> values) {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < months.size(); i++) {
             int monthNumber = Arrays.asList(monthName).indexOf(months.get(i)) + 1;
-            barEntries.add(new BarEntry(monthNumber, values.get(i)));
+            float floatValue = values.get(i).floatValue();
+            barEntries.add(new BarEntry(monthNumber, floatValue));
         }
 
         BarDataSet dataSet = new BarDataSet(barEntries, "Total Spending");
@@ -451,7 +465,6 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         spendingBarChart.setTouchEnabled(false);
         spendingBarChart.getDescription().setEnabled(false);
     }
-
 
     public String currentMonthYear() {
         Date currentDate = Calendar.getInstance().getTime();
@@ -477,15 +490,6 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //first clear current all the menu items
-        menu.clear();
-        //add the new menu items
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
 }

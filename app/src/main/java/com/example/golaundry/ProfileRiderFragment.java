@@ -182,24 +182,4 @@ public class ProfileRiderFragment extends Fragment {
         startActivity(intent);
         requireActivity().finish();
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //first clear current all the menu items
-        menu.clear();
-        //add the new menu items
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    //intent to notification
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

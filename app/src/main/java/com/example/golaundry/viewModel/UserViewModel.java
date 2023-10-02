@@ -1,5 +1,6 @@
 package com.example.golaundry.viewModel;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -26,7 +27,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -297,23 +301,66 @@ public class UserViewModel extends ViewModel {
         return addressData;
     }
 
-    public MutableLiveData<Boolean> addOrder(String currentUserId, OrderModel newOrder, OrderStatusModel mOrderStatusModel) {
+    public MutableLiveData<Boolean> addOrder(String currentUserId, OrderModel newOrder, OrderStatusModel mOrderStatusModel, double spending, double newBalance) {
         MutableLiveData<Boolean> orderData = new MutableLiveData<>();
         String orderId = String.valueOf(UUID.randomUUID());
 
-        orderStatusRef.child(orderId).setValue(mOrderStatusModel)
-                .addOnSuccessListener(aVoid ->
-                        orderData.setValue(true))
-                .addOnFailureListener(e ->
-                        orderData.setValue(false)
-                );
+        Calendar calendar = Calendar.getInstance();
+        String[] monthName = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        String currentMonth = monthName[calendar.get(Calendar.MONTH)];
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String currentYear = sdf.format(new Date());
 
-        userOrderRef.child(currentUserId).child(orderId).setValue(newOrder)
-                .addOnSuccessListener(aVoid ->
-                        orderData.setValue(true))
-                .addOnFailureListener(e ->
-                        orderData.setValue(false)
-                );
+        DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(currentUserId).child(currentYear);
+        DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(currentUserId).child(currentYear);
+
+        orderStatusRef.child(orderId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> {
+            userOrderRef.child(currentUserId).child(orderId).setValue(newOrder).addOnSuccessListener(aVoid1 -> {
+                userSpendingRef.child(currentMonth).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Double currentValue = dataSnapshot.getValue(Double.class);
+                            if (currentValue == null) {
+                                currentValue = 0.0;
+                            }
+                            double updatedValue = currentValue + spending;
+                            userSpendingRef.child(currentMonth).setValue(updatedValue).addOnSuccessListener(aVoid -> {
+                                userTotalOrderRef.child(currentMonth).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            Integer currentValue = dataSnapshot.getValue(Integer.class);
+                                            if (currentValue == null) {
+                                                currentValue = 0;
+                                            }
+                                            int updatedValue = currentValue + 1;
+
+                                            userTotalOrderRef.child(currentMonth).setValue(updatedValue).addOnSuccessListener(aVoid -> {
+
+                                                userRef.child(currentUserId).child("balance").setValue(newBalance).addOnSuccessListener(aVoid2 -> {
+                                                            orderData.setValue(true);
+                                                        }).addOnFailureListener(e -> {
+                                                            orderData.setValue(false);
+                                                        });
+
+                                            }).addOnFailureListener(e -> orderData.setValue(false));
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
+                            }).addOnFailureListener(e -> orderData.setValue(false));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }).addOnFailureListener(e -> orderData.setValue(false));
+        }).addOnFailureListener(e -> orderData.setValue(false));
 
         return orderData;
     }
@@ -331,6 +378,7 @@ public class UserViewModel extends ViewModel {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -338,7 +386,6 @@ public class UserViewModel extends ViewModel {
 
         return orderData;
     }
-
 
     public void deleteAddressForUser(String currentUserId, String addressKey) {
         MutableLiveData<Boolean> deleteStatus = new MutableLiveData<>();
@@ -507,6 +554,5 @@ public class UserViewModel extends ViewModel {
 
         return updateStatus;
     }
-
 
 }
