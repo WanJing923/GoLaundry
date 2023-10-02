@@ -36,6 +36,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,19 +50,22 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
 public class HomeUserFragment<membershipRate> extends Fragment {
-    private LineChart lineChart;
+    private LineChart orderLineChart;
+    private BarChart spendingBarChart;
     UserViewModel mUserViewModel;
     double monthlyTopUp;
     double monthlyTopUpAll;
+    String[] monthName;
 
     public HomeUserFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -100,7 +104,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
 
         //show current month
         Calendar calendar = Calendar.getInstance();
-        String[] monthName = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        monthName = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         String currentMonth = monthName[calendar.get(Calendar.MONTH)];
         currentMonthTextView.setText(currentMonth);
 
@@ -109,7 +113,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         //show membership and monthly top up data
         mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
             if (currentMembership != null) {
-                if (Objects.equals(currentMembership.getMonthYear(), currentMonthYear)){
+                if (Objects.equals(currentMembership.getMonthYear(), currentMonthYear)) {
                     @SuppressLint("DefaultLocale")
                     String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
                     monthlyAmountTextView.setText(monthlyTopUpStr);
@@ -149,8 +153,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                 }
 
 
-            }
-            else {
+            } else {
                 Toast.makeText(getContext(), "Null current membership", Toast.LENGTH_SHORT).show();
             }
         });
@@ -168,7 +171,7 @@ public class HomeUserFragment<membershipRate> extends Fragment {
                 //show image
                 String avatarUrl = user.getAvatar();
                 if (!Objects.equals(avatarUrl, "")) {
-                    setAvatar(avatarUrl,ProfilePictureImageView);
+                    setAvatar(avatarUrl, ProfilePictureImageView);
                 }
 
                 //show membership card data
@@ -296,111 +299,165 @@ public class HomeUserFragment<membershipRate> extends Fragment {
             startActivity(intent);
         });
 
-//        BarChart barChart = view.findViewById(R.id.fhu_spending_chart);
-//        ArrayList<BarEntry> barEntries = new ArrayList<>();
-//        barEntries.add(new BarEntry(0f, 44f));
-//        barEntries.add(new BarEntry(1f, 88f));
-//        barEntries.add(new BarEntry(2f, 41f));
-//        barEntries.add(new BarEntry(3f, 85f));
-//        barEntries.add(new BarEntry(4f, 96f));
-//        barEntries.add(new BarEntry(5f, 25f));
-//        barEntries.add(new BarEntry(6f, 10f));
-//        BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
-//        ArrayList<String> theDates = new ArrayList<>();
-//        theDates.add("Mars");
-//        theDates.add("Avril");
-//        theDates.add("Dec");
-//        theDates.add("May");
-//        theDates.add("OCt");
-//        theDates.add("Nov");
-//        theDates.add("Fir");
-//        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(theDates));
-//        BarData theData = new BarData(barDataSet);//----Line of error
-//        barChart.setData(theData);
-//        barChart.setTouchEnabled(false);
-//        barChart.setDragEnabled(false);
-//        barChart.setScaleEnabled(false);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String currentYear = sdf.format(new Date());
 
-        //intent to membership activity, show all memberships
-//        lineChart = view.findViewById(R.id.fhu_spending_chart);
+        orderLineChart = view.findViewById(R.id.fhu_order_chart);
+        spendingBarChart = view.findViewById(R.id.fhu_spending_chart);
+        DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(currentUserId).child(currentYear);
+        DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(currentUserId).child(currentYear);
 
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-//
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    ArrayList<String> months = new ArrayList<>();
-//                    ArrayList<Integer> values = new ArrayList<>();
-//
-//                    // Define your custom order for months
-//                    String[] monthOrder = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-//
-//                    // Iterate through the custom order of months
-//                    for (String monthName : monthOrder) {
-//                        DataSnapshot monthSnapshot = dataSnapshot.child(monthName);
-//                        if (monthSnapshot.exists()) {
-//                            int spendingAmount = monthSnapshot.getValue(Integer.class);
-//
-//                            // Add month names to the months list
-//                            months.add(monthName);
-//
-//                            // Add spending amounts to the values list
-//                            values.add(spendingAmount);
-//                        }
-//                    }
-//
-//                    // Call a method to display the data in a LineChart
-//                    displayDataInLineChart(months, values);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Handle any errors here
-//            }
-//        });
+        ArrayList<String> months = new ArrayList<>(Arrays.asList(monthName));
+        showCharts(currentUserId, currentYear, months);
+
+        userSpendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    // current year node doesn't exist, create it
+                    userSpendingRef.child(currentMonth).setValue(0);
+                } else {
+                    if (!dataSnapshot.hasChild(currentMonth)) {
+                        userSpendingRef.child(currentMonth).setValue(0);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        userTotalOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    // current year node doesn't exist, create it
+                    userTotalOrderRef.child(currentMonth).setValue(0);
+                } else {
+                    if (!dataSnapshot.hasChild(currentMonth)) {
+                        userTotalOrderRef.child(currentMonth).setValue(0);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
         return view;
     }
+
+    private void showCharts(String currentUserId, String currentYear, ArrayList<String> months) {
+        DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(currentUserId).child(currentYear);
+        DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(currentUserId).child(currentYear);
+
+        ArrayList<Integer> spendingValues = new ArrayList<>();
+        ArrayList<Integer> orderValues = new ArrayList<>();
+
+        for (int i = 0; i < months.size(); i++) {
+            spendingValues.add(0);
+            orderValues.add(0);
+        }
+
+        userSpendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (String month : months) {
+                        DataSnapshot monthSnapshot = dataSnapshot.child(month);
+                        if (monthSnapshot.exists()) {
+                            Integer spendingValue = monthSnapshot.getValue(Integer.class);
+                            spendingValues.set(months.indexOf(month), spendingValue != null ? spendingValue : 0);
+                        }
+                    }
+                    displaySpendingBarChart(months, spendingValues);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        userTotalOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (String month : months) {
+                        DataSnapshot monthSnapshot = dataSnapshot.child(month);
+                        if (monthSnapshot.exists()) {
+                            Integer orderValue = monthSnapshot.getValue(Integer.class);
+                            orderValues.set(months.indexOf(month), orderValue != null ? orderValue : 0);
+                        }
+                    }
+                    displayOrderLineChart(months, orderValues);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void displayOrderLineChart(ArrayList<String> months, ArrayList<Integer> values) {
+        ArrayList<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < months.size(); i++) {
+            //the month name to its 1 to 12
+            int monthNumber = Arrays.asList(monthName).indexOf(months.get(i)) + 1;
+            entries.add(new Entry(monthNumber, values.get(i)));
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Total Number of Orders");
+        dataSet.setColor(Color.BLUE);
+        dataSet.setLineWidth(2f);
+        dataSet.setCircleColor(Color.RED);
+
+        LineData lineData = new LineData(dataSet);
+        orderLineChart.setData(lineData);
+
+        //months as numbers
+        XAxis xAxis = orderLineChart.getXAxis();
+        xAxis.setValueFormatter(null);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+
+        //refresh
+        orderLineChart.invalidate();
+        orderLineChart.setTouchEnabled(false);
+        orderLineChart.getDescription().setEnabled(false);
+    }
+
+    private void displaySpendingBarChart(ArrayList<String> months, ArrayList<Integer> values) {
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        for (int i = 0; i < months.size(); i++) {
+            int monthNumber = Arrays.asList(monthName).indexOf(months.get(i)) + 1;
+            barEntries.add(new BarEntry(monthNumber, values.get(i)));
+        }
+
+        BarDataSet dataSet = new BarDataSet(barEntries, "Total Spending");
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        BarData data = new BarData(dataSet);
+        data.setBarWidth(0.9f);
+
+        XAxis xAxis = spendingBarChart.getXAxis();
+        xAxis.setValueFormatter(null);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelCount(months.size());
+
+        spendingBarChart.setData(data);
+        spendingBarChart.setFitBars(true);
+        spendingBarChart.invalidate();
+        spendingBarChart.setTouchEnabled(false);
+        spendingBarChart.getDescription().setEnabled(false);
+    }
+
 
     public String currentMonthYear() {
         Date currentDate = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
         return dateFormat.format(currentDate);
     }
-
-//    private void displayDataInLineChart(ArrayList<String> months, ArrayList<Integer> values) {
-//
-//        // Populate the entries list with values
-//        ArrayList<Entry> entries = new ArrayList<>();
-//        for (int i = 0; i < months.size(); i++) {
-//            entries.add(new Entry(i, values.get(i)));
-//        }
-//
-//        LineDataSet dataSet = new LineDataSet(entries, "");
-//        dataSet.setColor(Color.BLUE);
-//        dataSet.setLineWidth(2f);
-//        dataSet.setCircleColor(Color.RED);
-//
-//        LineData lineData = new LineData(dataSet);
-//        lineChart.setData(lineData);
-//
-//        // Configure X-axis (months)
-//        XAxis xAxis = lineChart.getXAxis();
-//        xAxis.setValueFormatter(new IndexAxisValueFormatter(months));
-//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        xAxis.setGranularity(1f);
-//
-//        // Configure Y-axis (spending amounts)
-//        YAxis yAxisLeft = lineChart.getAxisLeft();
-//        yAxisLeft.setGranularity(1f);
-//
-//        // Refresh the chart
-//        lineChart.invalidate();
-//        lineChart.setTouchEnabled(false);
-//        lineChart.getDescription().setEnabled(false);
-//    }
 
     private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
         //referenceFromUrl to get StorageReference
@@ -430,17 +487,5 @@ public class HomeUserFragment<membershipRate> extends Fragment {
         inflater.inflate(R.menu.menu_top, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
-    //intent to notification
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
 }
