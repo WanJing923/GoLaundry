@@ -167,8 +167,8 @@ public class OrderActivity extends AppCompatActivity {
         note = noteEditText.getText().toString();
 
         Date currentDate = new Date();
-        dayFormat = new SimpleDateFormat("EEEE", new Locale("ms", "MY"));
-        timeFormat = new SimpleDateFormat("HH:mm", new Locale("ms", "MY"));
+        dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+        timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
         String currentDay = dayFormat.format(currentDate);
         String currentTime = timeFormat.format(currentDate);
 
@@ -201,12 +201,7 @@ public class OrderActivity extends AppCompatActivity {
                 }
 
                 if (!"off".equals(mappedDay)) {
-
-                    if (isTimeInRange(currentTime, mappedDay)) {
-                        laundryIsOpening = true;
-                    } else {
-                        laundryIsOpening = false;
-                    }
+                    laundryIsOpening = isTimeInRange(currentTime, mappedDay);
                 } else {
                     laundryIsOpening = false;
                 }

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.adapter.RiderFindOrderAdapter;
@@ -45,12 +46,13 @@ import java.util.Objects;
 
 public class FindOrderFragment extends Fragment {
     private UserGetLocationHolder mUserGetLocationHolder;
-    private RiderFindOrderHolder mRiderFindOrderHolder;
     private String currentUserId, currentArea, fullAddress;
     private static final int REQUEST_CODE_MAP = 8;
-    private TextView currentLocationTextView;
+    private TextView currentLocationTextView,noOrderTextView,notWorkingHourTextView;
     private DatabaseReference userOrderRef;
     private List<RiderFindOrderHolder> orderList;
+    RiderFindOrderAdapter mRiderFindOrderAdapter;
+    RecyclerView findOrderRecyclerView;
 
     public FindOrderFragment() {
         // Required empty public constructor
@@ -65,31 +67,16 @@ public class FindOrderFragment extends Fragment {
         userOrderRef = db.getReference().child("userOrder");
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_find_order, container, false);
         currentLocationTextView = view.findViewById(R.id.ffo_tv_location);
-        RecyclerView findOrderRecyclerView = view.findViewById(R.id.ffo_rv_order);
-        TextView noOrderTextView = view.findViewById(R.id.ffo_tv_no_order);
-        TextView notWorkingHourTextView = view.findViewById(R.id.ffo_tv_not_working_hour);
-
-        orderList = new ArrayList<>();
-        getAllOrderData();
-        if (orderList.size()!=0){
-            //put into adapter
-            RiderFindOrderAdapter mRiderFindOrderAdapter = new RiderFindOrderAdapter(orderList);
-            findOrderRecyclerView.setAdapter(mRiderFindOrderAdapter);
-
-            findOrderRecyclerView.setVisibility(View.VISIBLE);
-            noOrderTextView.setVisibility(View.GONE);
-            notWorkingHourTextView.setVisibility(View.GONE);
-        } else {
-            findOrderRecyclerView.setVisibility(View.GONE);
-            noOrderTextView.setVisibility(View.VISIBLE);
-            notWorkingHourTextView.setVisibility(View.GONE);
-        }
+        findOrderRecyclerView = view.findViewById(R.id.ffo_rv_order);
+        noOrderTextView = view.findViewById(R.id.ffo_tv_no_order);
+        notWorkingHourTextView = view.findViewById(R.id.ffo_tv_not_working_hour);
 
         if (currentArea == null) {
             getCurrentArea();
@@ -109,33 +96,25 @@ public class FindOrderFragment extends Fragment {
             currentArea = mUserGetLocationHolder.getArea();
             currentLocationTextView.setText(currentArea);
         }
-        String newFullAddress = fullAddress;
-//        mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
-
-        return view;
-    }
-
-    private void getAllOrderData() {
-        userOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        orderList = new ArrayList<>();
+        userOrderRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("DefaultLocale")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    orderList.clear();
                     for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
                         OrderModel allOrder = orderSnapshot.getValue(OrderModel.class);
                         if (allOrder != null) {
-
                             String userAddress = allOrder.getAddressInfo().get("address");
                             LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
                             LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
                             double distance = 0;
                             if (riderLatLng != null && userLatLng != null) {
                                 double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
-                                distance = dis/1000;
+                                distance = dis / 1000;
                             }
-                            RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder,distance);
+                            RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder, distance);
                             orderList.add(orderHolder);
                         }
                     }
@@ -149,12 +128,31 @@ public class FindOrderFragment extends Fragment {
                         return 0;
                     });
 
+                    if (orderList.size() != 0) {
+                        //put into adapter
+                        mRiderFindOrderAdapter = new RiderFindOrderAdapter(orderList,getContext());
+                        findOrderRecyclerView.setAdapter(mRiderFindOrderAdapter);
+                        findOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        mRiderFindOrderAdapter.notifyDataSetChanged();
+
+                        findOrderRecyclerView.setVisibility(View.VISIBLE);
+                        noOrderTextView.setVisibility(View.GONE);
+                        notWorkingHourTextView.setVisibility(View.GONE);
+                    } else {
+                        findOrderRecyclerView.setVisibility(View.GONE);
+                        noOrderTextView.setVisibility(View.VISIBLE);
+                        notWorkingHourTextView.setVisibility(View.GONE);
+                    }
+
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+
+        return view;
     }
 
     public LatLng getLocationFromAddress1(Context context, String theAddress) {
@@ -239,13 +237,67 @@ public class FindOrderFragment extends Fragment {
                 if (!Objects.equals(currentArea, newArea)) {
                     currentArea = newArea;
                     currentLocationTextView.setText(currentArea);
-//                    if (mUserOrderShowLaundryAdapter != null) {
-//                        mUserOrderShowLaundryAdapter.updateFullAddress(fullAddress);
-//                    }
                     mUserGetLocationHolder.setFullAddress(fullAddress);
                     mUserGetLocationHolder.setArea(currentArea);
+                    updateOrderList();
                 }
             }
         }
+    }
+
+    private void updateOrderList() {
+        orderList.clear();
+        userOrderRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel allOrder = orderSnapshot.getValue(OrderModel.class);
+                        if (allOrder != null) {
+                            String userAddress = allOrder.getAddressInfo().get("address");
+                            LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
+                            LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
+                            double distance = 0;
+                            if (riderLatLng != null && userLatLng != null) {
+                                double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
+                                distance = dis / 1000;
+                            }
+                            RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder, distance);
+                            orderList.add(orderHolder);
+                        }
+                    }
+
+                    orderList.sort((order1, order2) -> {
+                        if (order1.getDistance() < order2.getDistance()) {
+                            return -1;
+                        } else if (order1.getDistance() > order2.getDistance()) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+
+                    if (orderList.size() != 0) {
+                        if (mRiderFindOrderAdapter == null) {
+                            mRiderFindOrderAdapter = new RiderFindOrderAdapter(orderList, getContext());
+                            findOrderRecyclerView.setAdapter(mRiderFindOrderAdapter);
+                        }
+                        mRiderFindOrderAdapter.notifyDataSetChanged();
+
+                        findOrderRecyclerView.setVisibility(View.VISIBLE);
+                        noOrderTextView.setVisibility(View.GONE);
+                        notWorkingHourTextView.setVisibility(View.GONE);
+                    } else {
+                        findOrderRecyclerView.setVisibility(View.GONE);
+                        noOrderTextView.setVisibility(View.VISIBLE);
+                        notWorkingHourTextView.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }
