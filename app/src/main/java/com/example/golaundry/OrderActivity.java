@@ -41,9 +41,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -271,7 +268,7 @@ public class OrderActivity extends AppCompatActivity {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "");
+        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance);
     }
 
     @SuppressLint("NotifyDataSetChanged")

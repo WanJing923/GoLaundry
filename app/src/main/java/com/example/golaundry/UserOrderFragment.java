@@ -351,6 +351,9 @@ public class UserOrderFragment extends Fragment {
                         fullAddress = address.getAddressLine(0);
                         currentArea = address.getLocality();
                         currentLocationTextView.setText(currentArea);
+                        mUserGetLocationHolder.setArea(currentArea);
+                        mUserGetLocationHolder.setIsGetCurrentLocation(true);
+                        mUserGetLocationHolder.setFullAddress(fullAddress);
                     }
                 }
             } catch (IOException e) {

@@ -19,11 +19,12 @@ public class OrderModel implements Serializable {
     private double totalFee;
     private String pickUpDate;
     private String noteToRider;
+    private double distanceBetweenUserLaundry;
 
     public OrderModel() {
     }
 
-    public OrderModel(String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider) {
+    public OrderModel(String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider, double distanceBetweenUserLaundry) {
         this.laundryId = laundryId;
         this.userId = userId;
         this.selectedServices = selectedServices;
@@ -38,6 +39,15 @@ public class OrderModel implements Serializable {
         this.totalFee = totalFee;
         this.pickUpDate = pickUpDate;
         this.noteToRider = noteToRider;
+        this.distanceBetweenUserLaundry = distanceBetweenUserLaundry;
+    }
+
+    public double getDistanceBetweenUserLaundry() {
+        return distanceBetweenUserLaundry;
+    }
+
+    public void setDistanceBetweenUserLaundry(double distanceBetweenUserLaundry) {
+        this.distanceBetweenUserLaundry = distanceBetweenUserLaundry;
     }
 
     public String getLaundryId() {

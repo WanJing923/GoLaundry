@@ -2,6 +2,7 @@ package com.example.golaundry.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,11 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.golaundry.OrderActivity;
+import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
+import com.example.golaundry.RiderViewOrderActivity;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.RiderFindOrderHolder;
 import com.example.golaundry.viewModel.LaundryViewModel;
 
@@ -41,6 +46,11 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RiderFindOrderHolder order = orderList.get(position);
 
+        double distance = order.getDistance();
+        @SuppressLint("DefaultLocale")
+        String distanceShow = String.format("%.2f", distance);
+        holder.distanceTextView.setText(distanceShow);
+
         String fromAddress = order.getOrderData().getAddressInfo().get("address");
         holder.fromAddressTextView.setText(fromAddress);
 
@@ -60,11 +70,12 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
         String earnAmount = String.format("%.2f", earnings);
         holder.earnAmountTextView.setText(earnAmount);
 
-        holder.viewOrderTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        holder.viewOrderTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, RiderViewOrderActivity.class);
+            OrderModel mOrderModel = order.getOrderData();
+            intent.putExtra("RiderViewOrderData", mOrderModel);
+            intent.putExtra("distance", distance);
+            context.startActivity(intent);
         });
 
     }
@@ -75,7 +86,7 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView fromAddressTextView, laundryNameTextView, toAddressTextView, earnAmountTextView, viewOrderTextView;
+        TextView fromAddressTextView, laundryNameTextView, toAddressTextView, earnAmountTextView, viewOrderTextView,distanceTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -84,6 +95,7 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
             toAddressTextView = itemView.findViewById(R.id.rfo_tv_address_to);
             earnAmountTextView = itemView.findViewById(R.id.rfo_tv_money);
             viewOrderTextView = itemView.findViewById(R.id.rfo_tv_view_order);
+            distanceTextView = itemView.findViewById(R.id.rfo_tv_distance_number);
         }
     }
 }

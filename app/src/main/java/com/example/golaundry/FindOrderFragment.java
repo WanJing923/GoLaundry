@@ -39,7 +39,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -48,7 +51,7 @@ public class FindOrderFragment extends Fragment {
     private UserGetLocationHolder mUserGetLocationHolder;
     private String currentUserId, currentArea, fullAddress;
     private static final int REQUEST_CODE_MAP = 8;
-    private TextView currentLocationTextView,noOrderTextView,notWorkingHourTextView;
+    private TextView currentLocationTextView, noOrderTextView, notWorkingHourTextView;
     private DatabaseReference userOrderRef;
     private List<RiderFindOrderHolder> orderList;
     RiderFindOrderAdapter mRiderFindOrderAdapter;
@@ -79,7 +82,11 @@ public class FindOrderFragment extends Fragment {
         notWorkingHourTextView = view.findViewById(R.id.ffo_tv_not_working_hour);
 
         if (currentArea == null) {
-            getCurrentArea();
+            if (mUserGetLocationHolder.getIsGetCurrentLocation()){
+                currentArea = mUserGetLocationHolder.getArea();
+            } else {
+                getCurrentArea();
+            }
         } else {
             currentLocationTextView.setText(currentArea);
         }
@@ -97,60 +104,82 @@ public class FindOrderFragment extends Fragment {
             currentLocationTextView.setText(currentArea);
         }
 
-        orderList = new ArrayList<>();
-        userOrderRef.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
-                        OrderModel allOrder = orderSnapshot.getValue(OrderModel.class);
-                        if (allOrder != null) {
-                            String userAddress = allOrder.getAddressInfo().get("address");
-                            LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
-                            LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
-                            double distance = 0;
-                            if (riderLatLng != null && userLatLng != null) {
-                                double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
-                                distance = dis / 1000;
+        int workingHoursStart = 9;
+        int workingHoursEnd = 17;
+        int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+        if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
+            //get and show order list
+            orderList = new ArrayList<>();
+            userOrderRef.addValueEventListener(new ValueEventListener() {
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/d/yyyy", Locale.getDefault());
+                        String todayDate = dateFormat.format(new Date());
+
+                        for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                            OrderModel allOrder = orderSnapshot.getValue(OrderModel.class);
+                            if (allOrder != null) {
+                                String pickUpDate = allOrder.getPickUpDate();
+
+                                if (pickUpDate != null && pickUpDate.equals(todayDate)) {
+                                    String orderStatus = allOrder.getCurrentStatus();
+                                    if ("Order created".equals(orderStatus)) {
+                                        String userAddress = allOrder.getAddressInfo().get("address");
+                                        LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
+                                        LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
+                                        double distance = 0;
+                                        if (riderLatLng != null && userLatLng != null) {
+                                            double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
+                                            distance = dis / 1000;
+                                        }
+                                        RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder, distance);
+                                        orderList.add(orderHolder);
+                                    }
+                                }
                             }
-                            RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder, distance);
-                            orderList.add(orderHolder);
                         }
-                    }
 
-                    orderList.sort((order1, order2) -> {
-                        if (order1.getDistance() < order2.getDistance()) {
-                            return -1;
-                        } else if (order1.getDistance() > order2.getDistance()) {
-                            return 1;
+                        orderList.sort((order1, order2) -> {
+                            if (order1.getDistance() < order2.getDistance()) {
+                                return -1;
+                            } else if (order1.getDistance() > order2.getDistance()) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+
+                        if (orderList.size() != 0) {
+                            //put into adapter
+                            mRiderFindOrderAdapter = new RiderFindOrderAdapter(orderList, getContext());
+                            findOrderRecyclerView.setAdapter(mRiderFindOrderAdapter);
+                            findOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            mRiderFindOrderAdapter.notifyDataSetChanged();
+
+                            findOrderRecyclerView.setVisibility(View.VISIBLE);
+                            noOrderTextView.setVisibility(View.GONE);
+                            notWorkingHourTextView.setVisibility(View.GONE);
+                        } else {
+                            findOrderRecyclerView.setVisibility(View.GONE);
+                            noOrderTextView.setVisibility(View.VISIBLE);
+                            notWorkingHourTextView.setVisibility(View.GONE);
                         }
-                        return 0;
-                    });
 
-                    if (orderList.size() != 0) {
-                        //put into adapter
-                        mRiderFindOrderAdapter = new RiderFindOrderAdapter(orderList,getContext());
-                        findOrderRecyclerView.setAdapter(mRiderFindOrderAdapter);
-                        findOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        mRiderFindOrderAdapter.notifyDataSetChanged();
-
-                        findOrderRecyclerView.setVisibility(View.VISIBLE);
-                        noOrderTextView.setVisibility(View.GONE);
-                        notWorkingHourTextView.setVisibility(View.GONE);
-                    } else {
-                        findOrderRecyclerView.setVisibility(View.GONE);
-                        noOrderTextView.setVisibility(View.VISIBLE);
-                        notWorkingHourTextView.setVisibility(View.GONE);
                     }
-
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        } else {
+            notWorkingHourTextView.setVisibility(View.VISIBLE);
+            noOrderTextView.setVisibility(View.GONE);
+            findOrderRecyclerView.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -204,6 +233,9 @@ public class FindOrderFragment extends Fragment {
                         fullAddress = address.getAddressLine(0);
                         currentArea = address.getLocality();
                         currentLocationTextView.setText(currentArea);
+                        mUserGetLocationHolder.setArea(currentArea);
+                        mUserGetLocationHolder.setIsGetCurrentLocation(true);
+                        mUserGetLocationHolder.setFullAddress(fullAddress);
                     }
                 }
             } catch (IOException e) {
@@ -246,58 +278,80 @@ public class FindOrderFragment extends Fragment {
     }
 
     private void updateOrderList() {
-        orderList.clear();
-        userOrderRef.addValueEventListener(new ValueEventListener() {
-            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
-                        OrderModel allOrder = orderSnapshot.getValue(OrderModel.class);
-                        if (allOrder != null) {
-                            String userAddress = allOrder.getAddressInfo().get("address");
-                            LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
-                            LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
-                            double distance = 0;
-                            if (riderLatLng != null && userLatLng != null) {
-                                double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
-                                distance = dis / 1000;
+        int workingHoursStart = 9;
+        int workingHoursEnd = 17;
+        int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
+            orderList.clear();
+            userOrderRef.addValueEventListener(new ValueEventListener() {
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/d/yyyy", Locale.getDefault());
+                        String todayDate = dateFormat.format(new Date());
+
+                        for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                            OrderModel allOrder = orderSnapshot.getValue(OrderModel.class);
+                            if (allOrder != null) {
+                                String pickUpDate = allOrder.getPickUpDate();
+
+                                if (pickUpDate != null && pickUpDate.equals(todayDate)) {
+                                    String orderStatus = allOrder.getCurrentStatus();
+                                    if ("Order created".equals(orderStatus)) {
+                                        String userAddress = allOrder.getAddressInfo().get("address");
+                                        LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
+                                        LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
+                                        double distance = 0;
+                                        if (riderLatLng != null && userLatLng != null) {
+                                            double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
+                                            distance = dis / 1000;
+                                        }
+                                        RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder, distance);
+                                        orderList.add(orderHolder);
+                                    }
+                                }
                             }
-                            RiderFindOrderHolder orderHolder = new RiderFindOrderHolder(allOrder, distance);
-                            orderList.add(orderHolder);
                         }
-                    }
 
-                    orderList.sort((order1, order2) -> {
-                        if (order1.getDistance() < order2.getDistance()) {
-                            return -1;
-                        } else if (order1.getDistance() > order2.getDistance()) {
-                            return 1;
-                        }
-                        return 0;
-                    });
+                        orderList.sort((order1, order2) -> {
+                            if (order1.getDistance() < order2.getDistance()) {
+                                return -1;
+                            } else if (order1.getDistance() > order2.getDistance()) {
+                                return 1;
+                            }
+                            return 0;
+                        });
 
-                    if (orderList.size() != 0) {
-                        if (mRiderFindOrderAdapter == null) {
+                        if (orderList.size() != 0) {
+                            //put into adapter
                             mRiderFindOrderAdapter = new RiderFindOrderAdapter(orderList, getContext());
                             findOrderRecyclerView.setAdapter(mRiderFindOrderAdapter);
-                        }
-                        mRiderFindOrderAdapter.notifyDataSetChanged();
+                            findOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            mRiderFindOrderAdapter.notifyDataSetChanged();
 
-                        findOrderRecyclerView.setVisibility(View.VISIBLE);
-                        noOrderTextView.setVisibility(View.GONE);
-                        notWorkingHourTextView.setVisibility(View.GONE);
-                    } else {
-                        findOrderRecyclerView.setVisibility(View.GONE);
-                        noOrderTextView.setVisibility(View.VISIBLE);
-                        notWorkingHourTextView.setVisibility(View.GONE);
+                            findOrderRecyclerView.setVisibility(View.VISIBLE);
+                            noOrderTextView.setVisibility(View.GONE);
+                            notWorkingHourTextView.setVisibility(View.GONE);
+                        } else {
+                            findOrderRecyclerView.setVisibility(View.GONE);
+                            noOrderTextView.setVisibility(View.VISIBLE);
+                            notWorkingHourTextView.setVisibility(View.GONE);
+                        }
+
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        } else {
+            notWorkingHourTextView.setVisibility(View.VISIBLE);
+            noOrderTextView.setVisibility(View.GONE);
+            findOrderRecyclerView.setVisibility(View.GONE);
+        }
+
     }
 }
