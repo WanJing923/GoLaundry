@@ -75,7 +75,7 @@ public class UserOrderFragment extends Fragment {
     TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView,lastRecentTextView;
     CardView recentlyOrderCardView, filterCardView;
     boolean recentlyOrderVisible;
-    private static final int REQUEST_CODE_MAP = 7;
+    static final int REQUEST_CODE_MAP = 7;
     int currentRatingsFilter = 0;
     int currentDistanceFilter = 0;
     SeekBar ratingsFilterSeekBar, distanceFilterSeekBar;
@@ -211,6 +211,7 @@ public class UserOrderFragment extends Fragment {
                         });
                     }
                 }));
+
         String newFullAddress = fullAddress;
         mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
@@ -234,9 +235,7 @@ public class UserOrderFragment extends Fragment {
         //filter laundry shop
         filterTextView.setOnClickListener(v -> filterCardView.setVisibility(View.VISIBLE));
         setupSeekBarListeners();
-        filterDoneButton.setOnClickListener(v ->
-                applyFilters(currentRatingsFilter, currentDistanceFilter)
-        );
+        filterDoneButton.setOnClickListener(v -> applyFilters(currentRatingsFilter, currentDistanceFilter));
 
         return view;
     }
@@ -412,22 +411,5 @@ public class UserOrderFragment extends Fragment {
 
         discoverTextView.setLayoutParams(params1);
         discoverTextView.setLayoutParams(params2);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -67,7 +67,7 @@ public class RiderWalletActivity extends AppCompatActivity {
 
                 double newBalance = balance - amount;
                 if (newBalance >= 0) {
-                    mRiderViewModel.cashOutBalanceRider(currentUserId, mCashOutModel,newBalance).observe(RiderWalletActivity.this, cashOutStatus -> {
+                    mRiderViewModel.cashOutBalanceRider(currentUserId, mCashOutModel, newBalance).observe(RiderWalletActivity.this, cashOutStatus -> {
                         if (cashOutStatus) {
                             mProgressBar.setVisibility(View.GONE);
                             Toast.makeText(this, "Cash out successful", Toast.LENGTH_SHORT).show();
@@ -88,15 +88,6 @@ public class RiderWalletActivity extends AppCompatActivity {
                 cashOutAmountEditText.requestFocus();
             }
         });
-
-
-
-
-
-
-
-
-
 
 
     }

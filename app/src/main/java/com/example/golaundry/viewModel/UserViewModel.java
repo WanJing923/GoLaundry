@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -30,6 +31,7 @@ import com.google.firebase.storage.UploadTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -315,7 +317,7 @@ public class UserViewModel extends ViewModel {
         DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(currentUserId).child(currentYear);
 
         orderStatusRef.child(orderId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> {
-            userOrderRef.child(currentUserId).child(orderId).setValue(newOrder).addOnSuccessListener(aVoid1 -> {
+            userOrderRef.child(orderId).setValue(newOrder).addOnSuccessListener(aVoid1 -> {
                 userSpendingRef.child(currentMonth).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -366,15 +368,26 @@ public class UserViewModel extends ViewModel {
     }
 
     public MutableLiveData<OrderModel> getLatestOrder(String currentUserId) {
-        MutableLiveData<OrderModel> orderData = new MutableLiveData<>();// get the latest order only
-        userOrderRef.child(currentUserId).orderByChild("dateTime").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        MutableLiveData<OrderModel> orderData = new MutableLiveData<>();
+
+        Query query = userOrderRef.orderByChild("userId").equalTo(currentUserId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    List<OrderModel> orders = new ArrayList<>();
+
                     for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
-                        OrderModel latestOrder = orderSnapshot.getValue(OrderModel.class);
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            orders.add(order);
+                        }
+                    }
+                    orders.sort((order1, order2) -> order2.getDateTime().compareTo(order1.getDateTime()));
+
+                    if (!orders.isEmpty()) {
+                        OrderModel latestOrder = orders.get(0);
                         orderData.setValue(latestOrder);
-                        break;
                     }
                 }
             }
@@ -386,6 +399,7 @@ public class UserViewModel extends ViewModel {
 
         return orderData;
     }
+
 
     public void deleteAddressForUser(String currentUserId, String addressKey) {
         MutableLiveData<Boolean> deleteStatus = new MutableLiveData<>();

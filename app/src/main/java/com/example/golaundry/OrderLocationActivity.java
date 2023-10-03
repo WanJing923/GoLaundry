@@ -23,6 +23,7 @@ import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.UserAddressModel;
+import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -39,26 +41,28 @@ import java.util.Objects;
 public class OrderLocationActivity extends AppCompatActivity {
 
     UserViewModel mUserViewModel;
-    String currentUserId,name,details,address,selectedDate,currentMembershipUser;
+    String currentUserId, name, details, address, selectedDate, currentMembershipUser;
     OrderModel orderData;
-    String laundryIdLRO,currentStatusLRO,noteToLaundryLRO,noteToRiderLRO,membershipRateLRO;
-    double laundryFeeLRO,deliveryFeeLRO,totalFeeLRO,currentBalanceUser;
+    String laundryIdLRO, currentStatusLRO, noteToLaundryLRO, noteToRiderLRO, membershipRateLRO;
+    double laundryFeeLRO, deliveryFeeLRO, totalFeeLRO, currentBalanceUser;
     Map<String, Integer> selectedServicesLRO;
     Map<String, String> addressInfoLRO;
     OrderModel latestOrderData;
+    LaundryViewModel mLaundryViewModel;
+    SimpleDateFormat dayFormat,timeFormat;
+    boolean laundryIsOpening = false;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_location);
-
+        mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
         Toolbar toolbar = findViewById(R.id.ola_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
-
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
@@ -75,8 +79,16 @@ public class OrderLocationActivity extends AppCompatActivity {
         TextView noteToLaundryTextView = findViewById(R.id.order_tv_note_laundry);
         EditText noteToLaundryEditText = findViewById(R.id.order_et_note_laundry);
 
+        mUserViewModel.getUserData(currentUserId).observe(OrderLocationActivity.this, user -> {
+            if (user != null) {
+                currentMembershipUser = user.getMembershipRate();
+                currentBalanceUser = user.getBalance();
+            }
+        });
+
         Intent intentLRO = getIntent();
         if (intentLRO.hasExtra("latestOrderData")) {
+
             latestOrderData = (OrderModel) intentLRO.getSerializableExtra("latestOrderData");
             assert latestOrderData != null;
             laundryIdLRO = latestOrderData.getLaundryId();
@@ -89,6 +101,56 @@ public class OrderLocationActivity extends AppCompatActivity {
             noteToLaundryLRO = latestOrderData.getNoteToLaundry();
             noteToRiderLRO = latestOrderData.getNoteToRider();
             totalFeeLRO = latestOrderData.getTotalFee();
+
+            Date currentDate = new Date();
+            dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+            timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            String currentDay = dayFormat.format(currentDate);
+            String currentTime = timeFormat.format(currentDate);
+
+            mLaundryViewModel.getShopData(laundryIdLRO).observe(this, shop -> {
+                if (shop != null) {
+                    List<String> allTimeRanges = shop.getAllTimeRanges();
+                    String mappedDay = "";
+                    switch (currentDay) {
+                        case "Monday":
+                            mappedDay = allTimeRanges.get(0);
+                            break;
+                        case "Tuesday":
+                            mappedDay = allTimeRanges.get(1);
+                            break;
+                        case "Wednesday":
+                            mappedDay = allTimeRanges.get(2);
+                            break;
+                        case "Thursday":
+                            mappedDay = allTimeRanges.get(3);
+                            break;
+                        case "Friday":
+                            mappedDay = allTimeRanges.get(4);
+                            break;
+                        case "Saturday":
+                            mappedDay = allTimeRanges.get(5);
+                            break;
+                        case "Sunday":
+                            mappedDay = allTimeRanges.get(6);
+                            break;
+                    }
+
+                    if (!"off".equals(mappedDay)) {
+                        if (isTimeInRange(currentTime, mappedDay)) {
+                            laundryIsOpening = true;
+                        } else {
+                            laundryIsOpening = false;
+                            finish();
+                            Toast.makeText(OrderLocationActivity.this, "Laundry shop is currently closed", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        laundryIsOpening = false;
+                        finish();
+                        Toast.makeText(OrderLocationActivity.this, "Laundry shop is currently closed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
         dateEditText.setOnClickListener(view -> {
@@ -109,7 +171,7 @@ public class OrderLocationActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-        if (addressInfoLRO!=null){
+        if (addressInfoLRO != null) {
             name = addressInfoLRO.get("name");
             details = addressInfoLRO.get("details");
             address = addressInfoLRO.get("address");
@@ -183,10 +245,9 @@ public class OrderLocationActivity extends AppCompatActivity {
             }
         }
 
-        OrderModel mOrderModel = (OrderModel) getIntent().getSerializableExtra("orderData");
-        orderData = mOrderModel;
-        if (mOrderModel != null) {
-            String membershipRate = mOrderModel.getMembershipDiscount();
+        orderData = (OrderModel) getIntent().getSerializableExtra("orderData");
+        if (orderData != null) {
+            String membershipRate = orderData.getMembershipDiscount();
             double membershipDiscount = 0.0;
             DecimalFormat decimalFormat = new DecimalFormat("#0.00");
             if (Objects.equals(membershipRate, "None")) {
@@ -194,28 +255,28 @@ public class OrderLocationActivity extends AppCompatActivity {
                 membershipRateAmountTextView.setText("0.00");
             } else if (membershipRate.equals("GL05")) {
                 membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -5%: -RM");
-                membershipDiscount = 0.05 * mOrderModel.getLaundryFee();
+                membershipDiscount = 0.05 * orderData.getLaundryFee();
                 String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
                 membershipRateAmountTextView.setText(formattedMembershipDiscount);
             } else if (membershipRate.equals("GL10")) {
                 membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -10%: -RM");
-                membershipDiscount = 0.1 * mOrderModel.getLaundryFee();
+                membershipDiscount = 0.1 * orderData.getLaundryFee();
                 String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
                 membershipRateAmountTextView.setText(formattedMembershipDiscount);
             } else if (membershipRate.equals("GL20")) {
                 membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -20%: -RM");
-                membershipDiscount = 0.2 * mOrderModel.getLaundryFee();
+                membershipDiscount = 0.2 * orderData.getLaundryFee();
                 String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
                 membershipRateAmountTextView.setText(formattedMembershipDiscount);
             } else { //gl30
                 membershipRateTextView.setText("Membership Rate(" + membershipRate + "): -30%: -RM");
-                membershipDiscount = 0.3 * mOrderModel.getLaundryFee();
+                membershipDiscount = 0.3 * orderData.getLaundryFee();
                 String formattedMembershipDiscount = decimalFormat.format(membershipDiscount);
                 membershipRateAmountTextView.setText(formattedMembershipDiscount);
             }
-            String formattedLaundryFeeAmount = decimalFormat.format(mOrderModel.getLaundryFee());
+            String formattedLaundryFeeAmount = decimalFormat.format(orderData.getLaundryFee());
             laundryFeeAmountTextView.setText(formattedLaundryFeeAmount);
-            String formattedDeliveryFeeAmount = decimalFormat.format(mOrderModel.getDeliveryFee());
+            String formattedDeliveryFeeAmount = decimalFormat.format(orderData.getDeliveryFee());
             deliveryFeeAmountTextView.setText(formattedDeliveryFeeAmount);
 
             double laundryFee = Double.parseDouble(formattedLaundryFeeAmount);
@@ -223,13 +284,14 @@ public class OrderLocationActivity extends AppCompatActivity {
             double total = laundryFee - membershipDiscount + deliveryFee;
             String formattedTotal = decimalFormat.format(total);
             totalAmountTextView.setText(formattedTotal);
+            orderData.setTotalFee(total);
         } else {
             orderData = latestOrderData;
             mUserViewModel.getUserData(currentUserId).observe(OrderLocationActivity.this, user -> {
                 if (user != null) {
                     currentMembershipUser = user.getMembershipRate();
                     currentBalanceUser = user.getBalance();
-                    if (currentMembershipUser!=null){
+                    if (currentMembershipUser != null) {
                         String membershipRate = currentMembershipUser;
                         double membershipDiscount = 0.0;
                         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
@@ -280,11 +342,11 @@ public class OrderLocationActivity extends AppCompatActivity {
             ProgressBar mProgressBar = findViewById(R.id.ola_progressbar);
             mProgressBar.setVisibility(View.VISIBLE);
 
-            if (selectedDate==null){
+            if (selectedDate == null) {
                 mProgressBar.setVisibility(View.GONE);
                 dateEditText.setError("Pick up date is required!");
                 dateEditText.requestFocus();
-            } else if (address==null){
+            } else if (address == null) {
                 mProgressBar.setVisibility(View.GONE);
                 Toast.makeText(OrderLocationActivity.this, "Address info is required!", Toast.LENGTH_SHORT).show();
             } else {
@@ -297,7 +359,7 @@ public class OrderLocationActivity extends AppCompatActivity {
                 orderData.setPickUpDate(selectedDate);
                 orderData.setNoteToRider(noteToRider);
 
-                if (noteToLaundryLRO!=null){
+                if (noteToLaundryLRO != null) {
                     String noteToLaundry = noteToLaundryEditText.getText().toString();
                     orderData.setNoteToLaundry(noteToLaundry);
                 }
@@ -306,14 +368,14 @@ public class OrderLocationActivity extends AppCompatActivity {
                 String dateTime = sdf.format(new Date());
                 orderData.setDateTime(dateTime);
 
-                OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime,"Order created");
+                OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order created");
 
                 //deduct balance checking
                 double newBalance = currentBalanceUser - orderData.getTotalFee();
                 if (newBalance >= 0) {
                     //enough balance
-                    mUserViewModel.addOrder(currentUserId,orderData,mOrderStatusModel,orderData.getTotalFee(),newBalance).observe(OrderLocationActivity.this,orderStatus ->{
-                        if (orderStatus){
+                    mUserViewModel.addOrder(currentUserId, orderData, mOrderStatusModel, orderData.getTotalFee(), newBalance).observe(OrderLocationActivity.this, orderStatus -> {
+                        if (orderStatus) {
                             Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
@@ -329,6 +391,24 @@ public class OrderLocationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean isTimeInRange(String currentTime, String timeRange) {
+        try {
+            String[] parts = timeRange.split(" - ");
+            String startTime = parts[0];
+            String endTime = parts[1];
+
+            Date currentTimeDate = timeFormat.parse(currentTime);
+            Date startTimeDate = timeFormat.parse(startTime);
+            Date endTimeDate = timeFormat.parse(endTime);
+
+            assert currentTimeDate != null;
+            return currentTimeDate.after(startTimeDate) && currentTimeDate.before(endTimeDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

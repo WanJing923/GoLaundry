@@ -70,7 +70,7 @@ public class WalletActivity extends AppCompatActivity {
 
                 double newBalance = balance - amount;
                 if (newBalance >= 0) {
-                    mLaundryViewModel.cashOutBalance(currentUserId, mCashOutModel,newBalance).observe(WalletActivity.this, cashOutStatus -> {
+                    mLaundryViewModel.cashOutBalance(currentUserId, mCashOutModel, newBalance).observe(WalletActivity.this, cashOutStatus -> {
                         if (cashOutStatus) {
                             mProgressBar.setVisibility(View.GONE);
                             Toast.makeText(this, "Cash out successful", Toast.LENGTH_SHORT).show();

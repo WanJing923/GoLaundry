@@ -334,4 +334,6 @@
     <string name="no_laundry_saved">No laundry saved</string>
     <string name="enter_top_up_amount">Enter top up amount:</string>
     <string name="enter_cash_out_amount">Enter cash out amount:</string>
+    <string name="location_">Location</string>
+    <string name="no_order_found">No order found</string>
 </resources>
