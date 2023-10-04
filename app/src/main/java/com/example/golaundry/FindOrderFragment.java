@@ -49,7 +49,8 @@ import java.util.Objects;
 
 public class FindOrderFragment extends Fragment {
     private UserGetLocationHolder mUserGetLocationHolder;
-    private String currentUserId, currentArea, fullAddress;
+    private String currentArea;
+    private String fullAddress;
     private static final int REQUEST_CODE_MAP = 8;
     private TextView currentLocationTextView, noOrderTextView, notWorkingHourTextView;
     private DatabaseReference userOrderRef;
@@ -63,7 +64,7 @@ public class FindOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mUserGetLocationHolder = new ViewModelProvider(requireActivity()).get(UserGetLocationHolder.class);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         userOrderRef = db.getReference().child("userOrder");
@@ -81,7 +82,7 @@ public class FindOrderFragment extends Fragment {
         notWorkingHourTextView = view.findViewById(R.id.ffo_tv_not_working_hour);
 
         if (currentArea == null) {
-            if (mUserGetLocationHolder.getIsGetCurrentLocation()){
+            if (mUserGetLocationHolder.getIsGetCurrentLocation()) {
                 currentArea = mUserGetLocationHolder.getArea();
             } else {
                 getCurrentArea();

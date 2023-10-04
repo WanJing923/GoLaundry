@@ -36,9 +36,7 @@ import java.util.UUID;
 public class RiderViewOrderActivity extends AppCompatActivity {
 
     private OrderModel mOrderModel;
-    private double distance;
     private LaundryModel laundryData;
-    private UserViewModel mUserViewModel;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -47,24 +45,20 @@ public class RiderViewOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rider_view_order);
         String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         Toolbar toolbar = findViewById(R.id.arvo_toolbar);
-        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
         mOrderModel = (OrderModel) getIntent().getSerializableExtra("RiderViewOrderData");
-        distance = getIntent().getDoubleExtra("distance", 0.0);
+        double distance = getIntent().getDoubleExtra("distance", 0.0);
         laundryData = (LaundryModel) getIntent().getSerializableExtra("laundryData");
 
         TextView userNameTextView = findViewById(R.id.arvo_tv_name);
-        TextView userPhoneTextView = findViewById(R.id.arvo_tv_user_number);
         TextView fromAddressTextView = findViewById(R.id.arvo_tv_address_from);
-        ImageView copyFromImageView = findViewById(R.id.from_copy);
         TextView laundryNameTextView = findViewById(R.id.arvo_tv_laundry_name);
-        TextView laundryPhoneTextView = findViewById(R.id.arvo_tv_laundry_number);
         TextView toAddressTextView = findViewById(R.id.arvo_tv_address_to);
-        ImageView copyToImageView = findViewById(R.id.to_copy);
         TextView distanceTextView = findViewById(R.id.arvo_tv_distance_number);
         TextView earnTextView = findViewById(R.id.arvo_tv_money);
         Button acceptButton = findViewById(R.id.arvo_btn_accept);
@@ -76,31 +70,16 @@ public class RiderViewOrderActivity extends AppCompatActivity {
                 if (user != null) {
                     String userName = user.getFullName();
                     userNameTextView.setText(userName);
-                    String userPhone = "+60 " + user.getPhoneNo();
-                    userPhoneTextView.setText(userPhone);
                 }
             });
             String details = mOrderModel.getAddressInfo().get("details");
             String address = mOrderModel.getAddressInfo().get("address");
             String fullAddress = details + ", " + address;
             fromAddressTextView.setText(fullAddress);
-            copyFromImageView.setOnClickListener(view -> {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("user address", address);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getApplicationContext(), "User address copied to clipboard", Toast.LENGTH_SHORT).show();
-            });
 
             //middle part
             laundryNameTextView.setText(laundryData.getShopName());
-            laundryPhoneTextView.setText(laundryData.getContactNo());
             toAddressTextView.setText(laundryData.getAddress());
-            copyToImageView.setOnClickListener(view -> {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("laundry address", laundryData.getAddress());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(RiderViewOrderActivity.this, "Laundry address copied to clipboard", Toast.LENGTH_SHORT).show();
-            });
 
             @SuppressLint("DefaultLocale")
             String distanceShow = String.format("%.2f", distance);
@@ -121,7 +100,7 @@ public class RiderViewOrderActivity extends AppCompatActivity {
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                     String dateTime = sdf.format(new Date());
-                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime,"Rider accept order");
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Rider accept order");
 
                     userOrderRef.child("riderId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
                         userOrderRef.child("currentStatus").setValue("Rider accept order").addOnSuccessListener(aVoid1 -> { //update order table
@@ -148,7 +127,6 @@ public class RiderViewOrderActivity extends AppCompatActivity {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
             });
-
 
         }
 
