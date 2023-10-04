@@ -30,10 +30,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         //get current user id
         String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-
         //different fragment based on user type
         userUserType(currentUserId);
         laundryUserType(currentUserId);
@@ -47,12 +45,12 @@ public class HomeActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     String userType = snapshot.child("userType").getValue(String.class);
                     if (Objects.requireNonNull(userType).equals("user")) {
-                        replace(new HomeUserFragment<>());
+                        replace(new HomeUserFragment());
                         SmoothBottomBar smoothBottomBar = findViewById(R.id.menu_bottombar);
                         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
                             switch (i) {
                                 case 0:
-                                    replace(new HomeUserFragment<>());
+                                    replace(new HomeUserFragment());
                                     break;
 
                                 case 1:
@@ -103,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 2:
-                                    replace(new HistoryFragment());
+                                    replace(new HistoryLaundryFragment());
                                     break;
 
                                 case 3:
@@ -145,7 +143,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 2:
-                                    replace(new HistoryFragment());
+                                    replace(new HistoryRiderFragment());
                                     break;
 
                                 case 3:

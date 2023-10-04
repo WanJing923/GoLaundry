@@ -154,21 +154,6 @@
                         android:textSize="16sp"
                         app:drawableStartCompat="@drawable/ic_wallet" />
 
-                    <TextView
-                        android:id="@+id/fhl_tv_earnings_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="18dp"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="@string/view"
-                        android:textColor="@color/gold"
-                        android:textSize="13sp"
-                        app:drawableEndCompat="@drawable/ic_right"
-                        tools:ignore="RelativeOverlap" />
-
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/fhl_earnings_chart"
                         android:layout_width="match_parent"
@@ -321,26 +306,11 @@
                         android:textSize="16sp"
                         app:drawableStartCompat="@drawable/ic_month" />
 
-                    <TextView
-                        android:id="@+id/fhl_tv_monthly_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="18dp"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="@string/view"
-                        android:textColor="@color/gold"
-                        android:textSize="13sp"
-                        app:drawableEndCompat="@drawable/ic_right"
-                        tools:ignore="RelativeOverlap" />
-
-                    <com.github.mikephil.charting.charts.BarChart
+                    <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/fhl_order_chart"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:layout_below="@id/fhl_tv_monthly_view"
+                        android:layout_below="@id/fhl_tv_monthly_orders"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="19dp"

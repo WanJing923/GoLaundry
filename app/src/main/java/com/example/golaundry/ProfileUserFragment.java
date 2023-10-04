@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.golaundry.model.CurrentMembershipModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
@@ -29,7 +30,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ProfileUserFragment extends Fragment {
@@ -80,6 +84,122 @@ public class ProfileUserFragment extends Fragment {
         String currentMonth = monthName[calendar.get(Calendar.MONTH)];
         currentMonthTextView.setText(currentMonth);
 
+        //user click switch turn on or off
+        notificationSwitch.setOnClickListener(view1 -> {
+            boolean updatedValue = !notificationValue;
+            //update notification data
+            mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
+                if (notificationStatusData != null && notificationStatusData) {
+                    notificationSwitch.setChecked(updatedValue);
+                    Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
+                }
+                ;
+            });
+        });
+
+        //intent to edit profile
+        view.findViewById(R.id.puf_iv_edit).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //intent to top up
+        view.findViewById(R.id.puf_iv_topup).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), TopUpActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //intent to membership activity, show all memberships
+        view.findViewById(R.id.puf_cv_membership).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MembershipActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //saved laundry
+        view.findViewById(R.id.puf_tv_saved_laundry).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), SavedLaundryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //my addresses
+        view.findViewById(R.id.puf_tv_my_address).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), MyAddressesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //reset password
+        view.findViewById(R.id.puf_tv_reset_password).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), ResetPasswordActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //help center
+        view.findViewById(R.id.puf_tv_get_help).setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), HelpCenterActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        //logout
+        view.findViewById(R.id.puf_tv_log_out).setOnClickListener(view1 -> {
+            showLogoutConfirmationDialog();
+        });
+
+        String currentMonthYear = currentMonthYearMembership();
+
+        //show membership and monthly top up data
+        mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
+            if (currentMembership != null) {
+                if (Objects.equals(currentMembership.getMonthYear(), currentMonthYear)){
+                    @SuppressLint("DefaultLocale")
+                    String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
+                    monthlyAmountTextView.setText(monthlyTopUpStr);
+                    monthlyTopUp = currentMembership.getMonthlyTopUp();
+                } else {
+                    CurrentMembershipModel currentMembershipModel = new CurrentMembershipModel(currentMonthYear, 0);
+                    mUserViewModel.updateCurrentMembership(currentUserId, currentMembershipModel).observe(getViewLifecycleOwner(), updateStatus -> {
+                        if (updateStatus) {
+                            //update membership history
+                            mUserViewModel.updateMembershipHistory(currentUserId, currentMonthYear, 0).observe(getViewLifecycleOwner(), updateMembershipHistoryStatus -> {
+                                if (updateMembershipHistoryStatus) {
+
+                                    //update user table current membership rate
+                                    String newMembershipRate = "None";
+                                    mUserViewModel.updateUserMembership(currentUserId, newMembershipRate).observe(getViewLifecycleOwner(), updateUserStatus -> {
+                                        if (updateUserStatus) {
+                                            @SuppressLint("DefaultLocale")
+                                            String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
+                                            monthlyAmountTextView.setText(monthlyTopUpStr);
+                                            monthlyTopUp = currentMembership.getMonthlyTopUp();
+
+                                        } else {
+                                            Toast.makeText(getContext(), "Update user membership history failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } else {
+                                    Toast.makeText(getContext(), "Update user membership history failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getContext(), "Update current membership failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+            else {
+                Toast.makeText(getContext(), "Null current membership", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //get user and membership data
         mUserViewModel.getUserData(currentUserId).observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
@@ -93,7 +213,7 @@ public class ProfileUserFragment extends Fragment {
                 //show image
                 String avatarUrl = user.getAvatar();
                 if (!Objects.equals(avatarUrl, "")) {
-                    setAvatar(avatarUrl, ProfilePictureImageView);
+//                    setAvatar(avatarUrl, ProfilePictureImageView);
                 }
 
                 //show membership card data
@@ -221,107 +341,34 @@ public class ProfileUserFragment extends Fragment {
             }
         });
 
-        //user click switch turn on or off
-        notificationSwitch.setOnClickListener(view1 -> {
-            boolean updatedValue = !notificationValue;
-            //update notification data
-            mUserViewModel.updateNotificationData(currentUserId, updatedValue).observe(getViewLifecycleOwner(), notificationStatusData -> {
-                if (notificationStatusData != null && notificationStatusData) {
-                    notificationSwitch.setChecked(updatedValue);
-                    Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
-                }
-                ;
-            });
-        });
-
-        //intent to edit profile
-        view.findViewById(R.id.puf_iv_edit).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), EditProfileActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        //intent to top up
-        view.findViewById(R.id.puf_iv_topup).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), MembershipActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        //intent to membership activity, show all memberships
-        view.findViewById(R.id.puf_cv_membership).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), MembershipActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        //saved laundry
-        view.findViewById(R.id.puf_tv_saved_laundry).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), SavedLaundryActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        //my addresses
-//        view.findViewById(R.id.puf_tv_my_address).setOnClickListener(view1 -> {
-//            Intent intent = new Intent(getContext(), MyAddressesActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
-//        });
-
-        //reset password
-        view.findViewById(R.id.puf_tv_reset_password).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), ResetPasswordActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        //help center
-        view.findViewById(R.id.puf_tv_get_help).setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), HelpCenterActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        //logout
-        view.findViewById(R.id.puf_tv_log_out).setOnClickListener(view1 -> {
-            showLogoutConfirmationDialog();
-        });
-
-        //show membership and monthly top up data
-        mUserViewModel.getCurrentMembershipData(currentUserId).observe(getViewLifecycleOwner(), currentMembership -> {
-            if (currentMembership != null) {
-                @SuppressLint("DefaultLocale")
-                String monthlyTopUpStr = String.format("%.2f", currentMembership.getMonthlyTopUp());
-                monthlyAmountTextView.setText(monthlyTopUpStr);
-                monthlyTopUp = currentMembership.getMonthlyTopUp();
-            }
-        });
-
         return view;
     }
 
-    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
-        //referenceFromUrl to get StorageReference
-        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
-
-        try {
-            File localFile = File.createTempFile("tempfile", ".jpg");
-
-            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                //show
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                profilePictureImageView.setImageBitmap(bitmap);
-
-            }).addOnFailureListener(e -> {
-                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String currentMonthYearMembership() {
+        Date currentDate = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        return dateFormat.format(currentDate);
     }
+
+//    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
+//        //referenceFromUrl to get StorageReference
+//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
+//
+//        try {
+//            File localFile = File.createTempFile("tempfile", ".jpg");
+//
+//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+//                //show
+//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                profilePictureImageView.setImageBitmap(bitmap);
+//
+//            }).addOnFailureListener(e -> {
+//                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //call dialog
     private void showLogoutConfirmationDialog() {
@@ -334,28 +381,8 @@ public class ProfileUserFragment extends Fragment {
     //logout user
     public void logout() {
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getContext(), LoginFragment.class);
+        Intent intent = new Intent(getContext(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //first clear current all the menu items
-        menu.clear();
-        //add the new menu items
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    //intent to notification
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

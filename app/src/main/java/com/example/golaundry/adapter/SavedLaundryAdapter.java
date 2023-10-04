@@ -1,7 +1,5 @@
 package com.example.golaundry.adapter;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,11 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.OrderActivity;
 import com.example.golaundry.R;
-import com.example.golaundry.UserSignUpActivity;
 import com.example.golaundry.model.CombineLaundryData;
-import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
-import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,41 +39,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderShowLaundryAdapter.ViewHolder> {
+public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapter.ViewHolder>{
 
-    private List<CombineLaundryData> laundryList;
+    private final List<CombineLaundryData> laundryList;
     private final Context context;
-    private String fullAddress;
-    String imageUrl, currentUserId,finalDistance;
-    double distance;
+    String imageUrl, currentUserId;
     SaveLaundryViewModel mSaveLaundryViewModel;
-    List<String> savedLaundryIds;
+    boolean isSavedLaundry;
 
-    public UserOrderShowLaundryAdapter(List<CombineLaundryData> laundryList, Context context, String fullAddress) {
+    public SavedLaundryAdapter(List<CombineLaundryData> laundryList, Context context) {
         this.laundryList = laundryList;
         this.context = context;
-        this.fullAddress = fullAddress;
-        savedLaundryIds = new ArrayList<>();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateFullAddress(String newFullAddress) {
-        fullAddress = newFullAddress;
-        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SavedLaundryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.laundry_info_card, parent, false);
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mSaveLaundryViewModel = new ViewModelProvider((FragmentActivity) context).get(SaveLaundryViewModel.class);
-        return new ViewHolder(view);
+        return new SavedLaundryAdapter.ViewHolder(view);
     }
 
-    @SuppressLint({"SetTextI18n", "DefaultLocale", "NotifyDataSetChanged"})
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SavedLaundryAdapter.ViewHolder holder, int position) {
         CombineLaundryData laundry = laundryList.get(position);
         //bind data
         holder.shopNameTextView.setText(laundry.getLaundry().getShopName());
@@ -90,7 +73,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         //show image
         imageUrl = laundry.getShop().getImages();
         if (!Objects.equals(imageUrl, "")) {
-//            setImages(imageUrl, holder.laundryImageView);
+            setImages(imageUrl, holder.laundryImageView);
         }
 
         //load laundry services
@@ -99,25 +82,9 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         holder.servicesRecyclerView.setAdapter(hashtagAdapter);
         holder.servicesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-        //show distance
-        String laundryAddress = laundry.getLaundry().getAddress();
-        LatLng laundryLatLng = getLocationFromAddress(context, laundryAddress);
-        LatLng userLatLng = getLocationFromAddress(context, fullAddress);
-        if (laundryLatLng != null && userLatLng != null) {
-            double dis = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
-            distance = dis/1000;
-            finalDistance = String.format("%.2f", distance);
-            holder.kmTextView.setText(finalDistance + "km");
-        }
-
-        //go to laundry info
-        holder.rightImageView.setOnClickListener(view -> { //go to laundry info, order activity
-            Context context = view.getContext();
-            Intent intent = new Intent(context, OrderActivity.class);
-            intent.putExtra("laundryId", laundry.getLaundry().getLaundryId());
-            intent.putExtra("distance", distance);
-            context.startActivity(intent);
-        });
+        holder.kmTextView.setVisibility(View.GONE);
+        holder.rightImageView.setVisibility(View.GONE);
+        holder.distanceTextView.setVisibility(View.GONE);
 
         //saved laundry before or not
         isSaveLaundry(laundry.getLaundry().getLaundryId(), holder.savedImageView);
@@ -128,96 +95,61 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         });
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void filterList(ArrayList<CombineLaundryData> filteredList) {
-        laundryList = filteredList;
-        notifyDataSetChanged();
-    }
-
     //show the user whether is saved or not
-    @SuppressLint("NotifyDataSetChanged")
-    private void isSaveLaundry(String laundryId, ImageView savedImageView) {
+    private void isSaveLaundry(String laundryId, ImageView savedLaundryImageView) {
         mSaveLaundryViewModel.isSavedLaundry(laundryId, currentUserId).observe((LifecycleOwner) context, isSavedResult -> {
             if (isSavedResult != null && isSavedResult) {
-                savedImageView.setImageResource(R.drawable.ic_love);
-                savedLaundryIds.add(laundryId);
+                isSavedLaundry = true;
+                savedLaundryImageView.setImageResource(R.drawable.ic_love);
             } else {
-                savedImageView.setImageResource(R.drawable.ic_love_grey);
-                savedLaundryIds.remove(laundryId);
+                isSavedLaundry = false;
+                savedLaundryImageView.setImageResource(R.drawable.ic_love_grey);
             }
-            notifyDataSetChanged();
         });
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void saveLaundryShop(String laundryId, ImageView savedImageView) { //have laundry id and user id, add laundry id to that table
-        if (savedLaundryIds.contains(laundryId)) {
+        if (isSavedLaundry) {
             mSaveLaundryViewModel.saveLaundryRemove(currentUserId, laundryId).observe((LifecycleOwner) context, unsavedLaundryStatus -> {
                 if (unsavedLaundryStatus != null && unsavedLaundryStatus) {
-                    savedLaundryIds.remove(laundryId);
+                    isSavedLaundry = false;
                     Toast.makeText(context, "Removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 } else {
                     Toast.makeText(context, "Fail to removed saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 }
-                notifyDataSetChanged();
             });
         } else {
             mSaveLaundryViewModel.saveLaundryAdd(currentUserId, laundryId).observe((LifecycleOwner) context, saveLaundryStatus -> {
                 if (saveLaundryStatus != null && saveLaundryStatus) {
-                    savedLaundryIds.add(laundryId);
+                    isSavedLaundry = true;
                     Toast.makeText(context, "Saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love);
                 } else {
                     Toast.makeText(context, "Fail to saved laundry shop", Toast.LENGTH_SHORT).show();
                     savedImageView.setImageResource(R.drawable.ic_love_grey);
                 }
-                notifyDataSetChanged();
             });
         }
     }
 
-    public LatLng getLocationFromAddress(Context context, String theAddress) {
-
-        if (theAddress == null || theAddress.isEmpty()) {
-            return null;
-        }
-
-        if (!Geocoder.isPresent()) {
-            return null;
-        }
-        Geocoder coder = new Geocoder(context);
-        List<Address> address;
-        LatLng p1 = null;
+    private void setImages(String imageUrl, ImageView laundryImageView) {
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
         try {
-            address = coder.getFromLocationName(theAddress, 5);
-            if (address == null || address.isEmpty()) {
-                return null;
-            }
-            Address location = address.get(0);
-            p1 = new LatLng(location.getLatitude(), location.getLongitude());
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            File localFile = File.createTempFile("tempfile", ".jpg");
+            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                //show
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                laundryImageView.setImageBitmap(bitmap);
+            }).addOnFailureListener(e -> {
+                Toast.makeText(context, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return p1;
     }
-
-//    private void setImages(String imageUrl, ImageView laundryImageView) {
-//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-//        try {
-//            File localFile = File.createTempFile("tempfile", ".jpg");
-//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-//                //show
-//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                laundryImageView.setImageBitmap(bitmap);
-//            }).addOnFailureListener(e -> {
-//                Toast.makeText(context, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @Override
     public int getItemCount() {
@@ -226,7 +158,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView savedImageView, rightImageView;
-        TextView shopNameTextView, ratingsTextView, kmTextView;
+        TextView shopNameTextView, ratingsTextView, kmTextView,distanceTextView;
         RatingBar ratingsBar;
         RecyclerView servicesRecyclerView;
         ImageView laundryImageView;
@@ -237,10 +169,13 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
             shopNameTextView = itemView.findViewById(R.id.lic_tv_laundry_name);
             ratingsTextView = itemView.findViewById(R.id.lic_tv_rating);
             ratingsBar = itemView.findViewById(R.id.lic_rating_star);
+            distanceTextView = itemView.findViewById(R.id.lic_tv_distance);
             kmTextView = itemView.findViewById(R.id.lic_tv_distance_km);
             savedImageView = itemView.findViewById(R.id.lic_iv_saved);
             rightImageView = itemView.findViewById(R.id.lic_iv_right);
             servicesRecyclerView = itemView.findViewById(R.id.lic_rv_hashtags);
         }
     }
+
+
 }

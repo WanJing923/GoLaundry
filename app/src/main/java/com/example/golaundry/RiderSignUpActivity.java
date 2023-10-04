@@ -1,7 +1,6 @@
 package com.example.golaundry;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -278,7 +277,7 @@ public class RiderSignUpActivity extends AppCompatActivity {
             findViewById(R.id.rsua_et_confirm_password).requestFocus();
         } else {
 
-            RiderModel newRider = new RiderModel(fullName, "+60" + contactNo, emailAddress, plateNumber, facePhoto, drivingLicensePhoto, icNo, registerDateTime, "terminated", "rider", true);
+            RiderModel newRider = new RiderModel(fullName, "+60" + contactNo, emailAddress, plateNumber, facePhoto, drivingLicensePhoto, icNo, registerDateTime, "terminated", "rider", true, 0.0);
 
             mRiderViewModel.signUpRiderWithImage(emailAddress, password, newRider).observe(this, signUpSuccess -> {
                 if (signUpSuccess) {

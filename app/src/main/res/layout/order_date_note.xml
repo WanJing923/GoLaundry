@@ -29,8 +29,8 @@
         android:autofillHints="Select date"
         android:background="@drawable/custom_login"
         android:drawableEnd="@drawable/ic_month"
-        android:inputType="none"
         android:hint="@string/select_date"
+        android:inputType="none"
         android:padding="15dp"
         android:singleLine="true"
         android:textColor="@color/white"
@@ -79,5 +79,37 @@
         android:textColor="@color/white"
         android:textColorHint="@color/text_color"
         android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/order_tv_note_laundry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_et_note_rider"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/tell_this_laundry_shop"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/order_et_note_laundry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_tv_note_laundry"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="45dp"
+        android:background="@drawable/custom_login"
+        android:hint="@string/note"
+        android:inputType="text"
+        android:padding="15dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/text_color"
+        android:textSize="15sp"
+        android:visibility="invisible" />
 
 </RelativeLayout>

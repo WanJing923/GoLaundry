@@ -166,29 +166,9 @@ public class ProfileLaundryFragment extends Fragment {
     //logout user
     public void logout() {
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getContext(), LoginFragment.class);
+        Intent intent = new Intent(getContext(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //first clear current all the menu items
-        menu.clear();
-        //add the new menu items
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    //intent to notification
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_green"
-    tools:context=".SavedLaundryActivity">
+    tools:context=".MyAddressesActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/asl_toolbar"
+        android:id="@+id/maa_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/asl_tv_go_laundry"
+            android:id="@+id/maa_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -29,53 +29,65 @@
             android:shadowRadius="1"
             android:text="@string/go_laundry"
             android:textAlignment="center"
-            android:textColor="@color/gold"
+            android:textColor="#FFC0AB88"
             android:textSize="25sp" />
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/asl_toolbar">
+        android:layout_below="@id/maa_toolbar"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/asl_tv_saved_laundry"
+                android:id="@+id/maa_tv_my_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="28dp"
-                android:text="@string/saved_laundry"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/my_addresses"
                 android:textColor="@color/gold"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/asl_tv_no_laundry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="50dp"
-                android:layout_below="@id/asl_tv_saved_laundry"
-                android:text="@string/no_laundry_saved"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:visibility="invisible" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/asl_rv_saved_laundry"
+                android:id="@+id/maa_rv_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginEnd="22dp"
-                android:layout_below="@id/asl_tv_saved_laundry"
-                android:layout_marginTop="18dp"/>
+                android:layout_below="@id/maa_tv_my_address"
+                android:layout_marginTop="1dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/maa_rv_address">
+
+                <ImageView
+                    android:id="@+id/maa_btn_add_new_address"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="15dp"
+                    android:contentDescription="@string/add_new_address"
+                    android:src="@drawable/ic_add_address" />
+
+                <TextView
+                    android:id="@+id/maa_tv_add_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_below="@id/maa_btn_add_new_address"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/new_address"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </RelativeLayout>
 
         </RelativeLayout>
     </ScrollView>

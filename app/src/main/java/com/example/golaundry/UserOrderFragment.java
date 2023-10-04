@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -47,8 +48,10 @@ import com.example.golaundry.adapter.UserOrderShowLaundryAdapter;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserGetLocationHolder;
+import com.example.golaundry.viewModel.UserViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.SphericalUtil;
@@ -57,6 +60,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserOrderFragment extends Fragment {
@@ -64,16 +68,19 @@ public class UserOrderFragment extends Fragment {
     UserGetLocationHolder mUserGetLocationHolder;
     String currentUserId, currentArea, fullAddress;
     LaundryViewModel mLaundryViewModel;
+    UserViewModel mUserViewModel;
     ArrayList<CombineLaundryData> laundryList;
     UserOrderShowLaundryAdapter mUserOrderShowLaundryAdapter;
     RecyclerView laundryRecyclerView;
-    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView;
+    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView,lastRecentTextView;
     CardView recentlyOrderCardView, filterCardView;
     boolean recentlyOrderVisible;
-    private static final int REQUEST_CODE_MAP = 7;
+    static final int REQUEST_CODE_MAP = 7;
     int currentRatingsFilter = 0;
     int currentDistanceFilter = 0;
     SeekBar ratingsFilterSeekBar, distanceFilterSeekBar;
+    String laundryIdLRO;
+    OrderModel latestOrderData;
 
     public UserOrderFragment() {
     }
@@ -90,9 +97,10 @@ public class UserOrderFragment extends Fragment {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mLaundryViewModel = new ViewModelProvider(requireActivity()).get(LaundryViewModel.class);
         mUserGetLocationHolder = new ViewModelProvider(requireActivity()).get(UserGetLocationHolder.class);
+        mUserViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -112,18 +120,72 @@ public class UserOrderFragment extends Fragment {
         Button filterDoneButton = view.findViewById(R.id.uof_btn_filter);
         filterRatingsTextView = view.findViewById(R.id.uof_tv_filter_rating_number);
         filterDistanceTextView = view.findViewById(R.id.uof_tv_filter_distance_number);
-        setDiscoverTv();
+        lastRecentTextView = view.findViewById(R.id.uof_tv_last_recently);
 
+        TextView laundryNameLROTextView = view.findViewById(R.id.uof_tv_laundry_name);
+        TextView ratingsLROTextView = view.findViewById(R.id.uof_tv_rating);
+        RatingBar starLRORatingBar = view.findViewById(R.id.uof_rb_star);
+        TextView servicesTextView = view.findViewById(R.id.uof_tv_service);
+        Button repeatOrderButton = view.findViewById(R.id.uof_btn_repeat_order);
+
+        mUserViewModel.getLatestOrder(currentUserId).observe(getViewLifecycleOwner(), latestOrder -> {
+            if (latestOrder != null) {
+                latestOrderData = latestOrder;
+                lastRecentTextView.setVisibility(View.VISIBLE);
+                recentlyOrderCardView.setVisibility(View.VISIBLE);
+                laundryIdLRO = latestOrder.getLaundryId();
+
+                setDiscoverTv();
+
+                mLaundryViewModel.getLaundryData(laundryIdLRO).observe(getViewLifecycleOwner(), laundryLRO -> {
+                    if (laundryLRO != null) {
+                        String shopNameLRO = laundryLRO.getShopName();
+                        laundryNameLROTextView.setText(shopNameLRO);
+                    }
+                });
+
+                Map<String, Integer> selectedServicesLRO = latestOrder.getSelectedServices();
+                if (selectedServicesLRO != null && !selectedServicesLRO.isEmpty()) {
+                    StringBuilder servicesBuilder = new StringBuilder();
+                    int entryCount = 0;
+                    for (Map.Entry<String, Integer> entry : selectedServicesLRO.entrySet()) {
+                        String serviceName = entry.getKey();
+                        int serviceCount = entry.getValue();
+                        servicesBuilder.append(serviceName).append(" (").append(serviceCount).append(")");
+                        entryCount++;
+                        if (entryCount < selectedServicesLRO.size()) {
+                            servicesBuilder.append(", ");
+                        }
+                    }
+                    servicesTextView.setText(servicesBuilder.toString());
+                } else {
+                    servicesTextView.setText("No services selected");
+                }
+            }
+        });
+
+        repeatOrderButton.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), OrderLocationActivity.class);
+            intent.putExtra("latestOrderData", latestOrderData);
+            startActivity(intent);
+        });
+
+        setDiscoverTv(); //show or not show latest order card
+
+        if (currentArea == null) {
+            if (mUserGetLocationHolder.getIsGetCurrentLocation()){
+                currentArea = mUserGetLocationHolder.getArea();
+            } else {
+                getCurrentArea();
+            }
+        } else {
+            currentLocationTextView.setText(currentArea);
+        }
         //get current location or choose another location
         currentLocationTextView.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), MapsActivity.class);
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
-        if (currentArea == null) {
-            getCurrentArea();
-        } else {
-            currentLocationTextView.setText(currentArea);
-        }
         if (!mUserGetLocationHolder.getIsGetCurrentLocation() && mUserGetLocationHolder.getFullAddress() == null) {
             getCurrentArea();
             mUserGetLocationHolder.setIsGetCurrentLocation(true);
@@ -140,11 +202,10 @@ public class UserOrderFragment extends Fragment {
         laundryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //get data and put into adapter
-        mLaundryViewModel.getAllLaundryData().observe(getViewLifecycleOwner(), allLaundryData ->
+        mLaundryViewModel.getFilteredLaundryData().observe(getViewLifecycleOwner(), allLaundryData ->
                 mLaundryViewModel.getAllShopData().observe(getViewLifecycleOwner(), allShopData -> {
                     if (allLaundryData != null && allShopData != null) {
                         LiveData<List<CombineLaundryData>> combinedLiveData = mLaundryViewModel.combineAndNotifyData(allLaundryData, allShopData);
-
                         combinedLiveData.observe(getViewLifecycleOwner(), combinedDataList -> {
                             if (combinedDataList != null) {
                                 laundryList.clear();
@@ -154,6 +215,7 @@ public class UserOrderFragment extends Fragment {
                         });
                     }
                 }));
+
         String newFullAddress = fullAddress;
         mUserOrderShowLaundryAdapter.updateFullAddress(newFullAddress);
 
@@ -164,12 +226,10 @@ public class UserOrderFragment extends Fragment {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchLaundryList(charSequence.toString());
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 //
@@ -177,13 +237,9 @@ public class UserOrderFragment extends Fragment {
         });
 
         //filter laundry shop
-        filterTextView.setOnClickListener(v -> {
-            filterCardView.setVisibility(View.VISIBLE);
-        });
+        filterTextView.setOnClickListener(v -> filterCardView.setVisibility(View.VISIBLE));
         setupSeekBarListeners();
-        filterDoneButton.setOnClickListener(v ->
-                applyFilters(currentRatingsFilter, currentDistanceFilter)
-        );
+        filterDoneButton.setOnClickListener(v -> applyFilters(currentRatingsFilter, currentDistanceFilter));
 
         return view;
     }
@@ -225,15 +281,11 @@ public class UserOrderFragment extends Fragment {
                 currentRatingsFilter = progress;
                 filterRatingsTextView.setText(String.valueOf(currentRatingsFilter));
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //
             }
         });
 
@@ -244,15 +296,11 @@ public class UserOrderFragment extends Fragment {
                 currentDistanceFilter = progress;
                 filterDistanceTextView.setText(currentDistanceFilter + "km");
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //
             }
         });
     }
@@ -307,6 +355,8 @@ public class UserOrderFragment extends Fragment {
                         fullAddress = address.getAddressLine(0);
                         currentArea = address.getLocality();
                         currentLocationTextView.setText(currentArea);
+                        mUserGetLocationHolder.setArea(currentArea);
+                        mUserGetLocationHolder.setFullAddress(fullAddress);
                     }
                 }
             } catch (IOException e) {
@@ -357,30 +407,15 @@ public class UserOrderFragment extends Fragment {
 
         if (recentlyOrderVisible) {
             params1.addRule(RelativeLayout.BELOW, R.id.uof_cv_recently_order);
+            params2.addRule(RelativeLayout.BELOW, R.id.uof_cv_recently_order);
             params2.setMargins(25, 35, 0, 0);
         } else {
             params1.addRule(RelativeLayout.BELOW, R.id.uof_et_search_bar);
+            params2.addRule(RelativeLayout.BELOW, R.id.uof_et_search_bar);
             params2.setMargins(25, 35, 0, 0);
         }
 
         discoverTextView.setLayoutParams(params1);
         discoverTextView.setLayoutParams(params2);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

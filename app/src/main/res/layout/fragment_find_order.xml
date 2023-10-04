@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
                 android:text="@string/find_order"
                 android:textColor="@color/gold"
                 android:textSize="20sp"
@@ -61,12 +61,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ffo_tv_find_order"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/please_be_noted_that_the_delivery_earnings_of_each_order_has_included_pick_up_and_deliver_fees_you_will_receive_earnings_after_the_order_completed_accept_order_before_you_notices_about_your_fuel_costs"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/ffo_tv_location"
@@ -74,14 +74,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ffo_tv_msg"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="23dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:drawablePadding="1dp"
                 android:gravity="center"
                 android:text="@string/current_location"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
                 app:drawableStartCompat="@drawable/ic_location" />
 
             <TextView
@@ -90,21 +89,20 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ffo_tv_location"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginStart="20dp"
                 android:text="@string/near_me"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/ffo_tv_near_msg"
+                android:id="@+id/ffo_tv_not_working_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ffo_tv_near_me"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/this_portal_has_been_temporary_closed_due_to_out_of_working_hours_please_accept_and_deliver_the_new_order_within_9am_5pm_everyday"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
@@ -114,10 +112,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ffo_tv_near_me"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="18dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/ffo_tv_no_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/no_order_found"
+                android:textColor="@color/black"
+                android:visibility="invisible"
+                android:textSize="14sp" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

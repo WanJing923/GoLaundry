@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.CashOutModel;
 import com.example.golaundry.model.RiderModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -26,12 +27,13 @@ import java.util.Objects;
 public class RiderViewModel extends ViewModel {
     private final FirebaseDatabase db;
     private final FirebaseAuth mAuth;
-    private final DatabaseReference riderRef;
+    private final DatabaseReference riderRef,cashOutRef;
 
     public RiderViewModel() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         riderRef = FirebaseDatabase.getInstance().getReference().child("riders");
+        cashOutRef = FirebaseDatabase.getInstance().getReference().child("riderCashOut");
     }
 
     public LiveData<Boolean> signUpRiderWithImage(String email, String password, RiderModel newRider) {
@@ -126,4 +128,17 @@ public class RiderViewModel extends ViewModel {
         return notificationStatusData;
     }
 
+    public MutableLiveData<Boolean> cashOutBalanceRider(String currentUserId, CashOutModel mCashOutModel, double newBalance) {
+        MutableLiveData<Boolean> cashOutStatus = new MutableLiveData<>();
+
+        cashOutRef.child(currentUserId).setValue(mCashOutModel).addOnSuccessListener(aVoid ->
+
+                riderRef.child(currentUserId).child("balance").setValue(newBalance).addOnSuccessListener(aVoid1 -> {
+                    cashOutStatus.setValue(true);
+                }).addOnFailureListener(e -> cashOutStatus.setValue(false))
+
+        ).addOnFailureListener(e -> cashOutStatus.setValue(false));
+
+        return cashOutStatus;
+    }
 }

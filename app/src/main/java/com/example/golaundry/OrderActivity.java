@@ -48,14 +48,16 @@ public class OrderActivity extends AppCompatActivity {
     SaveLaundryViewModel mSaveLaundryViewModel;
     String currentUserId;
     boolean isSavedLaundry;
+    boolean laundryIsOpening = false;
     ArrayList<LaundryServiceModel> laundryServiceList;
     UserOrderLaundryServicesAdapter mUserOrderLaundryServicesAdapter;
     String laundryId, note;
     OrderModel mOrderModel;
-    double distance,deliveryFee;
+    double distance, deliveryFee;
     double totalLaundryFee;
     UserViewModel mUserViewModel;
     String membershipRate;
+    SimpleDateFormat dayFormat,timeFormat;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
@@ -161,15 +163,61 @@ public class OrderActivity extends AppCompatActivity {
         EditText noteEditText = findViewById(R.id.os_et_notes);
         note = noteEditText.getText().toString();
 
+        Date currentDate = new Date();
+        dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+        timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        String currentDay = dayFormat.format(currentDate);
+        String currentTime = timeFormat.format(currentDate);
+
+        mLaundryViewModel.getShopData(laundryId).observe(this, shop -> {
+            if (shop != null) {
+                List<String> allTimeRanges = shop.getAllTimeRanges();
+                String mappedDay = "";
+                switch (currentDay) {
+                    case "Monday":
+                        mappedDay = allTimeRanges.get(0);
+                        break;
+                    case "Tuesday":
+                        mappedDay = allTimeRanges.get(1);
+                        break;
+                    case "Wednesday":
+                        mappedDay = allTimeRanges.get(2);
+                        break;
+                    case "Thursday":
+                        mappedDay = allTimeRanges.get(3);
+                        break;
+                    case "Friday":
+                        mappedDay = allTimeRanges.get(4);
+                        break;
+                    case "Saturday":
+                        mappedDay = allTimeRanges.get(5);
+                        break;
+                    case "Sunday":
+                        mappedDay = allTimeRanges.get(6);
+                        break;
+                }
+
+                if (!"off".equals(mappedDay)) {
+                    laundryIsOpening = isTimeInRange(currentTime, mappedDay);
+                } else {
+                    laundryIsOpening = false;
+                }
+            }
+        });
+
         Button nextButton = findViewById(R.id.order_btn_next);
         nextButton.setOnClickListener(view -> {
-            Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
-            if (selectedServices != null ){
-                createOrderModel();
-                Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
-                intent.putExtra("orderData", mOrderModel);
-                startActivity(intent);
-                finish();
+            if (laundryIsOpening){
+                Map<String, Integer> selectedServices = mUserOrderLaundryServicesAdapter.getSelectedServices();
+                if (selectedServices != null) {
+                    createOrderModel();
+                    Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
+                    intent.putExtra("orderData", mOrderModel);
+                    startActivity(intent);
+                    finish();
+                }
+            } else {
+                Toast.makeText(this, "Laundry shop is currently closed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -179,7 +227,25 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        deliveryFee = distance * 0.5;
+        deliveryFee = (distance * 0.5) * 2;
+    }
+
+    private boolean isTimeInRange(String currentTime, String timeRange) {
+        try {
+            String[] parts = timeRange.split(" - ");
+            String startTime = parts[0];
+            String endTime = parts[1];
+
+            Date currentTimeDate = timeFormat.parse(currentTime);
+            Date startTimeDate = timeFormat.parse(startTime);
+            Date endTimeDate = timeFormat.parse(endTime);
+
+            assert currentTimeDate != null;
+            return currentTimeDate.after(startTimeDate) && currentTimeDate.before(endTimeDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void createOrderModel() {
@@ -192,7 +258,7 @@ public class OrderActivity extends AppCompatActivity {
         for (String serviceName : servicesInfo.keySet()) {
             OrderServicesHolder orderServicesHolder = servicesInfo.get(serviceName);
             assert orderServicesHolder != null;
-            double price = orderServicesHolder.getPrice();
+            double price = mUserOrderLaundryServicesAdapter.getPriceForService(serviceName, laundryServiceList);
             int userQty = orderServicesHolder.getUserSelected();
             double totalPrice = price * userQty;
             totalLaundryFee += totalPrice;
@@ -202,9 +268,8 @@ public class OrderActivity extends AppCompatActivity {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "","");
+        mOrderModel = new OrderModel("", laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance);
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     public void saveLaundryShop(String laundryId, ImageView savedImageView) { //have laundry id and user id, add laundry id to that table

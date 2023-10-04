@@ -1,6 +1,8 @@
 package com.example.golaundry.model;
 
-public class LaundryModel {
+import java.io.Serializable;
+
+public class LaundryModel implements Serializable {
     private String laundryId;
     private String shopName;
     private String contactNo;
@@ -17,11 +19,12 @@ public class LaundryModel {
     private boolean notification;
     private boolean setup;
     private boolean isBreak;
+    private double balance;
 
     public LaundryModel() {
     }
 
-    public LaundryModel(String laundryId, String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak) {
+    public LaundryModel(String laundryId, String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak, double balance) {
         this.laundryId = laundryId;
         this.shopName = shopName;
         this.contactNo = contactNo;
@@ -38,6 +41,15 @@ public class LaundryModel {
         this.notification = notification;
         this.setup = setup;
         this.isBreak = isBreak;
+        this.balance = balance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getLaundryId() {

@@ -8,12 +8,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.example.golaundry.model.CashOutModel;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
+import com.example.golaundry.model.TopUpModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -36,7 +40,7 @@ public class LaundryViewModel extends ViewModel {
     private final FirebaseAuth mAuth;
     private final DatabaseReference laundryRef;
     private final DatabaseReference shopRef;
-    private final DatabaseReference serviceRef;
+    private final DatabaseReference serviceRef, cashOutRef;
 
     public LaundryViewModel() {
         mAuth = FirebaseAuth.getInstance();
@@ -44,6 +48,7 @@ public class LaundryViewModel extends ViewModel {
         laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
         shopRef = FirebaseDatabase.getInstance().getReference().child("laundryShop");
         serviceRef = FirebaseDatabase.getInstance().getReference().child("laundryService");
+        cashOutRef = FirebaseDatabase.getInstance().getReference().child("laundryCashOut");
     }
 
     public LiveData<Boolean> signUpLaundryWithImage(String email, String password, LaundryModel newLaundry) {
@@ -112,7 +117,7 @@ public class LaundryViewModel extends ViewModel {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
+                Log.e("FirebaseError", "Error in Firebase ValueEventListener: " + databaseError.getMessage());
             }
         });
 
@@ -289,28 +294,33 @@ public class LaundryViewModel extends ViewModel {
         return updateSetupStatus;
     }
 
-    public LiveData<List<LaundryModel>> getAllLaundryData() {
-        MutableLiveData<List<LaundryModel>> allLaundryData = new MutableLiveData<>();
+    public LiveData<List<LaundryModel>> getFilteredLaundryData() {
+        MutableLiveData<List<LaundryModel>> filteredLaundryData = new MutableLiveData<>();
 
         laundryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<LaundryModel> allLaundry = new ArrayList<>();
+                List<LaundryModel> filteredLaundry = new ArrayList<>();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    LaundryModel eachLaundry = snapshot.getValue(LaundryModel.class);
-                    if (eachLaundry != null) {
-                        allLaundry.add(eachLaundry);
+                    LaundryModel laundry = snapshot.getValue(LaundryModel.class);
+
+                    if (laundry != null) {
+                        if (!laundry.getIsBreak() && laundry.getSetup()) {
+                            filteredLaundry.add(laundry);
+                        }
                     }
                 }
-                allLaundryData.setValue(allLaundry);
+
+                filteredLaundryData.setValue(filteredLaundry);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        return allLaundryData;
+
+        return filteredLaundryData;
     }
 
     public LiveData<List<LaundryShopModel>> getAllShopData() {
@@ -369,7 +379,7 @@ public class LaundryViewModel extends ViewModel {
                     LiveData<List<LaundryServiceModel>> serviceData = getAllServiceData(laundryId);
 
                     serviceData.observeForever(servicesData -> {
-                        if (servicesData != null) {
+                        if (servicesData != null && !servicesData.isEmpty()) {
                             CombineLaundryData mCombinedData = new CombineLaundryData(laundry, shop, servicesData);
                             combinedDataList.add(mCombinedData);
                             combinedLaundryDataLiveData.setValue(combinedDataList);
@@ -381,6 +391,19 @@ public class LaundryViewModel extends ViewModel {
         return combinedLaundryDataLiveData;
     }
 
+    public MutableLiveData<Boolean> cashOutBalance(String currentUserId, CashOutModel mCashOutModel, double newBalance) {
+        MutableLiveData<Boolean> cashOutStatus = new MutableLiveData<>();
+
+        cashOutRef.child(currentUserId).setValue(mCashOutModel).addOnSuccessListener(aVoid ->
+
+                laundryRef.child(currentUserId).child("balance").setValue(newBalance).addOnSuccessListener(aVoid1 -> {
+                    cashOutStatus.setValue(true);
+                }).addOnFailureListener(e -> cashOutStatus.setValue(false))
+
+        ).addOnFailureListener(e -> cashOutStatus.setValue(false));
+
+        return cashOutStatus;
+    }
 
 }
 

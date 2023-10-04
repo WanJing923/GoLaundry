@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Map;
 
 public class OrderModel implements Serializable {
-
+    private String orderId;
     private String laundryId;
-    private String currentUserId;
+    private String userId;
     private Map<String, Integer> selectedServices;
     private String noteToLaundry;
     private String riderId;
@@ -19,13 +19,15 @@ public class OrderModel implements Serializable {
     private double totalFee;
     private String pickUpDate;
     private String noteToRider;
+    private double distanceBetweenUserLaundry;
 
     public OrderModel() {
     }
 
-    public OrderModel(String laundryId, String currentUserId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider) {
+    public OrderModel(String orderId, String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider, double distanceBetweenUserLaundry) {
+        this.orderId = orderId;
         this.laundryId = laundryId;
-        this.currentUserId = currentUserId;
+        this.userId = userId;
         this.selectedServices = selectedServices;
         this.noteToLaundry = noteToLaundry;
         this.riderId = riderId;
@@ -38,6 +40,23 @@ public class OrderModel implements Serializable {
         this.totalFee = totalFee;
         this.pickUpDate = pickUpDate;
         this.noteToRider = noteToRider;
+        this.distanceBetweenUserLaundry = distanceBetweenUserLaundry;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public double getDistanceBetweenUserLaundry() {
+        return distanceBetweenUserLaundry;
+    }
+
+    public void setDistanceBetweenUserLaundry(double distanceBetweenUserLaundry) {
+        this.distanceBetweenUserLaundry = distanceBetweenUserLaundry;
     }
 
     public String getLaundryId() {
@@ -48,12 +67,12 @@ public class OrderModel implements Serializable {
         this.laundryId = laundryId;
     }
 
-    public String getCurrentUserId() {
-        return currentUserId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCurrentUserId(String currentUserId) {
-        this.currentUserId = currentUserId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Map<String, Integer> getSelectedServices() {

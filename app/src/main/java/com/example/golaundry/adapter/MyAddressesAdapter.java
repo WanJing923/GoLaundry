@@ -16,39 +16,36 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
+public class MyAddressesAdapter extends RecyclerView.Adapter<MyAddressesAdapter.ViewHolder>{
+
     private final List<AddressModel> addressList;
     private final Context context;
-    private final AddressModel selectedAddresses;
+
     UserViewModel mUserViewModel;
     String currentUserId;
-    private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public AddressAdapter(List<AddressModel> addressList, Context context, UserViewModel mUserViewModel) {
+    public MyAddressesAdapter(List<AddressModel> addressList, Context context, UserViewModel mUserViewModel) {
         this.addressList = addressList;
         this.context = context;
         this.mUserViewModel = mUserViewModel;
-        this.selectedAddresses = new AddressModel();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyAddressesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.location_address, parent, false);
-        return new ViewHolder(view);
+        return new MyAddressesAdapter.ViewHolder(view);
     }
 
-    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
@@ -70,44 +67,17 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         if (defaultAddress) {
             holder.deleteImageView.setVisibility(View.GONE);
         }
-        
+
         holder.deleteImageView.setOnClickListener(view -> {
             if (defaultAddress){
                 Toast.makeText(context, "Default address is not able to be removed. Please contact help center if needed.", Toast.LENGTH_LONG).show();
             } else {
-                removeItemWithConfirmation(position, addressId);
+                removeAddress(position, addressId);
             }
         });
-
-        boolean isSelected = (position == selectedPosition);
-        if (isSelected) {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cyan));
-        } else {
-            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
-        }
-
-        holder.itemView.setOnClickListener(view -> toggleSelection(address));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void toggleSelection(AddressModel address) {
-        int clickedPosition = addressList.indexOf(address);
-        if (clickedPosition == selectedPosition) {
-            selectedPosition = RecyclerView.NO_POSITION;
-        } else {
-            selectedPosition = clickedPosition;
-        }
-        notifyDataSetChanged();
-    }
-
-    public AddressModel getSelectedAddresses() {
-        if (selectedPosition != RecyclerView.NO_POSITION) {
-            return addressList.get(selectedPosition);
-        }
-        return null;
-    }
-
-    public void removeItemWithConfirmation(int position, String addressId) {
+    public void removeAddress(int position, String addressId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Confirm Deletion");
         builder.setMessage("Are you sure you want to delete this address?");
@@ -147,4 +117,5 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
             deleteImageView = itemView.findViewById(R.id.la_iv_delete);
         }
     }
+
 }

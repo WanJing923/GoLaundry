@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cyan"
-    tools:context=".RiderViewOrderActivity">
+    tools:context=".RiderOrderDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/arvo_toolbar"
+        android:id="@+id/arvd_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="5dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/arvo_tv_go_laundry"
+            android:id="@+id/arvd_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -36,7 +36,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/arvo_toolbar"
+        android:layout_below="@id/arvd_toolbar"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/arvo_tv_order_details"
+                android:id="@+id/arvd_tv_order_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -59,12 +59,11 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/arvo_tv_order_details"
+                android:layout_below="@id/arvd_tv_order_details"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="20dp"
-
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -73,12 +72,12 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/arvo_tv_from"
+                        android:id="@+id/arvd_tv_customer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/from_"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/customer_information"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +85,7 @@
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/arvo_constraint1"
+                        android:id="@+id/arvd_constraint1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -96,10 +95,18 @@
                         android:padding="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_tv_from">
+                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_customer">
+
+                        <ImageView
+                            android:id="@+id/arvd_copy1"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_copy_black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/arvo_tv_name"
+                            android:id="@+id/arvd_tv_customer_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/username"
@@ -109,24 +116,34 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <TextView
+                            android:id="@+id/arvd_tv_customer_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/_601234567890"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/arvd_tv_customer_name" />
+
                         <RelativeLayout
-                            android:id="@+id/arvo_linear1"
+                            android:id="@+id/arvd_linear1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/arvo_tv_name">
+                            app:layout_constraintTop_toBottomOf="@id/arvd_tv_customer_number">
 
                             <LinearLayout
-                                android:id="@+id/arvo_linear11"
+                                android:id="@+id/arvd_linear11"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:weightSum="1">
 
                                 <ImageView
-                                    android:id="@+id/arvo_icon_location"
+                                    android:id="@+id/arvd_icon_location"
                                     android:layout_width="0dp"
                                     android:layout_height="30dp"
                                     android:layout_weight="1"
@@ -136,17 +153,17 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/arvo_linear1_text"
+                                android:id="@+id/arvd_linear1_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
                                 android:layout_marginStart="5dp"
-                                android:layout_toEndOf="@id/arvo_linear11"
+                                android:layout_toEndOf="@id/arvd_linear11"
                                 android:orientation="horizontal"
                                 android:weightSum="1">
 
                                 <TextView
-                                    android:id="@+id/arvo_tv_address_from"
+                                    android:id="@+id/arvd_tv_address_customer"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -158,19 +175,19 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        android:id="@+id/arvo_tv_to"
+                        android:id="@+id/arvd_tv_laundry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="40dp"
-                        android:text="@string/to"
+                        android:text="@string/laundry_shop_information"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_constraint1" />
+                        app:layout_constraintTop_toBottomOf="@id/arvd_constraint1" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/arvo_constraint2"
+                        android:id="@+id/arvd_constraint2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -180,10 +197,18 @@
                         android:padding="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_tv_to">
+                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_laundry">
+
+                        <ImageView
+                            android:id="@+id/arvd_copy2"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_copy_black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/arvo_tv_laundry_name"
+                            android:id="@+id/arvd_tv_laundry_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/laundry_shop_name"
@@ -193,24 +218,34 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <TextView
+                            android:id="@+id/arvd_tv_laundry_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/_601234567890"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/arvd_tv_laundry_name" />
+
                         <RelativeLayout
-                            android:id="@+id/arvo_relative1"
+                            android:id="@+id/arvd_relative1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/arvo_tv_laundry_name">
+                            app:layout_constraintTop_toBottomOf="@id/arvd_tv_laundry_number">
 
                             <LinearLayout
-                                android:id="@+id/arvo_linear2"
+                                android:id="@+id/arvd_linear2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:weightSum="1">
 
                                 <ImageView
-                                    android:id="@+id/arvo_icon_location1"
+                                    android:id="@+id/arvd_icon_location1"
                                     android:layout_width="0dp"
                                     android:layout_height="30dp"
                                     android:layout_weight="1"
@@ -220,17 +255,17 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/arvo_linear1_text1"
+                                android:id="@+id/arvd_linear1_text1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
                                 android:layout_marginStart="5dp"
-                                android:layout_toEndOf="@id/arvo_linear2"
+                                android:layout_toEndOf="@id/arvd_linear2"
                                 android:orientation="horizontal"
                                 android:weightSum="1">
 
                                 <TextView
-                                    android:id="@+id/arvo_tv_address_to"
+                                    android:id="@+id/arvd_tv_address_laundry"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -242,7 +277,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        android:id="@+id/arvo_tv_distance"
+                        android:id="@+id/arvd_tv_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -253,10 +288,10 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_constraint2" />
+                        app:layout_constraintTop_toBottomOf="@id/arvd_constraint2" />
 
                     <TextView
-                        android:id="@+id/arvo_tv_distance_number"
+                        android:id="@+id/arvd_tv_distance_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -266,11 +301,11 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/arvo_tv_distance"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_constraint2" />
+                        app:layout_constraintStart_toEndOf="@id/arvd_tv_distance"
+                        app:layout_constraintTop_toBottomOf="@id/arvd_constraint2" />
 
                     <TextView
-                        android:id="@+id/arvo_tv_distance_number_km"
+                        android:id="@+id/arvd_tv_distance_number_km"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="1dp"
@@ -280,11 +315,11 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/arvo_tv_distance_number"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_constraint2" />
+                        app:layout_constraintStart_toEndOf="@id/arvd_tv_distance_number"
+                        app:layout_constraintTop_toBottomOf="@id/arvd_constraint2" />
 
                     <View
-                        android:id="@+id/arvo_divider"
+                        android:id="@+id/arvd_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginStart="10dp"
@@ -295,7 +330,7 @@
                         android:backgroundTint="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_tv_distance" />
+                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_distance" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -303,10 +338,10 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvo_divider">
+                        app:layout_constraintTop_toBottomOf="@id/arvd_divider">
 
                         <TextView
-                            android:id="@+id/arvo_tv_earn"
+                            android:id="@+id/arvd_tv_earn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
@@ -321,7 +356,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/arvo_tv_rm"
+                            android:id="@+id/arvd_tv_rm"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
@@ -332,11 +367,11 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/arvo_tv_earn"
+                            app:layout_constraintStart_toEndOf="@id/arvd_tv_earn"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/arvo_tv_money"
+                            android:id="@+id/arvd_tv_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
@@ -347,11 +382,11 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/arvo_tv_rm"
+                            app:layout_constraintStart_toEndOf="@id/arvd_tv_rm"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/arvo_btn_accept"
+                            android:id="@+id/arvd_btn_pick_up"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -360,7 +395,7 @@
                             android:background="@drawable/choose_custom"
                             android:backgroundTint="@color/primary_green"
                             android:padding="10dp"
-                            android:text="@string/accept"
+                            android:text="@string/pick_up"
                             android:textColor="#C0AB88"
                             android:textSize="14sp"
                             android:visibility="visible"
@@ -368,6 +403,110 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:visibility="invisible"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/arvd_tv_successful"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="25dp"
+                        android:text="@string/successfully_picked_up"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/arvd_tv_successful_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="25dp"
+                        android:text="@string/enter_the_order_id_that_provided_by_the_customer"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_successful" />
+
+                    <EditText
+                        android:id="@+id/arvd_et_order_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="20dp"
+                        android:autofillHints="order id"
+                        android:background="@drawable/custom_order"
+                        android:hint="@string/order_id_"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_color"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_successful_msg" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:padding="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/arvd_et_order_id">
+
+                        <TextView
+                            android:id="@+id/arvd_btn_ok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="36dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="@string/ok"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="36dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:padding="10dp"
+                            android:text="@string/cancel"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/arvd_btn_ok"
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>

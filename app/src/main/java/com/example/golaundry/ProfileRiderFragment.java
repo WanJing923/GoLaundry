@@ -53,7 +53,7 @@ public class ProfileRiderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile_rider, container, false);
 
         //toolbar and back button
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.prf_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.prf_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -120,7 +120,7 @@ public class ProfileRiderFragment extends Fragment {
 
         //intent to wallet
         myWalletTextView.setOnClickListener(view1 -> {
-            Intent intent = new Intent(getContext(), WalletActivity.class);
+            Intent intent = new Intent(getContext(), RiderWalletActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
@@ -178,28 +178,8 @@ public class ProfileRiderFragment extends Fragment {
     //logout user
     public void logout() {
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getContext(), LoginFragment.class);
+        Intent intent = new Intent(getContext(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //first clear current all the menu items
-        menu.clear();
-        //add the new menu items
-        inflater.inflate(R.menu.menu_top, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    //intent to notification
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.tm_btn_notification) {
-            //intent notification
-            Intent intent = new Intent(getActivity(), NotificationActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
