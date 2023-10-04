@@ -18,6 +18,7 @@ import com.example.golaundry.OrderActivity;
 import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
 import com.example.golaundry.RiderViewOrderActivity;
+import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.RiderFindOrderHolder;
 import com.example.golaundry.viewModel.LaundryViewModel;
@@ -28,6 +29,7 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
     private final List<RiderFindOrderHolder> orderList;
     private final Context context;
     private LaundryViewModel mLaundryViewModel;
+    private LaundryModel laundryData;
 
     public RiderFindOrderAdapter(List<RiderFindOrderHolder> orderList, Context context) {
         this.orderList = orderList;
@@ -56,12 +58,14 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
 
         String laundryId = order.getOrderData().getLaundryId();
         mLaundryViewModel.getLaundryData(laundryId).observe((LifecycleOwner) context, laundry -> {
-            if (laundry!=null){
+            if (laundry != null) {
                 String laundryName = laundry.getShopName();
                 holder.laundryNameTextView.setText(laundryName);
 
                 String laundryAddress = laundry.getAddress();
                 holder.toAddressTextView.setText(laundryAddress);
+
+                laundryData = laundry;
             }
         });
 
@@ -75,9 +79,9 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
             OrderModel mOrderModel = order.getOrderData();
             intent.putExtra("RiderViewOrderData", mOrderModel);
             intent.putExtra("distance", distance);
+            intent.putExtra("laundryData", laundryData);
             context.startActivity(intent);
         });
-
     }
 
     @Override
@@ -86,7 +90,7 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView fromAddressTextView, laundryNameTextView, toAddressTextView, earnAmountTextView, viewOrderTextView,distanceTextView;
+        TextView fromAddressTextView, laundryNameTextView, toAddressTextView, earnAmountTextView, viewOrderTextView, distanceTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);

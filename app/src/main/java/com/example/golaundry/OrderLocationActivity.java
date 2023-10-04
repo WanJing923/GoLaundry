@@ -6,8 +6,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +52,7 @@ public class OrderLocationActivity extends AppCompatActivity {
     Map<String, String> addressInfoLRO;
     OrderModel latestOrderData;
     LaundryViewModel mLaundryViewModel;
-    SimpleDateFormat dayFormat,timeFormat;
+    SimpleDateFormat dayFormat, timeFormat;
     boolean laundryIsOpening = false;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
@@ -372,22 +375,37 @@ public class OrderLocationActivity extends AppCompatActivity {
 
                 //deduct balance checking
                 double newBalance = currentBalanceUser - orderData.getTotalFee();
-                if (newBalance >= 0) {
-                    //enough balance
-                    mUserViewModel.addOrder(currentUserId, orderData, mOrderStatusModel, orderData.getTotalFee(), newBalance).observe(OrderLocationActivity.this, orderStatus -> {
-                        if (orderStatus) {
-                            Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(OrderLocationActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
-                        }
+                if (newBalance >= 0) { //enough balance
+                    //confirm place order dialog
+                    mProgressBar.setVisibility(View.GONE);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Place Order Confirmation");
+                    builder.setMessage("Your account balance will be deducted. Your order cannot be cancelled once the order has been picked up. Please provide the order ID to the rider.");
+                    builder.setPositiveButton("Yes", (dialog, which) -> {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        mUserViewModel.addOrder(currentUserId, orderData, mOrderStatusModel, orderData.getTotalFee(), newBalance).observe(OrderLocationActivity.this, orderStatus -> {
+                            if (orderStatus) {
+                                Toast.makeText(OrderLocationActivity.this, "Order placed", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(OrderLocationActivity.this, "Error occurred", Toast.LENGTH_SHORT).show();
+                            }
+                            mProgressBar.setVisibility(View.GONE);
+                        });
+                        dialog.dismiss();
                         mProgressBar.setVisibility(View.GONE);
                     });
+                    builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                    
                 } else {
                     Toast.makeText(OrderLocationActivity.this, "Insufficient balance! Please reload.", Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.GONE);
                 }
-
             }
         });
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 public class OrderModel implements Serializable {
-
+    private String orderId;
     private String laundryId;
     private String userId;
     private Map<String, Integer> selectedServices;
@@ -24,7 +24,8 @@ public class OrderModel implements Serializable {
     public OrderModel() {
     }
 
-    public OrderModel(String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider, double distanceBetweenUserLaundry) {
+    public OrderModel(String orderId, String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider, double distanceBetweenUserLaundry) {
+        this.orderId = orderId;
         this.laundryId = laundryId;
         this.userId = userId;
         this.selectedServices = selectedServices;
@@ -40,6 +41,14 @@ public class OrderModel implements Serializable {
         this.pickUpDate = pickUpDate;
         this.noteToRider = noteToRider;
         this.distanceBetweenUserLaundry = distanceBetweenUserLaundry;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public double getDistanceBetweenUserLaundry() {
@@ -62,7 +71,7 @@ public class OrderModel implements Serializable {
         return userId;
     }
 
-    public void setUserId(String currentUserId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

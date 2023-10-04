@@ -306,6 +306,7 @@ public class UserViewModel extends ViewModel {
     public MutableLiveData<Boolean> addOrder(String currentUserId, OrderModel newOrder, OrderStatusModel mOrderStatusModel, double spending, double newBalance) {
         MutableLiveData<Boolean> orderData = new MutableLiveData<>();
         String orderId = String.valueOf(UUID.randomUUID());
+        newOrder.setOrderId(orderId);
 
         Calendar calendar = Calendar.getInstance();
         String[] monthName = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -316,7 +317,8 @@ public class UserViewModel extends ViewModel {
         DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(currentUserId).child(currentYear);
         DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(currentUserId).child(currentYear);
 
-        orderStatusRef.child(orderId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> {
+        String orderStatusId = String.valueOf(UUID.randomUUID());
+        orderStatusRef.child(orderId).child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> {
             userOrderRef.child(orderId).setValue(newOrder).addOnSuccessListener(aVoid1 -> {
                 userSpendingRef.child(currentMonth).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

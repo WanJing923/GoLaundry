@@ -268,7 +268,7 @@ public class OrderActivity extends AppCompatActivity {
             note = "";
         }
 
-        mOrderModel = new OrderModel(laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance);
+        mOrderModel = new OrderModel("", laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance);
     }
 
     @SuppressLint("NotifyDataSetChanged")

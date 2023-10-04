@@ -1,6 +1,8 @@
 package com.example.golaundry.model;
 
-public class LaundryModel {
+import java.io.Serializable;
+
+public class LaundryModel implements Serializable {
     private String laundryId;
     private String shopName;
     private String contactNo;

@@ -11,7 +11,7 @@
         android:id="@+id/arvo_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:elevation="4dp"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/order_details"
                 android:textColor="@color/gold"
                 android:textSize="20sp"
@@ -60,10 +60,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/arvo_tv_order_details"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="19dp"
-                android:layout_marginEnd="18dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="20dp"
 
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
@@ -76,7 +76,7 @@
                         android:id="@+id/arvo_tv_from"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
                         android:text="@string/from_"
                         android:textColor="@color/black"
@@ -89,8 +89,8 @@
                         android:id="@+id/arvo_constraint1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/custom_order"
                         android:padding="10dp"
                         android:layout_marginTop="10dp"
@@ -98,16 +98,24 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/arvo_tv_from">
 
+                        <ImageView
+                            android:id="@+id/from_copy"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_copy_black"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
                         <TextView
                             android:id="@+id/arvo_tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/username"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"/>
 
                         <TextView
                             android:id="@+id/arvo_tv_user_number"
@@ -151,13 +159,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginStart="7dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_toEndOf="@id/arvo_linear11"
                                 android:orientation="horizontal"
                                 android:weightSum="1">
 
                                 <TextView
-                                    android:id="@+id/arvo_tv_address"
+                                    android:id="@+id/arvo_tv_address_from"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -172,8 +180,8 @@
                         android:id="@+id/arvo_tv_to"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="48dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="40dp"
                         android:text="@string/to"
                         android:textColor="@color/black"
                         android:textSize="14sp"
@@ -184,8 +192,8 @@
                         android:id="@+id/arvo_constraint2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/custom_order"
                         android:padding="10dp"
                         android:layout_marginTop="10dp"
@@ -193,13 +201,21 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/arvo_tv_to">
 
+                        <ImageView
+                            android:id="@+id/to_copy"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_copy_black"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
                         <TextView
-                            android:id="@+id/arvo_tv_laundry"
+                            android:id="@+id/arvo_tv_laundry_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/username"
+                            android:text="@string/laundry_shop_name"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -213,7 +229,7 @@
                             android:textSize="14sp"
                             android:visibility="invisible"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/arvo_tv_laundry" />
+                            app:layout_constraintTop_toBottomOf="@id/arvo_tv_laundry_name" />
 
                         <RelativeLayout
                             android:id="@+id/arvo_relative1"
@@ -246,13 +262,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
-                                android:layout_marginStart="7dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_toEndOf="@id/arvo_linear2"
                                 android:orientation="horizontal"
                                 android:weightSum="1">
 
                                 <TextView
-                                    android:id="@+id/arvo_tv_address1"
+                                    android:id="@+id/arvo_tv_address_to"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -267,9 +283,9 @@
                         android:id="@+id/arvo_tv_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="90dp"
-                        android:layout_marginBottom="11dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/distance"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -282,8 +298,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:layout_marginTop="90dp"
-                        android:layout_marginBottom="11dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/_0"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -296,8 +312,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="1dp"
-                        android:layout_marginTop="90dp"
-                        android:layout_marginBottom="11dp"
+                        android:layout_marginTop="80dp"
+                        android:layout_marginBottom="10dp"
                         android:text="@string/km"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -309,10 +325,10 @@
                         android:id="@+id/arvo_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginStart="11dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="11dp"
-                        android:layout_marginBottom="7dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
                         android:background="?android:attr/listDivider"
                         android:backgroundTint="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -327,31 +343,31 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/arvo_divider">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/arvo_btn_start_navigation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/choose_custom"
-                            android:backgroundTint="#D6EFEE"
-                            android:padding="10dp"
-                            android:text="@string/start_navigation"
-                            android:textColor="#C0AB88"
-                            android:textSize="14sp"
-                            android:visibility="invisible"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+<!--                        <androidx.appcompat.widget.AppCompatButton-->
+<!--                            android:id="@+id/arvo_btn_start_navigation"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="16dp"-->
+<!--                            android:layout_marginTop="6dp"-->
+<!--                            android:layout_marginBottom="6dp"-->
+<!--                            android:background="@drawable/choose_custom"-->
+<!--                            android:backgroundTint="#D6EFEE"-->
+<!--                            android:padding="10dp"-->
+<!--                            android:text="@string/start_navigation"-->
+<!--                            android:textColor="#C0AB88"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:visibility="invisible"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                         <TextView
                             android:id="@+id/arvo_tv_earn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="24dp"
-                            android:layout_marginTop="11dp"
-                            android:layout_marginBottom="11dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:text="@string/earn"
                             android:textColor="@color/black"
                             android:textSize="16sp"
@@ -365,8 +381,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:layout_marginTop="11dp"
-                            android:layout_marginBottom="11dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:text="@string/rm"
                             android:textColor="@color/black"
                             android:textSize="16sp"
@@ -380,8 +396,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
-                            android:layout_marginTop="11dp"
-                            android:layout_marginBottom="11dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:text="@string/_0"
                             android:textColor="@color/black"
                             android:textSize="16sp"
@@ -391,11 +407,12 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/arvo_btn_accept"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@drawable/choose_custom"
                             android:backgroundTint="@color/primary_green"
                             android:padding="10dp"
@@ -412,9 +429,9 @@
                             android:id="@+id/arvo_btn_pick_up"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@drawable/choose_custom"
                             android:backgroundTint="@color/primary_green"
                             android:padding="10dp"
@@ -434,12 +451,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="18dp"
-                android:layout_marginBottom="6dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:visibility="invisible"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -449,8 +467,8 @@
                         android:id="@+id/arvo_tv_successful"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="23dp"
-                        android:layout_marginTop="27dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="25dp"
                         android:text="@string/successfully_picked_up"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -462,9 +480,9 @@
                         android:id="@+id/arvo_tv_successful_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="23dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="23dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="25dp"
                         android:text="@string/enter_the_order_id_that_provided_by_the_customer"
                         android:textColor="@color/black"
                         android:textSize="15sp"
@@ -475,9 +493,9 @@
                         android:id="@+id/arvo_et_order_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="21dp"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="21dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="20dp"
                         android:background="@drawable/custom_order"
                         android:hint="@string/order_id_"
                         android:inputType="textPersonName"

@@ -213,7 +213,7 @@ public class ProfileUserFragment extends Fragment {
                 //show image
                 String avatarUrl = user.getAvatar();
                 if (!Objects.equals(avatarUrl, "")) {
-                    setAvatar(avatarUrl, ProfilePictureImageView);
+//                    setAvatar(avatarUrl, ProfilePictureImageView);
                 }
 
                 //show membership card data
@@ -350,25 +350,25 @@ public class ProfileUserFragment extends Fragment {
         return dateFormat.format(currentDate);
     }
 
-    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
-        //referenceFromUrl to get StorageReference
-        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
-
-        try {
-            File localFile = File.createTempFile("tempfile", ".jpg");
-
-            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                //show
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                profilePictureImageView.setImageBitmap(bitmap);
-
-            }).addOnFailureListener(e -> {
-                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
+//        //referenceFromUrl to get StorageReference
+//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
+//
+//        try {
+//            File localFile = File.createTempFile("tempfile", ".jpg");
+//
+//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+//                //show
+//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                profilePictureImageView.setImageBitmap(bitmap);
+//
+//            }).addOnFailureListener(e -> {
+//                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //call dialog
     private void showLogoutConfirmationDialog() {

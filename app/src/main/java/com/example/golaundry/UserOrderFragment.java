@@ -173,7 +173,11 @@ public class UserOrderFragment extends Fragment {
         setDiscoverTv(); //show or not show latest order card
 
         if (currentArea == null) {
-            getCurrentArea();
+            if (mUserGetLocationHolder.getIsGetCurrentLocation()){
+                currentArea = mUserGetLocationHolder.getArea();
+            } else {
+                getCurrentArea();
+            }
         } else {
             currentLocationTextView.setText(currentArea);
         }
@@ -352,7 +356,6 @@ public class UserOrderFragment extends Fragment {
                         currentArea = address.getLocality();
                         currentLocationTextView.setText(currentArea);
                         mUserGetLocationHolder.setArea(currentArea);
-                        mUserGetLocationHolder.setIsGetCurrentLocation(true);
                         mUserGetLocationHolder.setFullAddress(fullAddress);
                     }
                 }
