@@ -9,7 +9,7 @@
     tools:context=".HistoryRiderFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/hf_toolbar"
+        android:id="@+id/hrf_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:elevation="4dp"
@@ -18,7 +18,7 @@
         android:layout_alignParentEnd="true">
 
         <TextView
-            android:id="@+id/hf_tv_go_laundry"
+            android:id="@+id/hrf_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -35,10 +35,10 @@
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/hf_tab"
+        android:id="@+id/hrf_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hf_toolbar"
+        android:layout_below="@id/hrf_toolbar"
         app:tabMode="scrollable"
         android:background="@color/primary_green"
         app:tabTextColor="@color/white">
@@ -46,12 +46,12 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/to_collect" />
+            android:text="@string/to_pick" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/to_receive"/>
+            android:text="@string/to_deliver"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -66,10 +66,10 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hf_rv_orders"
+        android:id="@+id/hrf_rv_orders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hf_tab"
+        android:layout_below="@id/hrf_tab"
         android:layout_marginTop="14dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"/>

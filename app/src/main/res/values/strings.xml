@@ -338,4 +338,8 @@
     <string name="no_order_found">No order found</string>
     <string name="customer_information">Customer Information</string>
     <string name="laundry_shop_information">Laundry Shop Information</string>
+    <string name="to_process">To Process</string>
+    <string name="to_confirm">To Confirm</string>
+    <string name="to_pick">To Pick</string>
+    <string name="to_deliver">To Deliver</string>
 </resources>
