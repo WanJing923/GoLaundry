@@ -36,6 +36,17 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/huli_iv_qr"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_qr_code"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/order_id" />
+
         <TextView
             android:id="@+id/huli_tv_order_id_"
             android:layout_width="wrap_content"
