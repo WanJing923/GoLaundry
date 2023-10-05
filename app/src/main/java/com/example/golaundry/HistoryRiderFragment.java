@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class HistoryRiderFragment extends Fragment {
+    private DatabaseReference userOrderRef;
 
     public HistoryRiderFragment() {
     }
@@ -19,6 +22,8 @@ public class HistoryRiderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        userOrderRef = db.getReference().child("userOrder");
     }
 
     @Override
@@ -51,4 +56,6 @@ public class HistoryRiderFragment extends Fragment {
 
         return view;
     }
+
+
 }

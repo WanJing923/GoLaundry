@@ -68,9 +68,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/hf_rv_orders"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/hf_tab"
-        android:layout_marginTop="14dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginEnd="22dp"/>
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
 </RelativeLayout>
