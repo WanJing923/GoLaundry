@@ -351,4 +351,5 @@
     <string name="view_shop">View shop</string>
     <string name="date_time">Date Time</string>
     <string name="order_status">Order status</string>
+    <string name="laundry_shop">Laundry Shop:</string>
 </resources>

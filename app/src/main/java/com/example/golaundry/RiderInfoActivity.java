@@ -60,26 +60,26 @@ public class RiderInfoActivity extends AppCompatActivity {
 
                     String facePhotoUrl = riderModel.getFacePhoto();
                     if (!Objects.equals(facePhotoUrl, "")) {
-                        setAvatar(facePhotoUrl, profilePicImageView);
+//                        setAvatar(facePhotoUrl, profilePicImageView);
                     }
                 }
             });
         }
     }
 
-    private void setAvatar(String facePhotoUrl, ImageView profilePicImageView) {
-        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(facePhotoUrl);
-        try {
-            File localFile = File.createTempFile("tempfile", ".jpg");
-            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                profilePicImageView.setImageBitmap(bitmap);
-            }).addOnFailureListener(e -> {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void setAvatar(String facePhotoUrl, ImageView profilePicImageView) {
+//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(facePhotoUrl);
+//        try {
+//            File localFile = File.createTempFile("tempfile", ".jpg");
+//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                profilePicImageView.setImageBitmap(bitmap);
+//            }).addOnFailureListener(e -> {
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

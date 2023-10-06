@@ -1,20 +1,45 @@
 package com.example.golaundry;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.golaundry.adapter.HistoryFragmentAdapter;
+import com.example.golaundry.adapter.HistoryRiderFragmentAdapter;
+import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.viewModel.LaundryViewModel;
+import com.example.golaundry.viewModel.RiderViewModel;
+import com.example.golaundry.viewModel.UserViewModel;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class HistoryRiderFragment extends Fragment {
+    String currentUserId;
     private DatabaseReference userOrderRef;
+    private final List<OrderModel> toPickUpList = new ArrayList<>();
+    private final List<OrderModel> toDeliverList = new ArrayList<>();
+    private final List<OrderModel> completeList = new ArrayList<>();
+    private final List<OrderModel> cancelledList = new ArrayList<>();
+    private HistoryRiderFragmentAdapter toPickUpAdapter, toDeliverAdapter, completeAdapter, cancelledAdapter;
+    private RecyclerView OrderRiderRecyclerView;
 
     public HistoryRiderFragment() {
     }
@@ -24,6 +49,7 @@ public class HistoryRiderFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         userOrderRef = db.getReference().child("userOrder");
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     @Override
@@ -32,20 +58,43 @@ public class HistoryRiderFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_history_rider, container, false);
 
         TabLayout historyRiderTab = view.findViewById(R.id.hrf_tab);
-        RecyclerView OrderRiderRecyclerView = view.findViewById(R.id.hrf_rv_orders);
+        OrderRiderRecyclerView = view.findViewById(R.id.hrf_rv_orders);
 
-//        List<YourDataModel> initialData = getInitialData();
-//        YourRecyclerViewAdapter adapter = new YourRecyclerViewAdapter(initialData);
-//        recyclerView.setAdapter(adapter);
+        LaundryViewModel mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        RiderViewModel mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
+
+        toPickUpAdapter = new HistoryRiderFragmentAdapter(toPickUpList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
+        toDeliverAdapter = new HistoryRiderFragmentAdapter(toDeliverList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
+        completeAdapter = new HistoryRiderFragmentAdapter(completeList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
+        cancelledAdapter = new HistoryRiderFragmentAdapter(cancelledList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
+
+        OrderRiderRecyclerView.setAdapter(toPickUpAdapter);
+        OrderRiderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         historyRiderTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                // Update RecyclerView data based on the selected tab
-//                String selectedTabText = tab.getText().toString();
-//                List<YourDataModel> newData = getNewDataForTab(selectedTabText);
-//                adapter.updateData(newData);
+                switch (tab.getPosition()) {
+                    case 0:
+                        getRiderOrderDataForToPickUp();
+                        OrderRiderRecyclerView.setAdapter(toPickUpAdapter);
+                        break;
+                    case 1:
+//                        getUserOrderDataForToReceive();
+                        OrderRiderRecyclerView.setAdapter(toDeliverAdapter);
+                        break;
+                    case 2:
+//                        getUserOrderDataForComplete();
+                        OrderRiderRecyclerView.setAdapter(completeAdapter);
+                        break;
+                    case 3:
+//                        getUserOrderDataForCancelled();
+                        OrderRiderRecyclerView.setAdapter(cancelledAdapter);
+                        break;
+                }
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
@@ -54,8 +103,35 @@ public class HistoryRiderFragment extends Fragment {
             }
         });
 
+        getRiderOrderDataForToPickUp();
+
         return view;
     }
 
+    private void getRiderOrderDataForToPickUp() {
+        toPickUpList.clear();
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order created".equals(currentStatus) || "Rider accept order".equals(currentStatus)) {
+                                toPickUpList.add(order);
+                            }
+                        }
+                    }
+                    toPickUpList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    toPickUpAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 
 }
