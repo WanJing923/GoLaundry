@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.golaundry.adapter.HistoryFragmentAdapter;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
+import com.example.golaundry.viewModel.RiderViewModel;
+import com.example.golaundry.viewModel.UserViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -57,12 +59,15 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         TabLayout historyUserTab = view.findViewById(R.id.hf_tab);
         OrderUserRecyclerView = view.findViewById(R.id.hf_rv_orders);
-        LaundryViewModel mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
 
-        toCollectAdapter = new HistoryFragmentAdapter(toCollectList, getContext(),mLaundryViewModel);
-        toReceiveAdapter = new HistoryFragmentAdapter(toReceiveList, getContext(), mLaundryViewModel);
-        completeAdapter = new HistoryFragmentAdapter(completeList, getContext(), mLaundryViewModel);
-        cancelledAdapter = new HistoryFragmentAdapter(cancelledList, getContext(), mLaundryViewModel);
+        LaundryViewModel mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        RiderViewModel mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
+
+        toCollectAdapter = new HistoryFragmentAdapter(toCollectList, getContext(),mLaundryViewModel,mUserViewModel,mRiderViewModel);
+        toReceiveAdapter = new HistoryFragmentAdapter(toReceiveList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
+        completeAdapter = new HistoryFragmentAdapter(completeList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
+        cancelledAdapter = new HistoryFragmentAdapter(cancelledList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
 
         OrderUserRecyclerView.setAdapter(toCollectAdapter);
         OrderUserRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
