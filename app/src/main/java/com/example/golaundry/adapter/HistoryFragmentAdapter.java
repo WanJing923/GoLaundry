@@ -3,11 +3,13 @@ package com.example.golaundry.adapter;
 import static android.content.Context.WINDOW_SERVICE;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.golaundry.HistoryOrderStatusActivity;
 import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.RiderViewOrderActivity;
 import com.example.golaundry.model.OrderStatusModel;
@@ -242,10 +244,8 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             holder.actionButton.setVisibility(View.GONE);
         }
         //pending receiving
-        else if (Objects.equals(order.getCurrentStatus(), "Rider pick up")
-                && Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
-                && Objects.equals(order.getCurrentStatus(), "Laundry done process")
-                && Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
+        else if (Objects.equals(order.getCurrentStatus(), "Rider pick up") && Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
+                && Objects.equals(order.getCurrentStatus(), "Laundry done process") && Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
             holder.currentStatusTextView.setText("Pending Receiving");
         } else if (Objects.equals(order.getCurrentStatus(), "Order delivered")) {
             holder.currentStatusTextView.setText("Pending Receiving");
@@ -312,6 +312,9 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
         holder.moreImageView.setOnClickListener(view -> {
             //intent to order status history
+            Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
+            intent.putExtra("OrderData", order); //need to change
+            context.startActivity(intent);
         });
     }
 

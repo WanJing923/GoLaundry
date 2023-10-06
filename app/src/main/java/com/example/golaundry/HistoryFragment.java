@@ -34,7 +34,7 @@ public class HistoryFragment extends Fragment {
 
     String currentUserId;
     private DatabaseReference userOrderRef;
-    private List<OrderModel> toCollectList = new ArrayList<>();
+    private final List<OrderModel> toCollectList = new ArrayList<>();
     private final List<OrderModel> toReceiveList = new ArrayList<>();
     private final List<OrderModel> completeList = new ArrayList<>();
     private final List<OrderModel> cancelledList = new ArrayList<>();

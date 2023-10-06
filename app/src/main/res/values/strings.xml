@@ -344,4 +344,9 @@
     <string name="to_deliver">To Deliver</string>
     <string name="loading">Loading</string>
     <string name="qr_code">QR code</string>
+    <string name="delivered">Delivered</string>
+    <string name="delivered_on">Delivered on</string>
+    <string name="rider_">Rider:</string>
+    <string name="view_rider_info">View rider info</string>
+    <string name="view_shop">View shop</string>
 </resources>

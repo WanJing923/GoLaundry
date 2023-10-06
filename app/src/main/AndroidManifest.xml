@@ -26,6 +26,9 @@
         android:theme="@style/Theme.GoLaundry"
         tools:targetApi="31">
         <activity
+            android:name=".HistoryOrderStatusActivity"
+            android:exported="false" />
+        <activity
             android:name=".RiderOrderDetailsActivity"
             android:exported="false" />
         <activity
