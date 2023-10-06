@@ -2,11 +2,14 @@ package com.example.golaundry.adapter;
 
 import static android.content.Context.WINDOW_SERVICE;
 
+import android.app.AlertDialog;
+import android.graphics.Color;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.golaundry.OrderLocationActivity;
+import com.example.golaundry.RiderViewOrderActivity;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.viewModel.RiderViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -121,102 +124,117 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             holder.currentStatusTextView.setText("Pending Collection");
             holder.actionButton.setText("CANCEL");
             holder.actionButton.setOnClickListener(view -> {
-                holder.actionButton.setText("LOADING");
-                // update order status history, order current status, user balance, user spending, user total order
-                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(order.getUserId());
-                DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(order.getOrderId());
-                DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(order.getOrderId());
-                DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(order.getUserId());
-                DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(order.getUserId());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                String dateTime = sdf.format(new Date());
-                OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled");
-                String orderStatusId = String.valueOf(UUID.randomUUID());
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Cancel Order Confirmation");
+                builder.setMessage("Your fees will be refund.");
 
-                orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> { //order status history
-                    userOrderRef.child("currentStatus").setValue("Order cancelled").addOnSuccessListener(aVoid1 -> { //order current status
-                        userRef.child("balance").setValue(cancelBalance).addOnSuccessListener(aVoid2 -> { //add back user current balance
-                            userSpendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        String latestYear = "";
-                                        String latestMonth = "";
-                                        Double currentSpending = null;
-                                        for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
-                                            String year = yearSnapshot.getKey();
-                                            for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
-                                                String month = monthSnapshot.getKey();
-                                                assert latestYear != null;
-                                                if (latestYear.equals("") || Objects.equals(latestMonth, "") || (year + month).compareTo(latestYear + latestMonth) > 0) {
-                                                    latestYear = year;
-                                                    latestMonth = month;
-                                                    currentSpending = monthSnapshot.getValue(Double.class);
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    holder.actionButton.setText("LOADING");
+                    // update order status history, order current status, user balance, user spending, user total order
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(order.getUserId());
+                    DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(order.getOrderId());
+                    DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(order.getOrderId());
+                    DatabaseReference userSpendingRef = FirebaseDatabase.getInstance().getReference().child("userSpending").child(order.getUserId());
+                    DatabaseReference userTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("userTotalOrder").child(order.getUserId());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                    String dateTime = sdf.format(new Date());
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled");
+                    String orderStatusId = String.valueOf(UUID.randomUUID());
+
+                    orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> { //order status history
+                        userOrderRef.child("currentStatus").setValue("Order cancelled").addOnSuccessListener(aVoid1 -> { //order current status
+                            userRef.child("balance").setValue(cancelBalance).addOnSuccessListener(aVoid2 -> { //add back user current balance
+                                userSpendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            String latestYear = "";
+                                            String latestMonth = "";
+                                            Double currentSpending = null;
+                                            for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
+                                                String year = yearSnapshot.getKey();
+                                                for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                                    String month = monthSnapshot.getKey();
+                                                    assert latestYear != null;
+                                                    if (latestYear.equals("") || Objects.equals(latestMonth, "") || (year + month).compareTo(latestYear + latestMonth) > 0) {
+                                                        latestYear = year;
+                                                        latestMonth = month;
+                                                        currentSpending = monthSnapshot.getValue(Double.class);
+                                                    }
                                                 }
                                             }
-                                        }
-                                        if (currentSpending != null) {
-                                            double updatedSpending = currentSpending - order.getTotalFee();
-                                            assert latestYear != null;
-                                            if (!latestYear.isEmpty() && !Objects.requireNonNull(latestMonth).isEmpty()) {
-                                                userSpendingRef.child(latestYear).child(latestMonth).setValue(updatedSpending).addOnSuccessListener(aVoid3 -> {  //deduct the order total fee
-                                                    userTotalOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                            if (dataSnapshot.exists()) {
-                                                                String latestYear1 = "";
-                                                                String latestMonth1 = "";
-                                                                int currentTotalNumber = 0;
-                                                                for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
-                                                                    String year = yearSnapshot.getKey();
-                                                                    for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
-                                                                        String month = monthSnapshot.getKey();
-                                                                        assert latestYear1 != null;
-                                                                        if (latestYear1.equals("") || Objects.equals(latestMonth1, "") || (year + month).compareTo(latestYear1 + latestMonth1) > 0) {
-                                                                            latestYear1 = year;
-                                                                            latestMonth1 = month;
-                                                                            Integer totalNumber = monthSnapshot.getValue(Integer.class);
-                                                                            if (totalNumber != null) {
-                                                                                currentTotalNumber = totalNumber;
+                                            if (currentSpending != null) {
+                                                double updatedSpending = currentSpending - order.getTotalFee();
+                                                assert latestYear != null;
+                                                if (!latestYear.isEmpty() && !Objects.requireNonNull(latestMonth).isEmpty()) {
+                                                    userSpendingRef.child(latestYear).child(latestMonth).setValue(updatedSpending).addOnSuccessListener(aVoid3 -> {  //deduct the order total fee
+                                                        userTotalOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                if (dataSnapshot.exists()) {
+                                                                    String latestYear1 = "";
+                                                                    String latestMonth1 = "";
+                                                                    int currentTotalNumber = 0;
+                                                                    for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
+                                                                        String year = yearSnapshot.getKey();
+                                                                        for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                                                            String month = monthSnapshot.getKey();
+                                                                            assert latestYear1 != null;
+                                                                            if (latestYear1.equals("") || Objects.equals(latestMonth1, "") || (year + month).compareTo(latestYear1 + latestMonth1) > 0) {
+                                                                                latestYear1 = year;
+                                                                                latestMonth1 = month;
+                                                                                Integer totalNumber = monthSnapshot.getValue(Integer.class);
+                                                                                if (totalNumber != null) {
+                                                                                    currentTotalNumber = totalNumber;
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
-                                                                }
-                                                                if (currentTotalNumber != 0) {
-                                                                    int updatedNumber = currentTotalNumber - 1;
-                                                                    assert latestYear1 != null;
-                                                                    assert latestMonth1 != null;
-                                                                    if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "") ) {
-                                                                        userTotalOrderRef.child(latestYear1).child(latestMonth1).setValue(updatedNumber).addOnSuccessListener(aVoid4 -> {//deduct order total number
-                                                                            Toast.makeText(context, "Order cancelled, please refresh.", Toast.LENGTH_SHORT).show();
-                                                                            holder.actionButton.setText("DONE");
-                                                                            holder.actionButton.setEnabled(false);
-                                                                        }).addOnFailureListener(e -> Toast.makeText(context, "Order cancelling process failed.", Toast.LENGTH_SHORT).show());
+                                                                    if (currentTotalNumber != 0) {
+                                                                        int updatedNumber = currentTotalNumber - 1;
+                                                                        assert latestYear1 != null;
+                                                                        assert latestMonth1 != null;
+                                                                        if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "") ) {
+                                                                            userTotalOrderRef.child(latestYear1).child(latestMonth1).setValue(updatedNumber).addOnSuccessListener(aVoid4 -> {//deduct order total number
+                                                                                Toast.makeText(context, "Order cancelled, please refresh.", Toast.LENGTH_SHORT).show();
+                                                                                holder.actionButton.setText("DONE");
+                                                                                holder.actionButton.setEnabled(false);
+                                                                            }).addOnFailureListener(e -> Toast.makeText(context, "Order cancelling process failed.", Toast.LENGTH_SHORT).show());
+                                                                        }
                                                                     }
                                                                 }
                                                             }
-                                                        }
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                        }
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                            }
+                                                        });
+                                                    }).addOnFailureListener(e -> {
                                                     });
-                                                }).addOnFailureListener(e -> {
-                                                });
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
+                            }).addOnFailureListener(e -> {
                             });
                         }).addOnFailureListener(e -> {
                         });
                     }).addOnFailureListener(e -> {
                     });
-                }).addOnFailureListener(e -> {
+
+                    dialog.dismiss();
                 });
+
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
             });
         }
         //rider accept order, cant cancel order
@@ -248,6 +266,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         //cancelled
         else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
             holder.currentStatusTextView.setText("Cancelled");
+            holder.actionButton.setVisibility(View.GONE);
         }
 
         //show services list view

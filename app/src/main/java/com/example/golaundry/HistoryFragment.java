@@ -54,8 +54,7 @@ public class HistoryFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         TabLayout historyUserTab = view.findViewById(R.id.hf_tab);
         OrderUserRecyclerView = view.findViewById(R.id.hf_rv_orders);
@@ -64,7 +63,7 @@ public class HistoryFragment extends Fragment {
         UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         RiderViewModel mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
 
-        toCollectAdapter = new HistoryFragmentAdapter(toCollectList, getContext(),mLaundryViewModel,mUserViewModel,mRiderViewModel);
+        toCollectAdapter = new HistoryFragmentAdapter(toCollectList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
         toReceiveAdapter = new HistoryFragmentAdapter(toReceiveList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
         completeAdapter = new HistoryFragmentAdapter(completeList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
         cancelledAdapter = new HistoryFragmentAdapter(cancelledList, getContext(), mLaundryViewModel, mUserViewModel, mRiderViewModel);
@@ -81,12 +80,15 @@ public class HistoryFragment extends Fragment {
                         OrderUserRecyclerView.setAdapter(toCollectAdapter);
                         break;
                     case 1:
+                        getUserOrderDataForToReceive();
                         OrderUserRecyclerView.setAdapter(toReceiveAdapter);
                         break;
                     case 2:
+                        getUserOrderDataForComplete();
                         OrderUserRecyclerView.setAdapter(completeAdapter);
                         break;
                     case 3:
+                        getUserOrderDataForCancelled();
                         OrderUserRecyclerView.setAdapter(cancelledAdapter);
                         break;
                 }
@@ -95,6 +97,7 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
@@ -132,4 +135,83 @@ public class HistoryFragment extends Fragment {
         });
     }
 
+    private void getUserOrderDataForToReceive() {
+        toReceiveList.clear();
+        userOrderRef.orderByChild("userId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Rider pick up".equals(currentStatus) || "Order reached laundry shop".equals(currentStatus)
+                                    || "Laundry done process".equals(currentStatus) || "Order out of delivery".equals(currentStatus)
+                                    || "Order delivered".equals(currentStatus)) {
+                                toReceiveList.add(order);
+                            }
+                        }
+                    }
+                    toReceiveList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    toReceiveAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getUserOrderDataForComplete() {
+        completeList.clear();
+        userOrderRef.orderByChild("userId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order completed".equals(currentStatus)) {
+                                completeList.add(order);
+                            }
+                        }
+                    }
+                    completeList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    completeAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getUserOrderDataForCancelled() {
+        cancelledList.clear();
+        userOrderRef.orderByChild("userId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order cancelled".equals(currentStatus)) {
+                                cancelledList.add(order);
+                            }
+                        }
+                    }
+                    cancelledList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    cancelledAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 }
