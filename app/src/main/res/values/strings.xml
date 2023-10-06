@@ -349,4 +349,6 @@
     <string name="rider_">Rider:</string>
     <string name="view_rider_info">View rider info</string>
     <string name="view_shop">View shop</string>
+    <string name="date_time">Date Time</string>
+    <string name="order_status">Order status</string>
 </resources>

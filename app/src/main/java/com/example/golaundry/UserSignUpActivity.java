@@ -106,7 +106,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, R.string.checkBoxToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_checkBox).requestFocus();
-            return;
         }
         //validate to check if name is empty
         else if (fullName.isEmpty()) {
@@ -114,14 +113,12 @@ public class UserSignUpActivity extends AppCompatActivity {
             fullNameEditText.setError("Full name is required");
             Toast.makeText(this, R.string.fullNameRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_full_name).requestFocus();
-            return;
         }
         //validate to check if gender is selected
         else if (Objects.equals(selectedGender, "Select gender")) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, R.string.genderRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_spinner_gender).requestFocus();
-            return;
         }
         //validate to check if ic no is empty
         else if (icNo.isEmpty()) {
@@ -129,13 +126,11 @@ public class UserSignUpActivity extends AppCompatActivity {
             icNoEditText.setError("NRIC number is required!");
             Toast.makeText(this, R.string.icRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_ic_no).requestFocus();
-            return;
         } else if (icNo.length() != 12) {
             mProgressBar.setVisibility(View.GONE);
             icNoEditText.setError("NRIC number is invalid!");
             Toast.makeText(this, R.string.icInvalidToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_ic_no).requestFocus();
-            return;
         }
         //validate to check if phone number is empty
         else if (phoneNo.isEmpty()) {
@@ -143,7 +138,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             phoneNoEditText.setError("Phone number is required!");
             Toast.makeText(this, R.string.phoneNoRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_phone_number).requestFocus();
-            return;
         }
         //validate to check if phone number is less than 9 characters
         else if (phoneNo.length() < 9) {
@@ -151,7 +145,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             phoneNoEditText.setError("Phone number must be at least 9 characters!");
             Toast.makeText(this, R.string.phoneNoLessToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_phone_number).requestFocus();
-            return;
         }
         //validate to check if email is empty
         else if (emailAddress.isEmpty()) {
@@ -159,7 +152,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             emailAddressEditText.setError("Email address is required!");
             Toast.makeText(this, R.string.emailRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_email_address).requestFocus();
-            return;
         }
         //validate to check if email format is invalid
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()) {
@@ -167,7 +159,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             emailAddressEditText.setError("Email address is invalid!");
             Toast.makeText(this, R.string.emailInvalidToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_email_address).requestFocus();
-            return;
         }
         //validate to check if password is empty
         else if (password.isEmpty()) {
@@ -175,7 +166,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             passwordEditText.setError("Password is required!");
             Toast.makeText(this, R.string.passwordRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_password).requestFocus();
-            return;
         }
         //validate to check if password is less than 8 characters
         else if (password.length() < 8) {
@@ -183,7 +173,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             passwordEditText.setError("Password should be at least 8 characters!");
             Toast.makeText(this, R.string.passwordLessToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_password).requestFocus();
-            return;
         }
         //validate to check if confirm password is empty
         else if (confirmPass.isEmpty()) {
@@ -191,7 +180,6 @@ public class UserSignUpActivity extends AppCompatActivity {
             confirmPassEditText.setError("Confirm password is required!");
             Toast.makeText(this, R.string.confirmPasswordRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_confirm_password).requestFocus();
-            return;
         }
         //validate to check if both password match
         else if (!confirmPass.equals(password)) {
@@ -200,9 +188,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.confirmPasswordNotMatchToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_confirm_password).requestFocus();
         } else {
-
             UserModel newUser = new UserModel(fullName, selectedGender, icNo, phoneNo, emailAddress, "active", "user", "None", "", 0, true);
-
             //vm create user
             mUserViewModel.createUser(emailAddress, password, newUser)
                     .observe(this, signUpResult -> {
@@ -217,7 +203,6 @@ public class UserSignUpActivity extends AppCompatActivity {
                             mProgressBar.setVisibility(View.GONE);
                         }
                     });
-
         }
     }
 }

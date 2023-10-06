@@ -12,42 +12,27 @@
         android:orientation="horizontal"
         android:padding="10dp"
         android:weightSum="5"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         tools:ignore="UselessParent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="3">
 
             <TextView
-                android:id="@+id/tv_order_id"
+                android:id="@+id/osi_tv_dateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25 May 2023"
+                android:text="@string/date_time"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_order_id_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:text="13:33 pm"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_order_id"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
-            android:id="@+id/divider3"
+            android:id="@+id/osi_divider3"
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -58,12 +43,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_status"
+            android:id="@+id/osi_tv_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="2"
-            android:text="Order has arrived at the laundry shop"
+            android:text="@string/order_status"
             android:textColor="@color/black"
             android:textSize="14sp" />
     </LinearLayout>

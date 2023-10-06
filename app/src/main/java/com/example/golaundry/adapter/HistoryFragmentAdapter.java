@@ -313,7 +313,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         holder.moreImageView.setOnClickListener(view -> {
             //intent to order status history
             Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
-            intent.putExtra("OrderData", order); //need to change
+            intent.putExtra("HistoryOrderData", order); //need to change
             context.startActivity(intent);
         });
     }
