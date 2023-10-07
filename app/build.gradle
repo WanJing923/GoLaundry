@@ -56,6 +56,8 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.google.maps.android:android-maps-utils:0.4+'
 
+    //qrcode
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+    implementation 'com.budiyev.android:code-scanner:2.1.0'
 
 }

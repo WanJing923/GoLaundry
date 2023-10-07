@@ -233,20 +233,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/hrli_actionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/choose_custom"
-                android:backgroundTint="@color/primary_green"
-                android:padding="10dp"
-                android:text="@string/tv_rate"
-                android:textColor="@color/gold"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

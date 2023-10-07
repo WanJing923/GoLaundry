@@ -54,6 +54,14 @@ public class HistoryOrderStatusActivity extends AppCompatActivity {
         TextView viewShopTextView = findViewById(R.id.hosa_tv_view_shop);
         TextView orderIdTextView = findViewById(R.id.hosa_tv_order_id_number);
         ImageView helpImageView = findViewById(R.id.hosa_iv_help);
+        TextView orderIdWordTextView = findViewById(R.id.hosa_tv_order_id);
+
+        boolean isRider = getIntent().getBooleanExtra("isRider",false);
+        if (isRider){
+            orderIdTextView.setVisibility(View.GONE);
+            orderIdWordTextView.setVisibility(View.GONE);
+            viewShopTextView.setVisibility(View.GONE);
+        }
 
         OrderModel mOrderModel = (OrderModel) getIntent().getSerializableExtra("HistoryOrderData");
         if (mOrderModel != null) {

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.example.golaundry.HistoryOrderStatusActivity;
 import com.example.golaundry.OrderLocationActivity;
+import com.example.golaundry.RiderOrderDetailsActivity;
 import com.example.golaundry.RiderViewOrderActivity;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.viewModel.RiderViewModel;
@@ -84,7 +85,77 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OrderModel order = orderList.get(position);
+        holder.statusContentTextView.setText(order.getCurrentStatus());
 
+        double distance = order.getDeliveryFee();
+        @SuppressLint("DefaultLocale")
+        String distanceShow = String.format("%.2f", distance);
+        holder.amountTextView.setText(distanceShow);
+
+        String date = order.getPickUpDate();
+        String formattedDate = formatPickUpDateTime(date);
+        holder.dateTextView.setText("Pick up by " + formattedDate);
+
+        mUserViewModel.getUserData(order.getUserId()).observe((LifecycleOwner) context, userModel -> {
+            if (userModel != null) {
+                holder.userNameTextView.setText(userModel.getFullName());
+            }
+        });
+
+        mLaundryViewModel.getLaundryData(order.getLaundryId()).observe((LifecycleOwner) context, laundryModel -> {
+            if (laundryModel != null) {
+                holder.laundryShopNameTextView.setText("Laundry Shop Name: " + laundryModel.getShopName());
+            }
+        });
+
+        holder.moreImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
+            intent.putExtra("HistoryOrderData", order);
+            intent.getBooleanExtra("isRider",true);
+            context.startActivity(intent);
+        });
+
+        if (Objects.equals(order.getCurrentStatus(), "Rider accept order")) {
+            holder.orderIdTextView.setText("Pending Pick Up");
+            holder.currentStatusTextView.setText("Pending Pick Up");
+        }
+        if (Objects.equals(order.getCurrentStatus(), "Rider pick up") && Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
+                && Objects.equals(order.getCurrentStatus(), "Laundry done process") && Objects.equals(order.getCurrentStatus(), "Order out of delivery")
+                && Objects.equals(order.getCurrentStatus(), "Order delivered")) {
+            holder.orderIdTextView.setText(order.getOrderId());
+            holder.currentStatusTextView.setText("Pending Deliver");
+        }
+        if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
+            holder.orderIdTextView.setText(order.getOrderId());
+            holder.currentStatusTextView.setText("Completed");
+        }
+        if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+            holder.orderIdTextView.setText(order.getOrderId());
+            holder.currentStatusTextView.setText("Cancelled");
+        }
+
+        holder.viewOrderTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, RiderOrderDetailsActivity.class);
+            intent.putExtra("RiderViewOrderDetailsData", order);
+            context.startActivity(intent);
+        });
+    }
+
+    public String formatPickUpDateTime(String dateTime) {
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            Date date = originalFormat.parse(dateTime);
+
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+            assert date != null;
+            return dateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return dateTime;
+        }
     }
 
     @Override
@@ -93,9 +164,8 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView userNameTextView, viewOrderTextView, orderIdTextView, laundryShopNameTextView, amountTextView, dateTextView, currentStatusTextView,statusContentTextView;
+        TextView userNameTextView, viewOrderTextView, orderIdTextView, laundryShopNameTextView, amountTextView, dateTextView, currentStatusTextView, statusContentTextView;
         ImageView moreImageView;
-        Button actionButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -107,7 +177,6 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
             statusContentTextView = itemView.findViewById(R.id.hrli_tv_status_content);
             dateTextView = itemView.findViewById(R.id.hrli_tv_date);
             amountTextView = itemView.findViewById(R.id.hrli_tv_delivery_amount);
-            actionButton = itemView.findViewById(R.id.hrli_actionButton);
             currentStatusTextView = itemView.findViewById(R.id.hrli_tv_status);
         }
     }

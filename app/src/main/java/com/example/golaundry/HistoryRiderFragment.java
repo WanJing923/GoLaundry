@@ -55,7 +55,7 @@ public class HistoryRiderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_history_rider, container, false);
+        View view = inflater.inflate(R.layout.fragment_history_rider, container, false);
 
         TabLayout historyRiderTab = view.findViewById(R.id.hrf_tab);
         OrderRiderRecyclerView = view.findViewById(R.id.hrf_rv_orders);
@@ -81,15 +81,15 @@ public class HistoryRiderFragment extends Fragment {
                         OrderRiderRecyclerView.setAdapter(toPickUpAdapter);
                         break;
                     case 1:
-//                        getUserOrderDataForToReceive();
+                        getRiderOrderDataForToDeliver();
                         OrderRiderRecyclerView.setAdapter(toDeliverAdapter);
                         break;
                     case 2:
-//                        getUserOrderDataForComplete();
+                        getRiderOrderDataForComplete();
                         OrderRiderRecyclerView.setAdapter(completeAdapter);
                         break;
                     case 3:
-//                        getUserOrderDataForCancelled();
+                        getRiderOrderDataForCancelled();
                         OrderRiderRecyclerView.setAdapter(cancelledAdapter);
                         break;
                 }
@@ -98,13 +98,13 @@ public class HistoryRiderFragment extends Fragment {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
 
         getRiderOrderDataForToPickUp();
-
         return view;
     }
 
@@ -119,7 +119,7 @@ public class HistoryRiderFragment extends Fragment {
                         OrderModel order = orderSnapshot.getValue(OrderModel.class);
                         if (order != null) {
                             String currentStatus = order.getCurrentStatus();
-                            if ("Order created".equals(currentStatus) || "Rider accept order".equals(currentStatus)) {
+                            if ("Rider accept order".equals(currentStatus)) {
                                 toPickUpList.add(order);
                             }
                         }
@@ -128,6 +128,90 @@ public class HistoryRiderFragment extends Fragment {
                     toPickUpAdapter.notifyDataSetChanged();
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getRiderOrderDataForToDeliver() {
+        toDeliverList.clear();
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Rider pick up".equals(currentStatus) || "Order reached laundry shop".equals(currentStatus)
+                                    || "Laundry done process".equals(currentStatus) || "Order out of delivery".equals(currentStatus)
+                                    || "Order delivered".equals(currentStatus)) {
+                                toDeliverList.add(order);
+                            }
+                        }
+                    }
+                    toDeliverList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    toDeliverAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getRiderOrderDataForComplete() {
+        completeList.clear();
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order completed".equals(currentStatus)) {
+                                completeList.add(order);
+                            }
+                        }
+                    }
+                    completeList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    completeAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getRiderOrderDataForCancelled() {
+        cancelledList.clear();
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order cancelled".equals(currentStatus)) {
+                                cancelledList.add(order);
+                            }
+                        }
+                    }
+                    cancelledList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+                    cancelledAdapter.notifyDataSetChanged();
+                }
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
