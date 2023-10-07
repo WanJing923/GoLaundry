@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/hosa_tv_current_status"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp">
 
                 <TextView

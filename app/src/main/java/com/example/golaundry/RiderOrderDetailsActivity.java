@@ -54,7 +54,7 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
     private EditText orderIdEditText;
     private boolean isScannerEnabled = false;
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,74 +132,90 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
             String earnShow = String.format("%.2f", mOrderModel.getDeliveryFee());
             earnTextView.setText(earnShow);
 
-            //scan order ID to match
-            pickUpButton.setOnClickListener(view -> {
+            if (Objects.equals(mOrderModel.getCurrentStatus(), "Rider accept order")) {
+                //scan order ID to match
+                pickUpButton.setOnClickListener(view -> {
 
-                //show 2nd card, hide 1st card
-                enterOrderIdCardView.setVisibility(View.VISIBLE);
-                orderDetailsCardView.setVisibility(View.GONE);
-                disableScanner();
-
-                scanImageView.setOnClickListener(view1 -> {
-                    qRCodeScannerView.setVisibility(View.VISIBLE);
-                    enterOrderIdCardView.setVisibility(View.GONE);
+                    //show 2nd card, hide 1st card
+                    enterOrderIdCardView.setVisibility(View.VISIBLE);
                     orderDetailsCardView.setVisibility(View.GONE);
-                    enableScanner();
-                    startScanning();
-                });
-
-                cancelTextView.setOnClickListener(view1 -> {
                     disableScanner();
-                    enterOrderIdCardView.setVisibility(View.GONE);
-                    orderDetailsCardView.setVisibility(View.VISIBLE);
-                });
 
-                okTextView.setOnClickListener(view1 -> {
-                    disableScanner();
-                    String orderIdString = orderIdEditText.getText().toString();
-                    if (!orderIdString.equals("")) {
-                        if (orderIdString.equals(mOrderModel.getOrderId())) {
-                            //update order status table ,order table
-                            DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(mOrderModel.getOrderId());
-                            DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(mOrderModel.getOrderId());
+                    scanImageView.setOnClickListener(view1 -> {
+                        qRCodeScannerView.setVisibility(View.VISIBLE);
+                        enterOrderIdCardView.setVisibility(View.GONE);
+                        orderDetailsCardView.setVisibility(View.GONE);
+                        enableScanner();
+                        startScanning();
+                    });
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                            String dateTime = sdf.format(new Date());
-                            OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Rider pick up");
+                    cancelTextView.setOnClickListener(view1 -> {
+                        disableScanner();
+                        enterOrderIdCardView.setVisibility(View.GONE);
+                        orderDetailsCardView.setVisibility(View.VISIBLE);
+                    });
 
-                            userOrderRef.child("riderId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
-                                userOrderRef.child("currentStatus").setValue("Rider pick up").addOnSuccessListener(aVoid1 -> { //update order table
-                                    String orderStatusId = String.valueOf(UUID.randomUUID());
-                                    orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid2 -> { //add order status table
-                                        Toast.makeText(RiderOrderDetailsActivity.this, "Rider pick up", Toast.LENGTH_SHORT).show();
-                                        finish();
+                    okTextView.setOnClickListener(view1 -> {
+                        disableScanner();
+                        String orderIdString = orderIdEditText.getText().toString();
+                        if (!orderIdString.equals("")) {
+                            if (orderIdString.equals(mOrderModel.getOrderId())) {
+                                //update order status table ,order table
+                                DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(mOrderModel.getOrderId());
+                                DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(mOrderModel.getOrderId());
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                                String dateTime = sdf.format(new Date());
+                                OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Rider pick up");
+
+                                userOrderRef.child("riderId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
+                                    userOrderRef.child("currentStatus").setValue("Rider pick up").addOnSuccessListener(aVoid1 -> { //update order table
+                                        String orderStatusId = String.valueOf(UUID.randomUUID());
+                                        orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid2 -> { //add order status table
+                                            Toast.makeText(RiderOrderDetailsActivity.this, "Rider pick up", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }).addOnFailureListener(e -> {
+                                            //
+                                        });
                                     }).addOnFailureListener(e -> {
                                         //
                                     });
                                 }).addOnFailureListener(e -> {
                                     //
                                 });
-                            }).addOnFailureListener(e -> {
-                                //
-                            });
 
-                            qRCodeScannerView.setVisibility(View.GONE);
-                            disableScanner();
-                            enterOrderIdCardView.setVisibility(View.GONE);
-                            orderDetailsCardView.setVisibility(View.VISIBLE);
-                            finish();
+                                qRCodeScannerView.setVisibility(View.GONE);
+                                disableScanner();
+                                enterOrderIdCardView.setVisibility(View.GONE);
+                                orderDetailsCardView.setVisibility(View.VISIBLE);
+                                finish();
+                            } else {
+                                Toast.makeText(RiderOrderDetailsActivity.this, "Order ID is not match. Please retry.", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Toast.makeText(RiderOrderDetailsActivity.this, "Order ID is not match. Please retry.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RiderOrderDetailsActivity.this, "Order ID is required!", Toast.LENGTH_SHORT).show();
+                            orderIdEditText.requestFocus();
+                            qRCodeScannerView.setVisibility(View.GONE);
+                            enterOrderIdCardView.setVisibility(View.VISIBLE);
+                            orderDetailsCardView.setVisibility(View.GONE);
                         }
-                    } else {
-                        Toast.makeText(RiderOrderDetailsActivity.this, "Order ID is required!", Toast.LENGTH_SHORT).show();
-                        orderIdEditText.requestFocus();
-                        qRCodeScannerView.setVisibility(View.GONE);
-                        enterOrderIdCardView.setVisibility(View.VISIBLE);
-                        orderDetailsCardView.setVisibility(View.GONE);
-                    }
+                    });
                 });
-            });
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Rider pick up")) {
+                pickUpButton.setBackgroundColor(Color.GRAY);
+                pickUpButton.setText("Pending laundry confirm");
+                pickUpButton.setEnabled(false);
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order reached laundry shop")
+                    || Objects.equals(mOrderModel.getCurrentStatus(), "Laundry done process") || Objects.equals(mOrderModel.getCurrentStatus(), "Order out of delivery")
+                    || Objects.equals(mOrderModel.getCurrentStatus(), "Order delivered")) {
+
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order completed")) {
+
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order cancelled")) {
+
+            }
+
+
         }
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA)
@@ -208,7 +224,6 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
         } else {
             startScanning();
         }
-
     }
 
     @Override
@@ -263,13 +278,13 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (isScannerEnabled) {
-            enableScanner(); // Enable the scanner when the activity is resumed
+            enableScanner();
         }
     }
 
     @Override
     protected void onPause() {
-        disableScanner(); // Disable the scanner when the activity is paused
+        disableScanner();
         super.onPause();
     }
 

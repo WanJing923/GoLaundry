@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.golaundry.HistoryOrderStatusActivity;
+import com.example.golaundry.OrderLocationActivity;
+import com.example.golaundry.RiderOrderDetailsActivity;
+import com.example.golaundry.RiderViewOrderActivity;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.viewModel.RiderViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -56,19 +59,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragmentAdapter.ViewHolder> {
+public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryLaundryFragmentAdapter.ViewHolder> {
     private final List<OrderModel> orderList;
     private final Context context;
     private final LaundryViewModel mLaundryViewModel;
     private final UserViewModel mUserViewModel;
     private final RiderViewModel mRiderViewModel;
-
-    QRGEncoder qrgEncoder;
-    Bitmap bitmap;
-    String TAG = "GenerateQRCODE";
     private double cancelBalance;
 
-    public HistoryFragmentAdapter(List<OrderModel> orderList, Context context, LaundryViewModel mLaundryViewModel, UserViewModel mUserViewModel, RiderViewModel mRiderViewModel) {
+    public HistoryLaundryFragmentAdapter(List<OrderModel> orderList, Context context, LaundryViewModel mLaundryViewModel, UserViewModel mUserViewModel, RiderViewModel mRiderViewModel) {
         this.orderList = orderList;
         this.context = context;
         this.mLaundryViewModel = mLaundryViewModel;
@@ -90,19 +89,17 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
         holder.orderIdTextView.setText(order.getOrderId());
         holder.statusTextView.setText(order.getCurrentStatus());
+        holder.deliveryAmountTextView.setVisibility(View.GONE);
+        holder.deliveryFeeTextView.setVisibility(View.GONE);
+        holder.deliveryFeeRMTextView.setVisibility(View.GONE);
 
-        double distance = order.getDeliveryFee();
-        @SuppressLint("DefaultLocale")
-        String distanceShow = String.format("%.2f", distance);
-        holder.deliveryAmountTextView.setText(distanceShow);
-
-        double total = order.getTotalFee();
+        double total = order.getLaundryFee() / 2;
         @SuppressLint("DefaultLocale")
         String totalShow = String.format("%.2f", total);
         holder.totalAmountTextView.setText(totalShow);
 
         String date = order.getDateTime();
-        String formattedDate = formatDateTime(date);
+        String formattedDate = formatDateTimeLaundry(date);
         holder.dateTextView.setText("Order by " + formattedDate);
 
         mLaundryViewModel.getLaundryData(order.getLaundryId()).observe((LifecycleOwner) context, laundryModel -> {
@@ -119,15 +116,15 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             }
         });
 
-        //Pending collection
+        //Pending process
         if (Objects.equals(order.getCurrentStatus(), "Order created")) {
-            holder.currentStatusTextView.setText("Pending Collection");
+            holder.currentStatusTextView.setText("Pending Process");
             holder.actionButton.setText("CANCEL");
             holder.actionButton.setOnClickListener(view -> {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Cancel Order Confirmation");
-                builder.setMessage("Your fees will be refund.");
+                builder.setMessage("Are you sure you want to cancel this order?");
 
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     holder.actionButton.setText("LOADING");
@@ -196,7 +193,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                                                         int updatedNumber = currentTotalNumber - 1;
                                                                         assert latestYear1 != null;
                                                                         assert latestMonth1 != null;
-                                                                        if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "") ) {
+                                                                        if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "")) {
                                                                             userTotalOrderRef.child(latestYear1).child(latestMonth1).setValue(updatedNumber).addOnSuccessListener(aVoid4 -> {//deduct order total number
                                                                                 Toast.makeText(context, "Order cancelled, please refresh.", Toast.LENGTH_SHORT).show();
                                                                                 holder.actionButton.setText("DONE");
@@ -206,6 +203,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                                                     }
                                                                 }
                                                             }
+
                                                             @Override
                                                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                                             }
@@ -216,6 +214,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                             }
                                         }
                                     }
+
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
                                     }
@@ -236,33 +235,29 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
             });
-        }
-        //rider accept order, cant cancel order
-        else if (Objects.equals(order.getCurrentStatus(), "Rider accept order")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Rider accept order")) {
+            holder.currentStatusTextView.setText("Pending Process");
             holder.actionButton.setVisibility(View.GONE);
-        }
-        //pending receiving
-        else if (Objects.equals(order.getCurrentStatus(), "Rider pick up") || Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
-                || Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
-            holder.currentStatusTextView.setText("Pending Receiving");
-        } else if (Objects.equals(order.getCurrentStatus(), "Order delivered")) {
-            holder.currentStatusTextView.setText("Pending Receiving");
-            holder.actionButton.setText("RECEIVE");
+        } else if (Objects.equals(order.getCurrentStatus(), "Rider pick up")) {
+            holder.currentStatusTextView.setText("Pending Process");
+            holder.actionButton.setText("Received and proceed");
             holder.actionButton.setOnClickListener(view -> {
-                //received, update order status and order status history
-                // add laundry_rider each 2 tables dashboard
+                //update order table, order status table, to Order reached laundry shop
             });
-        }
-        //completed
-        else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")) {
+            holder.currentStatusTextView.setText("Pending Process");
+            holder.actionButton.setText("Done");
+            holder.actionButton.setOnClickListener(view -> {
+                //update order table, order status table, to Laundry done process
+            });
+        } else if (Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")
+                || Objects.equals(order.getCurrentStatus(), "Order delivered")) {
+            holder.currentStatusTextView.setText("Pending Confirm");
+            holder.actionButton.setVisibility(View.GONE);
+        } else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.currentStatusTextView.setText("Completed");
-            holder.actionButton.setText("RATE");
-            holder.actionButton.setOnClickListener(view -> {
-                // go ratings feature
-            });
-        }
-        //cancelled
-        else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+            holder.actionButton.setVisibility(View.GONE);
+        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
             holder.currentStatusTextView.setText("Cancelled");
             holder.actionButton.setVisibility(View.GONE);
         }
@@ -281,42 +276,16 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             }
         });
 
-        holder.qrImageView.setOnClickListener(view -> {
-            String orderId = order.getOrderId();
-
-            WindowManager manager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            Point point = new Point();
-            display.getSize(point);
-            int width = point.x;
-            int height = point.y;
-            int smallerDimension = Math.min(width, height);
-            smallerDimension = smallerDimension * 3 / 4;
-
-            qrgEncoder = new QRGEncoder(orderId, null, QRGContents.Type.TEXT, smallerDimension);
-
-            try {
-                bitmap = qrgEncoder.encodeAsBitmap();
-                Dialog qrCodeDialog = new Dialog(context);
-                qrCodeDialog.setContentView(R.layout.dialog_qr_code);
-                ImageView qrCodeImageView = qrCodeDialog.findViewById(R.id.qr_show);
-                qrCodeImageView.setImageBitmap(bitmap);
-                qrCodeDialog.show();
-            } catch (WriterException e) {
-                Log.v(TAG, e.toString());
-            }
-
-        });
-
         holder.moreImageView.setOnClickListener(view -> {
             //intent to order status history
             Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
             intent.putExtra("HistoryOrderData", order);
+            intent.getBooleanExtra("isLaundry", true);
             context.startActivity(intent);
         });
     }
 
-    public String formatDateTime(String dateTime) {
+    public String formatDateTimeLaundry(String dateTime) {
         try {
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -339,7 +308,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView laundryShopNameTextView, orderIdTextView, statusTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView;
+        TextView laundryShopNameTextView, orderIdTextView, statusTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView, deliveryFeeTextView, deliveryFeeRMTextView;
         RecyclerView servicesRecyclerView;
         ImageView moreImageView, qrImageView;
         Button actionButton;
@@ -357,6 +326,8 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             currentStatusTextView = itemView.findViewById(R.id.huli_tv_status);
             actionButton = itemView.findViewById(R.id.huli_button);
             qrImageView = itemView.findViewById(R.id.huli_iv_qr);
+            deliveryFeeTextView = itemView.findViewById(R.id.huli_tv_delivery_fee);
+            deliveryFeeRMTextView = itemView.findViewById(R.id.huli_tv_delivery_fee_rm);
         }
     }
 }

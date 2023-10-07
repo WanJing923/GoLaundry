@@ -13,24 +13,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.golaundry.R;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.ServiceItem;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
+import java.util.Objects;
 
 public class HistoryFragmentServicesAdapter extends RecyclerView.Adapter<HistoryFragmentServicesAdapter.ViewHolder> {
     private final List<ServiceItem> servicesList;
     private final Context context;
     private final List<LaundryServiceModel> serviceLaundry;
+    private final String laundryId;
+    String currentUserId;
 
-    public HistoryFragmentServicesAdapter(List<ServiceItem> servicesList, List<LaundryServiceModel> serviceLaundry, Context context) {
+    public HistoryFragmentServicesAdapter(List<ServiceItem> servicesList, List<LaundryServiceModel> serviceLaundry, Context context, String laundryId) {
         this.servicesList = servicesList;
         this.serviceLaundry = serviceLaundry;
         this.context = context;
+        this.laundryId = laundryId;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_list, parent, false);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         return new ViewHolder(view);
     }
 
@@ -53,11 +59,20 @@ public class HistoryFragmentServicesAdapter extends RecyclerView.Adapter<History
         }
 
         if (serviceItem != null) {
-            double shopServicePrice = serviceItem.getPrice();
-            double subTotal = shopServicePrice * 2 * selectedQty;
-            @SuppressLint("DefaultLocale")
-            String totalShow = String.format("%.2f", subTotal);
-            holder.amountTextView.setText(totalShow);
+            //if is laundry, let the amount not multiply 2
+            if (Objects.equals(laundryId, currentUserId)){
+                double shopServicePrice = serviceItem.getPrice();
+                double subTotal = shopServicePrice * selectedQty;
+                @SuppressLint("DefaultLocale")
+                String totalShow = String.format("%.2f", subTotal);
+                holder.amountTextView.setText(totalShow);
+            } else {
+                double shopServicePrice = serviceItem.getPrice();
+                double subTotal = shopServicePrice * 2 * selectedQty;
+                @SuppressLint("DefaultLocale")
+                String totalShow = String.format("%.2f", subTotal);
+                holder.amountTextView.setText(totalShow);
+            }
         }
 
     }

@@ -63,6 +63,11 @@ public class HistoryOrderStatusActivity extends AppCompatActivity {
             viewShopTextView.setVisibility(View.GONE);
         }
 
+        boolean isLaundry = getIntent().getBooleanExtra("isLaundry",false);
+        if (isLaundry){
+            viewShopTextView.setVisibility(View.GONE);
+        }
+
         OrderModel mOrderModel = (OrderModel) getIntent().getSerializableExtra("HistoryOrderData");
         if (mOrderModel != null) {
             String laundryId = mOrderModel.getLaundryId();
@@ -75,7 +80,7 @@ public class HistoryOrderStatusActivity extends AppCompatActivity {
                 if (laundryData != null) {
                     laundryNameTextView.setText(laundryData.getShopName());
                     viewShopTextView.setOnClickListener(view -> {
-                        Intent intent = new Intent(HistoryOrderStatusActivity.this, OrderActivity.class);
+                        Intent intent = new Intent(HistoryOrderStatusActivity.this, HistoryViewLaundryShopActivity.class);
                         intent.putExtra("laundryId", laundryId);
                         startActivity(intent);
                     });
@@ -85,6 +90,7 @@ public class HistoryOrderStatusActivity extends AppCompatActivity {
             ArrayList<OrderStatusModel> orderStatusList = new ArrayList<>();
             DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(orderId);
             orderStatusRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -93,10 +99,12 @@ public class HistoryOrderStatusActivity extends AppCompatActivity {
                             String statusContent = orderStatusSnapshot.child("statusContent").getValue(String.class);
                             OrderStatusModel orderStatus = new OrderStatusModel(dateTime, statusContent);
                             orderStatusList.add(orderStatus);
+                            orderStatusList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
                         }
                         OrderStatusAdapter orderStatusAdapter = new OrderStatusAdapter(orderStatusList, HistoryOrderStatusActivity.this);
                         orderStatusRecyclerView.setAdapter(orderStatusAdapter);
                         orderStatusRecyclerView.setLayoutManager(new LinearLayoutManager(HistoryOrderStatusActivity.this));
+                        orderStatusAdapter.notifyDataSetChanged();
                     }
                 }
 
