@@ -57,6 +57,7 @@
                 android:textStyle="bold" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/arvd_cv_order_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/arvd_tv_order_details"
@@ -64,6 +65,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="20dp"
+                android:visibility="visible"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -408,6 +410,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/arvd_cv_enter_order_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -419,16 +422,18 @@
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/arvd_tv_successful"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
                         android:text="@string/successfully_picked_up"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -438,55 +443,76 @@
 
                     <TextView
                         android:id="@+id/arvd_tv_successful_msg"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginEnd="25dp"
+                        android:layout_marginEnd="20dp"
                         android:text="@string/enter_the_order_id_that_provided_by_the_customer"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/arvd_tv_successful" />
 
-                    <EditText
-                        android:id="@+id/arvd_et_order_id"
+                    <LinearLayout
+                        android:id="@+id/linear_order_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="20dp"
-                        android:autofillHints="order id"
-                        android:background="@drawable/custom_order"
-                        android:hint="@string/order_id_"
-                        android:inputType="textPersonName"
-                        android:padding="10dp"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/text_color"
-                        android:textSize="15sp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:orientation="horizontal"
+                        android:weightSum="5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_successful_msg" />
+                        app:layout_constraintTop_toBottomOf="@id/arvd_tv_successful_msg" >
+
+                        <EditText
+                            android:id="@+id/arvd_et_order_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="order id"
+                            android:background="@drawable/custom_order"
+                            android:hint="@string/order_id_"
+                            android:layout_weight="3"
+                            android:inputType="textPersonName"
+                            android:padding="10dp"
+                            android:singleLine="true"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/text_color"
+                            android:textSize="15sp"/>
+
+                        <ImageView
+                            android:id="@+id/arvd_qr_scan"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="2"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_qr_code"
+                            android:layout_marginStart="5dp" />
+
+                    </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/arvd_et_order_id">
+                        app:layout_constraintTop_toBottomOf="@id/linear_order_id">
 
                         <TextView
-                            android:id="@+id/arvd_btn_ok"
+                            android:id="@+id/arvd_tv_ok"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="36dp"
                             android:layout_marginEnd="20dp"
                             android:layout_marginBottom="20dp"
+                            android:padding="10dp"
                             android:text="@string/ok"
                             android:textColor="@color/black"
                             android:textSize="15sp"
@@ -495,6 +521,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            android:id="@+id/arvd_tv_cancel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="36dp"
@@ -505,11 +532,30 @@
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/arvd_btn_ok"
+                            app:layout_constraintEnd_toStartOf="@id/arvd_tv_ok"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
     </ScrollView>
+
+    <com.budiyev.android.codescanner.CodeScannerView
+        android:id="@+id/arvd_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:autoFocusButtonColor="@android:color/white"
+        app:autoFocusButtonVisible="true"
+        app:flashButtonColor="@android:color/white"
+        app:flashButtonVisible="true"
+        android:visibility="invisible"
+        app:frameColor="@color/white"
+        android:layout_alignParentTop="true"
+        app:frameCornersSize="50dp"
+        app:frameCornersRadius="10dp"
+        app:frameAspectRatioWidth="1"
+        app:frameAspectRatioHeight="1"
+        app:frameSize="0.75"
+        app:frameThickness="4dp"
+        app:maskColor="#77000000"/>
 </RelativeLayout>
