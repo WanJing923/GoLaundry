@@ -52,6 +52,7 @@ public class HistoryRiderFragment extends Fragment {
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,26 +72,32 @@ public class HistoryRiderFragment extends Fragment {
 
         OrderRiderRecyclerView.setAdapter(toPickUpAdapter);
         OrderRiderRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        toPickUpAdapter.notifyDataSetChanged();
 
         historyRiderTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
                         getRiderOrderDataForToPickUp();
                         OrderRiderRecyclerView.setAdapter(toPickUpAdapter);
+                        toPickUpAdapter.notifyDataSetChanged();
                         break;
                     case 1:
                         getRiderOrderDataForToDeliver();
                         OrderRiderRecyclerView.setAdapter(toDeliverAdapter);
+                        toDeliverAdapter.notifyDataSetChanged();
                         break;
                     case 2:
                         getRiderOrderDataForComplete();
                         OrderRiderRecyclerView.setAdapter(completeAdapter);
+                        completeAdapter.notifyDataSetChanged();
                         break;
                     case 3:
                         getRiderOrderDataForCancelled();
                         OrderRiderRecyclerView.setAdapter(cancelledAdapter);
+                        cancelledAdapter.notifyDataSetChanged();
                         break;
                 }
             }

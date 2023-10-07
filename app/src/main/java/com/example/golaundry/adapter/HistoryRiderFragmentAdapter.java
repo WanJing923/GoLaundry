@@ -111,25 +111,22 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
         holder.moreImageView.setOnClickListener(view -> {
             Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
             intent.putExtra("HistoryOrderData", order);
-            intent.getBooleanExtra("isRider",true);
+            intent.getBooleanExtra("isRider", true);
             context.startActivity(intent);
         });
 
         if (Objects.equals(order.getCurrentStatus(), "Rider accept order")) {
             holder.orderIdTextView.setText("Pending Pick Up");
             holder.currentStatusTextView.setText("Pending Pick Up");
-        }
-        if (Objects.equals(order.getCurrentStatus(), "Rider pick up") && Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
-                && Objects.equals(order.getCurrentStatus(), "Laundry done process") && Objects.equals(order.getCurrentStatus(), "Order out of delivery")
-                && Objects.equals(order.getCurrentStatus(), "Order delivered")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Rider pick up") || Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
+                || Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")
+                || Objects.equals(order.getCurrentStatus(), "Order delivered")) {
             holder.orderIdTextView.setText(order.getOrderId());
             holder.currentStatusTextView.setText("Pending Deliver");
-        }
-        if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.orderIdTextView.setText(order.getOrderId());
             holder.currentStatusTextView.setText("Completed");
-        }
-        if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
             holder.orderIdTextView.setText(order.getOrderId());
             holder.currentStatusTextView.setText("Cancelled");
         }

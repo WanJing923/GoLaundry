@@ -52,7 +52,6 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
     private CodeScannerView qRCodeScannerView;
     private CardView enterOrderIdCardView;
     private EditText orderIdEditText;
-
     private boolean isScannerEnabled = false;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -139,9 +138,7 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
                 //show 2nd card, hide 1st card
                 enterOrderIdCardView.setVisibility(View.VISIBLE);
                 orderDetailsCardView.setVisibility(View.GONE);
-//                qRCodeScannerView.setVisibility(View.GONE);
                 disableScanner();
-
 
                 scanImageView.setOnClickListener(view1 -> {
                     qRCodeScannerView.setVisibility(View.VISIBLE);
@@ -153,7 +150,6 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
 
                 cancelTextView.setOnClickListener(view1 -> {
                     disableScanner();
-//                    qRCodeScannerView.setVisibility(View.GONE);
                     enterOrderIdCardView.setVisibility(View.GONE);
                     orderDetailsCardView.setVisibility(View.VISIBLE);
                 });
@@ -242,11 +238,9 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
 
             qRCodeScannerView.setOnClickListener(view -> {
                 if (isScannerEnabled) {
-                    mCodeScanner.startPreview(); // Start scanning when the view is clicked
+                    mCodeScanner.startPreview();
                 }
             });
-
-            // Initially, the scanner is enabled
             enableScanner();
         }
     }

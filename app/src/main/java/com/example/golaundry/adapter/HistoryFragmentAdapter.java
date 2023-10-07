@@ -244,8 +244,8 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             holder.actionButton.setVisibility(View.GONE);
         }
         //pending receiving
-        else if (Objects.equals(order.getCurrentStatus(), "Rider pick up") && Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
-                && Objects.equals(order.getCurrentStatus(), "Laundry done process") && Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
+        else if (Objects.equals(order.getCurrentStatus(), "Rider pick up") || Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
+                || Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
             holder.currentStatusTextView.setText("Pending Receiving");
         } else if (Objects.equals(order.getCurrentStatus(), "Order delivered")) {
             holder.currentStatusTextView.setText("Pending Receiving");
