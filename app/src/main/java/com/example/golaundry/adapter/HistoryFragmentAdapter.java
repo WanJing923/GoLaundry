@@ -268,7 +268,6 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                     DatabaseReference riderTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("riderTotalOrder").child(order.getRiderId());
                     DatabaseReference ridersRef = FirebaseDatabase.getInstance().getReference().child("riders").child(order.getRiderId());
                     DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry").child(order.getLaundryId());
-
                     DatabaseReference appEarningsRef = FirebaseDatabase.getInstance().getReference().child("appEarnings").child(order.getOrderId());
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
@@ -408,7 +407,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                                                                                                                                     appEarningsRef.child("dateTime").setValue(dateTime).addOnSuccessListener(aVoid6 -> { //update app earnings datetime
 
-                                                                                                                                                                        double appEarningsWithoutDeductMembership = order.getTotalFee() - order.getDeliveryFee() - (order.getLaundryFee()/2);
+                                                                                                                                                                        double appEarningsWithoutDeductMembership = order.getTotalFee() - order.getDeliveryFee() - (order.getLaundryFee() / 2);
                                                                                                                                                                         double appEarnings;
 
                                                                                                                                                                         if (Objects.equals(order.getMembershipDiscount(), "None")) {
@@ -433,11 +432,14 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                                                                                                                                             }).addOnFailureListener(e -> Toast.makeText(context, "Order confirming process failed.", Toast.LENGTH_SHORT).show());
 
-                                                                                                                                                                        }).addOnFailureListener(e -> {});
+                                                                                                                                                                        }).addOnFailureListener(e -> {
+                                                                                                                                                                        });
 
-                                                                                                                                                                    }).addOnFailureListener(e -> {});
+                                                                                                                                                                    }).addOnFailureListener(e -> {
+                                                                                                                                                                    });
 
-                                                                                                                                                                }).addOnFailureListener(e -> {});
+                                                                                                                                                                }).addOnFailureListener(e -> {
+                                                                                                                                                                });
                                                                                                                                                             }
                                                                                                                                                         }
                                                                                                                                                     }
@@ -513,8 +515,6 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
-
-
             });
         }
         //completed
@@ -529,6 +529,11 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))) {
             holder.currentStatusTextView.setText("Cancelled");
             holder.actionButton.setVisibility(View.GONE);
+        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled due to rider missed pick up") || Objects.equals(order.getCurrentStatus(), "Order cancelled due to no rider accept order")) {
+            holder.currentStatusTextView.setText("Cancelled");
+            holder.actionButton.setOnClickListener(view -> {
+                //rescheduling pick up time, show dialog, new rider pick up
+            });
         }
 
         //show services list view
