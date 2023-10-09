@@ -209,7 +209,7 @@ public class HistoryRiderFragment extends Fragment {
                         OrderModel order = orderSnapshot.getValue(OrderModel.class);
                         if (order != null) {
                             String currentStatus = order.getCurrentStatus();
-                            if ("Order cancelled".equals(currentStatus)) {
+                            if ("Order cancelled by customer".equals(currentStatus) || "Order cancelled by laundry".equals(currentStatus)) {
                                 cancelledList.add(order);
                             }
                         }

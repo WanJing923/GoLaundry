@@ -111,7 +111,7 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
         holder.moreImageView.setOnClickListener(view -> {
             Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
             intent.putExtra("HistoryOrderData", order);
-            intent.getBooleanExtra("isRider", true);
+            intent.putExtra("isRider", true);
             context.startActivity(intent);
         });
 
@@ -126,7 +126,7 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
         } else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.orderIdTextView.setText(order.getOrderId());
             holder.currentStatusTextView.setText("Completed");
-        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by user") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))) {
             holder.orderIdTextView.setText(order.getOrderId());
             holder.currentStatusTextView.setText("Cancelled");
         }

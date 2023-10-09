@@ -16,6 +16,7 @@ import com.example.golaundry.RiderViewOrderActivity;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.viewModel.RiderViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +67,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
     private final UserViewModel mUserViewModel;
     private final RiderViewModel mRiderViewModel;
     private double cancelBalance;
+    private String currentUserId;
 
     public HistoryLaundryFragmentAdapter(List<OrderModel> orderList, Context context, LaundryViewModel mLaundryViewModel, UserViewModel mUserViewModel, RiderViewModel mRiderViewModel) {
         this.orderList = orderList;
@@ -79,6 +81,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_user_list_item, parent, false);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         return new ViewHolder(view);
     }
 
@@ -92,6 +95,8 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
         holder.deliveryAmountTextView.setVisibility(View.GONE);
         holder.deliveryFeeTextView.setVisibility(View.GONE);
         holder.deliveryFeeRMTextView.setVisibility(View.GONE);
+        holder.qrImageView.setVisibility(View.GONE);
+        holder.userRoleImageView.setImageResource(R.drawable.ic_user);
 
         double total = order.getLaundryFee() / 2;
         @SuppressLint("DefaultLocale")
@@ -113,6 +118,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
             if (userModel != null) {
                 double currentBalance = userModel.getBalance();
                 cancelBalance = currentBalance + order.getTotalFee();
+                holder.laundryShopNameTextView.setText(userModel.getFullName());
             }
         });
 
@@ -137,11 +143,11 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                     String dateTime = sdf.format(new Date());
-                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled");
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled by laundry shop");
                     String orderStatusId = String.valueOf(UUID.randomUUID());
 
                     orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> { //order status history
-                        userOrderRef.child("currentStatus").setValue("Order cancelled").addOnSuccessListener(aVoid1 -> { //order current status
+                        userOrderRef.child("currentStatus").setValue("Order cancelled by laundry shop").addOnSuccessListener(aVoid1 -> { //order current status
                             userRef.child("balance").setValue(cancelBalance).addOnSuccessListener(aVoid2 -> { //add back user current balance
                                 userSpendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -196,7 +202,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
                                                                         if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "")) {
                                                                             userTotalOrderRef.child(latestYear1).child(latestMonth1).setValue(updatedNumber).addOnSuccessListener(aVoid4 -> {//deduct order total number
                                                                                 Toast.makeText(context, "Order cancelled, please refresh.", Toast.LENGTH_SHORT).show();
-                                                                                holder.actionButton.setText("DONE");
+                                                                                holder.actionButton.setText("CANCELLED");
                                                                                 holder.actionButton.setEnabled(false);
                                                                             }).addOnFailureListener(e -> Toast.makeText(context, "Order cancelling process failed.", Toast.LENGTH_SHORT).show());
                                                                         }
@@ -241,14 +247,78 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
         } else if (Objects.equals(order.getCurrentStatus(), "Rider pick up")) {
             holder.currentStatusTextView.setText("Pending Process");
             holder.actionButton.setText("Received and proceed");
+            //update order table, order status table, to Order reached laundry shop
             holder.actionButton.setOnClickListener(view -> {
-                //update order table, order status table, to Order reached laundry shop
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Receive and proceed to order confirmation");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    holder.actionButton.setText("LOADING");
+                    // update order status history, order current status
+                    DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(order.getOrderId());
+                    DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(order.getOrderId());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                    String dateTime = sdf.format(new Date());
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order reached laundry shop");
+
+                    userOrderRef.child("laundryId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
+                        userOrderRef.child("currentStatus").setValue("Order reached laundry shop").addOnSuccessListener(aVoid1 -> { //update order table
+                            String orderStatusId = String.valueOf(UUID.randomUUID());
+                            orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid2 -> { //add order status table
+                                Toast.makeText(context, "Order reached laundry shop", Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(e -> {
+                                //
+                            });
+                        }).addOnFailureListener(e -> {
+                            //
+                        });
+                    }).addOnFailureListener(e -> {
+                        //
+                    });
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
             });
         } else if (Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")) {
             holder.currentStatusTextView.setText("Pending Process");
             holder.actionButton.setText("Done");
+            //update order table, order status table, to Laundry done process
             holder.actionButton.setOnClickListener(view -> {
-                //update order table, order status table, to Laundry done process
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Done order confirmation");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    holder.actionButton.setText("LOADING");
+                    // update order status history, order current status
+                    DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(order.getOrderId());
+                    DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(order.getOrderId());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                    String dateTime = sdf.format(new Date());
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Laundry done process");
+
+                    userOrderRef.child("laundryId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
+                        userOrderRef.child("currentStatus").setValue("Laundry done process").addOnSuccessListener(aVoid1 -> { //update order table
+                            String orderStatusId = String.valueOf(UUID.randomUUID());
+                            orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid2 -> { //add order status table
+                                Toast.makeText(context, "Laundry done process", Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(e -> {
+                                //
+                            });
+                        }).addOnFailureListener(e -> {
+                            //
+                        });
+                    }).addOnFailureListener(e -> {
+                        //
+                    });
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
             });
         } else if (Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")
                 || Objects.equals(order.getCurrentStatus(), "Order delivered")) {
@@ -257,7 +327,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
         } else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.currentStatusTextView.setText("Completed");
             holder.actionButton.setVisibility(View.GONE);
-        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))) {
             holder.currentStatusTextView.setText("Cancelled");
             holder.actionButton.setVisibility(View.GONE);
         }
@@ -280,7 +350,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
             //intent to order status history
             Intent intent = new Intent(context, HistoryOrderStatusActivity.class);
             intent.putExtra("HistoryOrderData", order);
-            intent.getBooleanExtra("isLaundry", true);
+            intent.putExtra("isLaundry", true);
             context.startActivity(intent);
         });
     }
@@ -310,7 +380,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView laundryShopNameTextView, orderIdTextView, statusTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView, deliveryFeeTextView, deliveryFeeRMTextView;
         RecyclerView servicesRecyclerView;
-        ImageView moreImageView, qrImageView;
+        ImageView moreImageView, qrImageView, userRoleImageView;
         Button actionButton;
 
         public ViewHolder(View itemView) {
@@ -328,6 +398,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
             qrImageView = itemView.findViewById(R.id.huli_iv_qr);
             deliveryFeeTextView = itemView.findViewById(R.id.huli_tv_delivery_fee);
             deliveryFeeRMTextView = itemView.findViewById(R.id.huli_tv_delivery_fee_rm);
+            userRoleImageView = itemView.findViewById(R.id.huli_iv_icon);
         }
     }
 }

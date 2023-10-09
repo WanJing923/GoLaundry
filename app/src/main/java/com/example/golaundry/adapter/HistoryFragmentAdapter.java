@@ -140,11 +140,11 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
                     String dateTime = sdf.format(new Date());
-                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled");
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled by customer");
                     String orderStatusId = String.valueOf(UUID.randomUUID());
 
                     orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> { //order status history
-                        userOrderRef.child("currentStatus").setValue("Order cancelled").addOnSuccessListener(aVoid1 -> { //order current status
+                        userOrderRef.child("currentStatus").setValue("Order cancelled by customer").addOnSuccessListener(aVoid1 -> { //order current status
                             userRef.child("balance").setValue(cancelBalance).addOnSuccessListener(aVoid2 -> { //add back user current balance
                                 userSpendingRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -196,16 +196,17 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                                                         int updatedNumber = currentTotalNumber - 1;
                                                                         assert latestYear1 != null;
                                                                         assert latestMonth1 != null;
-                                                                        if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "") ) {
+                                                                        if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "")) {
                                                                             userTotalOrderRef.child(latestYear1).child(latestMonth1).setValue(updatedNumber).addOnSuccessListener(aVoid4 -> {//deduct order total number
                                                                                 Toast.makeText(context, "Order cancelled, please refresh.", Toast.LENGTH_SHORT).show();
-                                                                                holder.actionButton.setText("DONE");
+                                                                                holder.actionButton.setText("CANCELLED");
                                                                                 holder.actionButton.setEnabled(false);
                                                                             }).addOnFailureListener(e -> Toast.makeText(context, "Order cancelling process failed.", Toast.LENGTH_SHORT).show());
                                                                         }
                                                                     }
                                                                 }
                                                             }
+
                                                             @Override
                                                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                                             }
@@ -216,6 +217,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                             }
                                         }
                                     }
+
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
                                     }
@@ -245,12 +247,274 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         else if (Objects.equals(order.getCurrentStatus(), "Rider pick up") || Objects.equals(order.getCurrentStatus(), "Order reached laundry shop")
                 || Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
             holder.currentStatusTextView.setText("Pending Receiving");
+            holder.actionButton.setVisibility(View.GONE);
         } else if (Objects.equals(order.getCurrentStatus(), "Order delivered")) {
             holder.currentStatusTextView.setText("Pending Receiving");
             holder.actionButton.setText("RECEIVE");
             holder.actionButton.setOnClickListener(view -> {
-                //received, update order status and order status history
-                // add laundry_rider each 2 tables dashboard
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Received and Confirm Order Confirmation");
+                builder.setMessage("Release money to laundry shop and rider.");
+
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    holder.actionButton.setText("LOADING");
+                    // update order status history, order current status, laundry earnings&total order, rider earnings&total order, rider and laundry balance
+                    DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(order.getOrderId());
+                    DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(order.getOrderId());
+                    DatabaseReference laundryEarningsRef = FirebaseDatabase.getInstance().getReference().child("laundryEarnings").child(order.getLaundryId());
+                    DatabaseReference laundryTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("laundryTotalOrder").child(order.getLaundryId());
+                    DatabaseReference riderEarningsRef = FirebaseDatabase.getInstance().getReference().child("riderEarnings").child(order.getRiderId());
+                    DatabaseReference riderTotalOrderRef = FirebaseDatabase.getInstance().getReference().child("riderTotalOrder").child(order.getRiderId());
+                    DatabaseReference ridersRef = FirebaseDatabase.getInstance().getReference().child("riders").child(order.getRiderId());
+                    DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry").child(order.getLaundryId());
+
+                    DatabaseReference appEarningsRef = FirebaseDatabase.getInstance().getReference().child("appEarnings").child(order.getOrderId());
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                    String dateTime = sdf.format(new Date());
+                    OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order completed");
+                    String orderStatusId = String.valueOf(UUID.randomUUID());
+
+                    orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid -> { //order status history, done
+                        userOrderRef.child("currentStatus").setValue("Order completed").addOnSuccessListener(aVoid1 -> { //order current status, done
+                            laundryEarningsRef.addListenerForSingleValueEvent(new ValueEventListener() { //laundry dashboard,  done
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        String latestYear = "";
+                                        String latestMonth = "";
+                                        Double currentEarningsLaundry = null;
+                                        for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
+                                            String year = yearSnapshot.getKey();
+                                            for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                                String month = monthSnapshot.getKey();
+                                                assert latestYear != null;
+                                                if (latestYear.equals("") || Objects.equals(latestMonth, "") || (year + month).compareTo(latestYear + latestMonth) > 0) {
+                                                    latestYear = year;
+                                                    latestMonth = month;
+                                                    currentEarningsLaundry = monthSnapshot.getValue(Double.class);
+                                                }
+                                            }
+                                        }
+                                        if (currentEarningsLaundry != null) {
+                                            double updatedEarningsLaundry = currentEarningsLaundry + (order.getLaundryFee() / 2);
+                                            assert latestYear != null;
+                                            if (!latestYear.isEmpty() && !Objects.requireNonNull(latestMonth).isEmpty()) {
+                                                laundryEarningsRef.child(latestYear).child(latestMonth).setValue(updatedEarningsLaundry).addOnSuccessListener(aVoid3 -> {  //add the laundry earnings, done
+                                                    laundryTotalOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if (dataSnapshot.exists()) {
+                                                                String latestYear1 = "";
+                                                                String latestMonth1 = "";
+                                                                int currentTotalNumberLaundry = 100000;
+                                                                for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
+                                                                    String year = yearSnapshot.getKey();
+                                                                    for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                                                        String month = monthSnapshot.getKey();
+                                                                        assert latestYear1 != null;
+                                                                        if (latestYear1.equals("") || Objects.equals(latestMonth1, "") || (year + month).compareTo(latestYear1 + latestMonth1) > 0) {
+                                                                            latestYear1 = year;
+                                                                            latestMonth1 = month;
+                                                                            Integer totalNumber = monthSnapshot.getValue(Integer.class);
+                                                                            if (totalNumber != null) {
+                                                                                currentTotalNumberLaundry = totalNumber;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (currentTotalNumberLaundry != 100000) {
+                                                                    int updatedNumberLaundry = currentTotalNumberLaundry + 1;
+                                                                    assert latestYear1 != null;
+                                                                    assert latestMonth1 != null;
+                                                                    if (!latestYear1.equals("") && !Objects.equals(latestMonth1, "")) {
+                                                                        laundryTotalOrderRef.child(latestYear1).child(latestMonth1).setValue(updatedNumberLaundry).addOnSuccessListener(aVoid4 -> {  //add laundry order total number
+
+                                                                            //rider
+                                                                            riderEarningsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                @Override
+                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                    if (dataSnapshot.exists()) {
+                                                                                        String latestYear3 = "";
+                                                                                        String latestMonth3 = "";
+                                                                                        Double currentEarningsRider = null;
+                                                                                        for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
+                                                                                            String year = yearSnapshot.getKey();
+                                                                                            for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                                                                                String month = monthSnapshot.getKey();
+                                                                                                assert latestYear3 != null;
+                                                                                                if (latestYear3.equals("") || Objects.equals(latestMonth3, "") || (year + month).compareTo(latestYear3 + latestMonth3) > 0) {
+                                                                                                    latestYear3 = year;
+                                                                                                    latestMonth3 = month;
+                                                                                                    currentEarningsRider = monthSnapshot.getValue(Double.class);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        if (currentEarningsRider != null) { //2f format
+                                                                                            double updatedEarningsRider = currentEarningsRider + (order.getDeliveryFee());
+                                                                                            assert latestYear3 != null;
+                                                                                            if (!latestYear3.isEmpty() && !Objects.requireNonNull(latestMonth3).isEmpty()) {
+                                                                                                riderEarningsRef.child(latestYear3).child(latestMonth3).setValue(updatedEarningsRider).addOnSuccessListener(aVoid3 -> {  //add the rider earnings
+                                                                                                    riderTotalOrderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                        @Override
+                                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                            if (dataSnapshot.exists()) {
+                                                                                                                String latestYear4 = "";
+                                                                                                                String latestMonth4 = "";
+                                                                                                                int currentTotalNumberRider = 100000000;
+                                                                                                                for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
+                                                                                                                    String year = yearSnapshot.getKey();
+                                                                                                                    for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                                                                                                                        String month = monthSnapshot.getKey();
+                                                                                                                        assert latestYear4 != null;
+                                                                                                                        if (latestYear4.equals("") || Objects.equals(latestMonth4, "") || (year + month).compareTo(latestYear4 + latestMonth4) > 0) {
+                                                                                                                            latestYear4 = year;
+                                                                                                                            latestMonth4 = month;
+                                                                                                                            Integer totalNumber = monthSnapshot.getValue(Integer.class);
+                                                                                                                            if (totalNumber != null) {
+                                                                                                                                currentTotalNumberRider = totalNumber;
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                if (currentTotalNumberRider != 100000000) {
+                                                                                                                    int updatedNumberLaundry = currentTotalNumberRider + 1;
+                                                                                                                    assert latestYear4 != null;
+                                                                                                                    assert latestMonth4 != null;
+                                                                                                                    if (!latestYear4.equals("") && !Objects.equals(latestMonth4, "")) {
+                                                                                                                        riderTotalOrderRef.child(latestYear4).child(latestMonth4).setValue(updatedNumberLaundry).addOnSuccessListener(aVoid4 -> {//add order total number
+
+                                                                                                                            //laundry balance
+                                                                                                                            laundryRef.child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                                @Override
+                                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                                                    if (dataSnapshot.exists()) {
+                                                                                                                                        Double currentBalanceLaundry = dataSnapshot.getValue(Double.class);
+                                                                                                                                        if (currentBalanceLaundry != null) {
+                                                                                                                                            double updatedBalanceLaundry = currentBalanceLaundry + (order.getLaundryFee() / 2);
+
+                                                                                                                                            laundryRef.child("balance").setValue(updatedBalanceLaundry).addOnSuccessListener(aVoid5 -> { //update laundry balance
+                                                                                                                                                //rider balance
+                                                                                                                                                ridersRef.child("balance").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                                                    @Override
+                                                                                                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                                                                        if (dataSnapshot.exists()) {
+                                                                                                                                                            Double currentBalanceRider = dataSnapshot.getValue(Double.class);
+                                                                                                                                                            if (currentBalanceRider != null) {
+                                                                                                                                                                double updatedBalanceRider = currentBalanceRider + (order.getDeliveryFee());
+
+                                                                                                                                                                ridersRef.child("balance").setValue(updatedBalanceRider).addOnSuccessListener(aVoid5 -> { //update rider balance
+
+                                                                                                                                                                    appEarningsRef.child("dateTime").setValue(dateTime).addOnSuccessListener(aVoid6 -> { //update app earnings datetime
+
+                                                                                                                                                                        double appEarningsWithoutDeductMembership = order.getTotalFee() - order.getDeliveryFee() - (order.getLaundryFee()/2);
+                                                                                                                                                                        double appEarnings;
+
+                                                                                                                                                                        if (Objects.equals(order.getMembershipDiscount(), "None")) {
+                                                                                                                                                                            appEarnings = appEarningsWithoutDeductMembership;
+                                                                                                                                                                        } else if (Objects.equals(order.getMembershipDiscount(), "GL05")) {
+                                                                                                                                                                            appEarnings = 0.95 * appEarningsWithoutDeductMembership;
+                                                                                                                                                                        } else if (Objects.equals(order.getMembershipDiscount(), "GL10")) {
+                                                                                                                                                                            appEarnings = 0.9 * appEarningsWithoutDeductMembership;
+                                                                                                                                                                        } else if (Objects.equals(order.getMembershipDiscount(), "GL20")) {
+                                                                                                                                                                            appEarnings = 0.8 * appEarningsWithoutDeductMembership;
+                                                                                                                                                                        } else {
+                                                                                                                                                                            appEarnings = 0.7 * appEarningsWithoutDeductMembership;
+                                                                                                                                                                        }
+
+                                                                                                                                                                        appEarningsRef.child("earnings").setValue(appEarnings).addOnSuccessListener(aVoid7 -> { //update app earnings amount
+
+                                                                                                                                                                            appEarningsRef.child("orderId").setValue(order.getOrderId()).addOnSuccessListener(aVoid8 -> { //update app earnings orderID
+
+                                                                                                                                                                                Toast.makeText(context, "Order has been completed, please refresh.", Toast.LENGTH_SHORT).show();
+                                                                                                                                                                                holder.actionButton.setText("Done");
+                                                                                                                                                                                holder.actionButton.setEnabled(false);
+
+                                                                                                                                                                            }).addOnFailureListener(e -> Toast.makeText(context, "Order confirming process failed.", Toast.LENGTH_SHORT).show());
+
+                                                                                                                                                                        }).addOnFailureListener(e -> {});
+
+                                                                                                                                                                    }).addOnFailureListener(e -> {});
+
+                                                                                                                                                                }).addOnFailureListener(e -> {});
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+
+                                                                                                                                                    @Override
+                                                                                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                                                                                                                    }
+                                                                                                                                                });
+                                                                                                                                            });
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+
+                                                                                                                                @Override
+                                                                                                                                public void onCancelled(@NonNull DatabaseError error) {
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                        }).addOnFailureListener(e -> {
+                                                                                                                        });
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                                        }
+                                                                                                    });
+                                                                                                }).addOnFailureListener(e -> {
+                                                                                                });
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                }
+                                                                            });
+                                                                        }).addOnFailureListener(e -> {
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        }
+                                                    });
+                                                }).addOnFailureListener(e -> {
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
+                            });
+
+                        }).addOnFailureListener(e -> {
+                        });
+                    }).addOnFailureListener(e -> {
+                    });
+
+                    dialog.dismiss();
+                });
+
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+
+
             });
         }
         //completed
@@ -262,7 +526,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             });
         }
         //cancelled
-        else if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+        else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))) {
             holder.currentStatusTextView.setText("Cancelled");
             holder.actionButton.setVisibility(View.GONE);
         }

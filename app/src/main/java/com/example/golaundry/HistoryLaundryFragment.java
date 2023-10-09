@@ -155,7 +155,7 @@ public class HistoryLaundryFragment extends Fragment {
                         }
                     }
                     toConfirmList.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
-                    toProcessAdapter.notifyDataSetChanged();
+                    toConfirmAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -201,7 +201,7 @@ public class HistoryLaundryFragment extends Fragment {
                     for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
                         OrderModel order = orderSnapshot.getValue(OrderModel.class);
                         if (order != null) {
-                            if (Objects.equals(order.getCurrentStatus(), "Order cancelled")) {
+                            if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || "Order cancelled by laundry".equals(order.getCurrentStatus())) {
                                 cancelledList.add(order);
                             }
                         }

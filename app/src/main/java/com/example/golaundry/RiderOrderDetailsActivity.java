@@ -35,6 +35,8 @@ import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -205,21 +207,99 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
                 pickUpButton.setBackgroundColor(Color.GRAY);
                 pickUpButton.setText("Pending laundry confirm");
                 pickUpButton.setEnabled(false);
-            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order reached laundry shop")
-                    || Objects.equals(mOrderModel.getCurrentStatus(), "Laundry done process") || Objects.equals(mOrderModel.getCurrentStatus(), "Order out of delivery")
-                    || Objects.equals(mOrderModel.getCurrentStatus(), "Order delivered")) {
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order reached laundry shop")) {
+                pickUpButton.setVisibility(View.GONE);
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Laundry done process")) {
+                pickUpButton.setText("Send to customer");
+                pickUpButton.setOnClickListener(view -> {
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Send to Customer Confirmation");
+
+                    builder.setPositiveButton("Yes", (dialog, which) -> {
+
+                        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(mOrderModel.getOrderId());
+                        DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(mOrderModel.getOrderId());
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                        String dateTime = sdf.format(new Date());
+                        OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order out of delivery");
+
+                        userOrderRef.child("riderId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
+                            userOrderRef.child("currentStatus").setValue("Order out of delivery").addOnSuccessListener(aVoid1 -> { //update order table
+                                String orderStatusId = String.valueOf(UUID.randomUUID());
+                                orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid2 -> { //add order status table
+                                    Toast.makeText(RiderOrderDetailsActivity.this, "Order out of delivery", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }).addOnFailureListener(e -> {
+                                    //
+                                });
+                            }).addOnFailureListener(e -> {
+                                //
+                            });
+                        }).addOnFailureListener(e -> {
+                            //
+                        });
+
+                        dialog.dismiss();
+                    });
+
+                    builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+
+                });
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order out of delivery")) {
+                pickUpButton.setText("Delivered");
+                pickUpButton.setOnClickListener(view -> {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Order Delivered Confirmation");
+
+                    builder.setPositiveButton("Yes", (dialog, which) -> {
+
+                        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(mOrderModel.getOrderId());
+                        DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(mOrderModel.getOrderId());
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                        String dateTime = sdf.format(new Date());
+                        OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order delivered");
+
+                        userOrderRef.child("riderId").setValue(currentUserId).addOnSuccessListener(aVoid -> { //update order table
+                            userOrderRef.child("currentStatus").setValue("Order delivered").addOnSuccessListener(aVoid1 -> { //update order table
+                                String orderStatusId = String.valueOf(UUID.randomUUID());
+                                orderStatusRef.child(orderStatusId).setValue(mOrderStatusModel).addOnSuccessListener(aVoid2 -> { //add order status table
+                                    Toast.makeText(RiderOrderDetailsActivity.this, "Order delivered", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }).addOnFailureListener(e -> {
+                                    //
+                                });
+                            }).addOnFailureListener(e -> {
+                                //
+                            });
+                        }).addOnFailureListener(e -> {
+                            //
+                        });
+
+                        dialog.dismiss();
+                    });
+
+                    builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+                });
+            } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order delivered")) {
+                pickUpButton.setVisibility(View.GONE);
             } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order completed")) {
-
+                pickUpButton.setVisibility(View.GONE);
             } else if (Objects.equals(mOrderModel.getCurrentStatus(), "Order cancelled")) {
-
+                pickUpButton.setVisibility(View.GONE);
             }
-
-
         }
 
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(RiderOrderDetailsActivity.this, new String[]{android.Manifest.permission.CAMERA}, 123);
         } else {
             startScanning();
