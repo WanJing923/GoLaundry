@@ -58,8 +58,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 2:
-//                                    replace(new HistoryFragment());
-                                    navigateToHistoryFragment();
+                                    replace(new HistoryFragment());
                                     break;
 
                                 case 3:
@@ -74,6 +73,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Handle database read error
             }
 
         });
@@ -170,12 +170,4 @@ public class HomeActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.home_container, fragment);
         fragmentTransaction.commit();
     }
-
-    public void navigateToHistoryFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.home_container, new HistoryFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
 }

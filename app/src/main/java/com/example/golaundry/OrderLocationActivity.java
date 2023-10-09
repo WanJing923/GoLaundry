@@ -264,6 +264,20 @@ public class OrderLocationActivity extends AppCompatActivity {
                             String userAddress = details + ", " + address;
                             addressTextView.setText(userAddress);
 
+                            String laundryAddress = mOrderLocationDataHolder.getLaundryData().getAddress();
+                            String userSelectAddress = address;
+
+                            LatLng laundryLatLng = getLocationFromAddress(this, laundryAddress);
+                            LatLng userLatLng = getLocationFromAddress(this, userSelectAddress);
+                            if (laundryLatLng != null && userLatLng != null) {
+                                double dis = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
+                                distance = dis / 1000;
+                                finalDistance = String.format("%.2f", distance);
+                                deliveryFeeAmountTextView.setText(finalDistance);
+                                orderData.setDeliveryFee(distance);
+                                mOrderLocationDataHolder.getOrderData().setDeliveryFee(distance);
+                            }
+
                             editAddressImageView.setOnClickListener(view -> {
                                 Intent intent = new Intent(OrderLocationActivity.this, EditLocationActivity.class);
                                 intent.putExtra("orderData", orderData);

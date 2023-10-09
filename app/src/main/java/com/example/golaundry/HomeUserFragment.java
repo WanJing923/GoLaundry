@@ -363,19 +363,6 @@ public class HomeUserFragment extends Fragment {
             }
         });
 
-        CardView pendingCollectionCV = view.findViewById(R.id.fhu_cv_pending_collection);
-        CardView pendingReceivingCV = view.findViewById(R.id.fhu_cv_pending_receiving);
-
-        pendingCollectionCV.setOnClickListener(view12 -> {
-            HomeActivity activity = (HomeActivity) requireActivity();
-            activity.navigateToHistoryFragment();
-        });
-
-        pendingReceivingCV.setOnClickListener(view13 -> {
-            HomeActivity activity = (HomeActivity) requireActivity();
-            activity.navigateToHistoryFragment();
-        });
-
         return view;
     }
 
