@@ -2,8 +2,6 @@ package com.example.golaundry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,10 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.golaundry.model.CurrentMembershipModel;
+import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -41,26 +41,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HomeUserFragment extends Fragment {
     private LineChart orderLineChart;
     private BarChart spendingBarChart;
     UserViewModel mUserViewModel;
+    String currentUserId;
     double monthlyTopUp;
     double monthlyTopUpAll;
     String[] monthName;
+    List<OrderModel> toCollectListUser = new ArrayList<>();
+    List<OrderModel> toReceiveListUser = new ArrayList<>();
 
     public HomeUserFragment() {
     }
@@ -69,6 +70,7 @@ public class HomeUserFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     @SuppressLint("SetTextI18n")
@@ -98,6 +100,8 @@ public class HomeUserFragment extends Fragment {
         TextView messageStartTextView = view.findViewById(R.id.fhu_tv_messagestart);
         TextView messageEndTextView = view.findViewById(R.id.fhu_tv_messageend);
         ImageView ProfilePictureImageView = view.findViewById(R.id.fhu_civ_profile_pic);
+        TextView numOfPendingCollectionTextView = view.findViewById(R.id.fhu_tv_number_pending_collection);
+        TextView numOfPendingReceivingTextView = view.findViewById(R.id.fhu_tv_number_pending_receiving);
 
         //show current month
         Calendar calendar = Calendar.getInstance();
@@ -337,12 +341,106 @@ public class HomeUserFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
+        getUserOrderDataForToCollect(pendingCollectionNum1 -> {
+            if (pendingCollectionNum1 == 0) {
+                numOfPendingCollectionTextView.setText("0");
+            } else {
+                numOfPendingCollectionTextView.setText(String.valueOf(pendingCollectionNum1));
+            }
+        });
+
+        getUserOrderDataForToReceive(pendingReceiveNum1 -> {
+            if (pendingReceiveNum1 == 0) {
+                numOfPendingReceivingTextView.setText("0");
+            } else {
+                numOfPendingReceivingTextView.setText(String.valueOf(pendingReceiveNum1));
+            }
+        });
+
+        CardView pendingCollectionCV = view.findViewById(R.id.fhu_cv_pending_collection);
+        CardView pendingReceivingCV = view.findViewById(R.id.fhu_cv_pending_receiving);
+
+        pendingCollectionCV.setOnClickListener(view12 -> {
+            HomeActivity activity = (HomeActivity) requireActivity();
+            activity.navigateToHistoryFragment();
+        });
+
+        pendingReceivingCV.setOnClickListener(view13 -> {
+            HomeActivity activity = (HomeActivity) requireActivity();
+            activity.navigateToHistoryFragment();
+        });
+
         return view;
+    }
+
+    public interface DataCallback<T> {
+        void onDataLoaded(T data);
+    }
+
+    private void getUserOrderDataForToCollect(DataCallback<Integer> callback) {
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        AtomicInteger pendingCollectionNumber = new AtomicInteger(0);
+        userOrderRef.orderByChild("userId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order created".equals(currentStatus) || "Rider accept order".equals(currentStatus)) {
+                                toCollectListUser.add(order);
+                                pendingCollectionNumber.set(toCollectListUser.size());
+                            }
+                        }
+                    }
+                    callback.onDataLoaded(pendingCollectionNumber.get());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        pendingCollectionNumber.get();
+    }
+
+    private void getUserOrderDataForToReceive(DataCallback<Integer> callback) {
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        AtomicInteger pendingReceivingNumber = new AtomicInteger(0);
+        userOrderRef.orderByChild("userId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Rider pick up".equals(currentStatus) || "Order reached laundry shop".equals(currentStatus)
+                                    || "Laundry done process".equals(currentStatus) || "Order out of delivery".equals(currentStatus)
+                                    || "Order delivered".equals(currentStatus)) {
+                                toReceiveListUser.add(order);
+                                pendingReceivingNumber.set(toReceiveListUser.size());
+                            }
+                        }
+                    }
+                    callback.onDataLoaded(pendingReceivingNumber.get());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        pendingReceivingNumber.get();
     }
 
     private void showCharts(String currentUserId, String currentYear, ArrayList<String> months) {
@@ -391,6 +489,7 @@ public class HomeUserFragment extends Fragment {
                     displayOrderLineChart(months, orderValues);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
