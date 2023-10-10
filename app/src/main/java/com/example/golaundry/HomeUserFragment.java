@@ -411,7 +411,7 @@ public class HomeUserFragment extends Fragment {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                             builder.setTitle("Rider's account has been terminated" );
                                             builder.setMessage("Rider has missed pick up your order " + order.getOrderId() + ". You can reschedule pick up date in cancelled order section.");
-                                            builder.setPositiveButton("Yes", (dialog, which) -> dialog.dismiss());
+                                            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
                                             AlertDialog dialog = builder.create();
                                             dialog.show();
                                             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
@@ -430,7 +430,6 @@ public class HomeUserFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
 
         return view;
     }

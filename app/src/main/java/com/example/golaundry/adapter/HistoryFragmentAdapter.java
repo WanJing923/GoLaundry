@@ -539,6 +539,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             holder.currentStatusTextView.setText("Cancelled");
             holder.actionButton.setText("Reschedule");
             holder.actionButton.setOnClickListener(view -> {
+                final String[] selectedDate = {null};
                 //rescheduling pick up time, show dialog, new rider pick up
                 Calendar calendar = Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
@@ -549,17 +550,37 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 long minDate = calendar.getTimeInMillis();
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(context, R.style.CustomDatePickerDialog, (view1, year1, month1, dayOfMonth) -> {
-                    String selectedDate = (month1 + 1) + "/" + dayOfMonth + "/" + year1;
-                    holder.currentStatusTextView.setText(selectedDate);
+                    selectedDate[0] = (month1 + 1) + "/" + dayOfMonth + "/" + year1;
+                    holder.currentStatusTextView.setText(selectedDate[0]);
+                    holder.actionButton.setText("Submit");
                 }, year, month, day);
-
                 datePickerDialog.getDatePicker().setMinDate(minDate);
                 datePickerDialog.show();
 
-                holder.actionButton.setText("Submit");
+                String orderStatusId = String.valueOf(UUID.randomUUID());
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String dateTime = sdf2.format(new Date());
+
                 holder.actionButton.setOnClickListener(view12 -> {
                     holder.mProgressBar.setVisibility(View.VISIBLE);
-                    //update order pick up date
+
+                    if (selectedDate[0]!=null) {
+                        //update order pick up date, order current status and another table, order status add one
+                        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+                        DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus");
+
+                        userOrderRef.child(order.getOrderId()).child("pickUpDate").setValue(selectedDate[0]);
+                        userOrderRef.child(order.getOrderId()).child("currentStatus").setValue("Order created");
+                        userOrderRef.child(order.getOrderId()).child("riderId").setValue("None");
+
+                        OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order created");
+                        orderStatusRef.child(order.getOrderId()).child(orderStatusId).setValue(mOrderStatusModel);
+
+                        Toast.makeText(context, "Order created again, please refresh", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Please select a new pick up date", Toast.LENGTH_SHORT).show();
+                    }
+
                 });
 
             });
