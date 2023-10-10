@@ -3,10 +3,12 @@ package com.example.golaundry;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import com.example.golaundry.adapter.MainAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int NOTIFICATION_SETTINGS_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,28 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        boolean areNotificationsEnabled = NotificationManagerCompat.from(this).areNotificationsEnabled();
+        if (!areNotificationsEnabled) {
+            Intent intent = new Intent();
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", getPackageName());
+            intent.putExtra("app_uid", getApplicationInfo().uid);
+            intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+            startActivityForResult(intent, NOTIFICATION_SETTINGS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NOTIFICATION_SETTINGS_REQUEST_CODE) {
+            if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

@@ -116,7 +116,7 @@ public class FindOrderFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/d/yyyy", Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy", Locale.getDefault());
                         String todayDate = dateFormat.format(new Date());
 
                         for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {

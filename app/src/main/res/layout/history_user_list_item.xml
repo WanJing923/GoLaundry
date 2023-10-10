@@ -281,19 +281,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/huli_button"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/choose_custom"
-                android:backgroundTint="@color/primary_green"
-                android:padding="10dp"
-                android:text="@string/loading"
-                android:textColor="@color/gold"
-                android:textSize="14sp"
+                android:layout_gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/huli_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/choose_custom"
+                    android:backgroundTint="@color/primary_green"
+                    android:padding="10dp"
+                    android:text="@string/loading"
+                    android:textColor="@color/gold"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/huli_progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>

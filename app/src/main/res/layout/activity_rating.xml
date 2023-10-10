@@ -9,16 +9,16 @@
     tools:context=".RatingActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/ra_toolbar"
+        android:id="@+id/rate_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:elevation="4dp"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/ra_tv_go_laundry"
+            android:id="@+id/rate_tv_go_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -38,14 +38,14 @@
         android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ra_toolbar">
+        android:layout_below="@id/rate_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/pa_tv_rate_order"
+                android:id="@+id/rate_tv_rate_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -58,11 +58,11 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/ra_tv_laundry_service"
+                android:id="@+id/rate_tv_laundry_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/pa_tv_rate_order"
+                android:layout_below="@id/rate_tv_rate_order"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="40dp"
                 android:text="@string/laundry_service"
@@ -70,11 +70,11 @@
                 android:textSize="16sp" />
 
             <RatingBar
-                android:id="@+id/ra_rate_laundry"
+                android:id="@+id/rate_rate_laundry"
                 style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ra_tv_laundry_service"
+                android:layout_below="@id/rate_tv_laundry_service"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
                 android:numStars="5"
@@ -83,11 +83,11 @@
                 android:saveEnabled="true" />
 
             <TextView
-                android:id="@+id/ra_tv_laundry_service_msg"
+                android:id="@+id/rate_tv_laundry_service_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/ra_rate_laundry"
+                android:layout_below="@id/rate_rate_laundry"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/laundry_service_optional"
@@ -95,10 +95,10 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/ra_et_laundry_service"
+                android:id="@+id/rate_et_laundry_service"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_below="@id/ra_tv_laundry_service_msg"
+                android:layout_below="@id/rate_tv_laundry_service_msg"
                 android:layout_centerInParent="true"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="5dp"
@@ -118,11 +118,11 @@
 
 
             <TextView
-                android:id="@+id/ra_tv_rider_service"
+                android:id="@+id/rate_tv_rider_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/ra_et_laundry_service"
+                android:layout_below="@id/rate_et_laundry_service"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="48dp"
                 android:text="@string/rider_service"
@@ -130,11 +130,11 @@
                 android:textSize="16sp" />
 
             <RatingBar
-                android:id="@+id/ra_rate_rider"
+                android:id="@+id/rate_rate_rider"
                 style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ra_tv_rider_service"
+                android:layout_below="@id/rate_tv_rider_service"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
                 android:numStars="5"
@@ -143,11 +143,11 @@
                 android:saveEnabled="true" />
 
             <TextView
-                android:id="@+id/ra_tv_rider_service_msg"
+                android:id="@+id/rate_tv_rider_service_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/ra_rate_rider"
+                android:layout_below="@id/rate_rate_rider"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/rider_service_optional"
@@ -155,10 +155,10 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/ra_et_rider_service_note"
+                android:id="@+id/rate_et_rider_service_note"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_below="@id/ra_tv_rider_service_msg"
+                android:layout_below="@id/rate_tv_rider_service_msg"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="5dp"
@@ -177,7 +177,7 @@
                 android:autofillHints="rider service" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/ra_btn_done"
+                android:id="@+id/rate_btn_done"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="70dp"
@@ -187,7 +187,7 @@
                 android:background="@drawable/custom_button"
                 android:backgroundTint="@color/cyan"
                 android:text="@string/done"
-                android:layout_below="@id/ra_et_rider_service_note"/>
+                android:layout_below="@id/rate_et_rider_service_note"/>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

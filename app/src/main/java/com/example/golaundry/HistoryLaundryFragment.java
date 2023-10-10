@@ -201,7 +201,7 @@ public class HistoryLaundryFragment extends Fragment {
                     for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
                         OrderModel order = orderSnapshot.getValue(OrderModel.class);
                         if (order != null) {
-                            if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || "Order cancelled by laundry".equals(order.getCurrentStatus())) {
+                            if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || "Order cancelled by laundry shop".equals(order.getCurrentStatus())) {
                                 cancelledList.add(order);
                             }
                         }

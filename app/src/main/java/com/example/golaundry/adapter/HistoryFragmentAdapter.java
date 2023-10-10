@@ -3,6 +3,7 @@ package com.example.golaundry.adapter;
 import static android.content.Context.WINDOW_SERVICE;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.WindowManager;
@@ -33,6 +34,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ import com.example.golaundry.viewModel.LaundryViewModel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -130,6 +133,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 builder.setMessage("Your fees will be refund.");
 
                 builder.setPositiveButton("Yes", (dialog, which) -> {
+                    holder.mProgressBar.setVisibility(View.VISIBLE);
                     holder.actionButton.setText("LOADING");
                     // update order status history, order current status, user balance, user spending, user total order
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(order.getUserId());
@@ -201,6 +205,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                                                                 Toast.makeText(context, "Order cancelled, please refresh.", Toast.LENGTH_SHORT).show();
                                                                                 holder.actionButton.setText("CANCELLED");
                                                                                 holder.actionButton.setEnabled(false);
+                                                                                holder.mProgressBar.setVisibility(View.GONE);
                                                                             }).addOnFailureListener(e -> Toast.makeText(context, "Order cancelling process failed.", Toast.LENGTH_SHORT).show());
                                                                         }
                                                                     }
@@ -220,15 +225,12 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        holder.mProgressBar.setVisibility(View.GONE);
                                     }
                                 });
-                            }).addOnFailureListener(e -> {
-                            });
-                        }).addOnFailureListener(e -> {
-                        });
-                    }).addOnFailureListener(e -> {
-                    });
-
+                            }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
+                        }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
+                    }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
                     dialog.dismiss();
                 });
 
@@ -248,7 +250,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 || Objects.equals(order.getCurrentStatus(), "Laundry done process") || Objects.equals(order.getCurrentStatus(), "Order out of delivery")) {
             holder.currentStatusTextView.setText("Pending Receiving");
             holder.actionButton.setVisibility(View.GONE);
-        } else if (Objects.equals(order.getCurrentStatus(), "Order delivered")) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order delivered")) { //confirm complete order
             holder.currentStatusTextView.setText("Pending Receiving");
             holder.actionButton.setText("RECEIVE");
             holder.actionButton.setOnClickListener(view -> {
@@ -259,6 +261,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     holder.actionButton.setText("LOADING");
+                    holder.mProgressBar.setVisibility(View.VISIBLE);
                     // update order status history, order current status, laundry earnings&total order, rider earnings&total order, rider and laundry balance
                     DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder").child(order.getOrderId());
                     DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus").child(order.getOrderId());
@@ -426,26 +429,28 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                                                                                                                                             appEarningsRef.child("orderId").setValue(order.getOrderId()).addOnSuccessListener(aVoid8 -> { //update app earnings orderID
 
+                                                                                                                                                                                holder.mProgressBar.setVisibility(View.GONE);
                                                                                                                                                                                 Toast.makeText(context, "Order has been completed, please refresh.", Toast.LENGTH_SHORT).show();
                                                                                                                                                                                 holder.actionButton.setText("Done");
                                                                                                                                                                                 holder.actionButton.setEnabled(false);
 
-                                                                                                                                                                            }).addOnFailureListener(e -> Toast.makeText(context, "Order confirming process failed.", Toast.LENGTH_SHORT).show());
+                                                                                                                                                                            }).addOnFailureListener(e -> {
+                                                                                                                                                                                    holder.mProgressBar.setVisibility(View.GONE);
+                                                                                                                                                                            Toast.makeText(context, "Order confirming process failed.", Toast.LENGTH_SHORT).show();
+                                                                                                                                                                            });
 
-                                                                                                                                                                        }).addOnFailureListener(e -> {
-                                                                                                                                                                        });
+                                                                                                                                                                        }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
 
-                                                                                                                                                                    }).addOnFailureListener(e -> {
-                                                                                                                                                                    });
+                                                                                                                                                                    }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
 
-                                                                                                                                                                }).addOnFailureListener(e -> {
-                                                                                                                                                                });
+                                                                                                                                                                }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
                                                                                                                                                             }
                                                                                                                                                         }
                                                                                                                                                     }
 
                                                                                                                                                     @Override
                                                                                                                                                     public void onCancelled(@NonNull DatabaseError error) {
+                                                                                                                                                        holder.mProgressBar.setVisibility(View.GONE);
                                                                                                                                                     }
                                                                                                                                                 });
                                                                                                                                             });
@@ -455,10 +460,10 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                                                                                                 @Override
                                                                                                                                 public void onCancelled(@NonNull DatabaseError error) {
+                                                                                                                                    holder.mProgressBar.setVisibility(View.GONE);
                                                                                                                                 }
                                                                                                                             });
-                                                                                                                        }).addOnFailureListener(e -> {
-                                                                                                                        });
+                                                                                                                        }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
                                                                                                                     }
                                                                                                                 }
                                                                                                             }
@@ -466,10 +471,10 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                                                                         @Override
                                                                                                         public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                                            holder.mProgressBar.setVisibility(View.GONE);
                                                                                                         }
                                                                                                     });
-                                                                                                }).addOnFailureListener(e -> {
-                                                                                                });
+                                                                                                }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
                                                                                             }
                                                                                         }
                                                                                     }
@@ -477,10 +482,10 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                                                 @Override
                                                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                    holder.mProgressBar.setVisibility(View.GONE);
                                                                                 }
                                                                             });
-                                                                        }).addOnFailureListener(e -> {
-                                                                        });
+                                                                        }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
                                                                     }
                                                                 }
                                                             }
@@ -488,10 +493,10 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                                         @Override
                                                         public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                            holder.mProgressBar.setVisibility(View.GONE);
                                                         }
                                                     });
-                                                }).addOnFailureListener(e -> {
-                                                });
+                                                }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
                                             }
                                         }
                                     }
@@ -499,13 +504,12 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    holder.mProgressBar.setVisibility(View.GONE);
                                 }
                             });
 
-                        }).addOnFailureListener(e -> {
-                        });
-                    }).addOnFailureListener(e -> {
-                    });
+                        }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
+                    }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
 
                     dialog.dismiss();
                 });
@@ -523,6 +527,8 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             holder.actionButton.setText("RATE");
             holder.actionButton.setOnClickListener(view -> {
                 // go ratings feature
+                //intent and implement rate laundry and rider function, pass the orderId, userId, laundryId, riderId
+                //example: order.getOrderId(), order.getUserId(), order.getLaundryId(), order.getRiderId put extra to intent
             });
         }
         //cancelled
@@ -531,8 +537,31 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             holder.actionButton.setVisibility(View.GONE);
         } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled due to rider missed pick up") || Objects.equals(order.getCurrentStatus(), "Order cancelled due to no rider accept order")) {
             holder.currentStatusTextView.setText("Cancelled");
+            holder.actionButton.setText("Reschedule");
             holder.actionButton.setOnClickListener(view -> {
                 //rescheduling pick up time, show dialog, new rider pick up
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                long minDate = calendar.getTimeInMillis();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, R.style.CustomDatePickerDialog, (view1, year1, month1, dayOfMonth) -> {
+                    String selectedDate = (month1 + 1) + "/" + dayOfMonth + "/" + year1;
+                    holder.currentStatusTextView.setText(selectedDate);
+                }, year, month, day);
+
+                datePickerDialog.getDatePicker().setMinDate(minDate);
+                datePickerDialog.show();
+
+                holder.actionButton.setText("Submit");
+                holder.actionButton.setOnClickListener(view12 -> {
+                    holder.mProgressBar.setVisibility(View.VISIBLE);
+                    //update order pick up date
+                });
+
             });
         }
 
@@ -551,6 +580,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         });
 
         holder.qrImageView.setOnClickListener(view -> {
+            holder.mProgressBar.setVisibility(View.VISIBLE);
             String orderId = order.getOrderId();
 
             WindowManager manager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
@@ -571,8 +601,10 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 ImageView qrCodeImageView = qrCodeDialog.findViewById(R.id.qr_show);
                 qrCodeImageView.setImageBitmap(bitmap);
                 qrCodeDialog.show();
+                holder.mProgressBar.setVisibility(View.GONE);
             } catch (WriterException e) {
                 Log.v(TAG, e.toString());
+                holder.mProgressBar.setVisibility(View.GONE);
             }
 
         });
@@ -612,6 +644,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         RecyclerView servicesRecyclerView;
         ImageView moreImageView, qrImageView;
         Button actionButton;
+        ProgressBar mProgressBar;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -626,6 +659,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             currentStatusTextView = itemView.findViewById(R.id.huli_tv_status);
             actionButton = itemView.findViewById(R.id.huli_button);
             qrImageView = itemView.findViewById(R.id.huli_iv_qr);
+            mProgressBar = itemView.findViewById(R.id.huli_progressBar);
         }
     }
 }
