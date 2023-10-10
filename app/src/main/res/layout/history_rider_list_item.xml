@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="18dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/hrli_iv_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/laundry_icon"
+            android:src="@drawable/ic_user" />
+
+        <TextView
+            android:id="@+id/hrli_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/hrli_iv_icon"
+            android:text="@string/username"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/hrli_iv_view_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/view_order"
+            android:textColor="@color/gold"
+            android:textSize="12sp"
+            app:drawableEndCompat="@drawable/ic_right" />
+
+        <TextView
+            android:id="@+id/hrli_tv_order_id_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hrli_iv_icon"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/order_id"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/hrli_tv_show_order_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hrli_iv_icon"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/hrli_tv_order_id_"
+            android:text="@string/_20ff3e3"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/hrli_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/hrli_tv_order_id_"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/black" />
+
+        <TextView
+            android:id="@+id/hrli_tv_laundry_shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hrli_divider"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/laundry_shop"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hrli_linear2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/hrli_tv_laundry_shop_name"
+            android:background="@color/cyan">
+
+            <ImageView
+                android:id="@+id/hrli_iv_status_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/status_icon"
+                android:src="@drawable/ic_notification"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/hrli_tv_status_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/order_has_been_delivered"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/hrli_iv_status_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/hrli_iv_more_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/more_icon"
+                android:src="@drawable/ic_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hrli_linear4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hrli_linear2"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/hrli_tv_delivery_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0_00"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/hrli_tv_delivery_rm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:text="@string/rm"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/hrli_tv_delivery_amount"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/hrli_tv_delivery_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/total"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/hrli_tv_delivery_rm"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/hrli_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_23_september_2023"
+                android:textColor="@color/black"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/hrli_divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/hrli_linear4"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/black" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hrli_linear5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hrli_divider2"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:id="@+id/hrli_tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/completed"
+                android:textColor="@color/gold"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

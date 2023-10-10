@@ -1,6 +1,7 @@
 package com.example.golaundry;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.RiderModel;
 import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.RiderViewModel;
@@ -43,12 +46,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public class HomeRiderFragment extends Fragment {
     private LineChart orderLineChart;
@@ -57,7 +63,6 @@ public class HomeRiderFragment extends Fragment {
 
 
     public HomeRiderFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -143,6 +148,76 @@ public class HomeRiderFragment extends Fragment {
                     }
                 }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        //update order status
+        SimpleDateFormat sdf1 = new SimpleDateFormat("M/d/yyyy", Locale.getDefault());
+        String currentDateFromDb = sdf1.format(new Date());
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus");
+        DatabaseReference ridersRef = FirebaseDatabase.getInstance().getReference().child("riders");
+        String orderStatusId = String.valueOf(UUID.randomUUID());
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String dateTime = sdf2.format(new Date());
+
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order created".equals(currentStatus) || "Rider accept order".equals(currentStatus)) {
+                                try {
+                                    Date currentDate = sdf1.parse(currentDateFromDb);
+                                    Date dbDate = sdf1.parse(order.getPickUpDate());
+
+                                    assert currentDate != null;
+                                    if (currentDate.after(dbDate)) {
+                                        //check these order.getRiderId is "None" or not, if yes,update the table child(currentStatus) to "Order cancelled due to no rider accept order"
+                                        if ("None".equals(order.getRiderId())) {
+                                            userOrderRef.child(order.getOrderId()).child("currentStatus").setValue("Order cancelled due to no rider accept order");
+                                            //order status
+                                            OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled due to no rider accept order");
+                                            orderStatusRef.child(order.getOrderId()).child(orderStatusId).setValue(mOrderStatusModel);
+                                        } else {
+                                            userOrderRef.child(order.getOrderId()).child("currentStatus").setValue("Order cancelled due to rider missed pick up");
+                                            //order status
+                                            OrderStatusModel mOrderStatusModel = new OrderStatusModel(dateTime, "Order cancelled due to rider missed pick up");
+                                            orderStatusRef.child(order.getOrderId()).child(orderStatusId).setValue(mOrderStatusModel);
+                                            //terminate rider due to missed pick up
+                                            ridersRef.child(order.getRiderId()).child("status").setValue("terminated");
+
+                                            //show dialog
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                            builder.setTitle("Your account has been terminated" );
+                                            builder.setMessage("Due to missed pick up the order " + order.getOrderId());
+                                            builder.setPositiveButton("OK", (dialog, which) -> {
+                                                dialog.dismiss();
+                                                FirebaseAuth.getInstance().signOut();
+                                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                                startActivity(intent);
+                                                requireActivity().finish();
+                                            });
+                                            AlertDialog dialog = builder.create();
+                                            dialog.show();
+                                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+                                        }
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }

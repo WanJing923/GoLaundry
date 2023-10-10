@@ -36,7 +36,6 @@ import java.util.UUID;
 public class RiderViewOrderActivity extends AppCompatActivity {
 
     private OrderModel mOrderModel;
-    private LaundryModel laundryData;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -53,7 +52,7 @@ public class RiderViewOrderActivity extends AppCompatActivity {
 
         mOrderModel = (OrderModel) getIntent().getSerializableExtra("RiderViewOrderData");
         double distance = getIntent().getDoubleExtra("distance", 0.0);
-        laundryData = (LaundryModel) getIntent().getSerializableExtra("laundryData");
+        LaundryModel laundryData = (LaundryModel) getIntent().getSerializableExtra("laundryData");
 
         TextView userNameTextView = findViewById(R.id.arvo_tv_name);
         TextView fromAddressTextView = findViewById(R.id.arvo_tv_address_from);

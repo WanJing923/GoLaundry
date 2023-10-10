@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="@string/ironing"
+        android:text="@string/service_name"
         android:textColor="@color/black"
         android:textSize="12sp" />
 
@@ -38,7 +38,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/row_tv_qty"
-            android:text="@string/_2"
+            android:text="@string/_0"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -67,7 +67,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/row_tv_rm"
-            android:text="@string/_4_50"
+            android:text="@string/_0_00"
             android:textColor="@color/black"
             android:textSize="12sp" />
     </RelativeLayout>

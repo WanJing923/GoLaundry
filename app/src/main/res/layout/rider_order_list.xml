@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="6dp"
-    android:layout_marginBottom="6dp"
-    android:layout_marginStart="18dp"
-    android:layout_marginEnd="18dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="8dp">
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/fol_tv_from"
+            android:id="@+id/rol_tv_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:text="@string/from_"
             android:textColor="@color/black"
@@ -27,10 +27,10 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <RelativeLayout
-            android:id="@+id/fol_linear1"
+            android:id="@+id/rol_linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/fol_tv_from"
+            app:layout_constraintTop_toBottomOf="@id/rol_tv_from"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="20dp"
@@ -38,14 +38,14 @@
             android:layout_marginTop="7dp">
 
             <LinearLayout
-                android:id="@+id/fol_linear2"
+                android:id="@+id/rol_linear2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <ImageView
-                    android:id="@+id/fol_iv_location"
+                    android:id="@+id/rol_iv_location"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
@@ -55,17 +55,17 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/fol_linear1_text"
+                android:id="@+id/rol_linear1_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@id/fol_linear2"
+                android:layout_toEndOf="@id/rol_linear2"
                 android:layout_marginStart="7dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/fol_tv_address"
+                    android:id="@+id/rol_tv_address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -76,7 +76,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/fol_tv_to"
+            android:id="@+id/rol_tv_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -84,11 +84,11 @@
             android:text="@string/to"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/fol_linear1"
+            app:layout_constraintTop_toBottomOf="@id/rol_linear1"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            android:id="@+id/fol_tv_laundry"
+            android:id="@+id/rol_tv_laundry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -97,14 +97,14 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/fol_tv_to"
+            app:layout_constraintTop_toBottomOf="@+id/rol_tv_to"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <RelativeLayout
-            android:id="@+id/fol_linear3"
+            android:id="@+id/rol_linear3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/fol_tv_laundry"
+            app:layout_constraintTop_toBottomOf="@id/rol_tv_laundry"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="5dp"
@@ -112,14 +112,14 @@
             android:layout_marginEnd="20dp">
 
             <LinearLayout
-                android:id="@+id/fol_linear4"
+                android:id="@+id/rol_linear4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <ImageView
-                    android:id="@+id/fol_iv_location2"
+                    android:id="@+id/rol_iv_location2"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
@@ -129,17 +129,17 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/fol_linear1_text2"
+                android:id="@+id/rol_linear1_text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@id/fol_linear4"
+                android:layout_toEndOf="@id/rol_linear4"
                 android:layout_marginStart="7dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/fol_tv_address2"
+                    android:id="@+id/rol_tv_address2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -150,10 +150,10 @@
         </RelativeLayout>
 
         <View
-            android:id="@+id/fol_divider"
+            android:id="@+id/rol_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            app:layout_constraintTop_toBottomOf="@id/fol_linear3"
+            app:layout_constraintTop_toBottomOf="@id/rol_linear3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="11dp"
@@ -166,13 +166,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/fol_divider"
+            app:layout_constraintTop_toBottomOf="@id/rol_divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/fol_tv_earn"
+                android:id="@+id/rol_tv_earn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -187,7 +187,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/fol_tv_rm"
+                android:id="@+id/rol_tv_rm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
@@ -199,10 +199,10 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/fol_tv_earn"/>
+                app:layout_constraintStart_toEndOf="@id/rol_tv_earn"/>
 
             <TextView
-                android:id="@+id/fol_tv_price"
+                android:id="@+id/rol_tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
@@ -214,10 +214,10 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/fol_tv_rm"/>
+                app:layout_constraintStart_toEndOf="@id/rol_tv_rm"/>
 
             <TextView
-                android:id="@+id/fol_tv_view_order"
+                android:id="@+id/rol_tv_view_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"

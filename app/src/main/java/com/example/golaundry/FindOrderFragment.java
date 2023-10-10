@@ -64,7 +64,6 @@ public class FindOrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mUserGetLocationHolder = new ViewModelProvider(requireActivity()).get(UserGetLocationHolder.class);
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         userOrderRef = db.getReference().child("userOrder");
@@ -105,7 +104,7 @@ public class FindOrderFragment extends Fragment {
         }
 
         int workingHoursStart = 9;
-        int workingHoursEnd = 23;
+        int workingHoursEnd = 17;
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
         if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
@@ -117,7 +116,7 @@ public class FindOrderFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/d/yyyy", Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy", Locale.getDefault());
                         String todayDate = dateFormat.format(new Date());
 
                         for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
@@ -284,7 +283,7 @@ public class FindOrderFragment extends Fragment {
         if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
             orderList.clear();
             userOrderRef.addValueEventListener(new ValueEventListener() {
-                @SuppressLint("DefaultLocale")
+                @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {

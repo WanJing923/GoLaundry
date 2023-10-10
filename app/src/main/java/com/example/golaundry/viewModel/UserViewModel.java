@@ -94,7 +94,7 @@ public class UserViewModel extends ViewModel {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference("laundry");
         DatabaseReference riderRef = FirebaseDatabase.getInstance().getReference("riders");
-        ValueEventListener listener = new ValueEventListener() {
+        ValueEventListener emailListener = new ValueEventListener() {
             int searchCounter = 0;
             boolean userExists = false;
 
@@ -105,7 +105,7 @@ public class UserViewModel extends ViewModel {
                 }
                 searchCounter++;
                 if (searchCounter == 3) {
-                    roleLiveData.setValue(userExists);
+                    checkStatus(userRef, laundryRef, riderRef, email, roleLiveData);
                 }
             }
 
@@ -119,16 +119,90 @@ public class UserViewModel extends ViewModel {
         };
 
         // Search in the userRef table
-        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(emailListener);
 
         // Search in the laundryRef table
-        laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+        laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(emailListener);
 
         // Search in the riderRef table
-        riderRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(listener);
+        riderRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(emailListener);
 
         return roleLiveData;
     }
+
+    private void checkStatus(DatabaseReference userRef, DatabaseReference laundryRef, DatabaseReference riderRef, String email, MutableLiveData<Boolean> roleLiveData) {
+        userRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String userStatus = snapshot.child("status").getValue(String.class);
+                        if ("active".equals(userStatus)) {
+                            roleLiveData.setValue(true);
+                            return;
+                        }
+                    }
+                }
+                checkLaundryStatus(laundryRef, email, roleLiveData, riderRef);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                checkLaundryStatus(laundryRef, email, roleLiveData, riderRef);
+            }
+        });
+    }
+
+    private void checkLaundryStatus(DatabaseReference laundryRef, String email, MutableLiveData<Boolean> roleLiveData, DatabaseReference riderRef) {
+        laundryRef.orderByChild("emailAddress").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String laundryStatus = snapshot.child("status").getValue(String.class);
+                        if ("active".equals(laundryStatus)) {
+                            roleLiveData.setValue(true);
+                            return;
+                        }
+                    }
+                }
+                checkRiderStatus(riderRef, email, roleLiveData);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                checkRiderStatus(riderRef, email, roleLiveData);
+            }
+        });
+    }
+
+    private void checkRiderStatus(DatabaseReference riderRef, String email, MutableLiveData<Boolean> roleLiveData) {
+        Query query = riderRef.orderByChild("emailAddress").equalTo(email);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String riderStatus = snapshot.child("status").getValue(String.class);
+                        if ("active".equals(riderStatus)) {
+                            roleLiveData.setValue(true);
+                            return;
+                        }
+                    }
+                }
+
+                // If the loop completes without finding an "active" rider, set to false
+                roleLiveData.setValue(false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                roleLiveData.setValue(false);
+            }
+        });
+    }
+
 
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
@@ -343,14 +417,15 @@ public class UserViewModel extends ViewModel {
                                             userTotalOrderRef.child(currentMonth).setValue(updatedValue).addOnSuccessListener(aVoid -> {
 
                                                 userRef.child(currentUserId).child("balance").setValue(newBalance).addOnSuccessListener(aVoid2 -> {
-                                                            orderData.setValue(true);
-                                                        }).addOnFailureListener(e -> {
-                                                            orderData.setValue(false);
-                                                        });
+                                                    orderData.setValue(true);
+                                                }).addOnFailureListener(e -> {
+                                                    orderData.setValue(false);
+                                                });
 
                                             }).addOnFailureListener(e -> orderData.setValue(false));
                                         }
                                     }
+
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
                                     }

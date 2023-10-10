@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="18dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="10dp">
 
@@ -12,136 +13,149 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/hcl_iv_icon"
+            android:id="@+id/huli_iv_icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/ic_water"
-            android:contentDescription="@string/laundry_icon" />
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/laundry_icon"
+            android:src="@drawable/laundry" />
 
         <TextView
-            android:id="@+id/hcl_name"
+            android:id="@+id/huli_laundry_shop_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="9dp"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@id/hcl_iv_icon"
-            android:text="@string/laundry_terry"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@id/huli_iv_icon"
+            android:text="@string/laundry_shop_name"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/huli_iv_qr"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/order_id"
+            android:src="@drawable/ic_qr_code" />
+
         <TextView
-            android:id="@+id/hcl_tv_order_id_"
+            android:id="@+id/huli_tv_order_id_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hcl_iv_icon"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="7dp"
+            android:layout_below="@id/huli_iv_icon"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:text="@string/order_id"
             android:textColor="@color/black"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/hcl_tv_show_order_id"
+            android:id="@+id/huli_tv_show_order_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hcl_iv_icon"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="7dp"
-            android:layout_toEndOf="@id/hcl_tv_order_id_"
+            android:layout_below="@id/huli_iv_icon"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/huli_tv_order_id_"
             android:text="@string/_20ff3e3"
             android:textColor="@color/black"
             android:textSize="12sp" />
 
         <View
-            android:id="@+id/hcl_divider"
+            android:id="@+id/huli_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/hcl_tv_order_id_"
-            android:layout_marginStart="11dp"
+            android:layout_below="@id/huli_tv_order_id_"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="11dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             android:background="?android:attr/listDivider"
             android:backgroundTint="@color/black" />
 
         <LinearLayout
-            android:id="@+id/hcl_linear"
+            android:id="@+id/huli_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hcl_divider"
+            android:layout_below="@id/huli_divider"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:weightSum="4">
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="70dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/huli_lv_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/hcl_linear2"
+            android:id="@+id/huli_linear2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@id/hcl_linear"
+            android:layout_below="@id/huli_linear"
             android:background="#D6EFEE">
 
             <ImageView
-                android:id="@+id/hcl_iv_status_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/huli_iv_status_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/laundry"
+                android:contentDescription="@string/status_icon"
+                android:src="@drawable/ic_notification"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/status_icon" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/hcl_tv_status"
+                android:id="@+id/huli_tv_status_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="5dp"
                 android:text="@string/order_has_been_delivered"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/hcl_iv_status_icon"
+                app:layout_constraintStart_toEndOf="@id/huli_iv_status_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/hcl_iv_more_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/huli_iv_more_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginEnd="20dp"
+                android:contentDescription="@string/more_icon"
                 android:src="@drawable/ic_right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/more_icon" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/hcl_linear3"
+            android:id="@+id/huli_linear3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hcl_linear2"
+            android:layout_below="@id/huli_linear2"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp">
 
             <TextView
-                android:id="@+id/hcl_tv_delivery_fee_amount"
+                android:id="@+id/huli_tv_delivery_fee_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_3_00"
+                android:text="@string/_0_00"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -149,7 +163,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/hcl_tv_delivery_fee_rm"
+                android:id="@+id/huli_tv_delivery_fee_rm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
@@ -157,37 +171,37 @@
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/hcl_tv_delivery_fee_amount"
+                app:layout_constraintEnd_toStartOf="@id/huli_tv_delivery_fee_amount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/hcl_tv_delivery_fee"
+                android:id="@+id/huli_tv_delivery_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="179dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/delivery_fee"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/huli_tv_delivery_fee_rm"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/hcl_linear4"
+            android:id="@+id/huli_linear4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hcl_linear3"
+            android:layout_below="@id/huli_linear3"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp">
 
             <TextView
-                android:id="@+id/hcl_tv_total_amount"
+                android:id="@+id/huli_tv_total_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_50_00"
+                android:text="@string/_0_00"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -196,7 +210,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/hcl_tv_total_rm"
+                android:id="@+id/huli_tv_total_rm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
@@ -205,24 +219,24 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/hcl_tv_total_amount"
+                app:layout_constraintEnd_toStartOf="@id/huli_tv_total_amount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/hcl_tv_total"
+                android:id="@+id/huli_tv_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="88dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/order_total"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/hcl_tv_date"
+                app:layout_constraintEnd_toStartOf="@+id/huli_tv_total_rm"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/hcl_tv_date"
+                android:id="@+id/huli_tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_23_september_2023"
@@ -235,50 +249,64 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
-            android:id="@+id/hcl_divider2"
+            android:id="@+id/huli_divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/hcl_linear4"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="11dp"
+            android:layout_below="@id/huli_linear4"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:background="?android:attr/listDivider"
             android:backgroundTint="@color/black" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/hcl_linear5"
+            android:id="@+id/huli_linear5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hcl_divider2"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="17dp">
+            android:layout_below="@id/huli_divider2"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp">
 
             <TextView
-                android:id="@+id/tv_status"
+                android:id="@+id/huli_tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/completed"
-                android:textColor="#C0AB88"
+                android:text="@string/pending_collection"
+                android:textColor="@color/gold"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/choose_custom"
-                android:backgroundTint="@color/primary_green"
-                android:padding="10dp"
-                android:text="@string/tv_rate"
-                android:textColor="@color/gold"
-                android:textSize="14sp"
+                android:layout_gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/huli_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/choose_custom"
+                    android:backgroundTint="@color/primary_green"
+                    android:padding="10dp"
+                    android:text="@string/loading"
+                    android:textColor="@color/gold"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/huli_progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>

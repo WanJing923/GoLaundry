@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.golaundry.adapter.UserOrderLaundryServicesAdapter;
 import com.example.golaundry.holder.OrderServicesHolder;
+import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
@@ -58,6 +59,7 @@ public class OrderActivity extends AppCompatActivity {
     UserViewModel mUserViewModel;
     String membershipRate;
     SimpleDateFormat dayFormat,timeFormat;
+    private LaundryModel laundryModel;
 
     @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
     @Override
@@ -101,6 +103,7 @@ public class OrderActivity extends AppCompatActivity {
                 String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
                 locationTextView.setText(address);
                 phoneNoTextView.setText(laundry.getPhoneNo());
+                laundryModel = laundry;
             }
         });
 
@@ -136,7 +139,7 @@ public class OrderActivity extends AppCompatActivity {
                 //show image
                 String imageUrl = shop.getImages();
                 if (!Objects.equals(imageUrl, "")) {
-                    setImages(imageUrl, laundryImageView);
+//                    setImages(imageUrl, laundryImageView);
                 }
             }
         });
@@ -213,8 +216,8 @@ public class OrderActivity extends AppCompatActivity {
                     createOrderModel();
                     Intent intent = new Intent(OrderActivity.this, OrderLocationActivity.class);
                     intent.putExtra("orderData", mOrderModel);
+                    intent.putExtra("laundryData", laundryModel);
                     startActivity(intent);
-                    finish();
                 }
             } else {
                 Toast.makeText(this, "Laundry shop is currently closed", Toast.LENGTH_SHORT).show();
@@ -310,20 +313,20 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-    private void setImages(String imageUrl, ImageView LaundryPictureImageView) {
-        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-        try {
-            File localFile = File.createTempFile("tempfile", ".jpg");
-            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                //show
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                LaundryPictureImageView.setImageBitmap(bitmap);
-            }).addOnFailureListener(e ->
-                    Toast.makeText(OrderActivity.this, "Failed to retrieve image", Toast.LENGTH_SHORT).show());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void setImages(String imageUrl, ImageView LaundryPictureImageView) {
+//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+//        try {
+//            File localFile = File.createTempFile("tempfile", ".jpg");
+//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+//                //show
+//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                LaundryPictureImageView.setImageBitmap(bitmap);
+//            }).addOnFailureListener(e ->
+//                    Toast.makeText(OrderActivity.this, "Failed to retrieve image", Toast.LENGTH_SHORT).show());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

@@ -40,7 +40,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
     private final Boolean validateImage = false;
     private StorageTask uploadTask;
     private static final int REQUEST_CODE_MAP = 4;
-    String formattedAddress;
+    String formattedAddress = "";
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -111,6 +111,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         EditText shopNameEditText = findViewById(R.id.lsua_et_enter_shop_name);
         EditText contactNoEditText = findViewById(R.id.lsua_et_contact_num);
         EditText emailAddressEditText = findViewById(R.id.lsua_et_enter_email_address);
+        EditText addressEditText = findViewById(R.id.lsua_et_choose_location);
         EditText addressDetailsEditText = findViewById(R.id.lsua_et_address_details);
         EditText fullNameEditText = findViewById(R.id.lsua_et_enter_full_name);
         EditText phoneNoEditText = findViewById(R.id.lsua_et_personal_num);
@@ -121,6 +122,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         String shopName = shopNameEditText.getText().toString().trim();
         String contactNo = contactNoEditText.getText().toString().trim();
         String emailAddress = emailAddressEditText.getText().toString().trim();
+        String address = addressEditText.getText().toString().trim();
         String addressDetails = addressDetailsEditText.getText().toString().trim();
         String fullName = fullNameEditText.getText().toString().trim();
         String phoneNo = phoneNoEditText.getText().toString().trim();
@@ -172,16 +174,17 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             return;
         }
         //validate to check if address is empty
-        if (formattedAddress.isEmpty()) {
+        if (formattedAddress.isEmpty() || address.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
-            emailAddressEditText.setError("Address is required!");
+            addressEditText.setError("Address is required!");
+            Toast.makeText(LaundrySignUpActivity.this, "Address is required!", Toast.LENGTH_SHORT).show();
             findViewById(R.id.lsua_et_choose_location).requestFocus();
             return;
         }
         //validate to check if address details is empty
         if (addressDetails.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
-            emailAddressEditText.setError("Address is required!");
+            addressDetailsEditText.setError("Address details is required!");
             findViewById(R.id.lsua_et_address_details).requestFocus();
             return;
         }
@@ -189,6 +192,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
         if (BusinessLicensePhoto.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
             passwordEditText.setError("Business license photo is required!");
+            Toast.makeText(LaundrySignUpActivity.this, "Business license photo is required!", Toast.LENGTH_SHORT).show();
             findViewById(R.id.lsua_et_upload_BL).requestFocus();
             return;
         }

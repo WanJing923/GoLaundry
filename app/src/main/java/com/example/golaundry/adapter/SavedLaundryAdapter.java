@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.OrderActivity;
+import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
+import com.example.golaundry.TopUpActivity;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
@@ -83,7 +85,6 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
         holder.servicesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
         holder.kmTextView.setVisibility(View.GONE);
-        holder.rightImageView.setVisibility(View.GONE);
         holder.distanceTextView.setVisibility(View.GONE);
 
         //saved laundry before or not
@@ -93,6 +94,14 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
             String laundryId = laundry.getLaundry().getLaundryId();
             saveLaundryShop(laundryId, holder.savedImageView);
         });
+
+        holder.rightImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, OrderActivity.class);
+            intent.putExtra("laundryId", laundry.getLaundry().getLaundryId());
+            intent.putExtra("distance", 0.0);
+            context.startActivity(intent);
+        });
+
     }
 
     //show the user whether is saved or not

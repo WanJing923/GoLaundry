@@ -58,35 +58,22 @@ public class RiderSignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
 
-        findViewById(R.id.rsua_et_upload_face_photo).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Face Photo"), SELECT_FACE_PHOTO);
-            }
+        findViewById(R.id.rsua_et_upload_face_photo).setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Face Photo"), SELECT_FACE_PHOTO);
         });
 
-        findViewById(R.id.rsua_et_upload_driving_license).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Driving License"), SELECT_DRIVING_LICENSE);
-            }
+        findViewById(R.id.rsua_et_upload_driving_license).setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Driving License"), SELECT_DRIVING_LICENSE);
         });
 
         //check and register user
-        findViewById(R.id.rsua_btn_register).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerRider();
-            }
-        });
+        findViewById(R.id.rsua_btn_register).setOnClickListener(v -> registerRider());
     }
 
     //process images
@@ -201,7 +188,7 @@ public class RiderSignUpActivity extends AppCompatActivity {
         //validate to check if email is empty
         if (plateNumber.isEmpty()) {
             mProgressBar.setVisibility(View.GONE);
-            emailAddressEditText.setError("Plate number is required!");
+            plateNumberEditText.setError("Plate number is required!");
             Toast.makeText(this, R.string.plateNumberRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.rsua_et_enter_plate_num).requestFocus();
             return;
@@ -209,7 +196,7 @@ public class RiderSignUpActivity extends AppCompatActivity {
         //validate to check if plate number is less than 7 characters
         if (plateNumber.length() < 7) {
             mProgressBar.setVisibility(View.GONE);
-            contactNoEditText.setError("Plate number should be more than 6 characters!");
+            plateNumberEditText.setError("Plate number should be more than 6 characters!");
             Toast.makeText(this, R.string.plateNumberLessToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.rsua_et_enter_plate_num).requestFocus();
             return;
