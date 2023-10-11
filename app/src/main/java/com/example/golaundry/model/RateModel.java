@@ -1,8 +1,11 @@
 package com.example.golaundry.model;
 
-public class RateModel {
+import java.io.Serializable;
+
+public class RateModel implements Serializable {
     private String rateId;
     private String userId;
+    private String laundryId;
     private String riderId;
     private String orderId;
     private String dateTime;
@@ -14,9 +17,10 @@ public class RateModel {
     public RateModel() {
     }
 
-    public RateModel(String rateId, String userId, String riderId, String orderId, String dateTime, double rateToLaundry, String commentToLaundry, double rateToRider, String commentToRider) {
+    public RateModel(String rateId, String userId, String laundryId, String riderId, String orderId, String dateTime, double rateToLaundry, String commentToLaundry, double rateToRider, String commentToRider) {
         this.rateId = rateId;
         this.userId = userId;
+        this.laundryId = laundryId;
         this.riderId = riderId;
         this.orderId = orderId;
         this.dateTime = dateTime;
@@ -24,6 +28,14 @@ public class RateModel {
         this.commentToLaundry = commentToLaundry;
         this.rateToRider = rateToRider;
         this.commentToRider = commentToRider;
+    }
+
+    public String getLaundryId() {
+        return laundryId;
+    }
+
+    public void setLaundryId(String laundryId) {
+        this.laundryId = laundryId;
     }
 
     public String getRateId() {

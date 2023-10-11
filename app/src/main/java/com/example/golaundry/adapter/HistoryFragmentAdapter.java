@@ -435,8 +435,8 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                                                                                                                                                                                 holder.actionButton.setEnabled(false);
 
                                                                                                                                                                             }).addOnFailureListener(e -> {
-                                                                                                                                                                                    holder.mProgressBar.setVisibility(View.GONE);
-                                                                                                                                                                            Toast.makeText(context, "Order confirming process failed.", Toast.LENGTH_SHORT).show();
+                                                                                                                                                                                holder.mProgressBar.setVisibility(View.GONE);
+                                                                                                                                                                                Toast.makeText(context, "Order confirming process failed.", Toast.LENGTH_SHORT).show();
                                                                                                                                                                             });
 
                                                                                                                                                                         }).addOnFailureListener(e -> holder.mProgressBar.setVisibility(View.GONE));
@@ -524,12 +524,21 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         //completed
         else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.currentStatusTextView.setText("Completed");
-            holder.actionButton.setText("RATE");
-            holder.actionButton.setOnClickListener(view -> {
-                // go ratings feature
-                //intent and implement rate laundry and rider function, pass the orderId, userId, laundryId, riderId
-                //example: order.getOrderId(), order.getUserId(), order.getLaundryId(), order.getRiderId put extra to intent
-            });
+
+            if (!order.isAbleToRate()){
+                holder.actionButton.setEnabled(false);
+                holder.actionButton.setVisibility(View.GONE);
+            } else {
+                holder.actionButton.setText("RATE");
+                holder.actionButton.setOnClickListener(view -> {
+                    // go ratings feature
+                    //intent and implement rate laundry and rider function, pass the orderId, userId, laundryId, riderId
+                    //example: order.getOrderId(), order.getUserId(), order.getLaundryId(), order.getRiderId put extra to intent
+
+                    //set userOrder not able to rate
+                });
+            }
+
         }
         //cancelled
         else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))) {
@@ -577,8 +586,10 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                         orderStatusRef.child(order.getOrderId()).child(orderStatusId).setValue(mOrderStatusModel);
 
                         Toast.makeText(context, "Order created again, please refresh", Toast.LENGTH_SHORT).show();
+                        holder.mProgressBar.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(context, "Please select a new pick up date", Toast.LENGTH_SHORT).show();
+                        holder.mProgressBar.setVisibility(View.GONE);
                     }
 
                 });

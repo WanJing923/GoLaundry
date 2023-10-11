@@ -98,7 +98,7 @@ public class HomeLaundryFragment extends Fragment {
 
         viewRatingsTextView.setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(), RatingsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("isLaundry", true);
             startActivity(intent);
         });
 
