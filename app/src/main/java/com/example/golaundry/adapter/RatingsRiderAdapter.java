@@ -67,21 +67,12 @@ public class RatingsRiderAdapter extends RecyclerView.Adapter<RatingsRiderAdapte
 
         holder.orderIdTextView.setText(ratings.getOrderId());
         holder.commentTextView.setText(ratings.getCommentToRider());
-        float rateAmount = (float) ratings.getRateToRider();
+        float rateAmount = ratings.getRateToRider();
         holder.starRatingBar.setRating(rateAmount);
 
         String date = ratings.getDateTime();
         String formattedDate = formatDateTimeRiderRate(date);
         holder.dateTimeTextView.setText(formattedDate);
-
-        holder.viewTextView.setOnClickListener(view -> {
-            if (activity != null) {
-                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.home_container, new HistoryRiderFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
 
         holder.reportTextView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ReportActivity.class);
@@ -115,7 +106,7 @@ public class RatingsRiderAdapter extends RecyclerView.Adapter<RatingsRiderAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView userNameTextView, orderIdTextView, reportTextView,viewTextView,dateTimeTextView,commentTextView;
+        TextView userNameTextView, orderIdTextView, reportTextView,dateTimeTextView,commentTextView;
         RatingBar starRatingBar;
 
         public ViewHolder(View itemView) {
@@ -124,7 +115,6 @@ public class RatingsRiderAdapter extends RecyclerView.Adapter<RatingsRiderAdapte
             orderIdTextView = itemView.findViewById(R.id.review_tv_order_id);
             reportTextView = itemView.findViewById(R.id.review_tv_report);
             starRatingBar = itemView.findViewById(R.id.review_rating_star);
-            viewTextView = itemView.findViewById(R.id.review_tv_view_order);
             dateTimeTextView = itemView.findViewById(R.id.review_tv_date);
             commentTextView = itemView.findViewById(R.id.review_tv_comment);
         }

@@ -63,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/order_id_"
             android:textColor="@color/white"
@@ -72,9 +73,11 @@
 
         <TextView
             android:id="@+id/review_tv_order_id"
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/order"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -86,29 +89,24 @@
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
             android:numStars="5"
             android:progressTint="@color/white"
             android:rating="0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/review_tv_report" />
+            app:layout_constraintTop_toBottomOf="@+id/review_tv_order_id" />
 
         <TextView
             android:id="@+id/review_tv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
             android:text="@string/comment"
-            app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/review_tv_date"
-            app:layout_constraintTop_toBottomOf="@id/review_tv_order"
-            tools:layout_editor_absoluteX="10dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_rating_star" />
 
         <TextView
             android:id="@+id/review_tv_date"
@@ -123,22 +121,6 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="review_tv_comment" />
-
-        <TextView
-            android:id="@+id/review_tv_view_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/view_order"
-            android:textColor="@color/gold"
-            android:textSize="13sp"
-            app:drawableEndCompat="@drawable/ic_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/review_tv_comment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

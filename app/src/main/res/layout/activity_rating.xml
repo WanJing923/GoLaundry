@@ -71,16 +71,16 @@
 
             <RatingBar
                 android:id="@+id/rate_rate_laundry"
-                style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rate_tv_laundry_service"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
                 android:numStars="5"
                 android:progressTint="@color/white"
                 android:rating="1"
-                android:saveEnabled="true" />
+                android:stepSize="1" />
 
             <TextView
                 android:id="@+id/rate_tv_laundry_service_msg"
@@ -131,7 +131,6 @@
 
             <RatingBar
                 android:id="@+id/rate_rate_rider"
-                style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rate_tv_rider_service"

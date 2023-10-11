@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.golaundry.HistoryOrderStatusActivity;
+import com.example.golaundry.RatingActivity;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.viewModel.RiderViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -532,10 +533,12 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 holder.actionButton.setText("RATE");
                 holder.actionButton.setOnClickListener(view -> {
                     // go ratings feature
-                    //intent and implement rate laundry and rider function, pass the orderId, userId, laundryId, riderId
-                    //example: order.getOrderId(), order.getUserId(), order.getLaundryId(), order.getRiderId put extra to intent
-
-                    //set userOrder not able to rate
+                    Intent intent = new Intent(context, RatingActivity.class);
+                    intent.putExtra("orderID", order.getOrderId());
+                    intent.putExtra("userID", order.getUserId());
+                    intent.putExtra("laundryID", order.getLaundryId());
+                    intent.putExtra("riderID", order.getRiderId());
+                    context.startActivity(intent);
                 });
             }
 

@@ -101,8 +101,7 @@ public class HomeActivity extends AppCompatActivity {
                                     break;
 
                                 case 2:
-//                                    replace(new HistoryLaundryFragment());
-                                    navigateToHistoryLaundryFragment();
+                                    replace(new HistoryLaundryFragment());
                                     break;
 
                                 case 3:
@@ -171,13 +170,5 @@ public class HomeActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.home_container, fragment);
         fragmentTransaction.commit();
     }
-
-    public void navigateToHistoryLaundryFragment() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.home_container, new HistoryLaundryFragment());
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
 
 }

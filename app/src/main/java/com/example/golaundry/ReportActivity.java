@@ -77,12 +77,12 @@ public class ReportActivity extends AppCompatActivity {
 
             if (isRider) {
                 commentTextView.setText(rateData.getCommentToRider());
-                float rateAmount = (float) rateData.getRateToRider();
+                float rateAmount = rateData.getRateToRider();
                 RatingBar.setRating(rateAmount);
             }
             if (isLaundry) {
                 commentTextView.setText(rateData.getCommentToLaundry());
-                float rateAmount = (float) rateData.getRateToLaundry();
+                float rateAmount = rateData.getRateToLaundry();
                 RatingBar.setRating(rateAmount);
             }
 
