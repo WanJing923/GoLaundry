@@ -110,11 +110,13 @@ public class ReportActivity extends AppCompatActivity {
                     ReportModel mReportModel = new ReportModel(reportId, "rider", rateData.getRiderId(), rateData.getUserId(), rateData.getOrderId(), rateData.getRateId(), currentDateTime, message, false);
                     reportsRef.child(reportId).setValue(mReportModel);
                     mProgressBar.setVisibility(View.GONE);
+                    finish();
                 }
                 if (isLaundry) {
                     ReportModel mReportModel = new ReportModel(reportId, "laundry", rateData.getLaundryId(), rateData.getUserId(), rateData.getOrderId(), rateData.getRateId(), currentDateTime, message, false);
                     reportsRef.child(reportId).setValue(mReportModel);
                     mProgressBar.setVisibility(View.GONE);
+                    finish();
                 }
             }
 

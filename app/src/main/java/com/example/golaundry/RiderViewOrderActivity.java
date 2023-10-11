@@ -62,7 +62,7 @@ public class RiderViewOrderActivity extends AppCompatActivity {
         TextView earnTextView = findViewById(R.id.arvo_tv_money);
         Button acceptButton = findViewById(R.id.arvo_btn_accept);
 
-        if (mOrderModel != null && distance != 0.0 && laundryData != null) {
+        if (mOrderModel != null && laundryData != null) {
             //upper part
             String userId = mOrderModel.getUserId();
             mUserViewModel.getUserData(userId).observe(this, user -> {
