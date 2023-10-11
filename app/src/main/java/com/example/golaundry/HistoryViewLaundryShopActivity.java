@@ -34,7 +34,7 @@ public class HistoryViewLaundryShopActivity extends AppCompatActivity {
     boolean isSavedLaundry;
     String laundryId;
     UserViewModel mUserViewModel;
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint({"UseCompatLoadingForDrawables", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +70,8 @@ public class HistoryViewLaundryShopActivity extends AppCompatActivity {
             mLaundryViewModel.getLaundryData(laundryId).observe(this, laundry -> {
                 if (laundry != null) {
                     laundryShopNameTextView.setText(laundry.getShopName());
-                    ratingsTextView.setText("0");
-                    ratingsRatingBar.setRating(0);
+                    ratingsTextView.setText(String.format("%.2f", laundry.getRatingsAverage()));
+                    ratingsRatingBar.setRating(laundry.getRatingsAverage());
                     String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
                     locationTextView.setText(address);
                     phoneNoTextView.setText(laundry.getPhoneNo());

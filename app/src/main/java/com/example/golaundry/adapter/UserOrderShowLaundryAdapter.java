@@ -32,10 +32,16 @@ import com.example.golaundry.UserSignUpActivity;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
+import com.example.golaundry.model.RateModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
@@ -84,8 +90,8 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         CombineLaundryData laundry = laundryList.get(position);
         //bind data
         holder.shopNameTextView.setText(laundry.getLaundry().getShopName());
-        holder.ratingsTextView.setText("0");
-        holder.ratingsBar.setRating(0);
+        holder.ratingsTextView.setText(String.format("%.2f", laundry.getLaundry().getRatingsAverage()));
+        holder.ratingsBar.setRating(laundry.getLaundry().getRatingsAverage());
 
         //show image
         imageUrl = laundry.getShop().getImages();

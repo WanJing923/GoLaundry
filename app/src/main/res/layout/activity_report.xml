@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_green"
+    android:background="@color/second_green"
     tools:context=".ReportActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -94,11 +94,12 @@
 
         <TextView
             android:id="@+id/act_report_tv_order_id"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="@string/_2dff3e3"
+            android:text="@string/order"
             android:textColor="@color/white"
+            android:layout_marginEnd="5dp"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/act_report_tv_order"
             app:layout_constraintTop_toBottomOf="@id/act_report_tv_from_name" />
@@ -111,25 +112,39 @@
             android:layout_marginEnd="10dp"
             android:numStars="5"
             android:progressTint="@color/white"
+            android:layout_marginTop="20dp"
             android:rating="0"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/act_report_tv_order" />
+
+        <TextView
+            android:id="@+id/act_report_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="@string/comment"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/act_report_rating_star" />
 
         <TextView
             android:id="@+id/act_report_tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/_28_08_2023"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/act_report_tv_order" />
+            app:layout_constraintTop_toBottomOf="@id/act_report_comment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -153,11 +168,11 @@
         android:layout_marginEnd="20dp"
         android:autofillHints="description"
         android:background="@drawable/custom_login"
-        android:backgroundTint="@color/second_green"
+        android:backgroundTint="@color/primary_green"
         android:gravity="top|start"
         android:hint="@string/description"
         android:inputType="textMultiLine"
-        android:lines="6"
+        android:lines="4"
         android:maxLines="10"
         android:padding="15dp"
         android:textColor="@color/white"
@@ -175,4 +190,12 @@
         android:background="@drawable/custom_button"
         android:backgroundTint="@color/cyan"
         android:text="@string/submit" />
+
+    <ProgressBar
+        android:id="@+id/act_report_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

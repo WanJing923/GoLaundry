@@ -19,10 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
+import com.example.golaundry.model.RateModel;
 import com.example.golaundry.model.RiderModel;
 import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.RiderViewModel;
@@ -52,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -74,7 +77,7 @@ public class HomeRiderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_home_rider, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_rider, container, false);
 
         Toolbar toolbar = view.findViewById(R.id.fhr_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -90,17 +93,20 @@ public class HomeRiderFragment extends Fragment {
 
         TextView riderNameTextView = view.findViewById(R.id.fhr_tv_name);
         TextView ratingsTextView = view.findViewById(R.id.fhr_tv_rating_num);
+        RatingBar ratingsBar = view.findViewById(R.id.fhr_tv_rating_star);
         TextView viewRatingsTextView = view.findViewById(R.id.fhr_tv_view_ratings);
 
         mRiderViewModel.getRiderData(currentRiderId).observe(getViewLifecycleOwner(), rider -> {
             if (rider != null) {
                 riderNameTextView.setText(rider.getFullName());
+                ratingsTextView.setText(String.format("%.2f", rider.getRatingsAverage()));
+                ratingsBar.setRating(rider.getRatingsAverage());
             }
         });
 
         viewRatingsTextView.setOnClickListener(view1 -> {
             Intent intent = new Intent(getContext(), RatingsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("isRider", true);
             startActivity(intent);
         });
 
@@ -148,6 +154,7 @@ public class HomeRiderFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -195,7 +202,7 @@ public class HomeRiderFragment extends Fragment {
 
                                             //show dialog
                                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                            builder.setTitle("Your account has been terminated" );
+                                            builder.setTitle("Your account has been terminated");
                                             builder.setMessage("Due to missed pick up the order " + order.getOrderId());
                                             builder.setPositiveButton("OK", (dialog, which) -> {
                                                 dialog.dismiss();
@@ -252,6 +259,7 @@ public class HomeRiderFragment extends Fragment {
                     displayRiderEarningsBarChart(months, earningsValues);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -271,6 +279,7 @@ public class HomeRiderFragment extends Fragment {
                     displayRiderOrderLineChart(months, orderValues);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }

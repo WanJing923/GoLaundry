@@ -1,20 +1,23 @@
 package com.example.golaundry.model;
 
-public class RateModel {
+import java.io.Serializable;
+
+public class RateModel implements Serializable {
     private String rateId;
     private String userId;
     private String riderId;
     private String orderId;
     private String dateTime;
-    private double rateToLaundry;
+    private float rateToLaundry;
     private String commentToLaundry;
-    private double rateToRider;
+    private float rateToRider;
     private String commentToRider;
+    private String laundryId;
 
     public RateModel() {
     }
 
-    public RateModel(String rateId, String userId, String riderId, String orderId, String dateTime, double rateToLaundry, String commentToLaundry, double rateToRider, String commentToRider) {
+    public RateModel(String rateId, String userId, String riderId, String orderId, String dateTime, float rateToLaundry, String commentToLaundry, float rateToRider, String commentToRider, String laundryId) {
         this.rateId = rateId;
         this.userId = userId;
         this.riderId = riderId;
@@ -24,6 +27,7 @@ public class RateModel {
         this.commentToLaundry = commentToLaundry;
         this.rateToRider = rateToRider;
         this.commentToRider = commentToRider;
+        this.laundryId = laundryId;
     }
 
     public String getRateId() {
@@ -66,11 +70,11 @@ public class RateModel {
         this.dateTime = dateTime;
     }
 
-    public double getRateToLaundry() {
+    public float getRateToLaundry() {
         return rateToLaundry;
     }
 
-    public void setRateToLaundry(double rateToLaundry) {
+    public void setRateToLaundry(float rateToLaundry) {
         this.rateToLaundry = rateToLaundry;
     }
 
@@ -82,11 +86,11 @@ public class RateModel {
         this.commentToLaundry = commentToLaundry;
     }
 
-    public double getRateToRider() {
+    public float getRateToRider() {
         return rateToRider;
     }
 
-    public void setRateToRider(double rateToRider) {
+    public void setRateToRider(float rateToRider) {
         this.rateToRider = rateToRider;
     }
 
@@ -96,5 +100,13 @@ public class RateModel {
 
     public void setCommentToRider(String commentToRider) {
         this.commentToRider = commentToRider;
+    }
+
+    public String getLaundryId() {
+        return laundryId;
+    }
+
+    public void setLaundryId(String laundryId) {
+        this.laundryId = laundryId;
     }
 }

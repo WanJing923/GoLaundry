@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_green"
+    android:background="@color/second_green"
     tools:context=".RatingsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ar_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:elevation="4dp"
+        android:elevation="5dp"
         android:layout_alignParentTop="true">
 
         <TextView
@@ -65,18 +65,6 @@
         android:numStars="5"
         android:progressTint="@color/white"
         android:rating="0" />
-
-    <TextView
-        android:id="@+id/ar_tv_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ar_tv_all_review"
-        android:layout_marginEnd="23dp"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentEnd="true"
-        android:text="@string/latest"
-        android:textColor="@color/gold"
-        android:textSize="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ar_rv_reviews"

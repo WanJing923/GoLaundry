@@ -61,7 +61,7 @@ public class SavedLaundryActivity extends AppCompatActivity {
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mSaveLaundryViewModel = new ViewModelProvider(this).get(SaveLaundryViewModel.class);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.asl_toolbar);
+        Toolbar toolbar = findViewById(R.id.asl_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

@@ -69,8 +69,8 @@ public class SavedLaundryAdapter extends RecyclerView.Adapter<SavedLaundryAdapte
         CombineLaundryData laundry = laundryList.get(position);
         //bind data
         holder.shopNameTextView.setText(laundry.getLaundry().getShopName());
-        holder.ratingsTextView.setText("0");
-        holder.ratingsBar.setRating(0);
+        holder.ratingsTextView.setText(String.format("%.2f", laundry.getLaundry().getRatingsAverage()));
+        holder.ratingsBar.setRating(laundry.getLaundry().getRatingsAverage());
 
         //show image
         imageUrl = laundry.getShop().getImages();

@@ -20,11 +20,12 @@ public class OrderModel implements Serializable {
     private String pickUpDate;
     private String noteToRider;
     private double distanceBetweenUserLaundry;
+    private boolean ableToRate;
 
     public OrderModel() {
     }
 
-    public OrderModel(String orderId, String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider, double distanceBetweenUserLaundry) {
+    public OrderModel(String orderId, String laundryId, String userId, Map<String, Integer> selectedServices, String noteToLaundry, String riderId, Map<String, String> addressInfo, String dateTime, String currentStatus, double laundryFee, String membershipDiscount, double deliveryFee, double totalFee, String pickUpDate, String noteToRider, double distanceBetweenUserLaundry, boolean ableToRate) {
         this.orderId = orderId;
         this.laundryId = laundryId;
         this.userId = userId;
@@ -41,6 +42,15 @@ public class OrderModel implements Serializable {
         this.pickUpDate = pickUpDate;
         this.noteToRider = noteToRider;
         this.distanceBetweenUserLaundry = distanceBetweenUserLaundry;
+        this.ableToRate = ableToRate;
+    }
+
+    public boolean isAbleToRate() {
+        return ableToRate;
+    }
+
+    public void setAbleToRate(boolean ableToRate) {
+        this.ableToRate = ableToRate;
     }
 
     public String getOrderId() {

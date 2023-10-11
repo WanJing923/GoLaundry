@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -29,11 +27,7 @@ import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,7 +55,7 @@ public class OrderActivity extends AppCompatActivity {
     SimpleDateFormat dayFormat,timeFormat;
     private LaundryModel laundryModel;
 
-    @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
+    @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +92,8 @@ public class OrderActivity extends AppCompatActivity {
         mLaundryViewModel.getLaundryData(laundryId).observe(OrderActivity.this, laundry -> {
             if (laundry != null) {
                 laundryShopNameTextView.setText(laundry.getShopName());
-                ratingsTextView.setText("0");
-                ratingsRatingBar.setRating(0);
+                ratingsTextView.setText(String.format("%.2f", laundry.getRatingsAverage()));
+                ratingsRatingBar.setRating(laundry.getRatingsAverage());
                 String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
                 locationTextView.setText(address);
                 phoneNoTextView.setText(laundry.getPhoneNo());
@@ -271,7 +265,7 @@ public class OrderActivity extends AppCompatActivity {
             note = "";
         }
 
-        mOrderModel = new OrderModel("", laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance);
+        mOrderModel = new OrderModel("", laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance, true);
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -104,7 +104,7 @@ public class FindOrderFragment extends Fragment {
         }
 
         int workingHoursStart = 9;
-        int workingHoursEnd = 17;
+        int workingHoursEnd = 23;
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
         if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
@@ -288,7 +288,7 @@ public class FindOrderFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/d/yyyy", Locale.getDefault());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy", Locale.getDefault());
                         String todayDate = dateFormat.format(new Date());
 
                         for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {

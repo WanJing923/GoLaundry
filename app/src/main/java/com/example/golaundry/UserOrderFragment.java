@@ -49,11 +49,17 @@ import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.model.RateModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserGetLocationHolder;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -100,7 +106,7 @@ public class UserOrderFragment extends Fragment {
         mUserViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
     }
 
-    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n", "DefaultLocale"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -141,6 +147,8 @@ public class UserOrderFragment extends Fragment {
                     if (laundryLRO != null) {
                         String shopNameLRO = laundryLRO.getShopName();
                         laundryNameLROTextView.setText(shopNameLRO);
+                        ratingsLROTextView.setText(String.format("%.2f", laundryLRO.getRatingsAverage()));
+                        starLRORatingBar.setRating(laundryLRO.getRatingsAverage());
                     }
                 });
 
@@ -249,7 +257,7 @@ public class UserOrderFragment extends Fragment {
         boolean itemsFound = false;
 
         for (CombineLaundryData laundry : laundryList) {
-//            if (laundry.getLaundry().getRating() >= ratingsFilter) {
+            if (laundry.getLaundry().getRatingsAverage() >= ratingsFilter) {
             String laundryAddress = laundry.getLaundry().getAddress();
             LatLng laundryLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), laundryAddress);
             LatLng userLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), fullAddress);
@@ -260,8 +268,7 @@ public class UserOrderFragment extends Fragment {
                     itemsFound = true;
                 }
             }
-//            }
-
+            }
             if (itemsFound) {
                 noResultsTextView.setVisibility(View.GONE);
             } else {
@@ -269,7 +276,7 @@ public class UserOrderFragment extends Fragment {
             }
         }
 
-        // Update the filtered list
+        // update the filtered list
         mUserOrderShowLaundryAdapter.filterList(filteredList);
         filterCardView.setVisibility(View.GONE);
     }

@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class RiderInfoActivity extends AppCompatActivity {
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint({"UseCompatLoadingForDrawables", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +55,8 @@ public class RiderInfoActivity extends AppCompatActivity {
                     riderNameTextView.setText(riderModel.getFullName());
                     phoneNumberTextView.setText(riderModel.getContactNo());
                     plateNumberTextView.setText(riderModel.getPlateNumber());
-                    ratingsNumberTextView.setText("0");
-                    ratingsBar.setRating(0);
+                    ratingsNumberTextView.setText(String.format("%.2f", riderModel.getRatingsAverage()));
+                    ratingsBar.setRating(riderModel.getRatingsAverage());
 
                     String facePhotoUrl = riderModel.getFacePhoto();
                     if (!Objects.equals(facePhotoUrl, "")) {
