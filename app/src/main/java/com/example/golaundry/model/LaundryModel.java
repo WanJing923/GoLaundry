@@ -20,11 +20,12 @@ public class LaundryModel implements Serializable {
     private boolean setup;
     private boolean isBreak;
     private double balance;
+    private float ratingsAverage;
 
     public LaundryModel() {
     }
 
-    public LaundryModel(String laundryId, String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak, double balance) {
+    public LaundryModel(String laundryId, String shopName, String contactNo, String emailAddress, String address, String addressDetails, String businessLicensePhoto, String fullName, String phoneNo, String icNo, String registerDateTime, String status, String userType, boolean notification, boolean setup, boolean isBreak, double balance, float ratingsAverage) {
         this.laundryId = laundryId;
         this.shopName = shopName;
         this.contactNo = contactNo;
@@ -42,6 +43,15 @@ public class LaundryModel implements Serializable {
         this.setup = setup;
         this.isBreak = isBreak;
         this.balance = balance;
+        this.ratingsAverage = ratingsAverage;
+    }
+
+    public float getRatingsAverage() {
+        return ratingsAverage;
+    }
+
+    public void setRatingsAverage(float ratingsAverage) {
+        this.ratingsAverage = ratingsAverage;
     }
 
     public double getBalance() {

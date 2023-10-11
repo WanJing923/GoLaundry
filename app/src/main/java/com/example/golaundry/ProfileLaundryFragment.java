@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -20,9 +21,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.golaundry.model.RateModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ProfileLaundryFragment extends Fragment {
@@ -32,7 +41,6 @@ public class ProfileLaundryFragment extends Fragment {
     boolean laundryIsBreak;
 
     public ProfileLaundryFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -83,6 +91,8 @@ public class ProfileLaundryFragment extends Fragment {
                 phoneNumberTextView.setText(laundry.getPhoneNo());
                 icNoTextView.setText(laundry.getIcNo());
                 emailAddressTextView.setText(laundry.getEmailAddress());
+                ratingNumberTextView.setText(String.format("%.2f", laundry.getRatingsAverage()));
+                ratingstarRatingBar.setRating(laundry.getRatingsAverage());
 
                 //notification switch
                 notificationSwitch.setChecked(laundry.getNotification());
@@ -96,6 +106,12 @@ public class ProfileLaundryFragment extends Fragment {
                 laundryIsBreak = laundry.getIsBreak();
 
             }
+        });
+
+        viewRatingsTextView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), RatingsActivity.class);
+            intent.putExtra("isLaundry", true);
+            startActivity(intent);
         });
 
         //switch turn on or off

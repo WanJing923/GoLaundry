@@ -33,7 +33,7 @@
             android:layout_below="@id/ol_tv_laundry_name"
             android:layout_marginStart="25dp"
             android:layout_marginTop="1dp"
-            android:text="@string/_5_0"
+            android:text="@string/_0"
             app:layout_constraintTop_toBottomOf="@id/ol_tv_laundry_name"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/white"
@@ -52,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@id/ol_tv_laundry_name"
             app:layout_constraintStart_toEndOf="@id/ol_tv_rating"
             android:progressTint="@color/white"
-            android:rating="5" />
+            android:rating="0" />
 
         <ImageView
             android:id="@+id/ol_iv_save"

@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.example.golaundry.adapter.RatingsLaundryAdapter;
 import com.example.golaundry.adapter.RatingsRiderAdapter;
@@ -33,7 +35,7 @@ public class RatingsActivity extends AppCompatActivity {
     String currentUserId;
 
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint({"UseCompatLoadingForDrawables", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +52,20 @@ public class RatingsActivity extends AppCompatActivity {
         UserViewModel mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         RiderViewModel mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
 
+        TextView ratingsNumberTextView = findViewById(R.id.ar_tv_rating_number);
+        RatingBar RatingBar = findViewById(R.id.ar_rating_star);
+
         DatabaseReference ratingsRef = FirebaseDatabase.getInstance().getReference().child("ratings");
 
         boolean isLaundry = getIntent().getBooleanExtra("isLaundry", false);
         if (isLaundry) {
+            mLaundryViewModel.getLaundryData(currentUserId).observe(this, laundry -> {
+                if (laundry != null) {
+                    ratingsNumberTextView.setText(String.format("%.2f", laundry.getRatingsAverage()));
+                    RatingBar.setRating(laundry.getRatingsAverage());
+                }
+            });
+
             ratingsRef.orderByChild("laundryId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
                 @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
                 @Override
@@ -83,6 +95,13 @@ public class RatingsActivity extends AppCompatActivity {
 
         boolean isRider = getIntent().getBooleanExtra("isRider", false);
         if (isRider) {
+            mRiderViewModel.getRiderData(currentUserId).observe(this, rider -> {
+                if (rider != null) {
+                    ratingsNumberTextView.setText(String.format("%.2f", rider.getRatingsAverage()));
+                    RatingBar.setRating(rider.getRatingsAverage());
+                }
+            });
+
             ratingsRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
                 @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
                 @Override

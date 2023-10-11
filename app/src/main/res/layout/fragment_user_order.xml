@@ -281,7 +281,7 @@
                 android:layout_below="@id/uof_tv_filter_laundry"
                 android:layout_marginTop="30dp"
                 android:layout_toEndOf="@id/uof_tv_filter_rating"
-                android:text="@string/_3"
+                android:text="@string/_0"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -293,7 +293,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="33dp"
                 android:max="5"
-                android:progress="5"
+                android:progress="0"
                 android:progressTint="@color/normal_green"
                 android:thumbTint="@color/normal_green" />
 

@@ -55,7 +55,7 @@ public class OrderActivity extends AppCompatActivity {
     SimpleDateFormat dayFormat,timeFormat;
     private LaundryModel laundryModel;
 
-    @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged"})
+    @SuppressLint({"UseCompatLoadingForDrawables", "NotifyDataSetChanged", "DefaultLocale"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +92,8 @@ public class OrderActivity extends AppCompatActivity {
         mLaundryViewModel.getLaundryData(laundryId).observe(OrderActivity.this, laundry -> {
             if (laundry != null) {
                 laundryShopNameTextView.setText(laundry.getShopName());
-                ratingsTextView.setText("0");
-                ratingsRatingBar.setRating(0);
+                ratingsTextView.setText(String.format("%.2f", laundry.getRatingsAverage()));
+                ratingsRatingBar.setRating(laundry.getRatingsAverage());
                 String address = laundry.getAddressDetails() + ", " + laundry.getAddress();
                 locationTextView.setText(address);
                 phoneNoTextView.setText(laundry.getPhoneNo());

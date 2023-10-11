@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
+import com.example.golaundry.model.RateModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -50,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -69,6 +71,7 @@ public class HomeLaundryFragment extends Fragment {
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,6 +96,8 @@ public class HomeLaundryFragment extends Fragment {
         mLaundryViewModel.getLaundryData(currentUserId).observe(getViewLifecycleOwner(), laundry -> {
             if (laundry != null) {
                 shopNameTextView.setText(laundry.getShopName());
+                ratingNumberTextView.setText(String.format("%.2f", laundry.getRatingsAverage()));
+                ratingstarRatingBar.setRating(laundry.getRatingsAverage());
             }
         });
 

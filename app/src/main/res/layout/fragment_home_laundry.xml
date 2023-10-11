@@ -34,10 +34,10 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/fhl_toolbar">
+        android:layout_below="@id/fhl_toolbar"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -88,8 +88,8 @@
                         style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:numStars="5"
-                        android:padding="2dp"
                         android:progressTint="@color/white"
                         android:rating="0"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -105,8 +105,8 @@
                     android:text="@string/view_ratings"
                     android:textColor="@color/gold"
                     android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView

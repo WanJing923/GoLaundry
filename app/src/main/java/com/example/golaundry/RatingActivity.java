@@ -3,6 +3,7 @@ package com.example.golaundry;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -73,9 +76,65 @@ public class RatingActivity extends AppCompatActivity {
                                 DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
                                 userOrderRef.child(orderId).child("ableToRate").setValue(false);
 
-                                Toast.makeText(RatingActivity.this, "Rate Successful", Toast.LENGTH_SHORT).show();
-                                finish();
+                                ratingRef.orderByChild("riderId").equalTo(riderId).addValueEventListener(new ValueEventListener() { //rider average
+                                    @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            List<RateModel> ratingsList = new ArrayList<>();
+                                            for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
+                                                RateModel ratings = rateSnapshot.getValue(RateModel.class);
+                                                if (ratings != null) {
+                                                    ratingsList.add(ratings);
+                                                }
+                                            }
 
+                                            float totalRating = 0;
+                                            int numberOfRatings = ratingsList.size();
+                                            for (RateModel rating : ratingsList) {
+                                                totalRating += rating.getRateToRider();
+                                            }
+                                            float averageRating = totalRating / numberOfRatings;
+
+                                            DatabaseReference ridersRef = FirebaseDatabase.getInstance().getReference().child("riders");
+                                            ridersRef.child(riderId).child("ratingsAverage").setValue(averageRating);
+
+                                            ratingRef.orderByChild("laundryId").equalTo(laundryId).addValueEventListener(new ValueEventListener() { //laundry average
+                                                @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.exists()) {
+                                                        List<RateModel> ratingsList1 = new ArrayList<>();
+                                                        for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
+                                                            RateModel ratings = rateSnapshot.getValue(RateModel.class);
+                                                            if (ratings != null) {
+                                                                ratingsList1.add(ratings);
+                                                            }
+                                                        }
+
+                                                        float totalRating1 = 0;
+                                                        int numberOfRatings = ratingsList1.size();
+                                                        for (RateModel rating : ratingsList1) {
+                                                            totalRating1 += rating.getRateToLaundry();
+                                                        }
+                                                        float averageRating = totalRating1 / numberOfRatings;
+
+                                                        DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
+                                                        laundryRef.child(laundryId).child("ratingsAverage").setValue(averageRating);
+                                                        Toast.makeText(RatingActivity.this, "Rate Successful", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }
+                                                }
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                }
+                                            });
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
                             } else {
                                 Toast.makeText(RatingActivity.this, "Rate Fail. Please try again", Toast.LENGTH_SHORT).show();
                             }
@@ -85,7 +144,6 @@ public class RatingActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         });

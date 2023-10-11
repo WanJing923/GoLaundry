@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
+import com.example.golaundry.model.RateModel;
 import com.example.golaundry.model.RiderModel;
 import com.example.golaundry.model.UserModel;
 import com.example.golaundry.viewModel.RiderViewModel;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -97,6 +99,8 @@ public class HomeRiderFragment extends Fragment {
         mRiderViewModel.getRiderData(currentRiderId).observe(getViewLifecycleOwner(), rider -> {
             if (rider != null) {
                 riderNameTextView.setText(rider.getFullName());
+                ratingsTextView.setText(String.format("%.2f", rider.getRatingsAverage()));
+                ratingsBar.setRating(rider.getRatingsAverage());
             }
         });
 
