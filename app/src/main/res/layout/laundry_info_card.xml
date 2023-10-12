@@ -77,7 +77,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="1dp"
             android:layout_toEndOf="@id/lic_tv_distance"
-            android:text="@string/_13_5km"
+            android:text="@string/_0"
             android:textColor="@color/black"
             android:textSize="12sp" />
 

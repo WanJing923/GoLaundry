@@ -2,39 +2,23 @@ package com.example.golaundry.adapter;
 
 import static android.content.Context.WINDOW_SERVICE;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import com.example.golaundry.HistoryOrderStatusActivity;
-import com.example.golaundry.RatingActivity;
-import com.example.golaundry.model.OrderStatusModel;
-import com.example.golaundry.viewModel.RiderViewModel;
-import com.example.golaundry.viewModel.UserViewModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.WriterException;
-
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
-
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,10 +28,21 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.golaundry.HistoryOrderStatusActivity;
 import com.example.golaundry.R;
+import com.example.golaundry.RatingActivity;
 import com.example.golaundry.model.OrderModel;
+import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.ServiceItem;
 import com.example.golaundry.viewModel.LaundryViewModel;
+import com.example.golaundry.viewModel.RiderViewModel;
+import com.example.golaundry.viewModel.UserViewModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.WriterException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,6 +54,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 
 public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragmentAdapter.ViewHolder> {
     private final List<OrderModel> orderList;
@@ -105,9 +103,13 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         String totalShow = String.format("%.2f", total);
         holder.totalAmountTextView.setText(totalShow);
 
+        String datePickUp = order.getPickUpDate();
+        String formattedDatePick = formatDateTime(datePickUp);
+        holder.pickUpDateTextView.setText("Pick up on " + formattedDatePick);
+
         String date = order.getDateTime();
         String formattedDate = formatDateTime(date);
-        holder.dateTextView.setText("Order by " + formattedDate);
+        holder.dateTextView.setText("Order on " + formattedDate);
 
         mLaundryViewModel.getLaundryData(order.getLaundryId()).observe((LifecycleOwner) context, laundryModel -> {
             if (laundryModel != null) {
@@ -526,7 +528,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.currentStatusTextView.setText("Completed");
 
-            if (!order.isAbleToRate()){
+            if (!order.isAbleToRate()) {
                 holder.actionButton.setEnabled(false);
                 holder.actionButton.setVisibility(View.GONE);
             } else {
@@ -576,7 +578,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
                 holder.actionButton.setOnClickListener(view12 -> {
                     holder.mProgressBar.setVisibility(View.VISIBLE);
 
-                    if (selectedDate[0]!=null) {
+                    if (selectedDate[0] != null) {
                         //update order pick up date, order current status and another table, order status add one
                         DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
                         DatabaseReference orderStatusRef = FirebaseDatabase.getInstance().getReference().child("orderStatus");
@@ -675,7 +677,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView laundryShopNameTextView, orderIdTextView, statusTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView;
+        TextView laundryShopNameTextView, orderIdTextView, statusTextView, pickUpDateTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView;
         RecyclerView servicesRecyclerView;
         ImageView moreImageView, qrImageView;
         Button actionButton;
@@ -691,6 +693,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             deliveryAmountTextView = itemView.findViewById(R.id.huli_tv_delivery_fee_amount);
             totalAmountTextView = itemView.findViewById(R.id.huli_tv_total_amount);
             dateTextView = itemView.findViewById(R.id.huli_tv_date);
+            pickUpDateTextView = itemView.findViewById(R.id.pick_up_date);
             currentStatusTextView = itemView.findViewById(R.id.huli_tv_status);
             actionButton = itemView.findViewById(R.id.huli_button);
             qrImageView = itemView.findViewById(R.id.huli_iv_qr);
