@@ -63,7 +63,6 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
     private final Context context;
     private final LaundryViewModel mLaundryViewModel;
     private final UserViewModel mUserViewModel;
-    private final RiderViewModel mRiderViewModel;
 
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
@@ -75,7 +74,6 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         this.context = context;
         this.mLaundryViewModel = mLaundryViewModel;
         this.mUserViewModel = mUserViewModel;
-        this.mRiderViewModel = mRiderViewModel;
     }
 
     @NonNull
@@ -104,7 +102,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
         holder.totalAmountTextView.setText(totalShow);
 
         String datePickUp = order.getPickUpDate();
-        String formattedDatePick = formatDateTime(datePickUp);
+        String formattedDatePick = formatDateTimePickUp(datePickUp);
         holder.pickUpDateTextView.setText("Pick up on " + formattedDatePick);
 
         String date = order.getDateTime();
@@ -661,7 +659,24 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             Date date = originalFormat.parse(dateTime);
 
             @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/yyyy");
+
+            assert date != null;
+            return dateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return dateTime;
+        }
+    }
+
+    public String formatDateTimePickUp(String dateTime) {
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat originalFormat = new SimpleDateFormat("M/d/yyyy");
+            Date date = originalFormat.parse(dateTime);
+
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/yyyy");
 
             assert date != null;
             return dateFormat.format(date);

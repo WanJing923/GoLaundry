@@ -33,13 +33,7 @@ public class ForgotPasswordViewModel extends ViewModel {
             else {
                 sendEmailResult.setValue(false);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                sendEmailResult.setValue(false);
-
-            }
-        });
+        }).addOnFailureListener(e -> sendEmailResult.setValue(false));
         return sendEmailResult;
     }
 

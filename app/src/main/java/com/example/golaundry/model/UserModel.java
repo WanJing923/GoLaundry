@@ -1,7 +1,7 @@
 package com.example.golaundry.model;
 
 public class UserModel {
-
+    private String userId;
     private String fullName;
     private String gender;
     private String icNo;
@@ -14,7 +14,8 @@ public class UserModel {
     private double balance;
     private boolean notification;
 
-    public UserModel(String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, double balance, boolean notification) {
+    public UserModel(String userId, String fullName, String gender, String icNo, String phoneNo, String emailAddress, String status, String userType, String membershipRate, String avatar, double balance, boolean notification) {
+        this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
         this.icNo = icNo;
@@ -29,7 +30,14 @@ public class UserModel {
     }
 
     public UserModel() {
+    }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFullName() {

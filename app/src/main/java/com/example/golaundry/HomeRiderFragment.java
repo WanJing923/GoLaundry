@@ -73,6 +73,7 @@ public class HomeRiderFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

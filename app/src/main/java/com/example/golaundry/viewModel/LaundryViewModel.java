@@ -5,10 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.golaundry.model.CashOutModel;
@@ -16,7 +13,6 @@ import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.LaundryShopModel;
-import com.example.golaundry.model.TopUpModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +20,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -106,7 +101,7 @@ public class LaundryViewModel extends ViewModel {
     //get laundry shop role data
     public LiveData<LaundryModel> getLaundryData(String currentUserId) {
         MutableLiveData<LaundryModel> laundryData = new MutableLiveData<>();
-        laundryRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        laundryRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -216,7 +211,7 @@ public class LaundryViewModel extends ViewModel {
     //get laundry shop image and opening hours
     public LiveData<LaundryShopModel> getShopData(String currentUserId) {
         MutableLiveData<LaundryShopModel> shopData = new MutableLiveData<>();
-        shopRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        shopRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -237,7 +232,7 @@ public class LaundryViewModel extends ViewModel {
     public LiveData<List<LaundryServiceModel>> getServiceData(String currentUserId) {
         MutableLiveData<List<LaundryServiceModel>> serviceData = new MutableLiveData<>();
 
-        serviceRef.child(currentUserId).child("services").addValueEventListener(new ValueEventListener() {
+        serviceRef.child(currentUserId).child("services").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<LaundryServiceModel> services = new ArrayList<>();
@@ -297,7 +292,7 @@ public class LaundryViewModel extends ViewModel {
     public LiveData<List<LaundryModel>> getFilteredLaundryData() {
         MutableLiveData<List<LaundryModel>> filteredLaundryData = new MutableLiveData<>();
 
-        laundryRef.addValueEventListener(new ValueEventListener() {
+        laundryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<LaundryModel> filteredLaundry = new ArrayList<>();
@@ -326,7 +321,7 @@ public class LaundryViewModel extends ViewModel {
     public LiveData<List<LaundryShopModel>> getAllShopData() {
         MutableLiveData<List<LaundryShopModel>> allShopData = new MutableLiveData<>();
 
-        shopRef.addValueEventListener(new ValueEventListener() {
+        shopRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<LaundryShopModel> allShop = new ArrayList<>();
@@ -348,7 +343,7 @@ public class LaundryViewModel extends ViewModel {
 
     public LiveData<List<LaundryServiceModel>> getAllServiceData(String laundryId) {
         MutableLiveData<List<LaundryServiceModel>> allServicesData = new MutableLiveData<>();
-        serviceRef.child(laundryId).child("services").addValueEventListener(new ValueEventListener() {
+        serviceRef.child(laundryId).child("services").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<LaundryServiceModel> allServices = new ArrayList<>();
