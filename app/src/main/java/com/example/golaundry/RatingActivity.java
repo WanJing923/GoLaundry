@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class RatingActivity extends AppCompatActivity {
 
-    private String orderId, riderId, laundryId, userId = "";
+    private String orderId, riderId, laundryId, userId;
     private float riderRatingNumber = 1;
     private float laundryRatingNumber = 1;
 
@@ -53,113 +53,114 @@ public class RatingActivity extends AppCompatActivity {
         laundryId = intent.getStringExtra("laundryID");
         userId = intent.getStringExtra("userID");
 
-        btn_submit_rating.setOnClickListener(view -> {
+        if (orderId != null && riderId != null && laundryId != null && userId != null){
+            btn_submit_rating.setOnClickListener(view -> {
 
-            String rateLaundryId = String.valueOf(UUID.randomUUID());
-            String rateRiderId = String.valueOf(UUID.randomUUID());
+                String rateLaundryId = String.valueOf(UUID.randomUUID());
+                String rateRiderId = String.valueOf(UUID.randomUUID());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String dateTime = sdf.format(new Date());
 
-//            String ratingsId = String.valueOf(UUID.randomUUID());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-            String dateTime = sdf.format(new Date());
+                DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+                DatabaseReference ratingsLaundryRef = FirebaseDatabase.getInstance().getReference().child("ratingsLaundry");
+                DatabaseReference ratingsRiderRef = FirebaseDatabase.getInstance().getReference().child("ratingsRider");
 
-//            DatabaseReference ratingRef = FirebaseDatabase.getInstance().getReference().child("ratings");
-            DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
-            DatabaseReference ratingsLaundryRef = FirebaseDatabase.getInstance().getReference().child("ratingsLaundry");
-            DatabaseReference ratingsRiderRef = FirebaseDatabase.getInstance().getReference().child("ratingsRider");
+                String laundryComment = et_laundryComment.getText().toString();
+                String riderComment = et_riderComment.getText().toString();
 
-            String laundryComment = et_laundryComment.getText().toString();
-            String riderComment = et_riderComment.getText().toString();
+                if (riderRatingNumber == 0 || laundryRatingNumber == 0) {
+                    Toast.makeText(RatingActivity.this, "Ratings should be at least 1 star.", Toast.LENGTH_SHORT).show();
+                } else {
+                    float riderRating = riderRatingNumber;
+                    float laundryRating = laundryRatingNumber;
 
-            if (riderRatingNumber == 0 || laundryRatingNumber == 0) {
-                Toast.makeText(RatingActivity.this, "Ratings should be at least 1 star.", Toast.LENGTH_SHORT).show();
-            } else {
-                float riderRating = riderRatingNumber;
-                float laundryRating = laundryRatingNumber;
+                    //set userOrder not able to rate
+                    orderRef.child(orderId).child("ableToRate").setValue(false);
 
-                //set userOrder not able to rate
-                orderRef.child(orderId).child("ableToRate").setValue(false);
+                    RateLaundryModel newRateLaundryModel = new RateLaundryModel(rateLaundryId, userId, riderId, orderId, dateTime, laundryRating, laundryComment, laundryId);
+                    RateRiderModel newRateRiderModel = new RateRiderModel(rateRiderId, userId, riderId, orderId, dateTime, riderRating, riderComment, laundryId);
 
-                RateLaundryModel newRateLaundryModel = new RateLaundryModel(rateLaundryId, userId, riderId, orderId, dateTime, laundryRating, laundryComment, laundryId);
-                RateRiderModel newRateRiderModel = new RateRiderModel(rateRiderId, userId, riderId, orderId, dateTime, riderRating, riderComment, laundryId);
+                    ratingsLaundryRef.child(rateLaundryId).setValue(newRateLaundryModel).addOnCompleteListener(task -> { //rate laundry table
+                        if (task.isSuccessful()) {
 
-                ratingsLaundryRef.child(rateLaundryId).setValue(newRateLaundryModel).addOnCompleteListener(task -> { //rate laundry table
-                    if (task.isSuccessful()) {
-
-                        ratingsRiderRef.child(rateRiderId).setValue(newRateRiderModel).addOnCompleteListener(task1 -> { //rate rider table
-                            if (task.isSuccessful()) {
-                                //calculate laundry average and update
-                                ratingsLaundryRef.orderByChild("laundryId").equalTo(laundryId).addValueEventListener(new ValueEventListener() { //laundry average
-                                    @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()) {
-                                            List<RateLaundryModel> ratingsList1 = new ArrayList<>();
-                                            for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
-                                                RateLaundryModel ratings = rateSnapshot.getValue(RateLaundryModel.class);
-                                                if (ratings != null) {
-                                                    ratingsList1.add(ratings);
-                                                }
-                                            }
-
-                                            float totalRating1 = 0;
-                                            int numberOfRatings = ratingsList1.size();
-                                            for (RateLaundryModel rating : ratingsList1) {
-                                                totalRating1 += rating.getRateToLaundry();
-                                            }
-                                            float averageRating = totalRating1 / numberOfRatings;
-
-                                            DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
-                                            laundryRef.child(laundryId).child("ratingsAverage").setValue(averageRating);
-
-                                            ratingsRiderRef.orderByChild("riderId").equalTo(riderId).addValueEventListener(new ValueEventListener() { //rider average
-                                                @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        List<RateRiderModel> ratingsList = new ArrayList<>();
-                                                        for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
-                                                            RateRiderModel ratings = rateSnapshot.getValue(RateRiderModel.class);
-                                                            if (ratings != null) {
-                                                                ratingsList.add(ratings);
-                                                            }
-                                                        }
-
-                                                        float totalRating = 0;
-                                                        int numberOfRatings = ratingsList.size();
-                                                        for (RateRiderModel rating : ratingsList) {
-                                                            totalRating += rating.getRateToRider();
-                                                        }
-                                                        float averageRating = totalRating / numberOfRatings;
-
-                                                        DatabaseReference ridersRef = FirebaseDatabase.getInstance().getReference().child("riders");
-                                                        ridersRef.child(riderId).child("ratingsAverage").setValue(averageRating);
-
-                                                        Toast.makeText(RatingActivity.this, "Rate successful", Toast.LENGTH_SHORT).show();
-                                                        finish();
+                            ratingsRiderRef.child(rateRiderId).setValue(newRateRiderModel).addOnCompleteListener(task1 -> { //rate rider table
+                                if (task.isSuccessful()) {
+                                    //calculate laundry average and update
+                                    ratingsLaundryRef.orderByChild("laundryId").equalTo(laundryId).addValueEventListener(new ValueEventListener() { //laundry average
+                                        @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                List<RateLaundryModel> ratingsList1 = new ArrayList<>();
+                                                for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
+                                                    RateLaundryModel ratings = rateSnapshot.getValue(RateLaundryModel.class);
+                                                    if (ratings != null) {
+                                                        ratingsList1.add(ratings);
                                                     }
                                                 }
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                float totalRating1 = 0;
+                                                int numberOfRatings = ratingsList1.size();
+                                                for (RateLaundryModel rating : ratingsList1) {
+                                                    totalRating1 += rating.getRateToLaundry();
                                                 }
-                                            });
+                                                float averageRating = totalRating1 / numberOfRatings;
+
+                                                DatabaseReference laundryRef = FirebaseDatabase.getInstance().getReference().child("laundry");
+                                                laundryRef.child(laundryId).child("ratingsAverage").setValue(averageRating);
+
+                                                ratingsRiderRef.orderByChild("riderId").equalTo(riderId).addValueEventListener(new ValueEventListener() { //rider average
+                                                    @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()) {
+                                                            List<RateRiderModel> ratingsList = new ArrayList<>();
+                                                            for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
+                                                                RateRiderModel ratings = rateSnapshot.getValue(RateRiderModel.class);
+                                                                if (ratings != null) {
+                                                                    ratingsList.add(ratings);
+                                                                }
+                                                            }
+
+                                                            float totalRating = 0;
+                                                            int numberOfRatings = ratingsList.size();
+                                                            for (RateRiderModel rating : ratingsList) {
+                                                                totalRating += rating.getRateToRider();
+                                                            }
+                                                            float averageRating = totalRating / numberOfRatings;
+
+                                                            DatabaseReference ridersRef = FirebaseDatabase.getInstance().getReference().child("riders");
+                                                            ridersRef.child(riderId).child("ratingsAverage").setValue(averageRating);
+
+                                                            Toast.makeText(RatingActivity.this, "Rate successful", Toast.LENGTH_SHORT).show();
+                                                            finish();
+                                                        }
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    }
+                                                });
+                                            }
                                         }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    }
-                                });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        }
+                                    });
 
-                            } else {
-                                Toast.makeText(RatingActivity.this, "Rate Rider Fail. Please try again", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(RatingActivity.this, "Rate Laundry Fail. Please try again", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                                } else {
+                                    Toast.makeText(RatingActivity.this, "Rate Rider Fail. Please try again", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(RatingActivity.this, "Rate Laundry Fail. Please try again", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
-            }
-        });
+                }
+            });
+        }
+
+
     }
 }

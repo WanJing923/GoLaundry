@@ -147,7 +147,7 @@ public class ReportActivity extends AppCompatActivity {
                     String currentDateTime = sdf2.format(new Date());
 
                     if (isRider) {
-                        ReportModel mReportModel = new ReportModel(reportId, "rider", riderRateData.getLaundryId(), riderRateData.getUserId(), riderRateData.getOrderId(), riderRateData.getRateRiderId(), currentDateTime, message, false);
+                        ReportModel mReportModel = new ReportModel(reportId, "rider", riderRateData.getRiderId(), riderRateData.getUserId(), riderRateData.getOrderId(), riderRateData.getRateRiderId(), currentDateTime, message, false);
                         reportsRef.child(reportId).setValue(mReportModel);
                         mProgressBar.setVisibility(View.GONE);
                         Toast.makeText(this, "Reported successfully", Toast.LENGTH_SHORT).show();
