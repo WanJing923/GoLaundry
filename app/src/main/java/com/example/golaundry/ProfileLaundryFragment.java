@@ -3,17 +3,7 @@ package com.example.golaundry;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
@@ -21,17 +11,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.golaundry.model.RateModel;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ProfileLaundryFragment extends Fragment {
@@ -98,7 +85,7 @@ public class ProfileLaundryFragment extends Fragment {
                 notificationSwitch.setChecked(laundry.getNotification());
                 notificationValue = laundry.getNotification();
 
-                if (!laundry.getIsBreak()){
+                if (!laundry.getIsBreak()) {
                     takeBreakTextView.setText("Take a break");
                 } else {
                     takeBreakTextView.setText("End break");
@@ -122,9 +109,10 @@ public class ProfileLaundryFragment extends Fragment {
                 if (notificationStatusData != null && notificationStatusData) {
                     notificationSwitch.setChecked(updatedValue);
                     Toast.makeText(requireContext(), "Notification updated", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(requireContext(), "Notification update failed!", Toast.LENGTH_SHORT).show();
-                };
+                }
+                ;
             });
         });
 
@@ -155,7 +143,7 @@ public class ProfileLaundryFragment extends Fragment {
         });
 
         takeBreakTextView.setOnClickListener(view1 -> {
-            if (laundryIsBreak){
+            if (laundryIsBreak) {
                 LaundryEndBreakDialog dialogFragment = new LaundryEndBreakDialog();
                 dialogFragment.setTargetFragment(this, 0);
                 assert getFragmentManager() != null;

@@ -1,7 +1,5 @@
 package com.example.golaundry.adapter;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,20 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.OrderActivity;
 import com.example.golaundry.R;
-import com.example.golaundry.UserSignUpActivity;
 import com.example.golaundry.model.CombineLaundryData;
-import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.LaundryServiceModel;
-import com.example.golaundry.model.RateModel;
-import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
@@ -57,7 +44,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
     private List<CombineLaundryData> laundryList;
     private final Context context;
     private String fullAddress;
-    String imageUrl, currentUserId,finalDistance;
+    String imageUrl, currentUserId, finalDistance;
     double distance;
     SaveLaundryViewModel mSaveLaundryViewModel;
     List<String> savedLaundryIds;
@@ -111,7 +98,7 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
         LatLng userLatLng = getLocationFromAddress(context, fullAddress);
         if (laundryLatLng != null && userLatLng != null) {
             double dis = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
-            distance = dis/1000;
+            distance = dis / 1000;
             finalDistance = String.format("%.2f", distance);
             holder.kmTextView.setText(finalDistance + "km");
         }

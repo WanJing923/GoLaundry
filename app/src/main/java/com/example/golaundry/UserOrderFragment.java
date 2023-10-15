@@ -12,26 +12,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,24 +25,24 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.golaundry.adapter.ServiceAdapter;
-import com.example.golaundry.adapter.ShowServiceAdapter;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.golaundry.adapter.UserOrderShowLaundryAdapter;
 import com.example.golaundry.model.CombineLaundryData;
-import com.example.golaundry.model.LaundryModel;
-import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
-import com.example.golaundry.model.RateModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserGetLocationHolder;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
@@ -78,7 +61,7 @@ public class UserOrderFragment extends Fragment {
     ArrayList<CombineLaundryData> laundryList;
     UserOrderShowLaundryAdapter mUserOrderShowLaundryAdapter;
     RecyclerView laundryRecyclerView;
-    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView,lastRecentTextView;
+    TextView discoverTextView, currentLocationTextView, noResultsTextView, filterTextView, allTextView, filterRatingsTextView, filterDistanceTextView, lastRecentTextView;
     CardView recentlyOrderCardView, filterCardView;
     boolean recentlyOrderVisible;
     static final int REQUEST_CODE_MAP = 7;
@@ -181,7 +164,7 @@ public class UserOrderFragment extends Fragment {
         setDiscoverTv(); //show or not show latest order card
 
         if (currentArea == null) {
-            if (mUserGetLocationHolder.getIsGetCurrentLocation()){
+            if (mUserGetLocationHolder.getIsGetCurrentLocation()) {
                 currentArea = mUserGetLocationHolder.getArea();
             } else {
                 getCurrentArea();
@@ -234,10 +217,12 @@ public class UserOrderFragment extends Fragment {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchLaundryList(charSequence.toString());
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 //
@@ -258,16 +243,16 @@ public class UserOrderFragment extends Fragment {
 
         for (CombineLaundryData laundry : laundryList) {
             if (laundry.getLaundry().getRatingsAverage() >= ratingsFilter) {
-            String laundryAddress = laundry.getLaundry().getAddress();
-            LatLng laundryLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), laundryAddress);
-            LatLng userLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), fullAddress);
-            if (laundryLatLng != null && userLatLng != null) {
-                double distance = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
-                if (distance <= distanceFilter * 1000) {
-                    filteredList.add(laundry);
-                    itemsFound = true;
+                String laundryAddress = laundry.getLaundry().getAddress();
+                LatLng laundryLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), laundryAddress);
+                LatLng userLatLng = mUserOrderShowLaundryAdapter.getLocationFromAddress(requireContext(), fullAddress);
+                if (laundryLatLng != null && userLatLng != null) {
+                    double distance = SphericalUtil.computeDistanceBetween(laundryLatLng, userLatLng);
+                    if (distance <= distanceFilter * 1000) {
+                        filteredList.add(laundry);
+                        itemsFound = true;
+                    }
                 }
-            }
             }
             if (itemsFound) {
                 noResultsTextView.setVisibility(View.GONE);
@@ -288,9 +273,11 @@ public class UserOrderFragment extends Fragment {
                 currentRatingsFilter = progress;
                 filterRatingsTextView.setText(String.valueOf(currentRatingsFilter));
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
@@ -303,9 +290,11 @@ public class UserOrderFragment extends Fragment {
                 currentDistanceFilter = progress;
                 filterDistanceTextView.setText(currentDistanceFilter + "km");
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }

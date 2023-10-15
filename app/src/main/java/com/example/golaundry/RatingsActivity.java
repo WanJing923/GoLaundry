@@ -1,5 +1,11 @@
 package com.example.golaundry;
 
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,15 +13,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.RatingBar;
-import android.widget.TextView;
-
 import com.example.golaundry.adapter.RatingsLaundryAdapter;
 import com.example.golaundry.adapter.RatingsRiderAdapter;
-import com.example.golaundry.model.RateModel;
+import com.example.golaundry.model.RateLaundryModel;
+import com.example.golaundry.model.RateRiderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.RiderViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
@@ -33,7 +34,6 @@ import java.util.Objects;
 public class RatingsActivity extends AppCompatActivity {
 
     String currentUserId;
-
 
     @SuppressLint({"UseCompatLoadingForDrawables", "DefaultLocale"})
     @Override
@@ -55,7 +55,8 @@ public class RatingsActivity extends AppCompatActivity {
         TextView ratingsNumberTextView = findViewById(R.id.ar_tv_rating_number);
         RatingBar RatingBar = findViewById(R.id.ar_rating_star);
 
-        DatabaseReference ratingsRef = FirebaseDatabase.getInstance().getReference().child("ratings");
+        DatabaseReference ratingsLaundryRef = FirebaseDatabase.getInstance().getReference().child("ratingsLaundry");
+        DatabaseReference ratingsRiderRef = FirebaseDatabase.getInstance().getReference().child("ratingsRider");
 
         boolean isLaundry = getIntent().getBooleanExtra("isLaundry", false);
         if (isLaundry) {
@@ -66,14 +67,14 @@ public class RatingsActivity extends AppCompatActivity {
                 }
             });
 
-            ratingsRef.orderByChild("laundryId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            ratingsLaundryRef.orderByChild("laundryId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
                 @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        List<RateModel> ratingsList = new ArrayList<>();
+                        List<RateLaundryModel> ratingsList = new ArrayList<>();
                         for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
-                            RateModel ratings = rateSnapshot.getValue(RateModel.class);
+                            RateLaundryModel ratings = rateSnapshot.getValue(RateLaundryModel.class);
                             if (ratings != null) {
                                 ratingsList.add(ratings);
                             }
@@ -83,7 +84,7 @@ public class RatingsActivity extends AppCompatActivity {
 
                         RecyclerView recyclerView = findViewById(R.id.ar_rv_reviews);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        recyclerView.setAdapter(new RatingsLaundryAdapter(RatingsActivity.this,ratingsList,RatingsActivity.this,mLaundryViewModel,mUserViewModel,mRiderViewModel));
+                        recyclerView.setAdapter(new RatingsLaundryAdapter(RatingsActivity.this, ratingsList, RatingsActivity.this, mLaundryViewModel, mUserViewModel, mRiderViewModel));
                     }
                 }
 
@@ -102,14 +103,14 @@ public class RatingsActivity extends AppCompatActivity {
                 }
             });
 
-            ratingsRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            ratingsRiderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
                 @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        List<RateModel> ratingsList = new ArrayList<>();
+                        List<RateRiderModel> ratingsList = new ArrayList<>();
                         for (DataSnapshot rateSnapshot : dataSnapshot.getChildren()) {
-                            RateModel ratings = rateSnapshot.getValue(RateModel.class);
+                            RateRiderModel ratings = rateSnapshot.getValue(RateRiderModel.class);
                             if (ratings != null) {
                                 ratingsList.add(ratings);
                             }
@@ -119,7 +120,7 @@ public class RatingsActivity extends AppCompatActivity {
 
                         RecyclerView recyclerView = findViewById(R.id.ar_rv_reviews);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        recyclerView.setAdapter(new RatingsRiderAdapter(RatingsActivity.this, ratingsList,RatingsActivity.this,mLaundryViewModel,mUserViewModel,mRiderViewModel));
+                        recyclerView.setAdapter(new RatingsRiderAdapter(RatingsActivity.this, ratingsList, RatingsActivity.this, mLaundryViewModel, mUserViewModel, mRiderViewModel));
                     }
                 }
 
