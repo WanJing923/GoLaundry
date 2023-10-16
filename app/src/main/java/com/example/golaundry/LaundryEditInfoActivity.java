@@ -324,16 +324,13 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
             mLaundryViewModel.updateShopInfoNoImage(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
                     Toast.makeText(this, "Shop opening hours updated", Toast.LENGTH_SHORT).show();
-                    if (laundryIsSetup) {
-                        mProgressBar.setVisibility(View.GONE);
-                        finish();
-                    } else {
+                    if (!laundryIsSetup) {
                         Intent intent = new Intent(LaundryEditInfoActivity.this, LaundryEditServicesActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                        mProgressBar.setVisibility(View.GONE);
-                        finish();
                     }
+                    mProgressBar.setVisibility(View.GONE);
+                    finish();
                 } else {
                     Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
                     mProgressBar.setVisibility(View.GONE);
