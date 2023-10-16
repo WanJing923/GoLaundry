@@ -207,7 +207,8 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_copy_black"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:contentDescription="@string/qr_code" />
 
                         <TextView
                             android:id="@+id/arvd_tv_laundry_name"
@@ -277,6 +278,22 @@
                             </LinearLayout>
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/arvd_tv_view_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_notes"
+                        android:textColor="@color/gold"
+                        app:drawableEndCompat="@drawable/ic_right"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="@id/arvd_divider"
+                        android:gravity="center_horizontal|center_vertical"
+                         />
 
                     <TextView
                         android:id="@+id/arvd_tv_distance"

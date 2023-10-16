@@ -104,23 +104,6 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
         });
     }
 
-    public String formatDateTimeRiderPickUp(String dateTime) {
-        try {
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat originalFormat = new SimpleDateFormat("M/d/yyyy");
-            Date date = originalFormat.parse(dateTime);
-
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/yyyy");
-
-            assert date != null;
-            return dateFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return dateTime;
-        }
-    }
-
     public String formatOrderDateTime(String dateTime) {
         try {
             @SuppressLint("SimpleDateFormat")

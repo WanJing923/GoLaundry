@@ -68,12 +68,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
 
-        findViewById(R.id.lsua_btn_register).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerLaundry();
-            }
-        });
+        findViewById(R.id.lsua_btn_register).setOnClickListener(v -> registerLaundry());
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

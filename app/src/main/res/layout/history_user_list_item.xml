@@ -288,9 +288,21 @@
                 android:textColor="@color/gold"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/huli_tv_view_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view_notes"
+                android:textColor="@color/gold"
+                app:drawableEndCompat="@drawable/ic_right"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="center_horizontal|center_vertical"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <FrameLayout
                 android:layout_width="wrap_content"
