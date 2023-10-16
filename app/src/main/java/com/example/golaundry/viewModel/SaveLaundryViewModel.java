@@ -21,13 +21,11 @@ import java.util.Objects;
 
 public class SaveLaundryViewModel extends ViewModel {
 
-    private final FirebaseDatabase db;
-    private final FirebaseAuth mAuth;
     private final DatabaseReference savedLaundryRef;
 
     public SaveLaundryViewModel() {
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
         savedLaundryRef = db.getReference().child("savedLaundry");
     }
 

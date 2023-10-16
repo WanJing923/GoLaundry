@@ -22,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class LoginFragment extends Fragment {
 
     private SharedPreferences.Editor loginPrefsEditor;
@@ -117,6 +119,7 @@ public class LoginFragment extends Fragment {
                             //intent to home
                             Intent intent = new Intent(getActivity(), HomeActivity.class);
                             startActivity(intent);
+                            requireActivity().finish();
                         } else {
                             Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show();
                             mProgressBar.setVisibility(View.GONE);

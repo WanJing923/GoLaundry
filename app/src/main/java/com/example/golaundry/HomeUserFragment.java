@@ -3,6 +3,8 @@ package com.example.golaundry;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,7 +45,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -176,7 +182,7 @@ public class HomeUserFragment extends Fragment {
                 //show image
                 String avatarUrl = user.getAvatar();
                 if (!Objects.equals(avatarUrl, "")) {
-//                    setAvatar(avatarUrl, ProfilePictureImageView);
+                    setAvatar(avatarUrl, ProfilePictureImageView);
                 }
 
                 //show membership card data
@@ -626,24 +632,24 @@ public class HomeUserFragment extends Fragment {
         return dateFormat.format(currentDate);
     }
 
-//    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
-//        //referenceFromUrl to get StorageReference
-//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
-//
-//        try {
-//            File localFile = File.createTempFile("tempfile", ".jpg");
-//
-//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-//                //show
-//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                profilePictureImageView.setImageBitmap(bitmap);
-//
-//            }).addOnFailureListener(e -> {
-//                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void setAvatar(String avatarUrl, ImageView profilePictureImageView) {
+        //referenceFromUrl to get StorageReference
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(avatarUrl);
+
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+
+            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                //show
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                profilePictureImageView.setImageBitmap(bitmap);
+
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getContext(), "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

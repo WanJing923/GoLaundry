@@ -1,14 +1,5 @@
 package com.example.golaundry.adapter;
 
-import com.example.golaundry.HistoryFragment;
-import com.example.golaundry.HistoryLaundryFragment;
-import com.example.golaundry.HomeActivity;
-import com.example.golaundry.RatingsActivity;
-import com.example.golaundry.ReportActivity;
-import com.example.golaundry.model.RateModel;
-import com.example.golaundry.viewModel.RiderViewModel;
-import com.example.golaundry.viewModel.UserViewModel;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +11,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.R;
+import com.example.golaundry.ReportActivity;
+import com.example.golaundry.model.RateLaundryModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
+import com.example.golaundry.viewModel.RiderViewModel;
+import com.example.golaundry.viewModel.UserViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,14 +27,14 @@ import java.util.Date;
 import java.util.List;
 
 public class RatingsLaundryAdapter extends RecyclerView.Adapter<RatingsLaundryAdapter.ViewHolder> {
-    private final List<RateModel> ratingsList;
+    private final List<RateLaundryModel> ratingsList;
     private final Context context;
     private final LaundryViewModel mLaundryViewModel;
     private final UserViewModel mUserViewModel;
     private final RiderViewModel mRiderViewModel;
     private AppCompatActivity activity;
 
-    public RatingsLaundryAdapter(AppCompatActivity activity,List<RateModel> ratingsList, Context context, LaundryViewModel mLaundryViewModel, UserViewModel mUserViewModel, RiderViewModel mRiderViewModel) {
+    public RatingsLaundryAdapter(AppCompatActivity activity, List<RateLaundryModel> ratingsList, Context context, LaundryViewModel mLaundryViewModel, UserViewModel mUserViewModel, RiderViewModel mRiderViewModel) {
         this.activity = activity;
         this.ratingsList = ratingsList;
         this.context = context;
@@ -59,7 +53,7 @@ public class RatingsLaundryAdapter extends RecyclerView.Adapter<RatingsLaundryAd
     @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RateModel ratings = ratingsList.get(position);
+        RateLaundryModel ratings = ratingsList.get(position);
 
         mUserViewModel.getUserData(ratings.getUserId()).observe((LifecycleOwner) context, userModel -> {
             if (userModel != null) {
@@ -79,7 +73,7 @@ public class RatingsLaundryAdapter extends RecyclerView.Adapter<RatingsLaundryAd
         holder.reportTextView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ReportActivity.class);
             intent.putExtra("isLaundry", true);
-            intent.putExtra("RateData", ratings);
+            intent.putExtra("LaundryRateData", ratings);
             context.startActivity(intent);
         });
 

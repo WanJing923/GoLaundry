@@ -17,6 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.golaundry.model.HelpCenterModel;
 import com.example.golaundry.viewModel.HelpCenterViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class HelpCenterActivity extends AppCompatActivity {
@@ -85,20 +88,20 @@ public class HelpCenterActivity extends AppCompatActivity {
             messageEditText.setError("Message is required!");
             Toast.makeText(this, R.string.msgRequiredToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.ha_et_message).requestFocus();
-            return;
         } else {
 
-            HelpCenterModel newHelp = new HelpCenterModel(emailAddress, title, message, "Pending");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+            String dateTime = sdf.format(new Date());
+
+            HelpCenterModel newHelp = new HelpCenterModel("", dateTime, emailAddress, title, message, "Pending");
 
             mHelpCenterViewModel.addHelpCenterMessage(newHelp)
                     .observe(this, addHelpResult -> {
                         if (addHelpResult != null && addHelpResult) {
-                            // User registration success
                             Toast.makeText(HelpCenterActivity.this, "Your message has successfully submitted!", Toast.LENGTH_SHORT).show();
                             mProgressBar.setVisibility(View.GONE);
                             finish();
                         } else {
-                            // User registration failed
                             Toast.makeText(HelpCenterActivity.this, "Submit failed!", Toast.LENGTH_SHORT).show();
                             mProgressBar.setVisibility(View.GONE);
                         }

@@ -1,7 +1,7 @@
 package com.example.golaundry.model;
 
 public class RiderModel {
-
+    private String riderId;
     private String fullName;
     private String contactNo;
     private String emailAddress;
@@ -19,7 +19,8 @@ public class RiderModel {
     public RiderModel() {
     }
 
-    public RiderModel(String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType, boolean notification, double balance, float ratingsAverage) {
+    public RiderModel(String riderId, String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType, boolean notification, double balance, float ratingsAverage) {
+        this.riderId = riderId;
         this.fullName = fullName;
         this.contactNo = contactNo;
         this.emailAddress = emailAddress;
@@ -33,6 +34,14 @@ public class RiderModel {
         this.notification = notification;
         this.balance = balance;
         this.ratingsAverage = ratingsAverage;
+    }
+
+    public String getRiderId() {
+        return riderId;
+    }
+
+    public void setRiderId(String riderId) {
+        this.riderId = riderId;
     }
 
     public float getRatingsAverage() {

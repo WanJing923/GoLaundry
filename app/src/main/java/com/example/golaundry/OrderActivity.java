@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -27,7 +29,11 @@ import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -133,7 +139,7 @@ public class OrderActivity extends AppCompatActivity {
                 //show image
                 String imageUrl = shop.getImages();
                 if (!Objects.equals(imageUrl, "")) {
-//                    setImages(imageUrl, laundryImageView);
+                    setImages(imageUrl, laundryImageView);
                 }
             }
         });
@@ -307,20 +313,20 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-//    private void setImages(String imageUrl, ImageView LaundryPictureImageView) {
-//        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
-//        try {
-//            File localFile = File.createTempFile("tempfile", ".jpg");
-//            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-//                //show
-//                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                LaundryPictureImageView.setImageBitmap(bitmap);
-//            }).addOnFailureListener(e ->
-//                    Toast.makeText(OrderActivity.this, "Failed to retrieve image", Toast.LENGTH_SHORT).show());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void setImages(String imageUrl, ImageView LaundryPictureImageView) {
+        StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+        try {
+            File localFile = File.createTempFile("tempfile", ".jpg");
+            mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                //show
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                LaundryPictureImageView.setImageBitmap(bitmap);
+            }).addOnFailureListener(e ->
+                    Toast.makeText(OrderActivity.this, "Failed to retrieve image", Toast.LENGTH_SHORT).show());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

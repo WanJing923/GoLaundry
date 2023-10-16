@@ -43,6 +43,7 @@ public class RiderViewModel extends ViewModel {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String riderId = Objects.requireNonNull(task.getResult().getUser()).getUid();
+                        newRider.setRiderId(riderId);
                         uploadImageAndCreateRider(riderId, newRider, signUpResult);
                     } else {
                         signUpResult.setValue(false);
@@ -93,7 +94,7 @@ public class RiderViewModel extends ViewModel {
 
     public LiveData<RiderModel> getRiderData(String currentUserId) {
         MutableLiveData<RiderModel> riderData = new MutableLiveData<>();
-        riderRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        riderRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

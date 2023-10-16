@@ -22,6 +22,7 @@ public class HelpCenterViewModel extends ViewModel {
         MutableLiveData<Boolean> addHelpResult = new MutableLiveData<>();
 
         String helpId = String.valueOf(UUID.randomUUID());
+        newHelp.setHelpId(helpId);
         db.getReference("helpCenter")
                 .child(helpId).setValue(newHelp)
                 .addOnCompleteListener(task -> {

@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.model.AllMembershipModel;
 import com.example.golaundry.model.CurrentMembershipModel;
-import com.example.golaundry.model.LaundryModel;
-import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.TopUpModel;
@@ -31,7 +29,6 @@ import com.google.firebase.storage.UploadTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +61,7 @@ public class UserViewModel extends ViewModel {
     }
 
     //create user auth
-    public <User> LiveData<Boolean> createUser(String email, String password, User newUser) {
+    public LiveData<Boolean> createUser(String email, String password, UserModel newUser) {
         MutableLiveData<Boolean> signUpResult = new MutableLiveData<>();
 
         //create user
@@ -72,6 +69,7 @@ public class UserViewModel extends ViewModel {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         String userId = Objects.requireNonNull(task.getResult().getUser()).getUid();
+                        newUser.setUserId(userId);
                         db.getReference("users")
                                 .child(userId).setValue(newUser)
                                 .addOnCompleteListener(task1 -> {
@@ -207,7 +205,7 @@ public class UserViewModel extends ViewModel {
     //get user role data
     public LiveData<UserModel> getUserData(String currentUserId) {
         MutableLiveData<UserModel> userData = new MutableLiveData<>();
-        userRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
+        userRef.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -253,7 +251,7 @@ public class UserViewModel extends ViewModel {
     //all memberships data
     public LiveData<AllMembershipModel> getAllMembershipData(String membershipRate) {
         MutableLiveData<AllMembershipModel> AllMembershipData = new MutableLiveData<>();
-        allMembershipRef.child(membershipRate).addValueEventListener(new ValueEventListener() {
+        allMembershipRef.child(membershipRate).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -566,7 +564,7 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<Boolean> getMembershipHistory(String currentUserId, String monthYear) {
         MutableLiveData<Boolean> membershipData = new MutableLiveData<>();
-        membershipHistoryRef.child(currentUserId).child(monthYear).addValueEventListener(new ValueEventListener() {
+        membershipHistoryRef.child(currentUserId).child(monthYear).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

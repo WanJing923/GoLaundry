@@ -188,7 +188,7 @@ public class UserSignUpActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.confirmPasswordNotMatchToast, Toast.LENGTH_SHORT).show();
             findViewById(R.id.usua_et_confirm_password).requestFocus();
         } else {
-            UserModel newUser = new UserModel(fullName, selectedGender, icNo, phoneNo, emailAddress, "active", "user", "None", "", 0, true);
+            UserModel newUser = new UserModel("", fullName, selectedGender, icNo, phoneNo, emailAddress, "active", "user", "None", "", 0, true);
             //vm create user
             mUserViewModel.createUser(emailAddress, password, newUser)
                     .observe(this, signUpResult -> {
