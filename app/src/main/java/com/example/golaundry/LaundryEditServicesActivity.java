@@ -137,7 +137,10 @@ public class LaundryEditServicesActivity extends AppCompatActivity {
 
                                 builder.setPositiveButton(spannableString, (dialog, which) -> {
                                     dialog.dismiss();
-                                    finish();
+                                    //intent to home activity
+                                    Intent intent = new Intent(this, HomeActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
                                 }).show();
 
                             });
