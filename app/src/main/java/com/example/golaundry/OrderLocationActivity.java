@@ -234,11 +234,6 @@ public class OrderLocationActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
 
-                noteToRiderEditText.setText(noteToRiderLRO);
-                noteToLaundryTextView.setVisibility(View.VISIBLE);
-                noteToLaundryEditText.setVisibility(View.VISIBLE);
-                noteToLaundryEditText.setText(noteToLaundryLRO);
-
             } else {
                 mUserViewModel.getAllAddressesForUser(currentUserId).observe(this, addresses -> {
                     if (addresses == null || addresses.isEmpty()) {
@@ -247,7 +242,6 @@ public class OrderLocationActivity extends AppCompatActivity {
                         editAddressImageView.setImageResource(R.drawable.ic_add_address);
 
                         address = null;
-
                         editAddressImageView.setOnClickListener(view -> {
                             Intent intent = new Intent(OrderLocationActivity.this, NewAddressActivity.class);
                             intent.putExtra("orderData", orderData);
