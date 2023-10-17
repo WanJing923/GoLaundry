@@ -3,6 +3,8 @@ package com.example.golaundry;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
+import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +39,7 @@ import java.util.UUID;
 public class RiderViewOrderActivity extends AppCompatActivity {
 
     private OrderModel mOrderModel;
+    private LaundryViewModel mLaundryViewModel;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -49,10 +53,10 @@ public class RiderViewOrderActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_toolbar_back));
+        mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
 
         mOrderModel = (OrderModel) getIntent().getSerializableExtra("RiderViewOrderData");
         double distance = getIntent().getDoubleExtra("distance", 0.0);
-        LaundryModel laundryData = (LaundryModel) getIntent().getSerializableExtra("laundryData");
 
         TextView userNameTextView = findViewById(R.id.arvo_tv_name);
         TextView fromAddressTextView = findViewById(R.id.arvo_tv_address_from);
@@ -62,7 +66,7 @@ public class RiderViewOrderActivity extends AppCompatActivity {
         TextView earnTextView = findViewById(R.id.arvo_tv_money);
         Button acceptButton = findViewById(R.id.arvo_btn_accept);
 
-        if (mOrderModel != null && laundryData != null) {
+        if (mOrderModel != null) {
             //upper part
             String userId = mOrderModel.getUserId();
             mUserViewModel.getUserData(userId).observe(this, user -> {
@@ -76,9 +80,13 @@ public class RiderViewOrderActivity extends AppCompatActivity {
             String fullAddress = details + ", " + address;
             fromAddressTextView.setText(fullAddress);
 
-            //middle part
-            laundryNameTextView.setText(laundryData.getShopName());
-            toAddressTextView.setText(laundryData.getAddress());
+            mLaundryViewModel.getLaundryData(mOrderModel.getLaundryId()).observe(this, laundry -> {
+                if (laundry != null) {
+                    //middle part
+                    laundryNameTextView.setText(laundry.getShopName());
+                    toAddressTextView.setText(laundry.getAddress());
+                }
+            });
 
             @SuppressLint("DefaultLocale")
             String distanceShow = String.format("%.2f", distance);

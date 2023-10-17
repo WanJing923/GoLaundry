@@ -104,7 +104,7 @@ public class FindOrderFragment extends Fragment {
         }
 
         int workingHoursStart = 9;
-        int workingHoursEnd = 17;
+        int workingHoursEnd = 23;
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
         if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
