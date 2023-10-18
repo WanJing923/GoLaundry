@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.HistoryOrderStatusActivity;
 import com.example.golaundry.R;
+import com.example.golaundry.ViewNotesActivity;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.ServiceItem;
@@ -338,6 +339,12 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
             intent.putExtra("isLaundry", true);
             context.startActivity(intent);
         });
+
+        holder.viewNoteTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewNotesActivity.class);
+            intent.putExtra("HistoryOrderData", order);
+            context.startActivity(intent);
+        });
     }
 
     public String formatDateTimeLaundry(String dateTime) {
@@ -380,7 +387,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView laundryShopNameTextView, orderIdTextView, statusTextView, deliveryAmountTextView, totalAmountTextView, pickUpDateTextView, dateTextView, currentStatusTextView, deliveryFeeTextView, deliveryFeeRMTextView;
+        TextView laundryShopNameTextView, orderIdTextView, statusTextView, viewNoteTextView, deliveryAmountTextView, totalAmountTextView, pickUpDateTextView, dateTextView, currentStatusTextView, deliveryFeeTextView, deliveryFeeRMTextView;
         RecyclerView servicesRecyclerView;
         ImageView moreImageView, qrImageView, userRoleImageView;
         Button actionButton;
@@ -402,6 +409,7 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
             deliveryFeeTextView = itemView.findViewById(R.id.huli_tv_delivery_fee);
             deliveryFeeRMTextView = itemView.findViewById(R.id.huli_tv_delivery_fee_rm);
             userRoleImageView = itemView.findViewById(R.id.huli_iv_icon);
+            viewNoteTextView = itemView.findViewById(R.id.huli_tv_view_note);
         }
     }
 }

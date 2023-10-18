@@ -58,13 +58,9 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
         String distanceShow = String.format("%.2f", distance);
         holder.amountTextView.setText(distanceShow);
 
-        String datePickUp = order.getPickUpDate();
-        String formattedDatePick = formatDateTimeRiderPickUp(datePickUp);
-        holder.pickUpDateTextView.setText("Pick up on " + formattedDatePick);
-
-        String date = order.getPickUpDate();
-        String formattedDate = formatPickUpDateTime(date);
-        holder.dateTextView.setText("Pick up by " + formattedDate);
+        String date = order.getDateTime();
+        String formattedDateOrder = formatOrderDateTime(date);
+        holder.dateTextView.setText("Order on " + formattedDateOrder);
 
         mUserViewModel.getUserData(order.getUserId()).observe((LifecycleOwner) context, userModel -> {
             if (userModel != null) {
@@ -108,24 +104,7 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
         });
     }
 
-    public String formatDateTimeRiderPickUp(String dateTime) {
-        try {
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat originalFormat = new SimpleDateFormat("M/d/yyyy");
-            Date date = originalFormat.parse(dateTime);
-
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/yyyy");
-
-            assert date != null;
-            return dateFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return dateTime;
-        }
-    }
-
-    public String formatPickUpDateTime(String dateTime) {
+    public String formatOrderDateTime(String dateTime) {
         try {
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -148,7 +127,7 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView userNameTextView, viewOrderTextView, orderIdTextView, pickUpDateTextView,laundryShopNameTextView, amountTextView, dateTextView, currentStatusTextView, statusContentTextView;
+        TextView userNameTextView, viewOrderTextView, orderIdTextView,laundryShopNameTextView, amountTextView, dateTextView, currentStatusTextView, statusContentTextView;
         ImageView moreImageView;
 
         public ViewHolder(View itemView) {
@@ -160,7 +139,6 @@ public class HistoryRiderFragmentAdapter extends RecyclerView.Adapter<HistoryRid
             laundryShopNameTextView = itemView.findViewById(R.id.hrli_tv_laundry_shop_name);
             statusContentTextView = itemView.findViewById(R.id.hrli_tv_status_content);
             dateTextView = itemView.findViewById(R.id.hrli_tv_date);
-            pickUpDateTextView = itemView.findViewById(R.id.pick_up_date);
             amountTextView = itemView.findViewById(R.id.hrli_tv_delivery_amount);
             currentStatusTextView = itemView.findViewById(R.id.hrli_tv_status);
         }

@@ -298,7 +298,6 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
     }
 
     private void updateInfo() {
-
         ProgressBar mProgressBar = findViewById(R.id.alei_progressbar);
         // show the visibility of progress bar to show loading
         mProgressBar.setVisibility(View.VISIBLE);
@@ -320,33 +319,38 @@ public class LaundryEditInfoActivity extends AppCompatActivity {
         if (allTimeRanges == null) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Please set the opening hours", Toast.LENGTH_SHORT).show();
-        } else if (LaundryPicUri == null) {
-            mLaundryViewModel.updateShopInfoNoImage(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
-                if (timeRangesStatus != null && timeRangesStatus) {
-                    Toast.makeText(this, "Shop opening hours updated", Toast.LENGTH_SHORT).show();
-                    if (laundryIsSetup) {
+        } else if (LaundryPicUri == null) { //if no image
+            if (!laundryIsSetup) {//no setup done yet
+                Toast.makeText(this, "Shop image is required!", Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+            } else {
+                mLaundryViewModel.updateShopInfoNoImage(currentUserId, allTimeRanges).observe(this, timeRangesStatus -> {
+                    if (timeRangesStatus != null && timeRangesStatus) {
+                        Toast.makeText(this, "Shop opening hours updated", Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                         finish();
                     } else {
-                        Intent intent = new Intent(LaundryEditInfoActivity.this, LaundryEditServicesActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
-                        finish();
                     }
-                } else {
-                    Toast.makeText(this, "Shop opening hours update failed!", Toast.LENGTH_SHORT).show();
-                    mProgressBar.setVisibility(View.GONE);
-                }
-            });
+                });
+            }
 
-        } else {
+        } else { //all info have
             LaundryShopModel shopInfo = new LaundryShopModel(currentUserId, laundryPicUriString, allTimeRanges);
             mLaundryViewModel.updateShopInfo(currentUserId, shopInfo).observe(this, timeRangesStatus -> {
                 if (timeRangesStatus != null && timeRangesStatus) {
-                    Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();
-                    finish();
-                    mProgressBar.setVisibility(View.GONE);
+                    if (!laundryIsSetup) {
+                        Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();
+                        mProgressBar.setVisibility(View.GONE);
+                        Intent intent = new Intent(LaundryEditInfoActivity.this, LaundryEditServicesActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Shop info updated", Toast.LENGTH_SHORT).show();
+                        finish();
+                        mProgressBar.setVisibility(View.GONE);
+                    }
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                     Toast.makeText(this, "Shop info update failed!", Toast.LENGTH_SHORT).show();

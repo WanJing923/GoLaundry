@@ -56,16 +56,12 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
         String fromAddress = order.getOrderData().getAddressInfo().get("address");
         holder.fromAddressTextView.setText(fromAddress);
 
-        String laundryId = order.getOrderData().getLaundryId();
-        mLaundryViewModel.getLaundryData(laundryId).observe((LifecycleOwner) context, laundry -> {
+        mLaundryViewModel.getLaundryData(order.getOrderData().getLaundryId()).observe((LifecycleOwner) context, laundry -> {
             if (laundry != null) {
                 String laundryName = laundry.getShopName();
                 holder.laundryNameTextView.setText(laundryName);
-
                 String laundryAddress = laundry.getAddress();
                 holder.toAddressTextView.setText(laundryAddress);
-
-                laundryData = laundry;
             }
         });
 
@@ -79,7 +75,6 @@ public class RiderFindOrderAdapter extends RecyclerView.Adapter<RiderFindOrderAd
             OrderModel mOrderModel = order.getOrderData();
             intent.putExtra("RiderViewOrderData", mOrderModel);
             intent.putExtra("distance", distance);
-            intent.putExtra("laundryData", laundryData);
             context.startActivity(intent);
         });
     }

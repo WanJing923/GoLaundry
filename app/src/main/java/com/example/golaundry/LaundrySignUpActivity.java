@@ -68,12 +68,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_MAP);
         });
 
-        findViewById(R.id.lsua_btn_register).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerLaundry();
-            }
-        });
+        findViewById(R.id.lsua_btn_register).setOnClickListener(v -> registerLaundry());
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -258,7 +253,7 @@ public class LaundrySignUpActivity extends AppCompatActivity {
             findViewById(R.id.lsua_et_confirm_password).requestFocus();
         } else {
 
-            LaundryModel newLaundry = new LaundryModel("",fullName, "+60" + contactNo, emailAddress, formattedAddress, addressDetails, BusinessLicensePhoto, fullName, "+60" + phoneNo, icNo, registerDateTime, "terminated", "laundry", true, false, false, 0.0, 0);
+            LaundryModel newLaundry = new LaundryModel("",shopName, "+60" + contactNo, emailAddress, formattedAddress, addressDetails, BusinessLicensePhoto, fullName, "+60" + phoneNo, icNo, registerDateTime, "terminated", "laundry", true, false, false, 0.0, 0);
 
             mLaundryViewModel.signUpLaundryWithImage(emailAddress, password, newLaundry)
                     .observe(this, signUpSuccess -> {

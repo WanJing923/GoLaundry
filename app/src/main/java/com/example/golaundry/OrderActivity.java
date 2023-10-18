@@ -162,10 +162,6 @@ public class OrderActivity extends AppCompatActivity {
         servicesRecyclerView.setAdapter(mUserOrderLaundryServicesAdapter);
         servicesRecyclerView.setLayoutManager(new LinearLayoutManager(OrderActivity.this));
 
-        //extra note
-        EditText noteEditText = findViewById(R.id.os_et_notes);
-        note = noteEditText.getText().toString();
-
         Date currentDate = new Date();
         dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
@@ -267,9 +263,9 @@ public class OrderActivity extends AppCompatActivity {
             totalLaundryFee += totalPrice;
         }
 
-        if (note.isEmpty()) {
-            note = "";
-        }
+        //extra note
+        EditText noteEditText = findViewById(R.id.os_et_notes);
+        note = noteEditText.getText().toString().trim();
 
         mOrderModel = new OrderModel("", laundryId, currentUserId, selectedServices, note, "None", addressInfo, "", "Order created", totalLaundryFee, membershipRate, deliveryFee, 0, "", "", distance, true);
     }

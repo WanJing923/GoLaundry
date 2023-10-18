@@ -3,6 +3,7 @@ package com.example.golaundry;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.golaundry.model.RateLaundryModel;
 import com.example.golaundry.model.RateRiderModel;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 public class RatingActivity extends AppCompatActivity {
@@ -32,10 +35,17 @@ public class RatingActivity extends AppCompatActivity {
     private float riderRatingNumber = 1;
     private float laundryRatingNumber = 1;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
+
+        Toolbar toolbar = findViewById(R.id.rate_toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon((getResources().getDrawable(R.drawable.ic_toolbar_back)));
 
         RatingBar rb_laundryRating = findViewById(R.id.rate_rate_laundry);
         RatingBar rb_riderRating = findViewById(R.id.rate_rate_rider);
@@ -162,5 +172,14 @@ public class RatingActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

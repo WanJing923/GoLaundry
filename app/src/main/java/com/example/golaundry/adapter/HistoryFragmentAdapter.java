@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.golaundry.HistoryOrderStatusActivity;
 import com.example.golaundry.R;
 import com.example.golaundry.RatingActivity;
+import com.example.golaundry.ViewNotesActivity;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.OrderStatusModel;
 import com.example.golaundry.model.ServiceItem;
@@ -650,6 +651,12 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             intent.putExtra("HistoryOrderData", order);
             context.startActivity(intent);
         });
+
+        holder.viewNoteTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewNotesActivity.class);
+            intent.putExtra("HistoryOrderData", order);
+            context.startActivity(intent);
+        });
     }
 
     public String formatDateTime(String dateTime) {
@@ -692,7 +699,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView laundryShopNameTextView, orderIdTextView, statusTextView, pickUpDateTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView;
+        TextView laundryShopNameTextView, orderIdTextView, statusTextView, viewNoteTextView, pickUpDateTextView, deliveryAmountTextView, totalAmountTextView, dateTextView, currentStatusTextView;
         RecyclerView servicesRecyclerView;
         ImageView moreImageView, qrImageView;
         Button actionButton;
@@ -713,6 +720,7 @@ public class HistoryFragmentAdapter extends RecyclerView.Adapter<HistoryFragment
             actionButton = itemView.findViewById(R.id.huli_button);
             qrImageView = itemView.findViewById(R.id.huli_iv_qr);
             mProgressBar = itemView.findViewById(R.id.huli_progressBar);
+            viewNoteTextView = itemView.findViewById(R.id.huli_tv_view_note);
         }
     }
 }

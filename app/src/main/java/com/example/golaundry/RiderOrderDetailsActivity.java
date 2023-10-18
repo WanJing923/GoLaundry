@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -90,8 +91,15 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
         TextView okTextView = findViewById(R.id.arvd_tv_ok);
         TextView cancelTextView = findViewById(R.id.arvd_tv_cancel);
         qRCodeScannerView = findViewById(R.id.arvd_scanner);
+        TextView viewNoteTextView = findViewById(R.id.arvd_tv_view_note);
 
         if (mOrderModel != null) {
+            viewNoteTextView.setOnClickListener(v -> {
+                Intent intent = new Intent(this, ViewNotesActivity.class);
+                intent.putExtra("HistoryOrderData", mOrderModel);
+                startActivity(intent);
+            });
+
             //upper part
             String userId = mOrderModel.getUserId();
             mUserViewModel.getUserData(userId).observe(this, user -> {
@@ -324,7 +332,7 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
             mCodeScanner = new CodeScanner(RiderOrderDetailsActivity.this, qRCodeScannerView);
             mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
                 String text = String.valueOf(result);
-                Toast.makeText(RiderOrderDetailsActivity.this, text, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(RiderOrderDetailsActivity.this, text, Toast.LENGTH_SHORT).show();
                 qRCodeScannerView.setVisibility(View.INVISIBLE);
                 enterOrderIdCardView.setVisibility(View.VISIBLE);
                 orderIdEditText.setText(text);
