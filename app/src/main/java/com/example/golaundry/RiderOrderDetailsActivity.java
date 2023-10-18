@@ -332,7 +332,7 @@ public class RiderOrderDetailsActivity extends AppCompatActivity {
             mCodeScanner = new CodeScanner(RiderOrderDetailsActivity.this, qRCodeScannerView);
             mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
                 String text = String.valueOf(result);
-                Toast.makeText(RiderOrderDetailsActivity.this, text, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(RiderOrderDetailsActivity.this, text, Toast.LENGTH_SHORT).show();
                 qRCodeScannerView.setVisibility(View.INVISIBLE);
                 enterOrderIdCardView.setVisibility(View.VISIBLE);
                 orderIdEditText.setText(text);
