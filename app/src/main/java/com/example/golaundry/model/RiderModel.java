@@ -15,11 +15,12 @@ public class RiderModel {
     private boolean notification;
     private double balance;
     private float ratingsAverage;
+    private boolean isNew;
 
     public RiderModel() {
     }
 
-    public RiderModel(String riderId, String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType, boolean notification, double balance, float ratingsAverage) {
+    public RiderModel(String riderId, String fullName, String contactNo, String emailAddress, String plateNumber, String facePhoto, String drivingLicensePhoto, String icNo, String registerDateTime, String status, String userType, boolean notification, double balance, float ratingsAverage, boolean isNew) {
         this.riderId = riderId;
         this.fullName = fullName;
         this.contactNo = contactNo;
@@ -34,6 +35,15 @@ public class RiderModel {
         this.notification = notification;
         this.balance = balance;
         this.ratingsAverage = ratingsAverage;
+        this.isNew = isNew;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
     }
 
     public String getRiderId() {
