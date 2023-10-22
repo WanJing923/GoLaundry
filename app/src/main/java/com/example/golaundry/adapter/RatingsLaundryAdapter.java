@@ -66,17 +66,21 @@ public class RatingsLaundryAdapter extends RecyclerView.Adapter<RatingsLaundryAd
         float rateAmount = ratings.getRateToLaundry();
         holder.starRatingBar.setRating(rateAmount);
 
+        if (rateAmount <= 3) {
+            holder.reportTextView.setVisibility(View.VISIBLE);
+            holder.reportTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(context, ReportActivity.class);
+                intent.putExtra("isLaundry", true);
+                intent.putExtra("LaundryRateData", ratings);
+                context.startActivity(intent);
+            });
+        } else {
+            holder.reportTextView.setVisibility(View.GONE);
+        }
+
         String date = ratings.getDateTime();
         String formattedDate = formatDateTimeLaundryRate(date);
         holder.dateTimeTextView.setText(formattedDate);
-
-        holder.reportTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ReportActivity.class);
-            intent.putExtra("isLaundry", true);
-            intent.putExtra("LaundryRateData", ratings);
-            context.startActivity(intent);
-        });
-
     }
 
     public String formatDateTimeLaundryRate(String dateTime) {
