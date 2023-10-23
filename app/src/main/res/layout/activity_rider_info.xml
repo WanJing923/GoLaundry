@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_green"
-    tools:context=".RiderInfoActivity">
+    tools:context=".view.RiderInfoActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ria_toolbar"

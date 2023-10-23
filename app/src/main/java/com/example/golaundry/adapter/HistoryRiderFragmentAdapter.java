@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.golaundry.HistoryOrderStatusActivity;
+import com.example.golaundry.view.HistoryOrderStatusActivity;
 import com.example.golaundry.R;
-import com.example.golaundry.RiderOrderDetailsActivity;
+import com.example.golaundry.view.RiderOrderDetailsActivity;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.RiderViewModel;

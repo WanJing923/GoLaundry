@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,22 +20,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.golaundry.OrderActivity;
-import com.example.golaundry.OrderLocationActivity;
+import com.example.golaundry.view.OrderActivity;
 import com.example.golaundry.R;
-import com.example.golaundry.TopUpActivity;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryServiceModel;
 import com.example.golaundry.viewModel.SaveLaundryViewModel;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.maps.android.SphericalUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

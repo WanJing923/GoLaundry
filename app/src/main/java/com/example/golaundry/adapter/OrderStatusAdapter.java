@@ -1,62 +1,24 @@
 package com.example.golaundry.adapter;
 
-import static android.content.Context.WINDOW_SERVICE;
-
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import com.example.golaundry.HistoryOrderStatusActivity;
-import com.example.golaundry.OrderLocationActivity;
-import com.example.golaundry.RiderViewOrderActivity;
 import com.example.golaundry.model.OrderStatusModel;
-import com.example.golaundry.viewModel.RiderViewModel;
-import com.example.golaundry.viewModel.UserViewModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.WriterException;
-
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.R;
-import com.example.golaundry.model.OrderModel;
-import com.example.golaundry.model.ServiceItem;
-import com.example.golaundry.viewModel.LaundryViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
 
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.ViewHolder> {
     private final List<OrderStatusModel> orderStatusList;

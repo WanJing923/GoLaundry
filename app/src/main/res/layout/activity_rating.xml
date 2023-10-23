@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/second_green"
-    tools:context=".RatingActivity">
+    tools:context=".view.RatingActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/rate_toolbar"

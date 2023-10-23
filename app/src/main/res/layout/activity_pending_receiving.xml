@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/second_green"
-    tools:context=".PendingReceivingActivity">
+    tools:context=".view.PendingReceivingActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/pra_toolbar"

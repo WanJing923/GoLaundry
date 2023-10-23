@@ -14,10 +14,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.golaundry.OrderActivity;
-import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
-import com.example.golaundry.RiderViewOrderActivity;
+import com.example.golaundry.view.RiderViewOrderActivity;
 import com.example.golaundry.model.LaundryModel;
 import com.example.golaundry.model.OrderModel;
 import com.example.golaundry.model.RiderFindOrderHolder;

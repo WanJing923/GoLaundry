@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/second_green"
-    tools:context=".RiderSignUpActivity">
+    tools:context=".view.RiderSignUpActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/rsua_toolbar"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_green"
-    tools:context=".EditLocationActivity">
+    tools:context=".view.EditLocationActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ela_toolbar"
