@@ -31,11 +31,11 @@
         android:theme="@style/Theme.GoLaundry"
         tools:targetApi="31">
         <activity
-            android:name=".ViewNotesActivity"
+            android:name=".view.ViewNotesActivity"
             android:exported="false" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".view.MyFirebaseMessagingService"
             android:exported="true"
             android:permission="notification">
             <intent-filter>
@@ -44,115 +44,115 @@
         </service>
 
         <activity
-            android:name=".HistoryViewLaundryShopActivity"
+            android:name=".view.HistoryViewLaundryShopActivity"
             android:exported="false" />
         <activity
-            android:name=".HistoryOrderStatusActivity"
+            android:name=".view.HistoryOrderStatusActivity"
             android:exported="false" />
         <activity
-            android:name=".RiderOrderDetailsActivity"
+            android:name=".view.RiderOrderDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".RiderWalletActivity"
+            android:name=".view.RiderWalletActivity"
             android:exported="false" />
         <activity
-            android:name=".TopUpActivity"
+            android:name=".view.TopUpActivity"
             android:exported="false" />
         <activity
-            android:name=".MyAddressesActivity"
+            android:name=".view.MyAddressesActivity"
             android:exported="false" />
         <activity
-            android:name=".LaundryEditInfoActivity"
+            android:name=".view.LaundryEditInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".RiderViewOrderActivity"
+            android:name=".view.RiderViewOrderActivity"
             android:exported="false" />
         <activity
-            android:name=".LaundryEditServicesActivity"
+            android:name=".view.LaundryEditServicesActivity"
             android:exported="false" />
         <activity
-            android:name=".ReportActivity"
+            android:name=".view.ReportActivity"
             android:exported="false" />
         <activity
-            android:name=".RatingsActivity"
+            android:name=".view.RatingsActivity"
             android:exported="false" />
         <activity
-            android:name=".WalletActivity"
+            android:name=".view.WalletActivity"
             android:exported="false" />
         <activity
-            android:name=".SavedLaundryActivity"
+            android:name=".view.SavedLaundryActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".view.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".MembershipActivity"
+            android:name=".view.MembershipActivity"
             android:exported="false" />
         <activity
-            android:name=".RatingActivity"
+            android:name=".view.RatingActivity"
             android:exported="false" />
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".view.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".RiderInfoActivity"
+            android:name=".view.RiderInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".MapsActivity"
+            android:name=".view.MapsActivity"
             android:exported="false" />
         <activity
-            android:name=".RiderSignUpActivity"
+            android:name=".view.RiderSignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".NewAddressActivity"
+            android:name=".view.NewAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".EditLocationActivity"
+            android:name=".view.EditLocationActivity"
             android:exported="false" />
         <activity
-            android:name=".LaundrySignUpActivity"
+            android:name=".view.LaundrySignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".OrderLocationActivity"
+            android:name=".view.OrderLocationActivity"
             android:exported="false" />
         <activity
-            android:name=".OrderActivity"
+            android:name=".view.OrderActivity"
             android:exported="false" />
         <activity
-            android:name=".TotalSpendingActivity"
+            android:name=".view.TotalSpendingActivity"
             android:exported="false" />
         <activity
-            android:name=".PendingReceivingActivity"
+            android:name=".view.PendingReceivingActivity"
             android:exported="false" />
         <activity
-            android:name=".PendingCollectionActivity"
+            android:name=".view.PendingCollectionActivity"
             android:exported="false" />
         <activity
-            android:name=".NotificationActivity"
+            android:name=".view.NotificationActivity"
             android:exported="false" />
         <activity
-            android:name=".MonthlySpendingActivity"
+            android:name=".view.MonthlySpendingActivity"
             android:exported="false" />
         <activity
-            android:name=".MonthlyOrdersActivity"
+            android:name=".view.MonthlyOrdersActivity"
             android:exported="false" />
         <activity
-            android:name=".AllOrdersActivity"
+            android:name=".view.AllOrdersActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".view.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".UserSignUpActivity"
+            android:name=".view.UserSignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".HelpCenterActivity"
+            android:name=".view.HelpCenterActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".view.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

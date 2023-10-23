@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cyan"
-    tools:context=".FindOrderFragment">
+    tools:context=".view.FindOrderFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ffo_toolbar"

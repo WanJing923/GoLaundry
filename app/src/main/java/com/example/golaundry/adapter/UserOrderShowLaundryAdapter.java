@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.golaundry.OrderActivity;
+import com.example.golaundry.view.OrderActivity;
 import com.example.golaundry.R;
 import com.example.golaundry.model.CombineLaundryData;
 import com.example.golaundry.model.LaundryServiceModel;

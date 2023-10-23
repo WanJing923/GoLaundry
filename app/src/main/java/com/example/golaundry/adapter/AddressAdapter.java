@@ -16,13 +16,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.golaundry.OrderLocationActivity;
 import com.example.golaundry.R;
 import com.example.golaundry.model.AddressModel;
 import com.example.golaundry.viewModel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

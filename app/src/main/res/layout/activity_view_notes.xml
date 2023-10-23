@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/second_green"
-    tools:context=".ViewNotesActivity">
+    tools:context=".view.ViewNotesActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/vna_toolbar"

@@ -15,7 +15,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.golaundry.R;
-import com.example.golaundry.ReportActivity;
+import com.example.golaundry.view.ReportActivity;
 import com.example.golaundry.model.RateRiderModel;
 import com.example.golaundry.viewModel.LaundryViewModel;
 import com.example.golaundry.viewModel.RiderViewModel;
@@ -66,17 +66,21 @@ public class RatingsRiderAdapter extends RecyclerView.Adapter<RatingsRiderAdapte
         float rateAmount = ratings.getRateToRider();
         holder.starRatingBar.setRating(rateAmount);
 
+        if (rateAmount <= 3){
+            holder.reportTextView.setVisibility(View.VISIBLE);
+            holder.reportTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(context, ReportActivity.class);
+                intent.putExtra("isRider", true);
+                intent.putExtra("RiderRateData", ratings);
+                context.startActivity(intent);
+            });
+        } else {
+            holder.reportTextView.setVisibility(View.GONE);
+        }
+
         String date = ratings.getDateTime();
         String formattedDate = formatDateTimeRiderRate(date);
         holder.dateTimeTextView.setText(formattedDate);
-
-        holder.reportTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(context, ReportActivity.class);
-            intent.putExtra("isRider", true);
-            intent.putExtra("RiderRateData", ratings);
-            context.startActivity(intent);
-        });
-
     }
 
     public String formatDateTimeRiderRate(String dateTime) {

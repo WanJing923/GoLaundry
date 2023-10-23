@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cyan"
-    tools:context=".LaundryEditServicesActivity">
+    tools:context=".view.LaundryEditServicesActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/als_toolbar"
