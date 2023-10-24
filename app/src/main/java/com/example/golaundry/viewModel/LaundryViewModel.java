@@ -301,7 +301,7 @@ public class LaundryViewModel extends ViewModel {
                     LaundryModel laundry = snapshot.getValue(LaundryModel.class);
 
                     if (laundry != null) {
-                        if (!laundry.getIsBreak() && laundry.getSetup()) {
+                        if (!laundry.getIsBreak() && laundry.getSetup() && Objects.equals(laundry.getStatus(), "active")) {
                             filteredLaundry.add(laundry);
                         }
                     }
