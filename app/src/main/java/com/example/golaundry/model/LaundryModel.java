@@ -48,14 +48,6 @@ public class LaundryModel implements Serializable {
         this.isNew = isNew;
     }
 
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
-
     public float getRatingsAverage() {
         return ratingsAverage;
     }
@@ -198,5 +190,13 @@ public class LaundryModel implements Serializable {
 
     public void setIsBreak(boolean isBreak) {
         this.isBreak = isBreak;
+    }
+
+    public boolean getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
     }
 }

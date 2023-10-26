@@ -38,14 +38,6 @@ public class RiderModel {
         this.isNew = isNew;
     }
 
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
-
     public String getRiderId() {
         return riderId;
     }
@@ -156,5 +148,13 @@ public class RiderModel {
 
     public void setNotification(boolean notification) {
         this.notification = notification;
+    }
+
+    public boolean getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
     }
 }
