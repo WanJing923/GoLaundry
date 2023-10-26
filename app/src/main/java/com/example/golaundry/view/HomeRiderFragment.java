@@ -47,15 +47,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HomeRiderFragment extends Fragment {
     private LineChart orderLineChart;
     private BarChart spendingBarChart;
     private String[] monthName;
-
+    private String currentUserId;
+    List<OrderModel> toCollectListUser = new ArrayList<>();
+    List<OrderModel> toReceiveListUser = new ArrayList<>();
 
     public HomeRiderFragment() {
     }
@@ -63,6 +67,7 @@ public class HomeRiderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     @SuppressLint("DefaultLocale")
@@ -77,7 +82,6 @@ public class HomeRiderFragment extends Fragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
         //user view model
         RiderViewModel mRiderViewModel = new ViewModelProvider(this).get(RiderViewModel.class);
@@ -88,6 +92,8 @@ public class HomeRiderFragment extends Fragment {
         TextView ratingsTextView = view.findViewById(R.id.fhr_tv_rating_num);
         RatingBar ratingsBar = view.findViewById(R.id.fhr_tv_rating_star);
         TextView viewRatingsTextView = view.findViewById(R.id.fhr_tv_view_ratings);
+        TextView numOfPendingCollectionTextView = view.findViewById(R.id.fhr_tv_number_pending_pick_up);
+        TextView numOfPendingConfirmTextView = view.findViewById(R.id.fhr_tv_number_pending_confirm);
 
         mRiderViewModel.getRiderData(currentRiderId).observe(getViewLifecycleOwner(), rider -> {
             if (rider != null) {
@@ -223,7 +229,87 @@ public class HomeRiderFragment extends Fragment {
             }
         });
 
+        getRiderOrderDataForToCollect(pendingCollectionNum1 -> {
+            if (pendingCollectionNum1 == 0) {
+                numOfPendingCollectionTextView.setText("0");
+            } else {
+                numOfPendingCollectionTextView.setText(String.valueOf(pendingCollectionNum1));
+            }
+        });
+
+        getUserRiderDataForToConfirm(pendingConfirmNum1 -> {
+            if (pendingConfirmNum1 == 0) {
+                numOfPendingConfirmTextView.setText("0");
+            } else {
+                numOfPendingConfirmTextView.setText(String.valueOf(pendingConfirmNum1));
+            }
+        });
+
         return view;
+    }
+
+    public interface DataCallback<T> {
+        void onDataLoaded(T data);
+    }
+
+    private void getRiderOrderDataForToCollect(HomeRiderFragment.DataCallback<Integer> callback) {
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        AtomicInteger pendingCollectionNumber = new AtomicInteger(0);
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order created".equals(currentStatus) || "Rider accept order".equals(currentStatus)) {
+                                toCollectListUser.add(order);
+                                pendingCollectionNumber.set(toCollectListUser.size());
+                            }
+                        }
+                    }
+                    callback.onDataLoaded(pendingCollectionNumber.get());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        pendingCollectionNumber.get();
+    }
+
+    private void getUserRiderDataForToConfirm(HomeRiderFragment.DataCallback<Integer> callback) {
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        AtomicInteger pendingReceivingNumber = new AtomicInteger(0);
+        userOrderRef.orderByChild("riderId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Rider pick up".equals(currentStatus) || "Order reached laundry shop".equals(currentStatus)
+                                    || "Laundry done process".equals(currentStatus) || "Order out of delivery".equals(currentStatus)
+                                    || "Order delivered".equals(currentStatus)) {
+                                toReceiveListUser.add(order);
+                                pendingReceivingNumber.set(toReceiveListUser.size());
+                            }
+                        }
+                    }
+                    callback.onDataLoaded(pendingReceivingNumber.get());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        pendingReceivingNumber.get();
     }
 
     private void showCharts(String currentUserId, String currentYear, ArrayList<String> months) {

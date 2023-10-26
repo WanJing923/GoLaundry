@@ -96,8 +96,6 @@ public class HomeUserFragment extends Fragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
 
-        //get current user id
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         //declare the view id
         TextView userNameTextView = view.findViewById(R.id.fhu_tv_name);
         TextView membershipRateTextView = view.findViewById(R.id.fhu_tv_rate);
