@@ -198,19 +198,24 @@ public class UserOrderShowLaundryAdapter extends RecyclerView.Adapter<UserOrderS
 
     private void setImages(String imageUrl, ImageView laundryImageView) {
         StorageReference mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
+        laundryImageView.setTag(mStorageReference);
         try {
             File localFile = File.createTempFile("tempfile", ".jpg");
             mStorageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-                //show
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                laundryImageView.setImageBitmap(bitmap);
+                if (laundryImageView.getTag() == mStorageReference) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    laundryImageView.setImageBitmap(bitmap);
+                }
             }).addOnFailureListener(e -> {
-                Toast.makeText(context, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+                if (laundryImageView.getTag() == mStorageReference) {
+                    Toast.makeText(context, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
+                }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public int getItemCount() {

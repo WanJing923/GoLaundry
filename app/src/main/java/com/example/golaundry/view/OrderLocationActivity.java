@@ -131,6 +131,10 @@ public class OrderLocationActivity extends AppCompatActivity {
             mLaundryViewModel.getLaundryData(laundryIdLRO).observe(this, laundryData -> {
                 if (laundryData!= null){
                     mOrderLocationDataHolder.setLaundryData(laundryData);
+                    if (laundryData.getIsBreak()){
+                        finish();
+                        Toast.makeText(OrderLocationActivity.this, "Laundry shop is having break", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 

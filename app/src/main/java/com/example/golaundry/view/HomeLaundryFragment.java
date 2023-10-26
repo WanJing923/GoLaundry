@@ -47,15 +47,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HomeLaundryFragment extends Fragment {
     LaundryViewModel mLaundryViewModel;
     private LineChart orderLineChart;
     private BarChart spendingBarChart;
     private String[] monthName;
+    String currentUserId;
+    List<OrderModel> toCollectListUser = new ArrayList<>();
+    List<OrderModel> toReceiveListUser = new ArrayList<>();
+
 
     public HomeLaundryFragment() {
     }
@@ -64,6 +70,7 @@ public class HomeLaundryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLaundryViewModel = new ViewModelProvider(this).get(LaundryViewModel.class);
+        currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     }
 
     @SuppressLint("DefaultLocale")
@@ -79,13 +86,12 @@ public class HomeLaundryFragment extends Fragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setHasOptionsMenu(true);
 
-        //get current user id
-        String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-
         TextView shopNameTextView = view.findViewById(R.id.fhl_tv_name);
         TextView ratingNumberTextView = view.findViewById(R.id.fhl_tv_rating_num);
         RatingBar ratingstarRatingBar = view.findViewById(R.id.fhl_tv_rating_star);
         TextView viewRatingsTextView = view.findViewById(R.id.fhl_tv_view_ratings);
+        TextView numOfPendingProcessTextView = view.findViewById(R.id.fhl_tv_number_pending_process);
+        TextView numOfPendingConfirmTextView = view.findViewById(R.id.fhl_tv_number_pending_confirm);
 
         //get laundry data
         mLaundryViewModel.getLaundryData(currentUserId).observe(getViewLifecycleOwner(), laundry -> {
@@ -216,7 +222,87 @@ public class HomeLaundryFragment extends Fragment {
             }
         });
 
+        getUserOrderDataForToCollect(pendingCollectionNum1 -> {
+            if (pendingCollectionNum1 == 0) {
+                numOfPendingProcessTextView.setText("0");
+            } else {
+                numOfPendingProcessTextView.setText(String.valueOf(pendingCollectionNum1));
+            }
+        });
+
+        getUserOrderDataForToReceive(pendingReceiveNum1 -> {
+            if (pendingReceiveNum1 == 0) {
+                numOfPendingConfirmTextView.setText("0");
+            } else {
+                numOfPendingConfirmTextView.setText(String.valueOf(pendingReceiveNum1));
+            }
+        });
+
         return view;
+    }
+
+    public interface DataCallback<T> {
+        void onDataLoaded(T data);
+    }
+
+    private void getUserOrderDataForToCollect(HomeLaundryFragment.DataCallback<Integer> callback) {
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        AtomicInteger pendingCollectionNumber = new AtomicInteger(0);
+        userOrderRef.orderByChild("laundryId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ("Order created".equals(currentStatus) || "Rider accept order".equals(currentStatus)
+                                    || "Rider pick up".equals(currentStatus)) {
+                                toCollectListUser.add(order);
+                                pendingCollectionNumber.set(toCollectListUser.size());
+                            }
+                        }
+                    }
+                    callback.onDataLoaded(pendingCollectionNumber.get());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        pendingCollectionNumber.get();
+    }
+
+    private void getUserOrderDataForToReceive(HomeLaundryFragment.DataCallback<Integer> callback) {
+        DatabaseReference userOrderRef = FirebaseDatabase.getInstance().getReference().child("userOrder");
+        AtomicInteger pendingReceivingNumber = new AtomicInteger(0);
+        userOrderRef.orderByChild("laundryId").equalTo(currentUserId).addValueEventListener(new ValueEventListener() {
+            @SuppressLint({"DefaultLocale", "NotifyDataSetChanged"})
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                        OrderModel order = orderSnapshot.getValue(OrderModel.class);
+                        if (order != null) {
+                            String currentStatus = order.getCurrentStatus();
+                            if ( "Order reached laundry shop".equals(currentStatus) || "Laundry done process".equals(currentStatus) || "Order out of delivery".equals(currentStatus)
+                                    || "Order delivered".equals(currentStatus)) {
+                                toReceiveListUser.add(order);
+                                pendingReceivingNumber.set(toReceiveListUser.size());
+                            }
+                        }
+                    }
+                    callback.onDataLoaded(pendingReceivingNumber.get());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        pendingReceivingNumber.get();
     }
 
     private void showCharts(String currentUserId, String currentYear, ArrayList<String> months) {
