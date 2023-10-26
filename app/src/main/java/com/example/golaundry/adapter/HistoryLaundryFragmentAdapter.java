@@ -313,7 +313,8 @@ public class HistoryLaundryFragmentAdapter extends RecyclerView.Adapter<HistoryL
         } else if (Objects.equals(order.getCurrentStatus(), "Order completed")) {
             holder.currentStatusTextView.setText("Completed");
             holder.actionButton.setVisibility(View.GONE);
-        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))) {
+        } else if (Objects.equals(order.getCurrentStatus(), "Order cancelled by customer") || (Objects.equals(order.getCurrentStatus(), "Order cancelled by laundry shop"))
+                || (Objects.equals(order.getCurrentStatus(), "Order cancelled due to rider missed pick up"))|| (Objects.equals(order.getCurrentStatus(), "Order cancelled due to no rider accept order"))) {
             holder.currentStatusTextView.setText("Cancelled");
             holder.actionButton.setVisibility(View.GONE);
         }
