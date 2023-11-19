@@ -5,6 +5,19 @@ plugins {
 }
 
 android {
+
+    testOptions {
+
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            useJUnitPlatform()
+            reports {
+                junitXml.enabled = true
+                html.enabled = false
+            }
+        }
+    }
+
     namespace 'com.example.golaundry'
     compileSdk 33
 
@@ -61,5 +74,11 @@ dependencies {
     implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation 'com.google.firebase:firebase-messaging:23.2.1'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'junit:junit:4.12'
+
+    //JUnit Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0-M1'
+    testImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
 }
