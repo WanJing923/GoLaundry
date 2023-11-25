@@ -187,7 +187,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="5dp"
-                        android:layout_marginTop="19dp"
+                        android:layout_marginTop="20dp"
                         android:layout_weight="1">
 
                         <TextView
@@ -224,7 +224,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="5dp"
-                        android:layout_marginTop="19dp"
+                        android:layout_marginTop="20dp"
                         android:layout_weight="1">
 
                         <TextView
@@ -261,7 +261,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="5dp"
-                        android:layout_marginTop="19dp"
+                        android:layout_marginTop="20dp"
                         android:layout_weight="1">
 
                         <TextView
@@ -298,7 +298,6 @@
                         android:layout_height="match_parent"
                         android:padding="5dp"
                         android:layout_marginTop="19dp"
-                        android:layout_marginBottom="20dp"
                         android:layout_weight="1">
 
                         <TextView
@@ -323,6 +322,43 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="@string/_20"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/am_tr_sixth"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/rm_30_00"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/cyan"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/gl30"
+                            android:layout_weight="1"
+                            android:textColor="@color/cyan"
+                            android:gravity="center"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/_30"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:textColor="@color/cyan"

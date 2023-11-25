@@ -104,7 +104,7 @@ public class FindOrderFragment extends Fragment {
         }
 
         int workingHoursStart = 9;
-        int workingHoursEnd = 23;
+        int workingHoursEnd = 18;
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
         if (currentHour >= workingHoursStart && currentHour <= workingHoursEnd) {
@@ -128,8 +128,8 @@ public class FindOrderFragment extends Fragment {
                                     String orderStatus = allOrder.getCurrentStatus();
                                     if ("Order created".equals(orderStatus)) {
                                         String userAddress = allOrder.getAddressInfo().get("address");
-                                        LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
-                                        LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
+                                        LatLng userLatLng = getLocationFromAddress1(requireContext(), userAddress);
+                                        LatLng riderLatLng = getLocationFromAddress1(requireContext(), fullAddress);
                                         double distance = 0;
                                         if (riderLatLng != null && userLatLng != null) {
                                             double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
@@ -300,8 +300,8 @@ public class FindOrderFragment extends Fragment {
                                     String orderStatus = allOrder.getCurrentStatus();
                                     if ("Order created".equals(orderStatus)) {
                                         String userAddress = allOrder.getAddressInfo().get("address");
-                                        LatLng userLatLng = getLocationFromAddress1(getContext(), userAddress);
-                                        LatLng riderLatLng = getLocationFromAddress1(getContext(), fullAddress);
+                                        LatLng userLatLng = getLocationFromAddress1(requireContext(), userAddress);
+                                        LatLng riderLatLng = getLocationFromAddress1(requireContext(), fullAddress);
                                         double distance = 0;
                                         if (riderLatLng != null && userLatLng != null) {
                                             double dis = SphericalUtil.computeDistanceBetween(userLatLng, riderLatLng);
